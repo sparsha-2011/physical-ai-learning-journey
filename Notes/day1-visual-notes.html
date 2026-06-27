@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 1 — USD Foundations</title>
+<style>
+  :root {
+    --purple: #534AB7; --purple-light: #EEEDFE; --purple-mid: #AFA9EC; --purple-dark: #3C3489;
+    --teal: #1D9E75; --teal-light: #E1F5EE; --teal-mid: #5DCAA5; --teal-dark: #085041;
+    --coral: #D85A30; --coral-light: #FAECE7; --coral-mid: #F0997B; --coral-dark: #712B13;
+    --amber: #BA7517; --amber-light: #FAEEDA; --amber-mid: #EF9F27; --amber-dark: #633806;
+    --blue: #185FA5; --blue-light: #E6F1FB; --blue-mid: #85B7EB; --blue-dark: #0C447C;
+    --gray: #5F5E5A; --gray-light: #F1EFE8; --gray-mid: #B4B2A9; --gray-dark: #2C2C2A;
+    --text: #1a1a1a; --text-muted: #5F5E5A; --bg: #fafaf8; --white: #ffffff;
+    --radius: 10px; --radius-sm: 6px;
+    --mono: 'Courier New', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── HEADER ── */
+  .hero { background: var(--purple); border-radius: 16px; padding: 2.5rem 2rem; margin-bottom: 2.5rem; color: white; position: relative; overflow: hidden; }
+  .hero::after { content:''; position:absolute; right:-40px; top:-40px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.07); }
+  .hero-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; opacity: .7; margin-bottom: .5rem; }
+  .hero h1 { font-size: 28px; font-weight: 600; margin-bottom: .5rem; }
+  .hero p { font-size: 14px; opacity: .85; max-width: 560px; }
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1.25rem; }
+  .hero-pill { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 500; }
+
+  /* ── TOC ── */
+  .toc { background: var(--white); border: 1px solid #e5e3db; border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+  .toc h3 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: .75rem; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 1.5rem; }
+  .toc-item { font-size: 13px; color: var(--purple); text-decoration: none; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+  .toc-item:hover { color: var(--purple-dark); }
+  .toc-num { font-size: 11px; color: var(--text-muted); min-width: 18px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; padding-bottom: .75rem; border-bottom: 2px solid; }
+  .section-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .section-title { font-size: 20px; font-weight: 600; }
+  .section-sub { font-size: 13px; font-weight: 400; margin-left: 4px; }
+
+  .s-purple .section-header { border-color: var(--purple-mid); }
+  .s-purple .section-icon { background: var(--purple-light); }
+  .s-purple .section-title { color: var(--purple-dark); }
+  .s-teal .section-header { border-color: var(--teal-mid); }
+  .s-teal .section-icon { background: var(--teal-light); }
+  .s-teal .section-title { color: var(--teal-dark); }
+  .s-coral .section-header { border-color: var(--coral-mid); }
+  .s-coral .section-icon { background: var(--coral-light); }
+  .s-coral .section-title { color: var(--coral-dark); }
+  .s-amber .section-header { border-color: var(--amber-mid); }
+  .s-amber .section-icon { background: var(--amber-light); }
+  .s-amber .section-title { color: var(--amber-dark); }
+  .s-blue .section-header { border-color: var(--blue-mid); }
+  .s-blue .section-icon { background: var(--blue-light); }
+  .s-blue .section-title { color: var(--blue-dark); }
+  .s-gray .section-header { border-color: var(--gray-mid); }
+  .s-gray .section-icon { background: var(--gray-light); }
+  .s-gray .section-title { color: var(--gray-dark); }
+
+  p { margin-bottom: .9rem; }
+
+  /* ── ANALOGY BOX ── */
+  .analogy { background: var(--amber-light); border-left: 4px solid var(--amber-mid); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 1rem 1.25rem; margin: 1rem 0 1.25rem; }
+  .analogy-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--amber-dark); margin-bottom: .3rem; }
+  .analogy p { margin: 0; font-size: 14px; color: var(--amber-dark); }
+
+  /* ── CALLOUT ── */
+  .callout { border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin: 1rem 0 1.25rem; }
+  .callout-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; margin-bottom: .3rem; }
+  .callout p { margin: 0; font-size: 14px; }
+  .callout.tip { background: var(--teal-light); border-left: 4px solid var(--teal-mid); }
+  .callout.tip .callout-label { color: var(--teal-dark); }
+  .callout.tip p { color: var(--teal-dark); }
+  .callout.warn { background: var(--coral-light); border-left: 4px solid var(--coral-mid); }
+  .callout.warn .callout-label { color: var(--coral-dark); }
+  .callout.warn p { color: var(--coral-dark); }
+  .callout.info { background: var(--blue-light); border-left: 4px solid var(--blue-mid); }
+  .callout.info .callout-label { color: var(--blue-dark); }
+  .callout.info p { color: var(--blue-dark); }
+
+  /* ── CODE ── */
+  .code-block { margin: 1rem 0 1.25rem; border-radius: var(--radius); overflow: hidden; border: 1px solid #e5e3db; }
+  .code-header { background: #2C2C2A; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .code-lang { font-size: 11px; color: #B4B2A9; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
+  .code-desc { font-size: 11px; color: #888780; }
+  pre { background: #1e1e1c; padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.75; margin: 0; }
+  code { font-family: var(--mono); font-size: 13px; }
+  .code-block pre code { color: #d4d2c9; }
+  .cm { color: #888780; font-style: italic; }
+  .ck { color: #AFA9EC; }
+  .cs { color: #9FE1CB; }
+  .cn { color: #FAC775; }
+  .cv { color: #F0997B; }
+  .cp { color: #85B7EB; }
+  inline-code, .ic { font-family: var(--mono); font-size: 13px; background: var(--gray-light); padding: 1px 5px; border-radius: 3px; color: var(--purple-dark); }
+
+  /* ── DIAGRAM ── */
+  .diagram { background: var(--white); border: 1px solid #e5e3db; border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0 1.25rem; overflow-x: auto; }
+  .diagram-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 1rem; text-align: center; }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+  .comp-table th { padding: 8px 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+  .comp-table td { padding: 9px 12px; border-top: 1px solid #e5e3db; vertical-align: top; }
+  .comp-table tr:hover td { background: var(--bg); }
+
+  /* ── SPECIFIER CARDS ── */
+  .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 1rem 0; }
+  .spec-card { border-radius: var(--radius); padding: 1.1rem 1.1rem; }
+  .spec-card h4 { font-size: 16px; font-weight: 700; font-family: var(--mono); margin-bottom: .4rem; }
+  .spec-card p { font-size: 13px; margin: 0; line-height: 1.5; }
+  .spec-def { background: var(--teal-light); border: 1.5px solid var(--teal-mid); }
+  .spec-def h4 { color: var(--teal-dark); }
+  .spec-def p { color: var(--teal-dark); }
+  .spec-over { background: var(--amber-light); border: 1.5px solid var(--amber-mid); }
+  .spec-over h4 { color: var(--amber-dark); }
+  .spec-over p { color: var(--amber-dark); }
+  .spec-class { background: var(--blue-light); border: 1.5px solid var(--blue-mid); }
+  .spec-class h4 { color: var(--blue-dark); }
+  .spec-class p { color: var(--blue-dark); }
+
+  /* ── FORMAT CARDS ── */
+  .fmt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 1rem 0; }
+  .fmt-card { border-radius: var(--radius); padding: 1.1rem; text-align: center; border: 1.5px solid; }
+  .fmt-ext { font-size: 22px; font-weight: 700; font-family: var(--mono); margin-bottom: .3rem; }
+  .fmt-name { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; margin-bottom: .5rem; }
+  .fmt-desc { font-size: 12px; line-height: 1.5; }
+  .fmt-usda { background: var(--teal-light); border-color: var(--teal-mid); color: var(--teal-dark); }
+  .fmt-usdc { background: var(--purple-light); border-color: var(--purple-mid); color: var(--purple-dark); }
+  .fmt-usdz { background: var(--coral-light); border-color: var(--coral-mid); color: var(--coral-dark); }
+
+  /* ── VALUE TYPE TABLE ── */
+  .vtype-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 1rem 0; }
+  .vtype-table th { background: var(--purple-light); color: var(--purple-dark); padding: 8px 12px; text-align: left; font-size: 12px; font-weight: 600; }
+  .vtype-table td { padding: 8px 12px; border-top: 1px solid #e5e3db; font-family: var(--mono); }
+  .vtype-table td:first-child { color: var(--coral-dark); font-weight: 600; }
+  .vtype-table td:nth-child(2) { color: var(--text-muted); font-family: var(--sans); }
+  .vtype-table td:nth-child(3) { color: var(--teal-dark); }
+
+  /* ── KEY FACT ── */
+  .key-fact { background: var(--purple-light); border-radius: var(--radius); padding: 1rem 1.25rem; margin: 1rem 0; display: flex; gap: 12px; align-items: flex-start; }
+  .key-fact-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .key-fact-text { font-size: 14px; color: var(--purple-dark); line-height: 1.6; }
+  .key-fact-text strong { font-weight: 600; }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box { background: var(--gray-light); border-radius: var(--radius); padding: 1.5rem; margin-top: 2.5rem; }
+  .summary-box h3 { font-size: 15px; font-weight: 600; color: var(--gray-dark); margin-bottom: 1rem; }
+  .summary-item { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid #D3D1C7; font-size: 14px; align-items: flex-start; }
+  .summary-item:last-child { border-bottom: none; }
+  .summary-num { color: var(--purple); font-weight: 600; min-width: 20px; font-size: 13px; margin-top: 2px; }
+
+  /* ── SVG DIAGRAMS ── */
+  svg { max-width: 100%; height: auto; }
+
+  @media (max-width: 600px) {
+    .spec-grid, .fmt-grid { grid-template-columns: 1fr; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">OpenUSD Certification · Day 1</div>
+    <h1>USD Foundations</h1>
+    <p>Everything starts here. Before you can understand composition, pipelines, or shading, you need to know these five concepts cold: Stage, Layer, Prim, Property, and Path.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">Stage</span>
+      <span class="hero-pill">Layers</span>
+      <span class="hero-pill">Prims</span>
+      <span class="hero-pill">Attributes</span>
+      <span class="hero-pill">Relationships</span>
+      <span class="hero-pill">Paths</span>
+      <span class="hero-pill">File Formats</span>
+      <span class="hero-pill">Metadata</span>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>Contents</h3>
+    <div class="toc-grid">
+      <a class="toc-item" href="#s1"><span class="toc-num">01</span> Stage — the scene container</a>
+      <a class="toc-item" href="#s5"><span class="toc-num">05</span> Prim paths</a>
+      <a class="toc-item" href="#s2"><span class="toc-num">02</span> Layers — one sheet of data</a>
+      <a class="toc-item" href="#s6"><span class="toc-num">06</span> USD file formats</a>
+      <a class="toc-item" href="#s3"><span class="toc-num">03</span> Prims — the building blocks</a>
+      <a class="toc-item" href="#s7"><span class="toc-num">07</span> Metadata</a>
+      <a class="toc-item" href="#s4"><span class="toc-num">04</span> Properties — attributes & relationships</a>
+      <a class="toc-item" href="#s8"><span class="toc-num">08</span> Time samples &amp; animation</a>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 1: STAGE -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-purple" id="s1">
+    <div class="section-header">
+      <div class="section-icon">🎭</div>
+      <div>
+        <div class="section-title">01 — The Stage</div>
+      </div>
+    </div>
+
+    <p>The <strong>Stage</strong> is the top-level container for your entire 3D scene. It's what your renderer, viewport, and tools actually look at. Everything — geometry, lights, cameras, materials — lives on the stage.</p>
+
+    <div class="analogy">
+      <div class="analogy-label">Real-world analogy</div>
+      <p>Think of a stage like the final printed poster that results from stacking multiple transparent sheets of acetate on top of each other. Each sheet has some content on it. The poster you see is all the sheets composed together. In USD, those sheets are called <strong>Layers</strong>.</p>
+    </div>
+
+    <p>Here's the key insight that confuses beginners: <strong>a Stage is not a file</strong>. It's a live, in-memory composition of one or more files (layers). When you open a USD file, USD assembles a Stage from that file and any other files it references.</p>
+
+    <!-- Stage diagram -->
+    <div class="diagram">
+      <div class="diagram-title">How a Stage is assembled from Layers</div>
+      <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, sans-serif">
+        <!-- Layer boxes -->
+        <rect x="30" y="30" width="150" height="50" rx="8" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="1.5"/>
+        <text x="105" y="51" font-size="12" font-weight="600" fill="#3C3489" text-anchor="middle">lighting.usda</text>
+        <text x="105" y="68" font-size="11" fill="#534AB7" text-anchor="middle">lights &amp; sky</text>
+
+        <rect x="210" y="30" width="150" height="50" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="1.5"/>
+        <text x="285" y="51" font-size="12" font-weight="600" fill="#085041" text-anchor="middle">layout.usda</text>
+        <text x="285" y="68" font-size="11" fill="#1D9E75" text-anchor="middle">where things go</text>
+
+        <rect x="390" y="30" width="150" height="50" rx="8" fill="#FAECE7" stroke="#F0997B" stroke-width="1.5"/>
+        <text x="465" y="51" font-size="12" font-weight="600" fill="#712B13" text-anchor="middle">models.usda</text>
+        <text x="465" y="68" font-size="11" fill="#D85A30" text-anchor="middle">geometry &amp; meshes</text>
+
+        <rect x="570" y="30" width="100" height="50" rx="8" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1.5"/>
+        <text x="620" y="51" font-size="12" font-weight="600" fill="#0C447C" text-anchor="middle">anim.usda</text>
+        <text x="620" y="68" font-size="11" fill="#185FA5" text-anchor="middle">motion data</text>
+
+        <!-- Arrows down -->
+        <line x1="105" y1="82" x2="320" y2="148" stroke="#B4B2A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="285" y1="82" x2="320" y2="148" stroke="#B4B2A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="465" y1="82" x2="360" y2="148" stroke="#B4B2A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="620" y1="82" x2="380" y2="148" stroke="#B4B2A9" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+        <!-- Stage box -->
+        <rect x="200" y="148" width="240" height="58" rx="10" fill="#534AB7" stroke="#3C3489" stroke-width="2"/>
+        <text x="320" y="172" font-size="13" font-weight="700" fill="white" text-anchor="middle">COMPOSED STAGE</text>
+        <text x="320" y="191" font-size="11" fill="rgba(255,255,255,0.8)" text-anchor="middle">all layers merged into one view</text>
+      </svg>
+    </div>
+
+    <h3 style="margin:.75rem 0 .5rem; font-size:16px; color:var(--purple-dark);">Creating and opening stages in Python</h3>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Three ways to create a stage</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>
+
+<span class="cm"># ── WAY 1: Create a stage saved to a real file ──────────────────────</span>
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">CreateNew</span>(<span class="cs">"my_scene.usda"</span>)
+<span class="cm"># The file is created on disk IMMEDIATELY, even before you add anything.</span>
+<span class="cm"># Open it in a text editor right now and you'd see just:  #usda 1.0</span>
+
+
+<span class="cm"># ── WAY 2: Open an existing file ────────────────────────────────────</span>
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">Open</span>(<span class="cs">"my_scene.usda"</span>)
+<span class="cm"># Loads the file and assembles all its layers into one stage.</span>
+<span class="cm"># If the file references other files, those are loaded too.</span>
+
+
+<span class="cm"># ── WAY 3: Create a stage with NO file (in-memory only) ─────────────</span>
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">CreateInMemory</span>()
+<span class="cm"># Nothing is written to disk. Great for testing and temporary work.</span>
+<span class="cm"># To save it later: stage.Export("output.usda")</span>
+
+
+<span class="cm"># ── SAVING ──────────────────────────────────────────────────────────</span>
+stage.<span class="cv">Save</span>()
+<span class="cm"># Writes all changes back to the file(s) on disk.</span>
+
+<span class="cm"># ── INSPECT AS TEXT (very useful for debugging!) ─────────────────────</span>
+<span class="ck">print</span>(stage.<span class="cv">ExportToString</span>(addSourceFileComment=<span class="cn">False</span>))
+<span class="cm"># Prints the USDA content of the stage as text.</span>
+<span class="cm"># This is EXACTLY what the exam shows you in code questions.</span></code></pre>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Exam tip</div>
+      <p><code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">CreateInMemory()</code> is the answer when a question asks about creating a stage with no file on disk. <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">CreateNew()</code> always creates a file immediately.</p>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 2: LAYERS -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-teal" id="s2">
+    <div class="section-header">
+      <div class="section-icon">📄</div>
+      <div><div class="section-title">02 — Layers</div></div>
+    </div>
+
+    <p>A <strong>Layer</strong> is a single USD file (or in-memory buffer) that contains some scene description. It's one "sheet" of data. Layers are the physical things that exist on disk. Stages are the assembled result of combining layers.</p>
+
+    <div class="analogy">
+      <div class="analogy-label">Real-world analogy</div>
+      <p>Layers are like tracks in a music DAW (like GarageBand or Pro Tools). The drums are on one track, bass on another, vocals on a third. Each track exists independently. The final song you hear is all tracks playing together — that's the Stage. Just like audio tracks, the order matters: a louder track can "drown out" a quieter one.</p>
+    </div>
+
+    <p>Every layer contains <strong>opinions</strong> — its own values for prims and properties. When a Stage is opened, USD looks at all opinions from all layers and picks the winning value for each property. The layer listed highest (first) in the stack is the strongest — its opinions win.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">USDA</span>
+        <span class="code-desc">A stage that combines three layers</span>
+      </div>
+      <pre><code><span class="cm"># scene.usda  ← this is the ROOT LAYER (the file you open)</span>
+<span class="cn">#usda 1.0</span>
+(
+    subLayers = [
+        <span class="cs">@./anim.usda@</span>,      <span class="cm"># ← FIRST = STRONGEST. Wins all conflicts.</span>
+        <span class="cs">@./layout.usda@</span>,    <span class="cm"># ← second strongest</span>
+        <span class="cs">@./models.usda@</span>     <span class="cm"># ← LAST = WEAKEST. Overridden by everything above.</span>
+    ]
+)
+<span class="cm"># The @ signs are USD's way of writing file paths.</span>
+<span class="cm"># The ./ means "same folder as this file".</span></code></pre>
+    </div>
+
+    <div class="key-fact">
+      <div class="key-fact-icon">💡</div>
+      <div class="key-fact-text"><strong>Key rule:</strong> If two layers both have an opinion about the same value (e.g. the X position of a chair), the layer listed first (higher up in subLayers) always wins. This is called <strong>strength ordering</strong> and it's the foundation of everything in USD composition.</div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Working with layers in code</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">Sdf</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">Open</span>(<span class="cs">"scene.usda"</span>)
+
+<span class="cm"># ── GET THE ROOT LAYER ──────────────────────────────────────────────</span>
+root_layer = stage.<span class="cv">GetRootLayer</span>()
+<span class="cm"># The root layer = the file you opened. It's the "anchor" of the stage.</span>
+<span class="ck">print</span>(root_layer.identifier)  <span class="cm"># prints the file path</span>
+
+<span class="cm"># ── SEE ALL LAYERS IN STRENGTH ORDER ───────────────────────────────</span>
+<span class="ck">for</span> layer <span class="ck">in</span> stage.<span class="cv">GetLayerStack</span>():
+    <span class="ck">print</span>(layer.identifier)
+<span class="cm"># Prints layers strongest-first. Root layer is always first.</span>
+
+<span class="cm"># ── ADD A SUBLAYER ─────────────────────────────────────────────────</span>
+root_layer.subLayerPaths.<span class="cv">append</span>(<span class="cs">"./fx.usda"</span>)
+<span class="cm"># append() = add to END = becomes the WEAKEST sublayer</span>
+
+root_layer.subLayerPaths.<span class="cv">insert</span>(<span class="cn">0</span>, <span class="cs">"./overrides.usda"</span>)
+<span class="cm"># insert(0, ...) = add to FRONT = becomes the STRONGEST sublayer</span>
+
+<span class="cm"># ── EDIT TARGET: which layer receives your edits ────────────────────</span>
+<span class="ck">print</span>(stage.<span class="cv">GetEditTarget</span>().GetLayer().identifier)
+<span class="cm"># By default = root layer. All your Set() calls go here.</span>
+<span class="cm"># You can change it to write to a different layer:</span>
+stage.<span class="cv">SetEditTarget</span>(stage.<span class="cv">GetLayerStack</span>()[<span class="cn">1</span>])
+<span class="cm"># Now edits go to the SECOND layer, not the root.</span>
+<span class="cm"># Getting this wrong is one of the most common bugs in USD pipelines!</span></code></pre>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 3: PRIMS -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-coral" id="s3">
+    <div class="section-header">
+      <div class="section-icon">📦</div>
+      <div><div class="section-title">03 — Prims</div></div>
+    </div>
+
+    <p>A <strong>Prim</strong> (short for Primitive) is every individual object in your scene. Every mesh, every light, every camera, every material, every empty organising container — all prims. The word comes from Pixar's original USD design and just means "a node in the scene graph."</p>
+
+    <div class="analogy">
+      <div class="analogy-label">Real-world analogy</div>
+      <p>Think of your scene graph like a file system on your computer. Prims are the folders and files. Some prims are like <strong>folders</strong> (they contain other prims but hold no geometry themselves — like <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">Xform</code> and <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">Scope</code>). Some prims are like <strong>files with data</strong> (they contain the actual 3D content — like <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">Mesh</code>, <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">Sphere</code>, <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">Material</code>).</p>
+    </div>
+
+    <!-- Hierarchy diagram -->
+    <div class="diagram">
+      <div class="diagram-title">A typical scene hierarchy — every node is a prim</div>
+      <svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, sans-serif">
+        <!-- Root -->
+        <rect x="270" y="10" width="140" height="38" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="1.5"/>
+        <text x="340" y="25" font-size="11" font-weight="600" fill="#3C3489" text-anchor="middle">/ (pseudo-root)</text>
+        <text x="340" y="40" font-size="10" fill="#534AB7" text-anchor="middle">always exists, invisible</text>
+
+        <!-- World -->
+        <line x1="340" y1="48" x2="340" y2="72" stroke="#B4B2A9" stroke-width="1.5"/>
+        <rect x="255" y="72" width="170" height="36" rx="7" fill="#534AB7" stroke="#3C3489" stroke-width="1.5"/>
+        <text x="340" y="86" font-size="11" font-weight="600" fill="white" text-anchor="middle">/World</text>
+        <text x="340" y="100" font-size="10" fill="rgba(255,255,255,0.8)" text-anchor="middle">Xform — organises the scene</text>
+
+        <!-- Branch lines from World -->
+        <line x1="280" y1="108" x2="120" y2="146" stroke="#B4B2A9" stroke-width="1.5"/>
+        <line x1="340" y1="108" x2="340" y2="146" stroke="#B4B2A9" stroke-width="1.5"/>
+        <line x1="400" y1="108" x2="560" y2="146" stroke="#B4B2A9" stroke-width="1.5"/>
+
+        <!-- Geometry Scope -->
+        <rect x="30" y="146" width="180" height="36" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="1.5"/>
+        <text x="120" y="160" font-size="11" font-weight="600" fill="#085041" text-anchor="middle">/World/Geometry</text>
+        <text x="120" y="175" font-size="10" fill="#1D9E75" text-anchor="middle">Scope — no transform</text>
+
+        <!-- Camera -->
+        <rect x="250" y="146" width="180" height="36" rx="7" fill="#E6F1FB" stroke="#85B7EB" stroke-width="1.5"/>
+        <text x="340" y="160" font-size="11" font-weight="600" fill="#0C447C" text-anchor="middle">/World/Camera</text>
+        <text x="340" y="175" font-size="10" fill="#185FA5" text-anchor="middle">Camera prim</text>
+
+        <!-- Materials -->
+        <rect x="470" y="146" width="180" height="36" rx="7" fill="#FAECE7" stroke="#F0997B" stroke-width="1.5"/>
+        <text x="560" y="160" font-size="11" font-weight="600" fill="#712B13" text-anchor="middle">/World/Materials</text>
+        <text x="560" y="175" font-size="10" fill="#D85A30" text-anchor="middle">Scope — organises shaders</text>
+
+        <!-- Mesh children -->
+        <line x1="80" y1="182" x2="80" y2="214" stroke="#B4B2A9" stroke-width="1.5"/>
+        <line x1="160" y1="182" x2="160" y2="214" stroke="#B4B2A9" stroke-width="1.5"/>
+        <rect x="20" y="214" width="120" height="34" rx="7" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+        <text x="80" y="229" font-size="11" font-weight="600" fill="#633806" text-anchor="middle">.../Chair</text>
+        <text x="80" y="243" font-size="10" fill="#BA7517" text-anchor="middle">Mesh — geometry</text>
+        <rect x="100" y="214" width="120" height="34" rx="7" fill="#FAEEDA" stroke="#EF9F27" stroke-width="1.5"/>
+        <text x="160" y="229" font-size="11" font-weight="600" fill="#633806" text-anchor="middle">.../Table</text>
+        <text x="160" y="243" font-size="10" fill="#BA7517" text-anchor="middle">Mesh — geometry</text>
+      </svg>
+    </div>
+
+    <h3 style="margin:.75rem 0 .75rem; font-size:16px; color:var(--coral-dark);">The three prim specifiers — you must know these!</h3>
+    <p>Every prim in a USDA file starts with one of three keywords. These appear in almost every exam question that shows code.</p>
+
+    <div class="spec-grid">
+      <div class="spec-card spec-def">
+        <h4>def</h4>
+        <p><strong>Define</strong> — creates a brand new prim. This is the normal one you use when you're the author. It claims full ownership of this prim.</p>
+      </div>
+      <div class="spec-card spec-over">
+        <h4>over</h4>
+        <p><strong>Override</strong> — adds opinions on top of a prim that already exists in another layer. It doesn't create the prim — it just modifies it.</p>
+      </div>
+      <div class="spec-card spec-class">
+        <h4>class</h4>
+        <p><strong>Class</strong> — a template prim. Never rendered directly. Used with the <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">inherits</code> arc so other prims can inherit from it.</p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-label">Common exam trap</div>
+      <p>An <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">over</code> on its own does nothing if there is no <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">def</code> for the same prim in another layer. The <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">over</code> just silently has no effect. This is a very common debugging scenario — "why isn't my opinion taking effect?"</p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">USDA</span>
+        <span class="code-desc">def vs over in two different layers</span>
+      </div>
+      <pre><code><span class="cm"># model.usda  (weaker layer — loaded second)</span>
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"Chair"</span>          <span class="cm"># def = I am DEFINING this prim</span>
+{
+    <span class="cv">double3</span> xformOp:translate = (<span class="cn">0, 0, 0</span>)   <span class="cm"># original position</span>
+}
+
+<span class="cm">────────────────────────────────────────────</span>
+
+<span class="cm"># anim.usda  (stronger layer — loaded first)</span>
+<span class="ck">over</span> <span class="cs">"Chair"</span>                <span class="cm"># over = I am OVERRIDING this prim</span>
+{                            <span class="cm"># Note: NO type (Xform) with 'over'!</span>
+    <span class="cv">double3</span> xformOp:translate = (<span class="cn">5, 0, 0</span>)   <span class="cm"># new position (wins!)</span>
+}
+<span class="cm"># Result: chair sits at (5,0,0) in the final scene</span></code></pre>
+    </div>
+
+    <h3 style="margin:1rem 0 .75rem; font-size:16px; color:var(--coral-dark);">Common prim types you need to know</h3>
+    <table class="comp-table" style="border:1px solid #e5e3db;border-radius:8px;overflow:hidden;">
+      <tr style="background:var(--coral-light);">
+        <th style="color:var(--coral-dark);">Type</th>
+        <th style="color:var(--coral-dark);">What it is</th>
+        <th style="color:var(--coral-dark);">Real-world analogy</th>
+      </tr>
+      <tr><td><code>Xform</code></td><td>A transform node — can translate, rotate, scale. Groups children.</td><td>An empty folder with a position in space</td></tr>
+      <tr><td><code>Scope</code></td><td>An organising container — like Xform but with NO transform</td><td>A namespace folder (e.g. /Materials)</td></tr>
+      <tr><td><code>Mesh</code></td><td>Polygon geometry made of vertices and faces</td><td>A 3D model</td></tr>
+      <tr><td><code>Sphere</code></td><td>A mathematical sphere primitive</td><td>A ball</td></tr>
+      <tr><td><code>Cube</code></td><td>A box primitive</td><td>A box</td></tr>
+      <tr><td><code>Material</code></td><td>Defines how a surface looks (colour, roughness, etc.)</td><td>Paint or texture applied to a surface</td></tr>
+      <tr><td><code>Camera</code></td><td>A camera in the scene</td><td>The film camera on set</td></tr>
+      <tr><td><code>DistantLight</code></td><td>A directional light (like the sun)</td><td>The sun</td></tr>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Creating and navigating prims</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">CreateInMemory</span>()
+
+<span class="cm"># ── DEFINE A PRIM (basic way) ───────────────────────────────────────</span>
+chair = stage.<span class="cv">DefinePrim</span>(<span class="cs">"/World/Chair"</span>, <span class="cs">"Xform"</span>)
+<span class="cm"># First arg = the path.  Second arg = the type.</span>
+<span class="cm"># Produces:  def Xform "Chair" { }</span>
+<span class="cm"># Note: USD automatically creates /World if it doesn't exist!</span>
+
+<span class="cm"># ── DEFINE A PRIM (schema-specific, preferred way) ──────────────────</span>
+sphere = <span class="cn">UsdGeom</span>.<span class="cp">Sphere</span>.<span class="cv">Define</span>(stage, <span class="cs">"/World/MySphere"</span>)
+<span class="cm"># UsdGeom.Sphere is the Python class for Sphere prims.</span>
+<span class="cm"># This way gives you type-safe access to Sphere's specific attributes.</span>
+<span class="cm"># It's preferred because you can then call sphere.GetRadiusAttr() etc.</span>
+
+sphere.<span class="cv">CreateRadiusAttr</span>().<span class="cv">Set</span>(<span class="cn">5.0</span>)
+<span class="cm"># Sets radius = 5 on the sphere. In USDA:  double radius = 5</span>
+
+<span class="cm"># ── GET A PRIM BY PATH ──────────────────────────────────────────────</span>
+prim = stage.<span class="cv">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
+<span class="cm"># Returns the prim at that exact path.</span>
+<span class="cm"># If the path doesn't exist, returns an INVALID prim (evaluates as False)</span>
+<span class="ck">if not</span> prim:
+    <span class="ck">print</span>(<span class="cs">"Prim not found!"</span>)
+
+<span class="cm"># ── GET TYPE NAME ───────────────────────────────────────────────────</span>
+<span class="ck">print</span>(prim.<span class="cv">GetTypeName</span>())   <span class="cm"># → "Xform"</span>
+<span class="cm"># If the prim was defined with 'over' (no type), returns "" empty string</span>
+
+<span class="cm"># ── NAVIGATE THE HIERARCHY ─────────────────────────────────────────</span>
+<span class="ck">for</span> child <span class="ck">in</span> prim.<span class="cv">GetChildren</span>():
+    <span class="ck">print</span>(child.<span class="cv">GetPath</span>())    <span class="cm"># prints paths of direct children only</span></code></pre>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 4: PROPERTIES -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-amber" id="s4">
+    <div class="section-header">
+      <div class="section-icon">🏷️</div>
+      <div><div class="section-title">04 — Properties</div></div>
+    </div>
+
+    <p>Properties are the actual <strong>data stored on a prim</strong>. A Sphere prim without a <code>radius</code> property would just be an empty shell. Properties are what make prims meaningful.</p>
+
+    <p>There are exactly <strong>two types</strong> of properties in USD:</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem;">
+      <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem;">
+        <div style="font-size:15px;font-weight:700;color:var(--teal-dark);margin-bottom:.4rem;">Attribute</div>
+        <div style="font-size:13px;color:var(--teal-dark);line-height:1.5;">Stores a <strong>typed value</strong> — a number, a colour, a vector, a string. This is where your actual 3D data lives.</div>
+        <div style="margin-top:.6rem;font-family:var(--mono);font-size:12px;background:rgba(255,255,255,0.5);padding:5px 8px;border-radius:4px;color:var(--teal-dark);">double radius = 5.0<br>color3f[] primvars:displayColor</div>
+      </div>
+      <div style="background:var(--purple-light);border:1.5px solid var(--purple-mid);border-radius:var(--radius);padding:1.1rem;">
+        <div style="font-size:15px;font-weight:700;color:var(--purple-dark);margin-bottom:.4rem;">Relationship</div>
+        <div style="font-size:13px;color:var(--purple-dark);line-height:1.5;">Stores a <strong>path pointing to another prim</strong>. Doesn't store values — stores connections.</div>
+        <div style="margin-top:.6rem;font-family:var(--mono);font-size:12px;background:rgba(255,255,255,0.5);padding:5px 8px;border-radius:4px;color:var(--purple-dark);">rel material:binding =<br>  &lt;/Materials/Metal&gt;</div>
+      </div>
+    </div>
+
+    <h3 style="margin:.75rem 0 .75rem; font-size:16px; color:var(--amber-dark);">Attribute value types — the ones you'll see in the exam</h3>
+
+    <table class="vtype-table">
+      <tr><th>Type keyword</th><th>What it stores</th><th>Example in USDA</th></tr>
+      <tr><td>double</td><td>64-bit decimal number</td><td>double radius = 2.5</td></tr>
+      <tr><td>float</td><td>32-bit decimal number</td><td>float intensity = 1.0</td></tr>
+      <tr><td>int</td><td>Whole number</td><td>int faceCount = 500</td></tr>
+      <tr><td>bool</td><td>True or false</td><td>bool doubleSided = false</td></tr>
+      <tr><td>token</td><td>A fixed string (like an enum)</td><td>token visibility = "inherited"</td></tr>
+      <tr><td>string</td><td>Any text</td><td>string name = "chair_001"</td></tr>
+      <tr><td>double3</td><td>3 doubles — used for position/scale</td><td>double3 xformOp:translate = (0, 5, 0)</td></tr>
+      <tr><td>color3f</td><td>RGB colour (red, green, blue)</td><td>color3f inputs:diffuseColor = (1, 0, 0)</td></tr>
+      <tr><td>color3f[]</td><td>Array of colours (the [] means array)</td><td>color3f[] primvars:displayColor = [(1,0,0)]</td></tr>
+      <tr><td>float3[]</td><td>Array of 3-float vectors</td><td>float3[] extent = [(-1,-1,-1),(1,1,1)]</td></tr>
+    </table>
+
+    <div class="callout info">
+      <div class="callout-label">What is a primvar?</div>
+      <p>Attributes that start with <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">primvars:</code> are special — they are <strong>Primitive Variables</strong> that get inherited down to child prims and are used by renderers for shading. The most important ones to know: <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">primvars:displayColor</code> (a quick preview colour) and <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">primvars:displayOpacity</code>.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Reading and writing attributes</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Gf</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">CreateInMemory</span>()
+sphere = <span class="cn">UsdGeom</span>.<span class="cp">Sphere</span>.<span class="cv">Define</span>(stage, <span class="cs">"/World/Ball"</span>)
+cube   = <span class="cn">UsdGeom</span>.<span class="cp">Cube</span>.<span class="cv">Define</span>(stage, <span class="cs">"/World/Box"</span>)
+
+<span class="cm"># ── SET AN ATTRIBUTE VALUE ──────────────────────────────────────────</span>
+sphere.<span class="cv">GetRadiusAttr</span>().<span class="cv">Set</span>(<span class="cn">5.0</span>)
+<span class="cm"># GetRadiusAttr() returns the Attribute OBJECT (not the value yet!)</span>
+<span class="cm"># .Set(5.0) writes the value 5.0 to it</span>
+<span class="cm"># In USDA this becomes:   double radius = 5</span>
+
+<span class="cm"># ── GET AN ATTRIBUTE VALUE ──────────────────────────────────────────</span>
+radius = sphere.<span class="cv">GetRadiusAttr</span>().<span class="cv">Get</span>()
+<span class="ck">print</span>(radius)   <span class="cm"># → 5.0</span>
+<span class="cm"># .Get() with no arguments returns the DEFAULT value.</span>
+<span class="cm"># .Get(time=12) would return the value at time code 12 (for animation).</span>
+
+<span class="cm"># ── SET A COLOUR ────────────────────────────────────────────────────</span>
+sphere.<span class="cv">GetDisplayColorAttr</span>().<span class="cv">Set</span>([(<span class="cn">1.0</span>, <span class="cn">0.0</span>, <span class="cn">0.0</span>)])
+<span class="cm"># Note: wrapped in a LIST because displayColor is color3f[] (an array)</span>
+<span class="cm"># (1.0, 0.0, 0.0) = red.  (0.0, 1.0, 0.0) = green.  (0.0, 0.0, 1.0) = blue</span>
+
+<span class="cm"># ── SET A POSITION ──────────────────────────────────────────────────</span>
+<span class="cn">UsdGeom</span>.<span class="cp">XformCommonAPI</span>(sphere).<span class="cv">SetTranslate</span>(<span class="cn">Gf</span>.<span class="cv">Vec3d</span>(<span class="cn">0</span>, <span class="cn">5</span>, <span class="cn">0</span>))
+<span class="cm"># UsdGeom.XformCommonAPI is a helper that manages transform attributes.</span>
+<span class="cm"># Gf.Vec3d is a 3D vector from USD's math library.</span>
+<span class="cm"># This creates:  double3 xformOp:translate = (0, 5, 0)</span>
+<span class="cm">#                uniform token[] xformOpOrder = ["xformOp:translate"]</span>
+
+<span class="cm"># ── SET THE EXTENT (bounding box) ───────────────────────────────────</span>
+cube.<span class="cv">GetExtentAttr</span>().<span class="cv">Set</span>([(<span class="cn">-2</span>,<span class="cn">-2</span>,<span class="cn">-2</span>), (<span class="cn">2</span>,<span class="cn">2</span>,<span class="cn">2</span>)])
+<span class="cm"># Extent = the axis-aligned bounding box of the prim.</span>
+<span class="cm"># IMPORTANT: USD does NOT auto-update extent when you change geometry!</span>
+<span class="cm"># If you change the cube's size, you MUST manually update extent too.</span>
+<span class="cm"># Forgetting this is a common bug (exam topic 5.6).</span>
+
+<span class="cm"># ── MATERIAL BINDING (a Relationship, not an Attribute) ─────────────</span>
+<span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">UsdShade</span>
+material = <span class="cn">UsdShade</span>.<span class="cp">Material</span>.<span class="cv">Define</span>(stage, <span class="cs">"/Materials/MetalMat"</span>)
+<span class="cn">UsdShade</span>.<span class="cp">MaterialBindingAPI</span>(sphere.<span class="cv">GetPrim</span>()).<span class="cv">Bind</span>(material)
+<span class="cm"># This creates a RELATIONSHIP (not an attribute) on the sphere prim:</span>
+<span class="cm">#   rel material:binding = &lt;/Materials/MetalMat&gt;</span>
+<span class="cm"># It points the sphere TO the material. That's what a relationship does.</span></code></pre>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 5: PATHS -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-blue" id="s5">
+    <div class="section-header">
+      <div class="section-icon">🗺️</div>
+      <div><div class="section-title">05 — Prim &amp; Property Paths</div></div>
+    </div>
+
+    <p>Every prim and property in USD has a unique <strong>address</strong> called a path. Think of it exactly like a file path on your computer — it tells you where something lives in the hierarchy.</p>
+
+    <!-- Path anatomy diagram -->
+    <div class="diagram">
+      <div class="diagram-title">Anatomy of a USD path</div>
+      <svg viewBox="0 0 660 140" xmlns="http://www.w3.org/2000/svg" font-family="'Courier New', monospace">
+        <!-- Main path text -->
+        <text x="330" y="45" font-size="24" font-weight="700" fill="#1a1a1a" text-anchor="middle">/World/Chair/Mesh.visibility</text>
+
+        <!-- Annotations -->
+        <line x1="15" y1="55" x2="15" y2="80" stroke="#534AB7" stroke-width="1.5"/>
+        <line x1="15" y1="80" x2="80" y2="80" stroke="#534AB7" stroke-width="1.5"/>
+        <text x="85" y="84" font-size="11" fill="#3C3489" font-family="-apple-system, sans-serif">root level</text>
+
+        <line x1="75" y1="55" x2="75" y2="100" stroke="#1D9E75" stroke-width="1.5"/>
+        <line x1="75" y1="100" x2="160" y2="100" stroke="#1D9E75" stroke-width="1.5"/>
+        <text x="165" y="104" font-size="11" fill="#085041" font-family="-apple-system, sans-serif">top prim "World"</text>
+
+        <line x1="188" y1="55" x2="188" y2="120" stroke="#D85A30" stroke-width="1.5"/>
+        <line x1="188" y1="120" x2="250" y2="120" stroke="#D85A30" stroke-width="1.5"/>
+        <text x="255" y="124" font-size="11" fill="#712B13" font-family="-apple-system, sans-serif">child prim "Chair"</text>
+
+        <line x1="315" y1="55" x2="315" y2="100" stroke="#BA7517" stroke-width="1.5"/>
+        <line x1="315" y1="100" x2="365" y2="100" stroke="#BA7517" stroke-width="1.5"/>
+        <text x="370" y="104" font-size="11" fill="#633806" font-family="-apple-system, sans-serif">child prim "Mesh"</text>
+
+        <line x1="365" y1="55" x2="365" y2="80" stroke="#185FA5" stroke-width="1.5"/>
+        <line x1="365" y1="80" x2="440" y2="80" stroke="#185FA5" stroke-width="1.5"/>
+        <text x="445" y="84" font-size="11" fill="#0C447C" font-family="-apple-system, sans-serif">. = property separator</text>
+
+        <line x1="450" y1="55" x2="450" y2="60" stroke="#993556" stroke-width="1.5"/>
+        <line x1="450" y1="60" x2="520" y2="60" stroke="#993556" stroke-width="1.5"/>
+        <text x="525" y="64" font-size="11" fill="#72243E" font-family="-apple-system, sans-serif">property name</text>
+      </svg>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Examples</span>
+        <span class="code-desc">Reading USD paths</span>
+      </div>
+      <pre><code><span class="cm"># PRIM paths — the address of a prim</span>
+/World                          <span class="cm"># prim at root level, named "World"</span>
+/World/Chair                    <span class="cm"># prim "Chair" inside "World"</span>
+/World/Chair/seat_geo           <span class="cm"># prim "seat_geo" inside "Chair"</span>
+/World/Materials/MetalMat       <span class="cm"># prim nested 2 levels deep</span>
+
+<span class="cm"># PROPERTY paths — prim path + dot + property name</span>
+/World/Chair.visibility         <span class="cm"># the 'visibility' attribute on Chair</span>
+/World/Chair.xformOp:translate  <span class="cm"># the translate attribute (colon in name = namespace)</span>
+/World/Ball.primvars:displayColor  <span class="cm"># a primvar attribute</span>
+
+<span class="cm"># PATH RULES:</span>
+<span class="cm"># - Always starts with /</span>
+<span class="cm"># - Prim names separated by /</span>
+<span class="cm"># - Property separated from its prim by a dot (.)</span>
+<span class="cm"># - Colons (:) in property names = namespacing (e.g. xformOp:translate)</span>
+<span class="cm"># - No spaces allowed anywhere in a path</span></code></pre>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 6: FILE FORMATS -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-teal" id="s6">
+    <div class="section-header">
+      <div class="section-icon">💾</div>
+      <div><div class="section-title">06 — USD File Formats</div></div>
+    </div>
+
+    <p>USD has three file formats. Knowing the differences is directly tested in exam topic 4.3 and implicitly in topic 1.9. Memorise this table.</p>
+
+    <div class="fmt-grid">
+      <div class="fmt-card fmt-usda">
+        <div class="fmt-ext">.usda</div>
+        <div class="fmt-name">USD ASCII</div>
+        <div class="fmt-desc">Human-readable text. You can open it in any text editor and read it. Great for learning, debugging, and version control. Slow to parse, large file size.</div>
+      </div>
+      <div class="fmt-card fmt-usdc">
+        <div class="fmt-ext">.usdc</div>
+        <div class="fmt-name">USD Crate (binary)</div>
+        <div class="fmt-desc">Compact binary format. Very fast to load. Cannot be read in a text editor. This is what production pipelines use for performance.</div>
+      </div>
+      <div class="fmt-card fmt-usdz">
+        <div class="fmt-ext">.usdz</div>
+        <div class="fmt-name">USD Zip Archive</div>
+        <div class="fmt-desc">A zip file containing a USD file plus all its dependencies (textures, sublayers). Self-contained — no broken references. Used for delivery to external parties.</div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-label">Exam trap — .usdz for external delivery</div>
+      <p>Exam topic 1.9 asks how to "prepare an internal asset to be delivered to external parties." The answer is <strong>.usdz</strong> — because it bundles everything into one file so the recipient can't have missing textures or broken references. .usda and .usdc can both have references to other files that the recipient might not have.</p>
+    </div>
+
+    <!-- usda vs usdc comparison -->
+    <table class="comp-table" style="border:1px solid #e5e3db;border-radius:8px;overflow:hidden;margin-top:1rem;">
+      <tr style="background:var(--teal-light);">
+        <th style="color:var(--teal-dark);">Property</th>
+        <th style="color:var(--teal-dark);">.usda</th>
+        <th style="color:var(--teal-dark);">.usdc</th>
+        <th style="color:var(--teal-dark);">.usdz</th>
+      </tr>
+      <tr><td>Human-readable?</td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td></tr>
+      <tr><td>Load speed</td><td>Slow</td><td>Very fast</td><td>Fast</td></tr>
+      <tr><td>File size</td><td>Large</td><td>Small</td><td>Compressed</td></tr>
+      <tr><td>Good for debugging?</td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td></tr>
+      <tr><td>Good for production?</td><td>❌ No</td><td>✅ Yes</td><td>Delivery only</td></tr>
+      <tr><td>Self-contained?</td><td>❌ No</td><td>❌ No</td><td>✅ Yes</td></tr>
+      <tr><td>Can reference external files?</td><td>✅ Yes</td><td>✅ Yes</td><td>Read-only archive</td></tr>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Converting between formats</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>
+
+<span class="cm"># Open a text (usda) stage and save it as binary (usdc)</span>
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">Open</span>(<span class="cs">"scene.usda"</span>)
+stage.<span class="cv">Export</span>(<span class="cs">"scene.usdc"</span>)
+<span class="cm"># The file extension in the Export() path determines the output format.</span>
+<span class="cm"># USD automatically encodes to the correct format.</span>
+
+<span class="cm"># Flatten a complex multi-layer stage to a single flat file</span>
+flat_layer = stage.<span class="cv">Flatten</span>()
+flat_layer.<span class="cv">Export</span>(<span class="cs">"flattened.usda"</span>)
+<span class="cm"># Flatten() bakes ALL composition arcs into one layer.</span>
+<span class="cm"># No references, no sublayers — just pure baked data.</span>
+<span class="cm"># Use this when delivering to an external studio (exam topic 1.9).</span></code></pre>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 7: METADATA -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-purple" id="s7">
+    <div class="section-header">
+      <div class="section-icon">🏷️</div>
+      <div><div class="section-title">07 — Metadata</div></div>
+    </div>
+
+    <p>Metadata is <strong>data about data</strong>. It doesn't describe 3D content (like geometry or colour) — it describes properties of the <em>layer itself</em> or of a specific <em>prim</em>. In USDA files, metadata lives inside <code>(  )</code> parentheses blocks.</p>
+
+    <div class="analogy">
+      <div class="analogy-label">Real-world analogy</div>
+      <p>Metadata is like the label on a paint tin. The label says "this is red paint, for indoor use, 2.5 litres" — it describes the tin, not the painting you'll make. Similarly, USD metadata says "this file uses centimetres, Y is up, the main prim is /World" — it describes the file, not the 3D scene.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">USDA</span>
+        <span class="code-desc">Stage-level and prim-level metadata</span>
+      </div>
+      <pre><code><span class="cn">#usda 1.0</span>
+(
+    <span class="cm"># ── STAGE-LEVEL METADATA (describes this whole layer) ──────────────</span>
+
+    <span class="cv">defaultPrim</span> = <span class="cs">"World"</span>
+    <span class="cm"># When another file references THIS file, it uses /World as the target.</span>
+    <span class="cm"># Without this, the referencing file has to specify a prim path manually.</span>
+    <span class="cm"># This is what exam Q1 is testing!</span>
+
+    <span class="cv">metersPerUnit</span> = <span class="cn">0.01</span>
+    <span class="cm"># 0.01 = centimetres (1 USD unit = 1 cm)</span>
+    <span class="cm"># 1.0  = metres</span>
+    <span class="cm"># USD does NOT auto-convert units. This is metadata only — a label.</span>
+    <span class="cm"># If you reference a metre file into a centimetre stage,</span>
+    <span class="cm"># the asset will appear 100x too small (exam Q11).</span>
+
+    <span class="cv">upAxis</span> = <span class="cs">"Y"</span>
+    <span class="cm"># Which axis points "up". "Y" = Maya default. "Z" = Blender/Houdini.</span>
+    <span class="cm"># Again, USD doesn't rotate things — this is a hint for tools.</span>
+
+    <span class="cv">timeCodesPerSecond</span> = <span class="cn">24</span>
+    <span class="cm"># 24 time codes = 1 second. So time code 48 = 2 seconds.</span>
+    <span class="cm"># Change this for different frame rates (30fps, 60fps etc.)</span>
+)
+
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"World"</span> (
+    <span class="cm"># ── PRIM-LEVEL METADATA (describes just this prim) ─────────────────</span>
+
+    <span class="cv">kind</span> = <span class="cs">"assembly"</span>
+    <span class="cm"># Classifies this prim in the model hierarchy.</span>
+    <span class="cm"># Values: "assembly", "component", "group", "subcomponent"</span>
+
+    <span class="cv">doc</span> = <span class="cs">"The root world prim for this shot"</span>
+    <span class="cm"># A human-readable description. Shows up in USD tools.</span>
+
+    <span class="cv">active</span> = <span class="cs">true</span>
+    <span class="cm"># active=false means this prim is excluded from the scene entirely.</span>
+    <span class="cm"># It becomes invisible AND is skipped during traversal.</span>
+)
+{
+    <span class="cm"># Attributes go in the curly braces { }, not in parentheses ( )</span>
+}</code></pre>
+    </div>
+
+    <div class="key-fact">
+      <div class="key-fact-icon">🔑</div>
+      <div class="key-fact-text"><strong>Key visual trick:</strong> In USDA files, <strong>( )</strong> parentheses always contain metadata. <strong>{ }</strong> curly braces always contain attributes and child prims. Learn to spot this instantly — it tells you what kind of data you're looking at.</div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Setting metadata in code</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Kind</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">CreateNew</span>(<span class="cs">"scene.usda"</span>)
+
+<span class="cm"># ── STAGE-LEVEL METADATA ────────────────────────────────────────────</span>
+<span class="cn">UsdGeom</span>.<span class="cv">SetStageUpAxis</span>(stage, <span class="cn">UsdGeom</span>.<span class="cp">Tokens</span>.y)      <span class="cm"># set Y-up</span>
+<span class="cn">UsdGeom</span>.<span class="cv">SetStageMetersPerUnit</span>(stage, <span class="cn">0.01</span>)           <span class="cm"># centimetres</span>
+stage.<span class="cv">SetMetadata</span>(<span class="cs">"timeCodesPerSecond"</span>, <span class="cn">24</span>)           <span class="cm"># 24fps</span>
+
+<span class="cm"># ── SET defaultPrim ─────────────────────────────────────────────────</span>
+world = <span class="cn">UsdGeom</span>.<span class="cp">Xform</span>.<span class="cv">Define</span>(stage, <span class="cs">"/World"</span>)
+stage.<span class="cv">SetDefaultPrim</span>(world.<span class="cv">GetPrim</span>())
+<span class="cm"># Now when another file references this file, /World is used automatically.</span>
+
+<span class="cm"># ── PRIM-LEVEL METADATA ─────────────────────────────────────────────</span>
+prim = stage.<span class="cv">GetPrimAtPath</span>(<span class="cs">"/World"</span>)
+<span class="cn">Usd</span>.<span class="cp">ModelAPI</span>(prim).<span class="cv">SetKind</span>(<span class="cn">Kind</span>.<span class="cp">Tokens</span>.assembly)    <span class="cm"># set kind</span>
+prim.<span class="cv">SetMetadata</span>(<span class="cs">"documentation"</span>, <span class="cs">"Root world prim"</span>) <span class="cm"># set doc string</span>
+
+<span class="cm"># ── READ METADATA ───────────────────────────────────────────────────</span>
+root_layer = stage.<span class="cv">GetRootLayer</span>()
+<span class="ck">print</span>(root_layer.defaultPrim)       <span class="cm"># → "World"</span>
+<span class="ck">print</span>(root_layer.metersPerUnit)     <span class="cm"># → 0.01</span></code></pre>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SECTION 8: TIME SAMPLES -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section s-coral" id="s8">
+    <div class="section-header">
+      <div class="section-icon">⏱️</div>
+      <div><div class="section-title">08 — Time Codes &amp; Animation</div></div>
+    </div>
+
+    <p>USD handles animation by storing <strong>multiple values</strong> for one attribute at different points in time. Each point in time is called a <strong>time code</strong> (think of it as a frame number).</p>
+
+    <div class="analogy">
+      <div class="analogy-label">Real-world analogy</div>
+      <p>A time sample is like a keyframe in traditional animation software. In Maya or Blender, you set "at frame 0 the ball is here, at frame 24 it's over there." USD does exactly the same thing but calls them time codes instead of frames, and stores them in a special syntax called <code>timeSamples</code>.</p>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">USDA</span>
+        <span class="code-desc">An animated bounce — ball moves and comes back</span>
+      </div>
+      <pre><code><span class="cn">#usda 1.0</span>
+(
+    <span class="cv">timeCodesPerSecond</span> = <span class="cn">24</span>   <span class="cm"># 24 time codes = 1 second</span>
+)
+
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"Ball"</span>
+{
+    <span class="cv">double3</span> xformOp:translate.<span class="cs">timeSamples</span> = {
+        <span class="cm"># time code : value at that time</span>
+        <span class="cn">0</span>:  (<span class="cn">0, 0, 0</span>),    <span class="cm"># at frame 0:  ball is at the origin</span>
+        <span class="cn">12</span>: (<span class="cn">0, 5, 0</span>),    <span class="cm"># at frame 12: ball is 5 units in the air</span>
+        <span class="cn">24</span>: (<span class="cn">0, 0, 0</span>),    <span class="cm"># at frame 24: ball is back at origin (1 second later)</span>
+    }
+    <span class="cv">uniform token</span>[] xformOpOrder = [<span class="cs">"xformOp:translate"</span>]
+    <span class="cm"># 'uniform' means this attribute does NOT animate (same for all time).</span>
+    <span class="cm"># The xformOpOrder tells USD which transform ops to apply and in what order.</span>
+}</code></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-desc">Setting and reading animated values</span>
+      </div>
+      <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Gf</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cv">CreateNew</span>(<span class="cs">"anim.usda"</span>)
+stage.<span class="cv">SetMetadata</span>(<span class="cs">"timeCodesPerSecond"</span>, <span class="cn">24</span>)
+
+ball = <span class="cn">UsdGeom</span>.<span class="cp">Xform</span>.<span class="cv">Define</span>(stage, <span class="cs">"/Ball"</span>)
+
+<span class="cm"># ── CREATE THE TRANSLATE ATTRIBUTE WITH TIME SAMPLES ────────────────</span>
+translate_attr = ball.<span class="cv">AddTranslateOp</span>().<span class="cv">GetAttr</span>()
+<span class="cm"># AddTranslateOp() sets up the translate xform operation.</span>
+<span class="cm"># .GetAttr() gets the underlying Usd.Attribute object so we can set values.</span>
+
+translate_attr.<span class="cv">Set</span>(<span class="cn">Gf</span>.<span class="cv">Vec3d</span>(<span class="cn">0</span>, <span class="cn">0</span>, <span class="cn">0</span>),  time=<span class="cn">0</span>)
+<span class="cm"># time=0 makes this a TIME SAMPLE at frame 0, not a default value.</span>
+
+translate_attr.<span class="cv">Set</span>(<span class="cn">Gf</span>.<span class="cv">Vec3d</span>(<span class="cn">0</span>, <span class="cn">5</span>, <span class="cn">0</span>),  time=<span class="cn">12</span>)
+<span class="cm"># At frame 12, ball is 5 units up.</span>
+
+translate_attr.<span class="cv">Set</span>(<span class="cn">Gf</span>.<span class="cv">Vec3d</span>(<span class="cn">0</span>, <span class="cn">0</span>, <span class="cn">0</span>),  time=<span class="cn">24</span>)
+<span class="cm"># At frame 24, back to origin.</span>
+
+<span class="cm"># ── READ A VALUE AT A SPECIFIC TIME ─────────────────────────────────</span>
+val = translate_attr.<span class="cv">Get</span>(time=<span class="cn">12</span>)
+<span class="ck">print</span>(val)   <span class="cm"># → Gf.Vec3d(0, 5, 0)</span>
+<span class="cm"># Between keyframes, USD interpolates automatically.</span>
+
+<span class="cm"># ── READ THE DEFAULT (non-animated) VALUE ───────────────────────────</span>
+default_val = translate_attr.<span class="cv">Get</span>()
+<span class="cm"># Returns the default value (if one was set), or None if only timeSamples exist.</span>
+<span class="cm"># .Get() with no argument = default value, not time code 0!</span>
+
+stage.<span class="cv">Save</span>()</code></pre>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-label">Key distinction</div>
+      <p><code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">attr.Get()</code> returns the <strong>default value</strong> (authored without a time code). <code style="background:rgba(255,255,255,0.5);padding:1px 4px;border-radius:3px;">attr.Get(time=0)</code> returns the value at <strong>time code 0</strong>. These can be different things! The default value is what you get when there are no time samples at all.</p>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- SUMMARY -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="summary-box">
+    <h3>Day 1 key takeaways — commit these to memory</h3>
+    <div class="summary-item"><span class="summary-num">1</span><span>A <strong>Stage</strong> is the assembled scene — not a file. A <strong>Layer</strong> is the actual file. Stages are composed from one or more layers.</span></div>
+    <div class="summary-item"><span class="summary-num">2</span><span>Layers are ordered by strength. The layer listed <strong>first</strong> in subLayers is the <strong>strongest</strong> — its opinions win over all others.</span></div>
+    <div class="summary-item"><span class="summary-num">3</span><span><strong>def</strong> creates. <strong>over</strong> overrides (no type allowed). <strong>class</strong> templates. An <code>over</code> with no matching <code>def</code> in another layer does nothing.</span></div>
+    <div class="summary-item"><span class="summary-num">4</span><span>Properties are either <strong>Attributes</strong> (typed values like numbers and colours) or <strong>Relationships</strong> (paths pointing to other prims, like material bindings).</span></div>
+    <div class="summary-item"><span class="summary-num">5</span><span>Prim paths use <code>/</code> separators. Property paths add a <code>.</code> after the prim path. Namespace separators inside property names use <code>:</code>.</span></div>
+    <div class="summary-item"><span class="summary-num">6</span><span><strong>.usda</strong> = readable text (debugging). <strong>.usdc</strong> = fast binary (production). <strong>.usdz</strong> = portable zip for external delivery.</span></div>
+    <div class="summary-item"><span class="summary-num">7</span><span>Metadata lives in <strong>( ) parentheses</strong>. Attributes live in <strong>{ } curly braces</strong>. <code>defaultPrim</code> and <code>metersPerUnit</code> are the most exam-critical metadata fields.</span></div>
+    <div class="summary-item"><span class="summary-num">8</span><span>USD does <strong>NOT auto-convert units</strong>. <code>metersPerUnit</code> is just a label. A metres asset in a centimetres stage appears 100× too small.</span></div>
+    <div class="summary-item"><span class="summary-num">9</span><span>Animation = <strong>timeSamples</strong> on an attribute. <code>attr.Get(time=12)</code> reads at frame 12. <code>attr.Get()</code> reads the default value — not the same thing!</span></div>
+    <div class="summary-item"><span class="summary-num">10</span><span>The <strong>edit target</strong> decides which layer receives your edits. Accidentally authoring to the wrong layer is one of the most common USD pipeline bugs.</span></div>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e3db;">
+    <p style="font-size:13px;color:var(--text-muted);">Day 1 complete · Next: Day 2 — Composition Part 1 (Layers, References, Payloads)</p>
+  </div>
+
+</div>
+</body>
+</html>

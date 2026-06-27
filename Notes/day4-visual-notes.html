@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 4 — Composition Part 3</title>
+<style>
+  :root {
+    --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#AFA9EC;--purple-dark:#3C3489;
+    --teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#5DCAA5;--teal-dark:#085041;
+    --coral:#D85A30;--coral-light:#FAECE7;--coral-mid:#F0997B;--coral-dark:#712B13;
+    --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#EF9F27;--amber-dark:#633806;
+    --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#85B7EB;--blue-dark:#0C447C;
+    --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#97C459;--green-dark:#27500A;
+    --pink:#993556;--pink-light:#FBEAF0;--pink-mid:#ED93B1;--pink-dark:#72243E;
+    --gray:#5F5E5A;--gray-light:#F1EFE8;--gray-mid:#B4B2A9;--gray-dark:#2C2C2A;
+    --text:#1a1a1a;--text-muted:#5F5E5A;--bg:#fafaf8;--white:#ffffff;
+    --radius:10px;--radius-sm:6px;
+    --mono:'Courier New',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+  .page{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#085041 0%,#1D9E75 55%,#5DCAA5 100%);border-radius:16px;padding:2.5rem 2rem;margin-bottom:2.5rem;color:white;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;right:-50px;bottom:-50px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,0.05)}
+  .hero::after{content:'';position:absolute;right:80px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.05)}
+  .hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:.5rem}
+  .hero h1{font-size:28px;font-weight:700;margin-bottom:.5rem}
+  .hero p{font-size:14px;opacity:.85;max-width:560px;line-height:1.6}
+  .hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem}
+  .hero-pill{background:rgba(255,255,255,0.18);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500}
+
+  /* TOC */
+  .toc{background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:2.5rem}
+  .toc h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.75rem}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 2rem}
+  .toc-item{font-size:13px;color:var(--teal);text-decoration:none;padding:4px 0;display:flex;align-items:center;gap:8px}
+  .toc-item:hover{color:var(--teal-dark)}
+  .toc-num{font-size:11px;background:var(--teal-light);color:var(--teal-dark);border-radius:4px;padding:1px 6px;font-weight:600;min-width:24px;text-align:center}
+
+  /* SECTIONS */
+  .section{margin-bottom:3.5rem}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid}
+  .section-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .section-title{font-size:21px;font-weight:700}
+  .s-teal .section-header{border-color:var(--teal-mid)}.s-teal .section-icon{background:var(--teal-light)}.s-teal .section-title{color:var(--teal-dark)}
+  .s-purple .section-header{border-color:var(--purple-mid)}.s-purple .section-icon{background:var(--purple-light)}.s-purple .section-title{color:var(--purple-dark)}
+  .s-amber .section-header{border-color:var(--amber-mid)}.s-amber .section-icon{background:var(--amber-light)}.s-amber .section-title{color:var(--amber-dark)}
+  .s-coral .section-header{border-color:var(--coral-mid)}.s-coral .section-icon{background:var(--coral-light)}.s-coral .section-title{color:var(--coral-dark)}
+  .s-blue .section-header{border-color:var(--blue-mid)}.s-blue .section-icon{background:var(--blue-light)}.s-blue .section-title{color:var(--blue-dark)}
+  .s-green .section-header{border-color:var(--green-mid)}.s-green .section-icon{background:var(--green-light)}.s-green .section-title{color:var(--green-dark)}
+  .s-pink .section-header{border-color:var(--pink-mid)}.s-pink .section-icon{background:var(--pink-light)}.s-pink .section-title{color:var(--pink-dark)}
+  .s-gray .section-header{border-color:var(--gray-mid)}.s-gray .section-icon{background:var(--gray-light)}.s-gray .section-title{color:var(--gray-dark)}
+
+  p{margin-bottom:.9rem}
+  h3{font-size:16px;font-weight:600;margin:1.25rem 0 .6rem;color:var(--text)}
+
+  /* CALLOUTS */
+  .analogy{background:var(--amber-light);border-left:4px solid var(--amber-mid);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .analogy-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber-dark);margin-bottom:.3rem}
+  .analogy p{margin:0;font-size:14px;color:var(--amber-dark)}
+  .callout{border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .callout-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+  .callout p{margin:0;font-size:14px;line-height:1.6}
+  .tip{background:var(--teal-light);border-left:4px solid var(--teal-mid)}.tip .callout-label{color:var(--teal-dark)}.tip p{color:var(--teal-dark)}
+  .warn{background:var(--coral-light);border-left:4px solid var(--coral-mid)}.warn .callout-label{color:var(--coral-dark)}.warn p{color:var(--coral-dark)}
+  .info{background:var(--blue-light);border-left:4px solid var(--blue-mid)}.info .callout-label{color:var(--blue-dark)}.info p{color:var(--blue-dark)}
+  .key{background:var(--purple-light);border-left:4px solid var(--purple-mid)}.key .callout-label{color:var(--purple-dark)}.key p{color:var(--purple-dark)}
+  .success{background:var(--green-light);border-left:4px solid var(--green-mid)}.success .callout-label{color:var(--green-dark)}.success p{color:var(--green-dark)}
+
+  /* CODE */
+  .code-block{margin:1rem 0 1.25rem;border-radius:var(--radius);overflow:hidden;border:1px solid #e5e3db}
+  .code-header{background:#2C2C2A;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+  .code-lang{font-size:11px;color:#B4B2A9;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .code-desc{font-size:11px;color:#888780}
+  pre{background:#1e1e1c;padding:1rem 1.25rem;overflow-x:auto;line-height:1.8;margin:0}
+  code{font-family:var(--mono);font-size:12.5px}
+  .code-block pre code{color:#d4d2c9}
+  .cm{color:#6A9955;font-style:italic}.ck{color:#C586C0}.cs{color:#CE9178}.cn{color:#B5CEA8}.cv{color:#9CDCFE}.cp{color:#4EC9B0}.cw{color:#DCDCAA}
+
+  /* DIAGRAM */
+  .diagram{background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.5rem;margin:1rem 0 1.5rem;overflow-x:auto}
+  .diagram-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:1.25rem;text-align:center}
+
+  /* KEY FACT */
+  .key-fact{background:var(--teal-light);border-radius:var(--radius);padding:1rem 1.25rem;margin:1rem 0;display:flex;gap:12px;align-items:flex-start}
+  .key-fact-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+  .key-fact-text{font-size:14px;color:var(--teal-dark);line-height:1.6}
+  .key-fact-text strong{font-weight:700}
+
+  /* COMPARISON GRID */
+  .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.5rem}
+  .comp-card{border-radius:var(--radius);padding:1.1rem;border:1.5px solid}
+  .comp-card h4{font-size:15px;font-weight:700;margin-bottom:.5rem}
+  .comp-card p{font-size:13px;margin:0 0 .5rem;line-height:1.5}
+  .comp-card ul{font-size:13px;padding-left:1.1rem;line-height:1.7;margin:0}
+
+  /* STEPS */
+  .steps{margin:1rem 0}
+  .step{display:flex;gap:14px;margin-bottom:1rem;align-items:flex-start}
+  .step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px}
+  .step-body{flex:1;padding-top:4px}
+  .step-title{font-size:14px;font-weight:600;margin-bottom:3px}
+  .step-text{font-size:13px;color:var(--text-muted);line-height:1.5}
+
+  /* TABLE */
+  .data-table{width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0;border:1px solid #e5e3db;border-radius:var(--radius);overflow:hidden}
+  .data-table th{padding:9px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .data-table td{padding:10px 14px;border-top:1px solid #e5e3db;vertical-align:top;line-height:1.5}
+  .data-table tr:hover td{background:var(--bg)}
+
+  /* LAYER STACK VISUAL */
+  .layer-visual{margin:1.25rem 0}
+  .lv-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .lv-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;min-width:80px;text-align:center;font-family:var(--mono)}
+  .lv-bar{flex:1;padding:10px 14px;border-radius:6px;border:1px solid;font-size:13px;font-family:var(--mono)}
+  .lv-desc{font-size:12px;color:var(--text-muted);min-width:160px}
+
+  /* SUMMARY */
+  .summary-box{background:var(--gray-light);border-radius:var(--radius);padding:1.5rem;margin-top:2.5rem}
+  .summary-box h3{font-size:15px;font-weight:700;color:var(--gray-dark);margin-bottom:1rem}
+  .summary-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #D3D1C7;font-size:14px;align-items:flex-start}
+  .summary-item:last-child{border-bottom:none}
+  .summary-num{color:var(--teal);font-weight:700;min-width:20px;font-size:13px;margin-top:3px}
+
+  svg{max-width:100%;height:auto}
+  @media(max-width:600px){.comp-grid{grid-template-columns:1fr}.toc-grid{grid-template-columns:1fr}.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">OpenUSD Certification · Day 4</div>
+  <h1>Composition Part 3</h1>
+  <p>The final composition day. Today covers the advanced patterns that tie everything together — edit targets, the session layer, sparse overrides, asset structure principles, change processing, flatten, and the complete composition mental model for the exam.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">Edit Target</span>
+    <span class="hero-pill">Session Layer</span>
+    <span class="hero-pill">Sparse Overrides</span>
+    <span class="hero-pill">Asset Structure</span>
+    <span class="hero-pill">Encapsulated vs Unencapsulated</span>
+    <span class="hero-pill">Change Processing</span>
+    <span class="hero-pill">Flatten</span>
+    <span class="hero-pill">Full Composition Mental Model</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h3>Contents</h3>
+  <div class="toc-grid">
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span>Edit target — where edits go</a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span>Encapsulated vs unencapsulated prims</a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span>Session layer — scratch space</a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span>Asset structure principles</a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span>Sparse overrides — USD's superpower</a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span>Change processing &amp; SdfChangeBlock</a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span>Flatten — baking composition</a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span>Full composition mental model</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 1: EDIT TARGET -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-teal" id="s1">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div><div class="section-title">01 — Edit Target</div></div>
+  </div>
+
+  <p>The <strong>edit target</strong> is one of the most important — and most misunderstood — concepts in USD. It answers the question: <em>when I call Set() or DefinePrim(), which file on disk actually receives the change?</em></p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Imagine you're in a band rehearsal with three microphones: one for the lead guitarist, one for the drummer, one for the vocalist. Whoever the sound engineer points the recording arm at is the "edit target" — only THEIR mic gets recorded, even if everyone is playing simultaneously. You can switch the recording arm to a different mic at any time, but only one mic is recording at once.</p>
+  </div>
+
+  <p>A stage is composed from many layers. When you make any edit — <code>Set()</code> an attribute, define a prim, author metadata — that edit goes to exactly ONE layer: the current edit target. By default this is the root layer. But you can switch it to any layer in the stack at any time.</p>
+
+  <div class="diagram">
+    <div class="diagram-title">Edit target — only one layer receives your edits at a time</div>
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+      <!-- Layers -->
+      <rect x="60" y="20" width="200" height="40" rx="7" fill="#1D9E75" stroke="#085041" stroke-width="2"/>
+      <text x="160" y="38" font-size="12" font-weight="700" fill="white" text-anchor="middle">root_layer.usda</text>
+      <text x="160" y="52" font-size="10" fill="rgba(255,255,255,0.8)" text-anchor="middle">← EDIT TARGET (default)</text>
+
+      <rect x="60" y="72" width="200" height="36" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="1.5"/>
+      <text x="160" y="87" font-size="12" font-weight="600" fill="#3C3489" text-anchor="middle">anim.usda</text>
+      <text x="160" y="101" font-size="10" fill="#888780" text-anchor="middle">sublayered in</text>
+
+      <rect x="60" y="120" width="200" height="36" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="1.5"/>
+      <text x="160" y="135" font-size="12" font-weight="600" fill="#3C3489" text-anchor="middle">lighting.usda</text>
+      <text x="160" y="149" font-size="10" fill="#888780" text-anchor="middle">sublayered in</text>
+
+      <!-- Recording arm pointing at root -->
+      <line x1="340" y1="40" x2="262" y2="40" stroke="#1D9E75" stroke-width="2.5" marker-end="url(#arr)"/>
+      <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#1D9E75"/></marker></defs>
+      <rect x="340" y="20" width="280" height="80" rx="8" fill="white" stroke="#5DCAA5" stroke-width="1.5"/>
+      <text x="480" y="45" font-size="13" font-weight="600" fill="#085041" text-anchor="middle">prim.GetAttr().Set(5.0)</text>
+      <text x="480" y="64" font-size="11" fill="#1D9E75" text-anchor="middle">→ writes to root_layer.usda</text>
+      <text x="480" y="80" font-size="11" fill="#888780" text-anchor="middle">anim.usda and lighting.usda unchanged</text>
+
+      <!-- After switching -->
+      <line x1="340" y1="138" x2="262" y2="138" stroke="#534AB7" stroke-width="2.5" marker-end="url(#arr2)"/>
+      <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#534AB7"/></marker></defs>
+      <rect x="340" y="118" width="280" height="52" rx="8" fill="white" stroke="#AFA9EC" stroke-width="1.5"/>
+      <text x="480" y="138" font-size="12" font-weight="600" fill="#3C3489" text-anchor="middle">After SetEditTarget(lighting_layer)</text>
+      <text x="480" y="155" font-size="11" fill="#534AB7" text-anchor="middle">same Set() → writes to lighting.usda</text>
+    </svg>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">Most common USD pipeline bug</div>
+    <p>Writing to the wrong edit target is the single most common source of "my opinion isn't taking effect" bugs. You think you're editing anim.usda but the edit target is still pointing at the root layer — so your change goes to the wrong file, silently, with no error. Always verify your edit target before authoring data in multi-layer pipelines.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Reading and switching the edit target</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Sdf</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"shot.usda"</span>)
+
+<span class="cm"># ── CHECK THE CURRENT EDIT TARGET ───────────────────────────────────</span>
+current = stage.<span class="cw">GetEditTarget</span>()
+<span class="ck">print</span>(current.<span class="cw">GetLayer</span>().identifier)
+<span class="cm"># Prints the file path of the layer currently receiving edits</span>
+<span class="cm"># Default = root layer (shot.usda itself)</span>
+
+<span class="cm"># ── SWITCH EDIT TARGET TO A SUBLAYER ────────────────────────────────</span>
+layer_stack = stage.<span class="cw">GetLayerStack</span>()
+<span class="cm"># GetLayerStack() returns all layers in strength order — root is first</span>
+
+<span class="cm"># Find the anim layer specifically</span>
+anim_layer = <span class="cn">Sdf</span>.<span class="cp">Layer</span>.<span class="cw">FindOrOpen</span>(<span class="cs">"./anim.usda"</span>)
+stage.<span class="cw">SetEditTarget</span>(anim_layer)
+<span class="cm"># Now ALL edits go to anim.usda</span>
+<span class="cm"># shot.usda (root) is NOT modified</span>
+
+<span class="cm"># ── AUTHOR DATA TO THE TARGET LAYER ─────────────────────────────────</span>
+robot = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Robot"</span>)
+robot.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>).<span class="cw">Set</span>((<span class="cn">5</span>, <span class="cn">0</span>, <span class="cn">0</span>))
+<span class="cm"># This opinion goes into anim.usda — not the root layer</span>
+<span class="cm"># In USDA: anim.usda now contains  over "Robot" { double3 xformOp:translate = (5,0,0) }</span>
+
+<span class="cm"># ── USE A CONTEXT MANAGER (cleaner, safer) ───────────────────────────</span>
+<span class="ck">with</span> stage.<span class="cw">GetEditTargetContext</span>(anim_layer):
+    <span class="cm"># All edits inside this block go to anim_layer</span>
+    robot.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>).<span class="cw">Set</span>((<span class="cn">10</span>, <span class="cn">0</span>, <span class="cn">0</span>))
+<span class="cm"># After the 'with' block, edit target automatically reverts to what it was before</span>
+<span class="cm"># This is the safest way to temporarily redirect edits</span>
+
+<span class="cm"># ── SWITCH BACK TO ROOT ──────────────────────────────────────────────</span>
+stage.<span class="cw">SetEditTarget</span>(stage.<span class="cw">GetRootLayer</span>())
+<span class="cm"># Resets to default — edits go to the root layer again</span></code></pre>
+  </div>
+
+  <h3>Edit target with references — authoring into referenced assets</h3>
+  <p>You can also set the edit target to a layer that's inside a referenced asset. This lets you edit the referenced asset's file directly from the referencing stage — useful in pipeline tools but dangerous if misused.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Editing inside a referenced asset's layer</span></div>
+    <pre><code><span class="cm"># stage has /World/Chair which references chair.usda</span>
+chair_prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
+
+<span class="cm"># Get the layer stack that contributes to this prim</span>
+<span class="cm"># PrimStack = all prim specs from all layers in strength order</span>
+prim_stack = chair_prim.<span class="cw">GetPrimStack</span>()
+<span class="ck">for</span> spec <span class="ck">in</span> prim_stack:
+    <span class="ck">print</span>(spec.layer.identifier)
+<span class="cm"># Prints ALL layers that have opinions about /World/Chair</span>
+<span class="cm"># Includes: shot.usda (root), chair.usda (referenced), chair_geo.usda (inside reference)</span>
+
+<span class="cm"># Set edit target to chair.usda directly</span>
+chair_layer = <span class="cn">Sdf</span>.<span class="cp">Layer</span>.<span class="cw">FindOrOpen</span>(<span class="cs">"./chair.usda"</span>)
+stage.<span class="cw">SetEditTarget</span>(chair_layer)
+
+<span class="cm"># Now edits write to chair.usda — modifying the original asset</span>
+<span class="cm"># Be careful: this changes the asset for ALL scenes that reference it</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 2: SESSION LAYER -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-purple" id="s2">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div><div class="section-title">02 — The Session Layer</div></div>
+  </div>
+
+  <p>The <strong>session layer</strong> is a special in-memory layer that exists above all other layers — it is the <strong>strongest layer in the entire stage</strong>. It is never saved to disk. It's designed for temporary, interactive overrides that should not persist.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>The session layer is like a sticky note you put on top of a printed document. The note says "ignore this section" or "change this number to X." The sticky note is the strongest voice — it covers what's underneath. When you finish the meeting and throw away the note, the original document is completely unchanged. The session layer works exactly like this — temporary, non-destructive, disposable.</p>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">Session layer — always the strongest, never saved to disk</div>
+    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+      <!-- Strength bar -->
+      <text x="30" y="130" font-size="11" fill="#534AB7" font-weight="600" text-anchor="middle" transform="rotate(-90,30,130)">STRONGEST → WEAKEST</text>
+      <line x1="44" y1="24" x2="44" y2="200" stroke="#534AB7" stroke-width="1.5"/>
+
+      <!-- Session layer -->
+      <rect x="60" y="16" width="580" height="38" rx="7" fill="#FBEAF0" stroke="#ED93B1" stroke-width="2"/>
+      <text x="250" y="32" font-size="12" font-weight="700" fill="#72243E">Session Layer (in-memory only)</text>
+      <text x="250" y="47" font-size="10" fill="#993556">STRONGEST — never saved to disk — holds interactive overrides</text>
+      <text x="560" y="38" font-size="10" font-weight="700" fill="#72243E" text-anchor="middle">EPHEMERAL</text>
+
+      <!-- Root layer -->
+      <rect x="60" y="64" width="580" height="36" rx="7" fill="#1D9E75" stroke="#085041" stroke-width="1.5"/>
+      <text x="250" y="79" font-size="12" font-weight="700" fill="white">root_layer.usda</text>
+      <text x="250" y="93" font-size="10" fill="rgba(255,255,255,0.8)">the file you opened — saved to disk</text>
+
+      <!-- Sublayers -->
+      <rect x="60" y="110" width="580" height="32" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="1.5"/>
+      <text x="250" y="125" font-size="12" font-weight="600" fill="#3C3489">anim.usda</text>
+      <text x="250" y="140" font-size="10" fill="#888780">sublayered — saved to disk</text>
+
+      <rect x="60" y="152" width="580" height="32" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="1.5"/>
+      <text x="250" y="167" font-size="12" font-weight="600" fill="#085041">model.usda</text>
+      <text x="250" y="182" font-size="10" fill="#888780">sublayered — saved to disk</text>
+
+      <!-- Label -->
+      <rect x="500" y="112" width="130" height="22" rx="4" fill="#FBEAF0" stroke="#ED93B1"/>
+      <text x="565" y="127" font-size="10" fill="#72243E" text-anchor="middle">all files persist →</text>
+      <rect x="500" y="64" width="130" height="22" rx="4" fill="#FBEAF0" stroke="#ED93B1"/>
+      <text x="565" y="79" font-size="10" fill="#72243E" text-anchor="middle">only session is lost →</text>
+    </svg>
+  </div>
+
+  <p>The session layer is created automatically when you open a stage. It is always the edit target for interactive tools like usdview — when you change a variant in usdview's metadata panel, that change goes to the session layer, not to any file on disk.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Working with the session layer</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+
+<span class="cm"># ── GET THE SESSION LAYER ────────────────────────────────────────────</span>
+session = stage.<span class="cw">GetSessionLayer</span>()
+<span class="ck">print</span>(session.identifier)
+<span class="cm"># Prints something like: anon:0x... (anonymous — no file path)</span>
+<span class="cm"># The session layer is anonymous — it has no file on disk</span>
+
+<span class="cm"># ── SET THE SESSION LAYER AS EDIT TARGET ─────────────────────────────</span>
+stage.<span class="cw">SetEditTarget</span>(session)
+<span class="cm"># Now all edits are temporary — nothing touches any file on disk</span>
+
+<span class="cm"># ── AUTHOR A TEMPORARY OVERRIDE ─────────────────────────────────────</span>
+prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Robot"</span>)
+prim.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>).<span class="cw">Set</span>((<span class="cn">99</span>, <span class="cn">0</span>, <span class="cn">0</span>))
+<span class="cm"># The robot appears at (99, 0, 0) in the viewport</span>
+<span class="cm"># But NO file on disk was changed</span>
+
+<span class="cm"># ── CHECK WHAT'S IN THE SESSION LAYER ───────────────────────────────</span>
+<span class="ck">print</span>(session.<span class="cw">ExportToString</span>())
+<span class="cm"># Shows the in-memory content — the temporary overrides</span>
+
+<span class="cm"># ── CLEAR THE SESSION LAYER ─────────────────────────────────────────</span>
+session.<span class="cw">Clear</span>()
+<span class="cm"># Wipes all session overrides — robot returns to its original position</span>
+<span class="cm"># No file was touched — completely clean</span>
+
+<span class="cm"># ── COMMON USE CASE: switch a variant temporarily ────────────────────</span>
+stage.<span class="cw">SetEditTarget</span>(session)
+vset = prim.<span class="cw">GetVariantSets</span>().<span class="cw">GetVariantSet</span>(<span class="cs">"color"</span>)
+vset.<span class="cw">SetVariantSelection</span>(<span class="cs">"blue"</span>)
+<span class="cm"># Variant selection goes to session layer — nothing on disk changes</span>
+<span class="cm"># This is exactly what usdview does when you change a variant in the UI</span></code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-label">Exam tip — usdview and the session layer</div>
+    <p>When you change a variant or visibility in usdview's metadata panel, it writes to the session layer. This is why those changes disappear when you close usdview — the session layer is never saved. If you want to persist a variant selection, you need to write it to an actual layer file using SetEditTarget() pointing at a real layer.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 3: SPARSE OVERRIDES -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-amber" id="s3">
+  <div class="section-header">
+    <div class="section-icon">✏️</div>
+    <div><div class="section-title">03 — Sparse Overrides: USD's Superpower</div></div>
+  </div>
+
+  <p><strong>Sparse overrides</strong> are the core of what makes USD powerful for production. The idea is simple: you only author the data that's <em>different</em> from the composed result. You don't duplicate anything. You just say "change this one property" — and everything else stays exactly as it was.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>A sparse override is like a Git diff. You don't send someone a new copy of the entire codebase when you fix a bug — you send a patch that says "on line 42, change X to Y." The rest of the file is untouched. USD sparse overrides work the same way: author only what changed, leave everything else to be composed from the layers below.</p>
+  </div>
+
+  <p>This is sometimes called <strong>non-destructive editing</strong> — the original asset is never modified. You layer your changes on top using <code>over</code> prims in a stronger layer.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA</span><span class="code-desc">Sparse override — change ONE colour on an entire complex asset</span></div>
+    <pre><code><span class="cm"># robot.usda — the original asset (complex: 500 prims, thousands of properties)</span>
+<span class="cm"># You want to change ONLY the left arm's colour to red for one specific shot</span>
+<span class="cm"># You do NOT copy or modify robot.usda</span>
+
+<span class="cm"># shot_override.usda — a tiny sparse override layer</span>
+#usda 1.0
+<span class="ck">over</span> <span class="cs">"World"</span> {
+    <span class="ck">over</span> <span class="cs">"Robot"</span> {
+        <span class="ck">over</span> <span class="cs">"Arm_L"</span> {
+            <span class="ck">over</span> <span class="cs">"Mesh"</span> {
+                <span class="cm"># The ONLY opinion in this entire file</span>
+                <span class="cv">color3f</span>[] primvars:displayColor = [(<span class="cn">1, 0, 0</span>)]
+            }
+        }
+    }
+}
+<span class="cm"># This file is tiny — just one property changed</span>
+<span class="cm"># The entire robot (499 other prims) is completely untouched</span>
+<span class="cm"># Sublayer this above robot.usda and you're done</span></code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Creating sparse overrides programmatically</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Sdf</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+
+<span class="cm"># ── OVERRIDE A PRIM USING OverridePrim() ─────────────────────────────</span>
+<span class="cm"># OverridePrim() = create an 'over' prim spec — sparse override</span>
+override = stage.<span class="cw">OverridePrim</span>(<span class="cs">"/World/Robot/Arm_L/Mesh"</span>)
+<span class="cm"># Creates the minimum 'over' spec at that path</span>
+<span class="cm"># Does NOT create any parent prims as 'def' — keeps them as 'over' too</span>
+<span class="cm"># Result in USDA: over "World" { over "Robot" { over "Arm_L" { over "Mesh" { } } } }</span>
+
+<span class="cm"># ── SET THE ONE THING YOU WANT TO CHANGE ────────────────────────────</span>
+mesh = <span class="cn">UsdGeom</span>.<span class="cp">Mesh</span>(override)
+mesh.<span class="cw">GetDisplayColorAttr</span>().<span class="cw">Set</span>([(<span class="cn">1.0</span>, <span class="cn">0.0</span>, <span class="cn">0.0</span>)])
+<span class="cm"># Only this one attribute is authored — nothing else in the file changes</span>
+
+<span class="cm"># ── WHAT THIS PRODUCES IN USDA ───────────────────────────────────────</span>
+<span class="cm"># over "World" {</span>
+<span class="cm">#     over "Robot" {</span>
+<span class="cm">#         over "Arm_L" {</span>
+<span class="cm">#             over "Mesh" {</span>
+<span class="cm">#                 color3f[] primvars:displayColor = [(1, 0, 0)]</span>
+<span class="cm">#             }</span>
+<span class="cm">#         }</span>
+<span class="cm">#     }</span>
+<span class="cm"># }</span>
+
+stage.<span class="cw">Save</span>()
+<span class="cm"># The entire override is this tiny — just one property</span></code></pre>
+  </div>
+
+  <div class="key-fact">
+    <div class="key-fact-icon">💡</div>
+    <div class="key-fact-text"><strong>Why this matters for the exam:</strong> Sparse overrides are the mechanism behind non-destructive editing, multi-user workflows, shot-specific variations, and debugging. Every time you see an <code>over</code> prim in a USDA file, that's a sparse override — someone changing one thing without touching everything else. Understanding this pattern is essential for the Pipeline Development and Debugging domains.</div>
+  </div>
+
+  <h3>Attribute blocks — blocking a value from below</h3>
+  <p>A special type of sparse override: you can <strong>block</strong> an attribute to prevent any weaker layer from providing a value for it. The result is that the attribute appears to have no value at all.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Blocking an attribute</span></div>
+    <pre><code><span class="cm"># Scenario: a referenced asset has translate = (5, 0, 0)</span>
+<span class="cm"># You want to make it appear as if NO translate was authored</span>
+<span class="cm"># (not zero — completely absent)</span>
+
+attr = prim.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>)
+attr.<span class="cw">Block</span>()
+<span class="cm"># In USDA this produces:  double3 xformOp:translate = None</span>
+<span class="cm"># 'None' as a value = block — prevents ALL weaker layers from contributing</span>
+<span class="cm"># Even if a weaker layer says translate = (10, 0, 0), it is silently ignored</span>
+<span class="cm"># The attribute now has no value — stronger layers can still override the block</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 4: FLATTEN -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-coral" id="s4">
+  <div class="section-header">
+    <div class="section-icon">🧱</div>
+    <div><div class="section-title">04 — Flatten: Baking Composition</div></div>
+  </div>
+
+  <p><strong>Flattening</strong> takes a fully composed stage — with all its sublayers, references, payloads, variants, inherits — and bakes everything into a single, self-contained layer. The output has no composition arcs. All values are resolved and written out as plain data.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Flattening is like merging all your Git branches into one commit and squashing the history. The final state is the same, but all the individual contributions (who did what, in which file) are gone. The result is simpler and more portable, but you lose the modular structure. It's a one-way operation — you can't un-flatten.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">When to flatten</h4>
+      <ul style="color:var(--teal-dark);">
+        <li>Delivering an asset to an external studio (exam topic 1.9)</li>
+        <li>Archiving a specific version of a shot</li>
+        <li>Debugging — see all resolved values at once</li>
+        <li>Publishing a final asset with no dependencies</li>
+        <li>Creating a self-contained .usdz package</li>
+      </ul>
+    </div>
+    <div class="comp-card" style="background:var(--coral-light);border-color:var(--coral-mid);">
+      <h4 style="color:var(--coral-dark);">When NOT to flatten</h4>
+      <ul style="color:var(--coral-dark);">
+        <li>Ongoing production work — you lose modularity</li>
+        <li>Assets that will continue to be updated</li>
+        <li>When you need to preserve the layer structure for collaboration</li>
+        <li>Large scenes — flattening can be memory and compute intensive</li>
+        <li>When you still need to swap variants or make overrides</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python + CLI</span><span class="code-desc">Three ways to flatten</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"complex_scene.usda"</span>)
+
+<span class="cm"># ── METHOD 1: Flatten to an Sdf.Layer object (in memory) ─────────────</span>
+flat_layer = stage.<span class="cw">Flatten</span>()
+<span class="cm"># Returns an Sdf.Layer with all composition baked in</span>
+<span class="cm"># No references, no sublayers, no variants — just pure resolved data</span>
+
+<span class="cm"># ── METHOD 2: Export the flat layer to a file ────────────────────────</span>
+flat_layer.<span class="cw">Export</span>(<span class="cs">"flat_output.usda"</span>)
+<span class="cm"># Writes the baked result to disk as a single standalone file</span>
+<span class="cm"># Opening flat_output.usda will show all data with no composition arcs</span>
+
+<span class="cm"># ── METHOD 3: Export directly from stage ─────────────────────────────</span>
+stage.<span class="cw">Export</span>(<span class="cs">"flat_output.usdc"</span>)
+<span class="cm"># Shortcut — flattens AND exports to the specified format in one call</span>
+<span class="cm"># The file extension determines the format (.usda = text, .usdc = binary)</span>
+
+<span class="cm">────────────────────────────────────────────</span>
+
+<span class="cm"># ── COMMAND LINE: usdcat with --flatten ──────────────────────────────</span>
+<span class="cm"># Run in terminal (not Python):</span>
+<span class="cm"># usdcat --flatten complex_scene.usda -o flat_output.usda</span>
+<span class="cm">#</span>
+<span class="cm"># Also useful for format conversion:</span>
+<span class="cm"># usdcat scene.usda -o scene.usdc   (convert text to binary)</span>
+<span class="cm"># usdcat scene.usdc -o scene.usda   (convert binary to text — for debugging)</span></code></pre>
+  </div>
+
+  <h3>What flattening does to composition arcs</h3>
+  <div class="data-table" style="border-radius:var(--radius);overflow:hidden;">
+    <tr style="background:var(--coral-light);">
+      <th style="color:var(--coral-dark);">Arc type</th>
+      <th style="color:var(--coral-dark);">Before flatten</th>
+      <th style="color:var(--coral-dark);">After flatten</th>
+    </tr>
+    <tr><td>Sublayers</td><td>Multiple files listed in subLayers</td><td>All merged into one layer — no subLayers list</td></tr>
+    <tr><td>References</td><td><code>prepend references = @./chair.usda@</code></td><td>All geometry baked in — no reference arc</td></tr>
+    <tr><td>Payloads</td><td><code>prepend payload = @./heavy.usda@</code></td><td>Payload content baked in (if loaded)</td></tr>
+    <tr><td>Variants</td><td>variantSet with multiple choices</td><td>Only the SELECTED variant's data is baked — other variants disappear</td></tr>
+    <tr><td>Inherits</td><td>class prim + inheriting prims</td><td>Class values merged into each inheriting prim directly</td></tr>
+    <tr><td>Specializes</td><td>class prim + specializing prims</td><td>Fallback values merged in where not overridden</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-label">Exam trap — variants after flattening</div>
+    <p>When you flatten, only the <strong>currently selected variant</strong> gets baked. All other variant choices are permanently lost. If a car asset has color variants red/blue/green and the current selection is "red" — the flat output only contains red. The blue and green geometry is gone. This is why you never flatten an asset that will continue to be used in production.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 5: ENCAPSULATED VS UNENCAPSULATED -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-blue" id="s5">
+  <div class="section-header">
+    <div class="section-icon">📦</div>
+    <div><div class="section-title">05 — Encapsulated vs Unencapsulated Prims</div></div>
+  </div>
+
+  <p>This section deepens the encapsulation concept from Day 3. The official USD definition of encapsulation is specifically about <strong>where prims live relative to the reference target</strong>.</p>
+
+  <div class="key-fact">
+    <div class="key-fact-icon">📖</div>
+    <div class="key-fact-text"><strong>Official definition:</strong> A prim is <strong>encapsulated</strong> when it is an ancestor of the referenced target prim — meaning it lives <em>inside</em> the referenced hierarchy. An <strong>unencapsulated</strong> prim lives outside the referenced prim's hierarchy in the same file.</div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA</span><span class="code-desc">Encapsulated vs unencapsulated — the difference</span></div>
+    <pre><code><span class="cm"># ── FULLY ENCAPSULATED — everything inside the referenced hierarchy ──</span>
+<span class="cm"># encapsulated.usda</span>
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"World"</span>          <span class="cm"># ← the defaultPrim / referenced target</span>
+{
+    <span class="ck">def</span> <span class="cn">Mesh</span> <span class="cs">"Cube"</span>
+    {
+        <span class="cv">rel</span> material:binding = &lt;/World/Looks/RedMat&gt;
+    }
+    <span class="ck">def</span> <span class="cn">Scope</span> <span class="cs">"Looks"</span>       <span class="cm"># ← Looks is INSIDE /World = encapsulated</span>
+    {
+        <span class="ck">def</span> <span class="cn">Material</span> <span class="cs">"RedMat"</span> { }
+    }
+}
+<span class="cm"># When scene.usda references encapsulated.usda:</span>
+<span class="cm"># /World/Cube AND /World/Looks/RedMat BOTH come in together</span>
+<span class="cm"># The material binding works because Looks is inside the reference boundary</span>
+
+<span class="cm">────────────────────────────────────────────</span>
+
+<span class="cm"># ── UNENCAPSULATED — something important lives OUTSIDE the hierarchy ──</span>
+<span class="cm"># unencapsulated.usda</span>
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"World"</span>          <span class="cm"># ← the referenced target</span>
+{
+    <span class="ck">def</span> <span class="cn">Mesh</span> <span class="cs">"Cube"</span>
+    {
+        <span class="cv">rel</span> material:binding = &lt;/Looks/RedMat&gt;
+        <span class="cm"># ← binding points OUTSIDE /World to /Looks</span>
+    }
+}
+
+<span class="ck">def</span> <span class="cn">Scope</span> <span class="cs">"Looks"</span>           <span class="cm"># ← Looks is OUTSIDE /World = UNENCAPSULATED</span>
+{
+    <span class="ck">def</span> <span class="cn">Material</span> <span class="cs">"RedMat"</span> { }
+}
+<span class="cm"># When scene.usda references unencapsulated.usda targeting /World:</span>
+<span class="cm"># ONLY /World and its children come in</span>
+<span class="cm"># /Looks does NOT come in — it's outside the reference boundary</span>
+<span class="cm"># The material binding now BREAKS — /Looks/RedMat doesn't exist in the scene</span></code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">Production best practice — always encapsulate dependencies</div>
+    <p>Assets should always be fully encapsulated — every prim that the asset needs (materials, skeletons, look files) should live <em>inside</em> the asset's root prim hierarchy. If materials live at the root level outside the main prim, they won't come in when the asset is referenced. This is a common source of broken material bindings in pipeline work.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">✅ Encapsulated (correct)</h4>
+      <p style="color:var(--teal-dark);">Materials, skeletons, and all dependencies live <em>inside</em> the asset's root prim. When referenced, everything comes in together. No broken references.</p>
+      <p style="color:var(--teal-dark);font-family:var(--mono);font-size:12px;margin-top:.5rem;">/Asset/Geometry<br>/Asset/Looks  ← inside</p>
+    </div>
+    <div class="comp-card" style="background:var(--coral-light);border-color:var(--coral-mid);">
+      <h4 style="color:var(--coral-dark);">❌ Unencapsulated (dangerous)</h4>
+      <p style="color:var(--coral-dark);">Materials or other dependencies live <em>outside</em> the asset's root prim. When referenced, only the root prim and its children come in. Dependencies are left behind.</p>
+      <p style="color:var(--coral-dark);font-family:var(--mono);font-size:12px;margin-top:.5rem;">/Asset/Geometry<br>/Looks  ← outside, broken!</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 6: ASSET STRUCTURE PRINCIPLES -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-green" id="s6">
+  <div class="section-header">
+    <div class="section-icon">🏛️</div>
+    <div><div class="section-title">06 — Asset Structure Principles</div></div>
+  </div>
+
+  <p>This directly feeds into the Pipeline Development exam domain (14%). A well-structured USD asset enables collaboration, scalability, and reuse. The official NVIDIA guidelines give clear principles.</p>
+
+  <h3>The five core principles</h3>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:var(--green-light);color:var(--green-dark);">1</div>
+      <div class="step-body">
+        <div class="step-title">Simplicity — avoid complexity that confuses users</div>
+        <div class="step-text">Use clear, intentional composition arcs. Avoid deeply nested composition that nobody can debug. Choose naming conventions that communicate intent — capitalize "public" prims, underscore "internal" ones. Don't use every composition arc just because you can.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--green-light);color:var(--green-dark);">2</div>
+      <div class="step-body">
+        <div class="step-title">Modularity — assets should be self-contained and reusable</div>
+        <div class="step-text">Each asset should work as a standalone unit. Dependencies should be encapsulated inside the asset's hierarchy. A chair asset should contain its own materials — it should not rely on a material living elsewhere in someone else's scene. This enables reuse across multiple shots and projects.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--green-light);color:var(--green-dark);">3</div>
+      <div class="step-body">
+        <div class="step-title">Clear entry points and stable interfaces</div>
+        <div class="step-text">Every asset should have a well-defined <code>defaultPrim</code> — the entry point for referencing. Variant sets and primvars that are meant to be controlled from outside should be "lofted" to the asset's root prim so they're accessible without loading payloads. Think of this as the asset's public API.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--green-light);color:var(--green-dark);">4</div>
+      <div class="step-body">
+        <div class="step-title">Scalability — support parallel workstreams</div>
+        <div class="step-text">Split complex assets across discipline layers (geometry, rigging, shading, animation) so multiple artists can work simultaneously without file conflicts. The layer stack structure enables this — each discipline owns their layer, the root layer just lists them in the right order.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--green-light);color:var(--green-dark);">5</div>
+      <div class="step-body">
+        <div class="step-title">Anchored paths — use relative paths, not absolute</div>
+        <div class="step-text">Always use relative file paths (<code>./chair.usda</code>) not absolute paths (<code>/home/studio/project/chair.usda</code>). Absolute paths break the moment the project moves to a different machine or directory. Relative paths keep the asset self-contained and portable.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The reference/payload pattern (exam topic 1.9)</h3>
+  <p>A best-practice asset structure splits the asset into two layers — an interface layer (lightweight) and a payload layer (heavy geometry):</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA</span><span class="code-desc">The reference/payload pattern — interface above, heavy data below</span></div>
+    <pre><code><span class="cm"># chair.usda — the INTERFACE layer (small, fast to open)</span>
+#usda 1.0
+(
+    defaultPrim = <span class="cs">"Chair"</span>
+)
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"Chair"</span> (
+    <span class="cm"># Heavy geometry is behind a payload — not loaded by default</span>
+    <span class="cv">prepend</span> payload = <span class="cs">@./chair_geo.usda@</span>
+
+    <span class="cm"># Variant sets are LOFTED here — accessible even without loading the payload</span>
+    <span class="cv">prepend variantSets</span> = <span class="cs">"color"</span>
+    <span class="cv">variants</span> = { <span class="cn">string</span> color = <span class="cs">"natural"</span> }
+)
+{
+    <span class="cm"># Extent hint — lets tools know the bounding box without loading geometry</span>
+    <span class="cv">float3</span>[] extentsHint = [(-0.5,-0.5,-0.5), (0.5,1.0,0.5)]
+
+    <span class="cm"># The variant data (lofted here — works without loading payload)</span>
+    <span class="cv">variantSet</span> <span class="cs">"color"</span> = {
+        <span class="cs">"natural"</span> { }
+        <span class="cs">"painted"</span> { }
+    }
+}
+
+<span class="cm">────────────────────────────────────────────</span>
+
+<span class="cm"># chair_geo.usda — the PAYLOAD layer (heavy — only loaded when needed)</span>
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"Chair"</span>
+{
+    <span class="ck">def</span> <span class="cn">Mesh</span> <span class="cs">"seat"</span> { <span class="cm">/* 50,000 vertices */</span> }
+    <span class="ck">def</span> <span class="cn">Mesh</span> <span class="cs">"legs"</span> { <span class="cm">/* 10,000 vertices */</span> }
+    <span class="ck">def</span> <span class="cn">Scope</span> <span class="cs">"Looks"</span>
+    {
+        <span class="ck">def</span> <span class="cn">Material</span> <span class="cs">"WoodMat"</span> { }
+    }
+}</code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-label">Why lofting variants matters</div>
+    <p>If variant sets are defined inside the payload, tools can't see them without loading the heavy geometry. Lofting means copying the variant set declaration up to the interface layer (above the payload). Now a scene can switch colour variants without ever loading the geometry — saves memory and load time. This is exam topic 1.9 territory — preparing assets for efficient pipeline use.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 7: CHANGE PROCESSING -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-pink" id="s7">
+  <div class="section-header">
+    <div class="section-icon">⚡</div>
+    <div><div class="section-title">07 — Change Processing &amp; SdfChangeBlock</div></div>
+  </div>
+
+  <p>Every time you edit a layer, USD's stage automatically re-composes affected prims. This is called <strong>change processing</strong>. It keeps the stage accurate — but it has a cost. If you make thousands of edits in a loop, each one triggers a re-composition. This can be very slow.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Change processing is like a live preview in a design tool. Every brush stroke instantly updates the screen. That's great for 1–2 edits. But if you're running a script that makes 10,000 changes, you don't want the screen to re-render after each individual stroke — you want it to wait until all the strokes are done, then update once. <code>SdfChangeBlock</code> is the "pause live preview" button.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">SdfChangeBlock — batch edits for performance</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Sdf</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"city.usda"</span>)
+
+<span class="cm"># ── WITHOUT SdfChangeBlock — slow ────────────────────────────────────</span>
+<span class="ck">for</span> i <span class="ck">in</span> <span class="cw">range</span>(<span class="cn">1000</span>):
+    prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">f"/World/Building_{i}"</span>)
+    prim.<span class="cw">GetAttribute</span>(<span class="cs">"height"</span>).<span class="cw">Set</span>(<span class="cn">10.0</span>)
+    <span class="cm"># After each Set(), USD re-composes the stage</span>
+    <span class="cm"># 1000 iterations = 1000 re-compositions = VERY SLOW</span>
+
+
+<span class="cm"># ── WITH SdfChangeBlock — fast ───────────────────────────────────────</span>
+<span class="ck">with</span> <span class="cn">Sdf</span>.<span class="cp">ChangeBlock</span>():
+    <span class="ck">for</span> i <span class="ck">in</span> <span class="cw">range</span>(<span class="cn">1000</span>):
+        prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">f"/World/Building_{i}"</span>)
+        prim.<span class="cw">GetAttribute</span>(<span class="cs">"height"</span>).<span class="cw">Set</span>(<span class="cn">10.0</span>)
+        <span class="cm"># No re-composition happens inside the 'with' block</span>
+        <span class="cm"># All 1000 edits are queued up</span>
+<span class="cm"># When the 'with' block exits → ONE re-composition for all 1000 edits</span>
+<span class="cm"># Result: same final state, much faster execution</span>
+
+
+<span class="cm"># ── WHEN TO USE SdfChangeBlock ───────────────────────────────────────</span>
+<span class="cm"># Use it whenever you're making many edits in a loop</span>
+<span class="cm"># Don't use it when you NEED the stage to be current inside the loop</span>
+<span class="cm"># (e.g. if you're reading a value you just wrote and need it to be composed)</span></code></pre>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Exam topic 6.1 — when SdfChangeBlock alleviates performance bottlenecks</div>
+    <p>The exam may ask you to identify when <code>SdfChangeBlock</code> helps. The answer: any time you're making many sequential edits in a batch operation — updating transforms on thousands of prims, authoring animation curves, generating procedural geometry. The key is that change processing happens once at the end instead of after every single edit.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 8: FULL COMPOSITION MENTAL MODEL -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section s-gray" id="s8">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div><div class="section-title">08 — Full Composition Mental Model</div></div>
+  </div>
+
+  <p>You've now covered all of composition across Days 2, 3, and 4. Here is the complete mental model that ties everything together — this is how to think about any composition question on the exam.</p>
+
+  <h3>The complete layer stack — strength ordering including session layer</h3>
+
+  <div class="layer-visual">
+    <div class="lv-row">
+      <div class="lv-badge" style="background:#FBEAF0;color:#72243E;">STRONGEST</div>
+      <div class="lv-bar" style="background:#FBEAF0;border-color:#ED93B1;color:#72243E;">Session Layer (in-memory, never saved)</div>
+      <div class="lv-desc">interactive tool overrides</div>
+    </div>
+    <div class="lv-row">
+      <div class="lv-badge" style="background:#E1F5EE;color:#085041;">2nd</div>
+      <div class="lv-bar" style="background:#E1F5EE;border-color:#5DCAA5;color:#085041;">Root Layer sublayers (strongest first)</div>
+      <div class="lv-desc">shot overrides, anim layer</div>
+    </div>
+    <div class="lv-row">
+      <div class="lv-badge" style="background:#EEEDFE;color:#3C3489;">3rd</div>
+      <div class="lv-bar" style="background:#EEEDFE;border-color:#AFA9EC;color:#3C3489;">Root Layer sublayers (weaker)</div>
+      <div class="lv-desc">layout, lighting, model</div>
+    </div>
+    <div class="lv-row">
+      <div class="lv-badge" style="background:#FAECE7;color:#712B13;">4th</div>
+      <div class="lv-bar" style="background:#FAECE7;border-color:#F0997B;color:#712B13;">Referenced assets (via arcs — LIVERPS order)</div>
+      <div class="lv-desc">I → V → R → P → S</div>
+    </div>
+    <div class="lv-row">
+      <div class="lv-badge" style="background:#F1EFE8;color:#444441;">WEAKEST</div>
+      <div class="lv-bar" style="background:#F1EFE8;border-color:#D3D1C7;color:#444441;">Schema fallback values</div>
+      <div class="lv-desc">defined by prim type</div>
+    </div>
+  </div>
+
+  <h3>The 5-question checklist for any composition exam question</h3>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num" style="background:var(--purple-light);color:var(--purple-dark);">1</div>
+      <div class="step-body">
+        <div class="step-title">Find every opinion about the property in question</div>
+        <div class="step-text">Look in every layer — root layer, sublayers, referenced files, variant contexts. List them all before deciding anything.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--amber-light);color:var(--amber-dark);">2</div>
+      <div class="step-body">
+        <div class="step-title">Identify which LIVERPS category each opinion comes from</div>
+        <div class="step-text">Is it a local opinion in a sublayer? A reference? A variant? A payload? An inherits? A specializes? Label each one.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--teal-light);color:var(--teal-dark);">3</div>
+      <div class="step-body">
+        <div class="step-title">Apply LIVERPS — the strongest category wins</div>
+        <div class="step-text">L beats I beats V beats R beats P beats S. If two opinions are both Local, the one in the stronger sublayer wins (first listed = stronger).</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--blue-light);color:var(--blue-dark);">4</div>
+      <div class="step-body">
+        <div class="step-title">Check for encapsulation boundaries</div>
+        <div class="step-text">Are you trying to override something inside a reference from outside? Local opinions on the referencing prim work. Reaching into the reference's internal sublayer ordering doesn't.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:var(--coral-light);color:var(--coral-dark);">5</div>
+      <div class="step-body">
+        <div class="step-title">If no arc wins — use the schema fallback</div>
+        <div class="step-text">If no layer has any opinion at all, USD uses the fallback defined by the prim's schema type. This is why a Sphere has a radius of 1.0 even if you never set it.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Common "why doesn't my opinion work?" checklist</h3>
+
+  <table class="data-table">
+    <tr style="background:var(--gray-light);">
+      <th style="color:var(--gray-dark);">Symptom</th>
+      <th style="color:var(--gray-dark);">Likely cause</th>
+      <th style="color:var(--gray-dark);">Fix</th>
+    </tr>
+    <tr><td>My Set() did nothing</td><td>Wrong edit target — opinion went to the wrong layer</td><td>Check GetEditTarget() before authoring</td></tr>
+    <tr><td>My over has no effect</td><td>No matching def in any other layer for that prim path</td><td>Check the prim path spelling exactly</td></tr>
+    <tr><td>A stronger layer is overriding me</td><td>Another layer higher in subLayers has the same opinion</td><td>Use stage.MuteLayer() to isolate which layer is winning</td></tr>
+    <tr><td>My variant selection does nothing</td><td>A local opinion on the same property is stronger (L beats V)</td><td>Remove the conflicting local opinion</td></tr>
+    <tr><td>Material binding is broken</td><td>Material lives outside the reference boundary (unencapsulated)</td><td>Move materials inside the asset's root prim hierarchy</td></tr>
+    <tr><td>Changes are slow in a loop</td><td>Change processing fires after every single edit</td><td>Wrap the loop in Sdf.ChangeBlock()</td></tr>
+    <tr><td>Session changes disappear on close</td><td>Edits went to session layer — never saved to disk</td><td>SetEditTarget() to a real layer before authoring persistent data</td></tr>
+  </table>
+</div>
+
+
+<!-- SUMMARY -->
+<div class="summary-box">
+  <h3>Day 4 key takeaways — commit these to memory</h3>
+  <div class="summary-item"><span class="summary-num">1</span><span>The <strong>edit target</strong> determines which layer receives your edits. Default = root layer. Always check it before authoring in multi-layer pipelines — wrong edit target is the most common silent bug.</span></div>
+  <div class="summary-item"><span class="summary-num">2</span><span>Use <code>with stage.GetEditTargetContext(layer):</code> as the safest way to temporarily redirect edits — it automatically reverts the edit target when the block exits.</span></div>
+  <div class="summary-item"><span class="summary-num">3</span><span>The <strong>session layer</strong> is the strongest layer in the stage and is never saved to disk. usdview writes all interactive changes (variant selections, visibility) to the session layer.</span></div>
+  <div class="summary-item"><span class="summary-num">4</span><span><strong>Sparse overrides</strong> are the core of non-destructive editing — use <code>over</code> prims and <code>OverridePrim()</code> to change only what needs to change. Never duplicate an entire asset to change one property.</span></div>
+  <div class="summary-item"><span class="summary-num">5</span><span><strong>Flatten</strong> bakes all composition into one layer — use it for delivery to external parties, archiving, or debugging. Never flatten assets that will continue to be edited in production.</span></div>
+  <div class="summary-item"><span class="summary-num">6</span><span>Flattening discards all non-selected variant choices permanently. Only the currently active variant's data survives in the flat output.</span></div>
+  <div class="summary-item"><span class="summary-num">7</span><span><strong>Encapsulated prims</strong> live inside the referenced hierarchy and come in when referenced. <strong>Unencapsulated prims</strong> live outside and are left behind — causing broken material bindings.</span></div>
+  <div class="summary-item"><span class="summary-num">8</span><span>Good asset structure: simple, modular, encapsulated, clear defaultPrim, lofted variant sets above payloads, relative file paths. These principles feed directly into the Pipeline Development exam domain.</span></div>
+  <div class="summary-item"><span class="summary-num">9</span><span><strong>Change processing</strong> re-composes the stage after every edit. Wrap batch edits in <code>Sdf.ChangeBlock()</code> to defer re-composition until all edits are done — essential for performance with thousands of edits.</span></div>
+  <div class="summary-item"><span class="summary-num">10</span><span>Full composition strength order: Session Layer → Local sublayers (strongest first) → LIVERPS arcs (I → V → R → P → S) → Schema fallbacks. Session is always strongest, schema fallback is always weakest.</span></div>
+</div>
+
+<div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e3db;">
+  <p style="font-size:13px;color:var(--text-muted);">Day 4 complete — Composition fully covered · Next: Day 5 — Data Modeling (UsdGeomMesh, primvars, value types, timeSamples)</p>
+</div>
+
+</div>
+</body>
+</html>
