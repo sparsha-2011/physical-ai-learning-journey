@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 8 — Content Aggregation + Customising USD</title>
+<style>
+  :root {
+    --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#AFA9EC;--purple-dark:#3C3489;
+    --teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#5DCAA5;--teal-dark:#085041;
+    --coral:#D85A30;--coral-light:#FAECE7;--coral-mid:#F0997B;--coral-dark:#712B13;
+    --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#EF9F27;--amber-dark:#633806;
+    --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#85B7EB;--blue-dark:#0C447C;
+    --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#97C459;--green-dark:#27500A;
+    --pink:#993556;--pink-light:#FBEAF0;--pink-mid:#ED93B1;--pink-dark:#72243E;
+    --gray:#5F5E5A;--gray-light:#F1EFE8;--gray-mid:#B4B2A9;--gray-dark:#2C2C2A;
+    --text:#1a1a1a;--text-muted:#5F5E5A;--bg:#fafaf8;--white:#ffffff;
+    --radius:10px;--radius-sm:6px;
+    --mono:'Courier New',monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+  .page{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  .hero{background:linear-gradient(135deg,#72243E 0%,#993556 55%,#ED93B1 100%);border-radius:16px;padding:2.5rem 2rem;margin-bottom:2.5rem;color:white;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;right:-50px;bottom:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.05)}
+  .hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:.5rem}
+  .hero h1{font-size:28px;font-weight:700;margin-bottom:.5rem}
+  .hero p{font-size:14px;opacity:.85;max-width:560px;line-height:1.6}
+  .hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem}
+  .hero-pill{background:rgba(255,255,255,0.18);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500}
+  .toc{background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:2.5rem}
+  .toc h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.75rem}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 2rem}
+  .toc-item{font-size:13px;color:var(--pink);text-decoration:none;padding:4px 0;display:flex;align-items:center;gap:8px}
+  .toc-item:hover{color:var(--pink-dark)}
+  .toc-num{font-size:11px;background:var(--pink-light);color:var(--pink-dark);border-radius:4px;padding:1px 6px;font-weight:600;min-width:24px;text-align:center}
+  .section{margin-bottom:3.5rem}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid}
+  .section-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .section-title{font-size:21px;font-weight:700}
+  .s-pink .section-header{border-color:var(--pink-mid)}.s-pink .section-icon{background:var(--pink-light)}.s-pink .section-title{color:var(--pink-dark)}
+  .s-purple .section-header{border-color:var(--purple-mid)}.s-purple .section-icon{background:var(--purple-light)}.s-purple .section-title{color:var(--purple-dark)}
+  .s-teal .section-header{border-color:var(--teal-mid)}.s-teal .section-icon{background:var(--teal-light)}.s-teal .section-title{color:var(--teal-dark)}
+  .s-amber .section-header{border-color:var(--amber-mid)}.s-amber .section-icon{background:var(--amber-light)}.s-amber .section-title{color:var(--amber-dark)}
+  .s-blue .section-header{border-color:var(--blue-mid)}.s-blue .section-icon{background:var(--blue-light)}.s-blue .section-title{color:var(--blue-dark)}
+  .s-coral .section-header{border-color:var(--coral-mid)}.s-coral .section-icon{background:var(--coral-light)}.s-coral .section-title{color:var(--coral-dark)}
+  .s-green .section-header{border-color:var(--green-mid)}.s-green .section-icon{background:var(--green-light)}.s-green .section-title{color:var(--green-dark)}
+  .s-gray .section-header{border-color:var(--gray-mid)}.s-gray .section-icon{background:var(--gray-light)}.s-gray .section-title{color:var(--gray-dark)}
+  p{margin-bottom:.9rem}
+  h3{font-size:16px;font-weight:600;margin:1.25rem 0 .6rem;color:var(--text)}
+  .analogy{background:var(--amber-light);border-left:4px solid var(--amber-mid);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .analogy-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber-dark);margin-bottom:.3rem}
+  .analogy p{margin:0;font-size:14px;color:var(--amber-dark)}
+  .callout{border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .callout-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+  .callout p{margin:0;font-size:14px;line-height:1.6}
+  .tip{background:var(--teal-light);border-left:4px solid var(--teal-mid)}.tip .callout-label{color:var(--teal-dark)}.tip p{color:var(--teal-dark)}
+  .warn{background:var(--coral-light);border-left:4px solid var(--coral-mid)}.warn .callout-label{color:var(--coral-dark)}.warn p{color:var(--coral-dark)}
+  .info{background:var(--blue-light);border-left:4px solid var(--blue-mid)}.info .callout-label{color:var(--blue-dark)}.info p{color:var(--blue-dark)}
+  .key{background:var(--purple-light);border-left:4px solid var(--purple-mid)}.key .callout-label{color:var(--purple-dark)}.key p{color:var(--purple-dark)}
+  .code-block{margin:1rem 0 1.25rem;border-radius:var(--radius);overflow:hidden;border:1px solid #e5e3db}
+  .code-header{background:#2C2C2A;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+  .code-lang{font-size:11px;color:#B4B2A9;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .code-desc{font-size:11px;color:#888780}
+  pre{background:#1e1e1c;padding:1rem 1.25rem;overflow-x:auto;line-height:1.8;margin:0}
+  code{font-family:var(--mono);font-size:12.5px}
+  .code-block pre code{color:#d4d2c9}
+  .cm{color:#6A9955;font-style:italic}.ck{color:#C586C0}.cs{color:#CE9178}.cn{color:#B5CEA8}.cv{color:#9CDCFE}.cp{color:#4EC9B0}.cw{color:#DCDCAA}
+  .diagram{background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.5rem;margin:1rem 0 1.5rem;overflow-x:auto}
+  .diagram-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:1.25rem;text-align:center}
+  .key-fact{background:var(--pink-light);border-radius:var(--radius);padding:1rem 1.25rem;margin:1rem 0;display:flex;gap:12px;align-items:flex-start}
+  .key-fact-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+  .key-fact-text{font-size:14px;color:var(--pink-dark);line-height:1.6}
+  .key-fact-text strong{font-weight:700}
+  .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.5rem}
+  .comp-card{border-radius:var(--radius);padding:1.1rem;border:1.5px solid}
+  .comp-card h4{font-size:15px;font-weight:700;margin-bottom:.5rem}
+  .comp-card p{font-size:13px;margin:0 0 .4rem;line-height:1.5}
+  .comp-card ul{font-size:13px;padding-left:1.1rem;line-height:1.7;margin:0}
+  .schema-table{width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0;border:1px solid #e5e3db;border-radius:var(--radius);overflow:hidden}
+  .schema-table th{padding:9px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .schema-table td{padding:9px 14px;border-top:1px solid #e5e3db;vertical-align:top;line-height:1.5}
+  .schema-table td:first-child{font-family:var(--mono);font-weight:700;font-size:12px}
+  .schema-table tr:hover td{background:var(--bg)}
+  .summary-box{background:var(--gray-light);border-radius:var(--radius);padding:1.5rem;margin-top:2.5rem}
+  .summary-box h3{font-size:15px;font-weight:700;color:var(--gray-dark);margin-bottom:1rem}
+  .summary-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #D3D1C7;font-size:14px;align-items:flex-start}
+  .summary-item:last-child{border-bottom:none}
+  .summary-num{color:var(--pink);font-weight:700;min-width:20px;font-size:13px;margin-top:3px}
+  svg{max-width:100%;height:auto}
+  @media(max-width:600px){.comp-grid{grid-template-columns:1fr}.toc-grid{grid-template-columns:1fr}.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="hero-eyebrow">OpenUSD Certification · Day 8</div>
+  <h1>Content Aggregation + Customising USD</h1>
+  <p>Today covers two exam domains worth 16% combined. Content Aggregation (10%) is about building large scenes efficiently using instancing. Customising USD (6%) is about extending the type system with custom schemas and the asset resolver.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">What is Instancing?</span>
+    <span class="hero-pill">Scenegraph Instancing</span>
+    <span class="hero-pill">Point Instancing</span>
+    <span class="hero-pill">Nested Instancing</span>
+    <span class="hero-pill">IsA Schemas</span>
+    <span class="hero-pill">API Schemas</span>
+    <span class="hero-pill">Custom Schemas</span>
+    <span class="hero-pill">AssetResolver</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <div class="toc-grid">
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span>What is instancing?</a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span>IsA schemas</a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span>Scenegraph instancing</a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span>API schemas</a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span>Point instancing</a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span>Custom schemas</a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span>Scenegraph vs point instancing</a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span>AssetResolver</a>
+  </div>
+</div>
+
+
+<!-- ══ S1: WHAT IS INSTANCING ══ -->
+<div class="section s-pink" id="s1">
+  <div class="section-header">
+    <div class="section-icon">🔁</div>
+    <div><div class="section-title">01 — What is Instancing?</div></div>
+  </div>
+
+  <p>Instancing is USD's memory-sharing mechanism for efficiently handling multiple copies of the same asset. Instead of duplicating the scenegraph hierarchy for every copy, USD creates ONE shared version called a <strong>prototype</strong> and all copies point to it.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Instancing is like a rubber stamp. You have one stamp (the prototype) and you can stamp it anywhere on the page as many times as you want. Each stamp mark (instance) looks identical but is positioned differently. You don't carve a new stamp for each mark — you reuse the same one. If you change the stamp design, every future stamp uses the new design. Without instancing, it would be like carving a new stamp for every single mark — wasteful and slow.</p>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">Without vs with instancing — scenegraph size comparison</div>
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+      <!-- Without -->
+      <rect x="10" y="10" width="300" height="180" rx="8" fill="#FAECE7" stroke="#F0997B" stroke-width="1.5"/>
+      <text x="160" y="32" font-size="12" font-weight="700" fill="#712B13" text-anchor="middle">WITHOUT instancing</text>
+      <text x="160" y="48" font-size="10" fill="#D85A30" text-anchor="middle">1000 trees × 500 prims each = 500,000 prims</text>
+
+      <rect x="25" y="60" width="80" height="50" rx="5" fill="#FAECE7" stroke="#F0997B"/>
+      <text x="65" y="80" font-size="10" font-weight="700" fill="#712B13" text-anchor="middle">Tree_001</text>
+      <text x="65" y="94" font-size="9" fill="#D85A30" text-anchor="middle">500 prims</text>
+      <rect x="115" y="60" width="80" height="50" rx="5" fill="#FAECE7" stroke="#F0997B"/>
+      <text x="155" y="80" font-size="10" font-weight="700" fill="#712B13" text-anchor="middle">Tree_002</text>
+      <text x="155" y="94" font-size="9" fill="#D85A30" text-anchor="middle">500 prims</text>
+      <rect x="205" y="60" width="80" height="50" rx="5" fill="#FAECE7" stroke="#F0997B"/>
+      <text x="245" y="80" font-size="10" font-weight="700" fill="#712B13" text-anchor="middle">Tree_003</text>
+      <text x="245" y="94" font-size="9" fill="#D85A30" text-anchor="middle">500 prims</text>
+      <text x="160" y="135" font-size="24" fill="#F0997B" text-anchor="middle">...</text>
+      <text x="160" y="160" font-size="11" font-weight="600" fill="#712B13" text-anchor="middle">SLOW · MEMORY INTENSIVE</text>
+      <text x="160" y="178" font-size="10" fill="#D85A30" text-anchor="middle">Each copy duplicates all hierarchy</text>
+
+      <!-- With -->
+      <rect x="370" y="10" width="300" height="180" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="1.5"/>
+      <text x="520" y="32" font-size="12" font-weight="700" fill="#085041" text-anchor="middle">WITH instancing</text>
+      <text x="520" y="48" font-size="10" fill="#1D9E75" text-anchor="middle">1 prototype + 1000 lightweight instances</text>
+
+      <rect x="460" y="58" width="120" height="60" rx="5" fill="#1D9E75"/>
+      <text x="520" y="82" font-size="11" font-weight="700" fill="white" text-anchor="middle">__Prototype__</text>
+      <text x="520" y="98" font-size="10" fill="rgba(255,255,255,0.8)" text-anchor="middle">Tree (500 prims)</text>
+      <text x="520" y="112" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">ONE shared copy</text>
+
+      <line x1="400" y1="148" x2="460" y2="118" stroke="#5DCAA5" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <line x1="520" y1="150" x2="520" y2="118" stroke="#5DCAA5" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <line x1="640" y1="148" x2="580" y2="118" stroke="#5DCAA5" stroke-width="1.5" stroke-dasharray="4,2"/>
+
+      <rect x="375" y="148" width="60" height="28" rx="4" fill="#E1F5EE" stroke="#5DCAA5"/>
+      <text x="405" y="167" font-size="9" fill="#085041" text-anchor="middle">inst_001</text>
+      <rect x="490" y="148" width="60" height="28" rx="4" fill="#E1F5EE" stroke="#5DCAA5"/>
+      <text x="520" y="167" font-size="9" fill="#085041" text-anchor="middle">inst_002</text>
+      <rect x="605" y="148" width="60" height="28" rx="4" fill="#E1F5EE" stroke="#5DCAA5"/>
+      <text x="635" y="167" font-size="9" fill="#085041" text-anchor="middle">inst_003</text>
+
+      <text x="520" y="190" font-size="10" fill="#085041" text-anchor="middle">FAST · MEMORY EFFICIENT</text>
+    </svg>
+  </div>
+
+  <p>USD provides two instancing implementations:</p>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--purple-light);border-color:var(--purple-mid);">
+      <h4 style="color:var(--purple-dark);">Scenegraph Instancing</h4>
+      <p style="color:var(--purple-dark);">Shares composed prim hierarchies. Each instance is an individual prim with <code>instanceable=true</code>. Supports per-instance overrides on the instanceable prim itself.</p>
+      <p style="color:var(--purple-dark);"><strong>Best for:</strong> dozens to thousands of complex assets</p>
+    </div>
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">Point Instancing</h4>
+      <p style="color:var(--teal-dark);">Uses UsdGeomPointInstancer schema. Stores positions, orientations, and scales as arrays. Designed for massive counts — millions of instances.</p>
+      <p style="color:var(--teal-dark);"><strong>Best for:</strong> millions of simple objects (grass, rocks, particles)</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ S2: SCENEGRAPH INSTANCING ══ -->
+<div class="section s-purple" id="s2">
+  <div class="section-header">
+    <div class="section-icon">🌳</div>
+    <div><div class="section-title">02 — Scenegraph Instancing</div></div>
+  </div>
+
+  <p>Scenegraph instancing works by marking a prim as <strong>instanceable</strong>. USD then analyzes all instanceable prims that share the same composition arcs and creates ONE implicit prototype for all of them to share.</p>
+
+  <div class="key-fact">
+    <div class="key-fact-icon">🔑</div>
+    <div class="key-fact-text"><strong>The key requirement:</strong> instanceable prims must share the same composition arcs — the same references, payloads, variants. USD computes an "instancing key" from the composition arcs. Prims with matching keys share one prototype. If two prims reference different assets they get different prototypes.</div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA</span><span class="code-desc">Scenegraph instancing — two robots sharing one prototype</span></div>
+    <pre><code>#usda 1.0
+
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"World"</span>
+{
+    <span class="cm"># Both robots reference the SAME asset AND have instanceable=true</span>
+    <span class="cm"># → USD creates ONE prototype, both share it</span>
+
+    <span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"Robot_01"</span> (
+        <span class="cv">prepend</span> references = <span class="cs">@./robot.usda@</span>
+        <span class="cv">instanceable</span> = <span class="cn">true</span>    <span class="cm"># ← the magic metadata</span>
+    )
+    {
+        <span class="cm"># Can override properties on the instanceable prim itself</span>
+        <span class="cv">double3</span> xformOp:translate = (<span class="cn">-5, 0, 0</span>)
+        <span class="cm"># CANNOT author opinions on children (/Robot_01/Arm etc.)</span>
+        <span class="cm"># because the hierarchy is shared via the prototype</span>
+    }
+
+    <span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"Robot_02"</span> (
+        <span class="cv">prepend</span> references = <span class="cs">@./robot.usda@</span>
+        <span class="cv">instanceable</span> = <span class="cn">true</span>
+    )
+    {
+        <span class="cv">double3</span> xformOp:translate = (<span class="cn">5, 0, 0</span>)
+        <span class="cm"># Same composition arcs → same instancing key → same prototype</span>
+    }
+}
+<span class="cm"># Result: one __Prototype__ prim with 500 prims in it</span>
+<span class="cm"># Robot_01 and Robot_02 are lightweight — they just reference the prototype</span>
+<span class="cm"># Memory: 500 prims instead of 1000</span></code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Setting instanceable and working with prototypes</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"forest.usda"</span>)
+
+<span class="cm"># ── SET instanceable ON EXISTING PRIMS ──────────────────────────────</span>
+robot1 = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Robot_01"</span>)
+robot1.<span class="cw">SetInstanceable</span>(<span class="cn">True</span>)
+<span class="cm"># USD immediately computes the instancing key and creates a prototype</span>
+
+robot2 = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Robot_02"</span>)
+robot2.<span class="cw">SetInstanceable</span>(<span class="cn">True</span>)
+<span class="cm"># Same reference + instanceable=true → same key → shares prototype</span>
+
+<span class="cm"># ── CHECK IF A PRIM IS AN INSTANCE ──────────────────────────────────</span>
+<span class="ck">print</span>(robot1.<span class="cw">IsInstance</span>())          <span class="cm"># True</span>
+<span class="ck">print</span>(robot1.<span class="cw">IsInstanceable</span>())      <span class="cm"># True</span>
+
+<span class="cm"># ── GET THE PROTOTYPE ────────────────────────────────────────────────</span>
+prototype = robot1.<span class="cw">GetPrototype</span>()
+<span class="ck">print</span>(prototype.<span class="cw">GetPath</span>())
+<span class="cm"># → /__Prototype_1  (implicit path created by USD)</span>
+<span class="ck">print</span>(prototype.<span class="cw">IsPrototype</span>())      <span class="cm"># True</span>
+
+<span class="cm"># ── LIST ALL PROTOTYPES ON THE STAGE ────────────────────────────────</span>
+<span class="ck">for</span> proto <span class="ck">in</span> stage.<span class="cw">GetPrototypes</span>():
+    <span class="ck">print</span>(proto.<span class="cw">GetPath</span>())
+<span class="cm"># One prototype per unique instancing key</span>
+
+<span class="cm"># ── INSTANCE PROXIES — navigating into an instance ───────────────────</span>
+<span class="cm"># You cannot directly access children of an instance prim</span>
+<span class="cm"># because the hierarchy lives in the prototype, not in the instance</span>
+arm = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Robot_01/Arm"</span>)
+<span class="ck">print</span>(arm.<span class="cw">IsInstanceProxy</span>())
+<span class="cm"># True — /World/Robot_01/Arm is an instance proxy</span>
+<span class="cm"># It "proxies" the corresponding prim in the prototype</span>
+<span class="cm"># You can READ from it but not WRITE to it</span>
+
+<span class="cm"># ── DE-INSTANCE when you need per-instance edits ────────────────────</span>
+robot1.<span class="cw">SetInstanceable</span>(<span class="cn">False</span>)
+<span class="cm"># Now Robot_01's hierarchy is no longer shared</span>
+<span class="cm"># You can now make sparse overrides on /World/Robot_01/Arm etc.</span>
+<span class="cm"># Robot_02 still uses the prototype</span></code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">The key restriction — you cannot edit prototype descendants</div>
+    <p>When a prim is instanceable, its descendants (children, grandchildren) live in the prototype and are <strong>immutable</strong> from the instance. You can only make edits on the instanceable prim itself — transforms, variant selections, material bindings at the root level. To make per-instance edits to descendants you must de-instance that specific prim with <code>SetInstanceable(False)</code>.</p>
+  </div>
+
+  <h3>Nested instancing</h3>
+  <p>An instanceable prim can contain other instanceable prims. This is called nested instancing and allows building up large aggregate assets from smaller reusable pieces.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA</span><span class="code-desc">Nested instancing — a city block made of buildings made of windows</span></div>
+    <pre><code><span class="cm"># Building references window.usda 20 times (instanceable)</span>
+<span class="cm"># CityBlock references building.usda 10 times (instanceable)</span>
+<span class="cm"># Result: 2 prototypes, massive memory saving</span>
+
+<span class="ck">def</span> <span class="cn">Xform</span> <span class="cs">"CityBlock"</span> (
+    <span class="cv">prepend</span> references = <span class="cs">@./building.usda@</span>
+    <span class="cv">instanceable</span> = <span class="cn">true</span>
+)
+{
+    <span class="cm"># building.usda internally has 20 instanceable window prims</span>
+    <span class="cm"># → nested instancing: windows share a prototype INSIDE buildings</span>
+    <span class="cm"># CityBlock instances share the building prototype</span>
+    <span class="cm"># → two levels of sharing, enormous memory reduction</span>
+}</code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S3: POINT INSTANCING ══ -->
+<div class="section s-teal" id="s3">
+  <div class="section-header">
+    <div class="section-icon">🌿</div>
+    <div><div class="section-title">03 — Point Instancing</div></div>
+  </div>
+
+  <p><strong>UsdGeomPointInstancer</strong> is a schema for placing millions of instances of prototype objects using compact array attributes. Instead of individual prims, everything is stored as large arrays — positions, orientations, scales, and which prototype each point uses.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Point instancing is like a spreadsheet of object placements. Each row is one instance. Columns are: which object, X position, Y position, Z position, rotation, scale. The renderer reads the spreadsheet and stamps each object at the specified position. It's incredibly compact — a forest of a million trees is just one million rows in a spreadsheet, not a million prim hierarchies.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">UsdGeomPointInstancer — placing 1000 trees efficiently</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Gf</span>, <span class="cn">Vt</span>
+<span class="ck">import</span> <span class="cs">random</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateNew</span>(<span class="cs">"forest.usda"</span>)
+
+<span class="cm"># ── CREATE THE POINT INSTANCER ───────────────────────────────────────</span>
+instancer = <span class="cn">UsdGeom</span>.<span class="cp">PointInstancer</span>.<span class="cw">Define</span>(stage, <span class="cs">"/World/Forest"</span>)
+
+<span class="cm"># ── DEFINE PROTOTYPES — what objects to stamp ────────────────────────</span>
+<span class="cm"># Prototypes live as children under the instancer's "prototypes" scope</span>
+proto_scope = stage.<span class="cw">DefinePrim</span>(<span class="cs">"/World/Forest/Prototypes"</span>, <span class="cs">"Scope"</span>)
+
+<span class="cm"># Prototype 0 — pine tree</span>
+pine = <span class="cn">UsdGeom</span>.<span class="cp">Xform</span>.<span class="cw">Define</span>(stage, <span class="cs">"/World/Forest/Prototypes/PineTree"</span>)
+pine.<span class="cw">GetPrim</span>().<span class="cw">GetReferences</span>().<span class="cw">AddReference</span>(<span class="cs">"./pine_tree.usda"</span>)
+
+<span class="cm"># Prototype 1 — oak tree</span>
+oak = <span class="cn">UsdGeom</span>.<span class="cp">Xform</span>.<span class="cw">Define</span>(stage, <span class="cs">"/World/Forest/Prototypes/OakTree"</span>)
+oak.<span class="cw">GetPrim</span>().<span class="cw">GetReferences</span>().<span class="cw">AddReference</span>(<span class="cs">"./oak_tree.usda"</span>)
+
+<span class="cm"># Tell the instancer which prims are its prototypes</span>
+instancer.<span class="cw">GetPrototypesRel</span>().<span class="cw">AddTarget</span>(<span class="cs">"/World/Forest/Prototypes/PineTree"</span>)
+instancer.<span class="cw">GetPrototypesRel</span>().<span class="cw">AddTarget</span>(<span class="cs">"/World/Forest/Prototypes/OakTree"</span>)
+<span class="cm"># Index 0 = PineTree, Index 1 = OakTree</span>
+
+<span class="cm"># ── PLACE 1000 INSTANCES ─────────────────────────────────────────────</span>
+N = <span class="cn">1000</span>
+
+<span class="cm"># protoIndices — which prototype each instance uses</span>
+proto_indices = [<span class="cn">random</span>.<span class="cw">randint</span>(<span class="cn">0</span>, <span class="cn">1</span>) <span class="ck">for</span> _ <span class="ck">in</span> <span class="cw">range</span>(N)]
+<span class="cm"># 0 = pine, 1 = oak — randomly mixed</span>
+
+<span class="cm"># positions — where each instance goes</span>
+positions = [
+    <span class="cn">Gf</span>.<span class="cv">Vec3f</span>(
+        <span class="cn">random</span>.<span class="cw">uniform</span>(<span class="cn">-100</span>, <span class="cn">100</span>),
+        <span class="cn">0</span>,
+        <span class="cn">random</span>.<span class="cw">uniform</span>(<span class="cn">-100</span>, <span class="cn">100</span>)
+    )
+    <span class="ck">for</span> _ <span class="ck">in</span> <span class="cw">range</span>(N)
+]
+
+<span class="cm"># scales — random variation so not all trees are identical size</span>
+scales = [
+    <span class="cn">Gf</span>.<span class="cv">Vec3f</span>(<span class="cn">random</span>.<span class="cw">uniform</span>(<span class="cn">0.8</span>, <span class="cn">1.3</span>),
+             <span class="cn">random</span>.<span class="cw">uniform</span>(<span class="cn">0.9</span>, <span class="cn">1.5</span>),
+             <span class="cn">random</span>.<span class="cw">uniform</span>(<span class="cn">0.8</span>, <span class="cn">1.3</span>))
+    <span class="ck">for</span> _ <span class="ck">in</span> <span class="cw">range</span>(N)
+]
+
+<span class="cm"># orientations — random Y rotation for variety</span>
+orientations = []
+<span class="ck">for</span> _ <span class="ck">in</span> <span class="cw">range</span>(N):
+    angle = <span class="cn">random</span>.<span class="cw">uniform</span>(<span class="cn">0</span>, <span class="cn">360</span>)
+    half  = <span class="cn">angle</span> * <span class="cn">0.00872665</span>   <span class="cm"># half angle in radians</span>
+    orientations.<span class="cw">append</span>(<span class="cn">Gf</span>.<span class="cv">Quath</span>(<span class="cn">Gf</span>.<span class="cv">Vec4f</span>(
+        <span class="cn">0</span>, <span class="cn">round</span>(<span class="cn">0.5</span> * <span class="cn">angle</span> / <span class="cn">360</span>, <span class="cn">3</span>), <span class="cn">0</span>, <span class="cn">1</span>
+    )))
+
+<span class="cm"># ── SET THE ARRAYS ON THE INSTANCER ─────────────────────────────────</span>
+instancer.<span class="cw">GetProtoIndicesAttr</span>().<span class="cw">Set</span>(proto_indices)
+<span class="cm"># One int per instance — which prototype to use</span>
+
+instancer.<span class="cw">GetPositionsAttr</span>().<span class="cw">Set</span>(positions)
+<span class="cm"># One Vec3f per instance — world space position</span>
+
+instancer.<span class="cw">GetScalesAttr</span>().<span class="cw">Set</span>(scales)
+<span class="cm"># One Vec3f per instance — per-axis scale</span>
+
+stage.<span class="cw">Save</span>()
+<span class="ck">print</span>(<span class="cs">f"Created forest with {N} trees"</span>)
+<span class="ck">print</span>(<span class="cs">f"protoIndices length: {len(proto_indices)}"</span>)
+<span class="ck">print</span>(<span class="cs">f"positions length:    {len(positions)}"</span>)
+<span class="ck">print</span>(<span class="cs">f"scales length:       {len(scales)}"</span>)
+<span class="cm"># All three arrays must have the same length = number of instances</span></code></pre>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Required arrays on PointInstancer</div>
+    <p><code>protoIndices</code> is the only truly required array — it identifies which prototype each point uses. <code>positions</code> is also required to place instances. <code>orientations</code> and <code>scales</code> are optional — if omitted, USD uses identity rotation and uniform scale of 1. All arrays that ARE authored must have the same length as the number of instances.</p>
+  </div>
+</div>
+
+
+<!-- ══ S4: COMPARISON ══ -->
+<div class="section s-amber" id="s4">
+  <div class="section-header">
+    <div class="section-icon">⚖️</div>
+    <div><div class="section-title">04 — Scenegraph vs Point Instancing</div></div>
+  </div>
+
+  <p>Both solve the same problem but for different scales and use cases. This comparison is directly testable on the exam.</p>
+
+  <table class="schema-table">
+    <tr style="background:var(--amber-light);">
+      <th style="color:var(--amber-dark);">Property</th>
+      <th style="color:var(--amber-dark);">Scenegraph Instancing</th>
+      <th style="color:var(--amber-dark);">Point Instancing</th>
+    </tr>
+    <tr><td>How enabled</td><td><code>instanceable = true</code> metadata</td><td><code>UsdGeomPointInstancer</code> schema</td></tr>
+    <tr><td>Scale</td><td>Dozens to thousands</td><td>Millions</td></tr>
+    <tr><td>Per-instance overrides</td><td>Yes — on the instanceable prim itself</td><td>No — changes require full array reauthoring</td></tr>
+    <tr><td>Prototype location</td><td>Implicit __Prototype__ prims on stage</td><td>Explicit children under instancer</td></tr>
+    <tr><td>Traversal</td><td>Instances are regular prims — traversal works</td><td>Instances are array entries — not individual prims</td></tr>
+    <tr><td>Best use case</td><td>Complex assets (buildings, robots, vehicles)</td><td>Simple repeated objects (grass, rocks, particles)</td></tr>
+    <tr><td>Memory saving mechanism</td><td>Shared scenegraph hierarchy</td><td>Compact array storage</td></tr>
+    <tr><td>Can de-instance?</td><td>Yes — SetInstanceable(False)</td><td>No — must remove from array</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-label">When to use which</div>
+    <p>Use <strong>scenegraph instancing</strong> when you have hundreds of complex assets that may need individual overrides (move this one robot, change this one building's variant). Use <strong>point instancing</strong> when you have millions of simple repeated objects where every instance is essentially identical (a forest floor of grass blades, particle effects, scattered rocks).</p>
+  </div>
+</div>
+
+
+<!-- ══ S5: ISA SCHEMAS ══ -->
+<div class="section s-blue" id="s5">
+  <div class="section-header">
+    <div class="section-icon">🏷️</div>
+    <div><div class="section-title">05 — IsA Schemas</div></div>
+  </div>
+
+  <p>A schema is a blueprint that defines what a prim <strong>is</strong> and what properties it has. There are two types — IsA schemas and API schemas. Understanding the difference is directly tested in the exam.</p>
+
+  <p>An <strong>IsA schema</strong> (also called a typed schema) defines the fundamental type of a prim. Every prim can only have ONE IsA schema. It sets the <code>typeName</code> metadata and provides fallback values for all its defined attributes.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>An IsA schema is like a job title. A person can only have one job title at a time — "Engineer" or "Designer" or "Manager." The title defines what they fundamentally ARE and what responsibilities (attributes) come with the role. You can't be both an Engineer and a Manager at the same time under the IsA system.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--blue-light);border-color:var(--blue-mid);">
+      <h4 style="color:var(--blue-dark);">Concrete IsA schemas</h4>
+      <p style="color:var(--blue-dark);">Can be instantiated — create actual prims in the scene. Have both a name and a typeName in the schema definition.</p>
+      <ul style="color:var(--blue-dark);">
+        <li>UsdGeomMesh → <code>def Mesh "Chair"</code></li>
+        <li>UsdGeomSphere → <code>def Sphere "Ball"</code></li>
+        <li>UsdGeomXform → <code>def Xform "World"</code></li>
+        <li>UsdShadeMaterial → <code>def Material "Wood"</code></li>
+      </ul>
+    </div>
+    <div class="comp-card" style="background:var(--purple-light);border-color:var(--purple-mid);">
+      <h4 style="color:var(--purple-dark);">Abstract IsA schemas</h4>
+      <p style="color:var(--purple-dark);">Cannot be instantiated — serve as base classes. Provide only a name, no typeName. Exist to group related concrete schemas.</p>
+      <ul style="color:var(--purple-dark);">
+        <li>UsdGeomImageable — base for all renderable prims</li>
+        <li>UsdGeomGprim — base for all geometric prims</li>
+        <li>UsdGeomBoundable — base for prims with extents</li>
+        <li>UsdLuxLightAPI — base for all lights</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Working with IsA schemas</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateInMemory</span>()
+sphere = <span class="cn">UsdGeom</span>.<span class="cp">Sphere</span>.<span class="cw">Define</span>(stage, <span class="cs">"/MySphere"</span>)
+prim = sphere.<span class="cw">GetPrim</span>()
+
+<span class="cm"># ── CHECK IsA TYPE ───────────────────────────────────────────────────</span>
+<span class="ck">print</span>(prim.<span class="cw">IsA</span>(<span class="cn">UsdGeom</span>.<span class="cp">Sphere</span>))       <span class="cm"># True — it IS a Sphere</span>
+<span class="ck">print</span>(prim.<span class="cw">IsA</span>(<span class="cn">UsdGeom</span>.<span class="cp">Gprim</span>))        <span class="cm"># True — Sphere inherits from Gprim</span>
+<span class="ck">print</span>(prim.<span class="cw">IsA</span>(<span class="cn">UsdGeom</span>.<span class="cp">Imageable</span>))   <span class="cm"># True — all gprims are imageable</span>
+<span class="ck">print</span>(prim.<span class="cw">IsA</span>(<span class="cn">UsdGeom</span>.<span class="cp">Mesh</span>))         <span class="cm"># False — a Sphere is not a Mesh</span>
+
+<span class="cm"># ── GET THE TYPE NAME ────────────────────────────────────────────────</span>
+<span class="ck">print</span>(prim.<span class="cw">GetTypeName</span>())   <span class="cm"># "Sphere"</span>
+
+<span class="cm"># ── SCHEMA FALLBACKS WORK AUTOMATICALLY ─────────────────────────────</span>
+<span class="ck">print</span>(sphere.<span class="cw">GetRadiusAttr</span>().<span class="cw">Get</span>())   <span class="cm"># 1.0 — schema fallback</span>
+<span class="cm"># You never Set() radius but it returns 1.0 because the Sphere schema</span>
+<span class="cm"># defines:  double radius = 1.0</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S6: API SCHEMAS ══ -->
+<div class="section s-coral" id="s6">
+  <div class="section-header">
+    <div class="section-icon">🔧</div>
+    <div><div class="section-title">06 — API Schemas</div></div>
+  </div>
+
+  <p>An <strong>API schema</strong> does NOT set the typeName — it adds additional capabilities to a prim that already has an IsA type. Think of it as "has a" rather than "is a." A prim can have multiple API schemas applied at once.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>API schemas are like certifications or licences added to a job. Someone is still an "Engineer" (IsA) but they might also have a "Certified Safety Inspector" licence AND a "Project Management" certification. Each certification adds new capabilities without changing what they fundamentally are. Multiple certifications can be held simultaneously — unlike job titles.</p>
+  </div>
+
+  <table class="schema-table">
+    <tr style="background:var(--coral-light);">
+      <th style="color:var(--coral-dark);">Type</th>
+      <th style="color:var(--coral-dark);">Description</th>
+      <th style="color:var(--coral-dark);">Examples</th>
+    </tr>
+    <tr>
+      <td style="color:var(--coral-dark);">Non-applied</td>
+      <td>Just provides a Python/C++ API interface. Does not change the prim definition. Cannot tell if it's "applied".</td>
+      <td>UsdModelAPI, UsdGeomPrimvarsAPI, UsdShadeConnectableAPI</td>
+    </tr>
+    <tr>
+      <td style="color:var(--coral-dark);">Single-apply</td>
+      <td>Applied once per prim. Recorded in apiSchemas metadata. Has a public Apply() method. Adds properties to the prim.</td>
+      <td>MaterialBindingAPI, UsdGeomMotionAPI, UsdPhysicsRigidBodyAPI</td>
+    </tr>
+    <tr>
+      <td style="color:var(--coral-dark);">Multiple-apply</td>
+      <td>Can be applied multiple times with different instance names. Properties are prefixed with the instance name.</td>
+      <td>UsdCollectionAPI (applied once per collection)</td>
+    </tr>
+  </table>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Working with API schemas</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">UsdShade</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateInMemory</span>()
+mesh = <span class="cn">UsdGeom</span>.<span class="cp">Mesh</span>.<span class="cw">Define</span>(stage, <span class="cs">"/World/Chair"</span>)
+prim = mesh.<span class="cw">GetPrim</span>()
+
+<span class="cm"># ── APPLY A SINGLE-APPLY API SCHEMA ─────────────────────────────────</span>
+binding_api = <span class="cn">UsdShade</span>.<span class="cp">MaterialBindingAPI</span>.<span class="cw">Apply</span>(prim)
+<span class="cm"># Apply() records "MaterialBindingAPI" in the prim's apiSchemas metadata</span>
+<span class="cm"># In USDA: prepend apiSchemas = ["MaterialBindingAPI"]</span>
+
+<span class="cm"># ── CHECK IF AN API SCHEMA IS APPLIED ────────────────────────────────</span>
+<span class="ck">print</span>(prim.<span class="cw">HasAPI</span>(<span class="cn">UsdShade</span>.<span class="cp">MaterialBindingAPI</span>))   <span class="cm"># True</span>
+<span class="ck">print</span>(prim.<span class="cw">HasAPI</span>(<span class="cn">UsdGeom</span>.<span class="cp">MotionAPI</span>))             <span class="cm"># False — not applied</span>
+
+<span class="cm"># ── LIST ALL APPLIED API SCHEMAS ────────────────────────────────────</span>
+<span class="ck">print</span>(prim.<span class="cw">GetAppliedSchemas</span>())
+<span class="cm"># ['MaterialBindingAPI'] — everything that's been Apply()'d</span>
+
+<span class="cm"># ── NON-APPLIED API (no Apply() needed) ──────────────────────────────</span>
+<span class="cm"># UsdModelAPI, UsdGeomPrimvarsAPI etc. are used directly without Apply()</span>
+model_api = <span class="cn">Usd</span>.<span class="cp">ModelAPI</span>(prim)
+model_api.<span class="cw">SetKind</span>(<span class="cs">"component"</span>)
+<span class="cm"># No Apply() call — non-applied APIs just wrap the prim directly</span>
+<span class="cm"># prim.HasAPI(Usd.ModelAPI) would return False — it's non-applied</span>
+
+<span class="cm"># KEY DISTINCTION:</span>
+<span class="cm"># IsA  → prim.IsA(UsdGeom.Mesh)        → checks typeName</span>
+<span class="cm"># API  → prim.HasAPI(MaterialBindingAPI)→ checks apiSchemas list</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S7: CUSTOM SCHEMAS ══ -->
+<div class="section s-green" id="s7">
+  <div class="section-header">
+    <div class="section-icon">🛠️</div>
+    <div><div class="section-title">07 — Custom Schemas</div></div>
+  </div>
+
+  <p>Custom schemas let you extend USD's type system with your own prim types and API schemas — designed for your specific pipeline, industry, or application. This is exam domain 6 (Customising USD — 6%).</p>
+
+  <h3>When to use custom schemas vs custom properties</h3>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">Custom properties — use when</h4>
+      <ul style="color:var(--teal-dark);">
+        <li>Prototyping quickly — no schema generation needed</li>
+        <li>Data is specific to one asset or pipeline tool</li>
+        <li>Don't need standardisation across teams</li>
+        <li>No fallback values needed</li>
+        <li>Simple — just CreateAttribute()</li>
+      </ul>
+    </div>
+    <div class="comp-card" style="background:var(--green-light);border-color:var(--green-mid);">
+      <h4 style="color:var(--green-dark);">Custom schemas — use when</h4>
+      <ul style="color:var(--green-dark);">
+        <li>Need standardised types across many tools/teams</li>
+        <li>Need schema fallback values</li>
+        <li>Need prim.IsA() or prim.HasAPI() to work</li>
+        <li>Building a plugin or industry standard</li>
+        <li>Need generated C++/Python API for the properties</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The schema generation workflow</h3>
+  <p>Custom schemas are generated from a <code>schema.usda</code> definition file using the <code>usdGenSchema</code> tool. This produces C++ and Python code you can compile into a plugin.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA</span><span class="code-desc">A custom IsA schema definition — a sensor prim for IoT/digital twin pipelines</span></div>
+    <pre><code><span class="cm"># schema.usda — defines a custom SensorPrim type</span>
+#usda 1.0
+(
+    subLayers = [
+        <span class="cs">@usd/schema.usda@</span>   <span class="cm"># inherit from base USD schemas</span>
+    ]
+)
+
+<span class="ck">over</span> <span class="cs">"GLOBAL"</span> (
+    customData = {
+        <span class="cv">string</span> libraryName   = <span class="cs">"acmeSensors"</span>
+        <span class="cv">string</span> libraryPrefix = <span class="cs">"AcmeSensor"</span>
+    }
+) {}
+
+<span class="cm"># ── CUSTOM IsA SCHEMA ───────────────────────────────────────────────</span>
+<span class="ck">class</span> <span class="cn">Xform</span> <span class="cs">"TemperatureSensor"</span> (
+    customData = {
+        <span class="cv">string</span> className = <span class="cs">"TemperatureSensor"</span>
+    }
+    doc = <span class="cs">"""A prim representing a physical temperature sensor."""</span>
+    inherits = &lt;/Xform&gt;
+)
+{
+    <span class="cm"># These attributes get fallback values automatically</span>
+    <span class="cv">float</span> sensor:temperature = <span class="cn">20.0</span>    (
+        doc = <span class="cs">"Current temperature reading in Celsius"</span>
+    )
+    <span class="cv">float</span> sensor:minRange    = <span class="cn">-40.0</span>
+    <span class="cv">float</span> sensor:maxRange    = <span class="cn">125.0</span>
+    <span class="cv">string</span> sensor:serialNumber = <span class="cs">""</span>
+    <span class="cv">bool</span>  sensor:isCalibrated  = <span class="cn">false</span>
+}
+
+<span class="cm"># ── CUSTOM API SCHEMA ───────────────────────────────────────────────</span>
+<span class="ck">class</span> <span class="cs">"MaintenanceAPI"</span> (
+    customData = {
+        <span class="cv">token</span> apiSchemaType = <span class="cs">"singleApply"</span>
+    }
+    inherits = &lt;/APISchemaBase&gt;
+)
+{
+    <span class="cm"># Can be applied to ANY prim type</span>
+    <span class="cv">string</span> maintenance:lastServiceDate = <span class="cs">""</span>
+    <span class="cv">int</span>    maintenance:serviceIntervalDays = <span class="cn">365</span>
+    <span class="cv">string</span> maintenance:technician = <span class="cs">""</span>
+}</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Using custom schemas after generation (conceptual)</span></div>
+    <pre><code><span class="cm"># After running usdGenSchema on schema.usda you get:</span>
+<span class="cm"># - generated C++ header/source files</span>
+<span class="cm"># - generated Python bindings</span>
+<span class="cm"># - plugInfo.json for USD plugin registration</span>
+
+<span class="cm"># Then in your pipeline code:</span>
+<span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">AcmeSensors</span>   <span class="cm"># your generated module</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateNew</span>(<span class="cs">"factory.usda"</span>)
+
+<span class="cm"># Create a prim using your custom IsA schema</span>
+sensor = <span class="cn">AcmeSensors</span>.<span class="cp">TemperatureSensor</span>.<span class="cw">Define</span>(stage, <span class="cs">"/Factory/Sensor_001"</span>)
+
+<span class="cm"># Schema fallbacks work automatically</span>
+<span class="ck">print</span>(sensor.<span class="cw">GetTemperatureAttr</span>().<span class="cw">Get</span>())   <span class="cm"># 20.0 — schema fallback</span>
+
+<span class="cm"># Set real readings</span>
+sensor.<span class="cw">GetTemperatureAttr</span>().<span class="cw">Set</span>(<span class="cn">72.4</span>)
+sensor.<span class="cw">GetSerialNumberAttr</span>().<span class="cw">Set</span>(<span class="cs">"SN-ACME-001"</span>)
+
+<span class="cm"># Apply the maintenance API to ANY prim</span>
+maint = <span class="cn">AcmeSensors</span>.<span class="cp">MaintenanceAPI</span>.<span class="cw">Apply</span>(sensor.<span class="cw">GetPrim</span>())
+maint.<span class="cw">GetLastServiceDateAttr</span>().<span class="cw">Set</span>(<span class="cs">"2024-03-15"</span>)
+
+<span class="cm"># Type checking works properly</span>
+<span class="ck">print</span>(sensor.<span class="cw">GetPrim</span>().<span class="cw">IsA</span>(<span class="cn">AcmeSensors</span>.<span class="cp">TemperatureSensor</span>))  <span class="cm"># True</span>
+<span class="ck">print</span>(sensor.<span class="cw">GetPrim</span>().<span class="cw">HasAPI</span>(<span class="cn">AcmeSensors</span>.<span class="cp">MaintenanceAPI</span>))  <span class="cm"># True</span>
+
+stage.<span class="cw">Save</span>()</code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S8: ASSET RESOLVER ══ -->
+<div class="section s-gray" id="s8">
+  <div class="section-header">
+    <div class="section-icon">🗺️</div>
+    <div><div class="section-title">08 — AssetResolver</div></div>
+  </div>
+
+  <p>The <strong>AssetResolver</strong> (Ar) is the plugin system that controls how USD resolves file paths. When USD encounters an asset path like <code>@./chair.usda@</code> or <code>@assets://chair/v3/chair.usda@</code>, it calls the AssetResolver to convert that identifier into an actual file path on disk.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>The AssetResolver is like a company's internal URL shortener. When someone shares a link like <code>go/project-brief</code> the shortener knows to resolve that to the actual long URL <code>https://docs.company.com/projects/q4-2024/brief-v3.pdf</code>. The AssetResolver does the same for USD asset paths — it translates abstract pipeline identifiers into concrete file system paths.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Using and querying the AssetResolver</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Ar</span>, <span class="cn">Usd</span>
+
+<span class="cm"># ── GET THE DEFAULT RESOLVER ─────────────────────────────────────────</span>
+resolver = <span class="cn">Ar</span>.<span class="cw">GetResolver</span>()
+<span class="cm"># Returns the currently registered resolver plugin</span>
+<span class="cm"># Default = ArDefaultResolver (simple file system resolver)</span>
+<span class="cm"># Studios replace this with custom resolvers that talk to asset DBs</span>
+
+<span class="cm"># ── RESOLVE A PATH ───────────────────────────────────────────────────</span>
+resolved = resolver.<span class="cw">Resolve</span>(<span class="cs">"./chair.usda"</span>)
+<span class="ck">print</span>(resolved)
+<span class="cm"># → "/home/studio/project/assets/chair.usda"  (absolute path)</span>
+<span class="cm"># The resolver expands relative paths to absolute paths</span>
+
+<span class="cm"># ── WHAT A CUSTOM RESOLVER CAN DO ───────────────────────────────────</span>
+<span class="cm"># Instead of file paths, studios use asset identifiers like:</span>
+<span class="cm">#   @assets://chair/approved/v3@</span>
+<span class="cm">#   @sgtk:sg_asset_type=Prop,asset=Chair,version=latest@</span>
+<span class="cm">#</span>
+<span class="cm"># The custom resolver translates these to actual disk paths:</span>
+<span class="cm">#   /mnt/nas/studio/assets/Prop/Chair/v003/chair.usda</span>
+<span class="cm">#</span>
+<span class="cm"># Benefits:</span>
+<span class="cm"># - USD files use abstract IDs not hard disk paths</span>
+<span class="cm"># - Assets can move between disks without breaking references</span>
+<span class="cm"># - Resolver can query a database for "latest approved version"</span>
+<span class="cm"># - Works across different studios/operating systems</span>
+
+<span class="cm"># ── RESOLVE CONTEXT ──────────────────────────────────────────────────</span>
+<span class="cm"># A ResolveContext carries per-session settings</span>
+<span class="cm"># e.g. "resolve everything at version 3" or "use the production DB"</span>
+<span class="ck">with</span> <span class="cn">Ar</span>.<span class="cp">ResolverContextBinder</span>(<span class="cn">Ar</span>.<span class="cw">ResolverContext</span>()):
+    <span class="cm"># All asset resolution inside this block uses the bound context</span>
+    stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"shot.usda"</span>)
+    <span class="cm"># The resolver uses context settings to find the right versions</span></code></pre>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Why the AssetResolver matters for the exam</div>
+    <p>The exam topic 6.3 asks about customising USD for specific pipelines. The AssetResolver is the primary extensibility point for asset management integration. You don't need to know how to implement one — you need to know WHAT it does: translates abstract asset identifiers (pipeline URIs, database IDs) into actual file paths, enabling studios to use their own asset management systems with USD.</p>
+  </div>
+
+  <h3>ArDefaultResolver vs custom resolvers</h3>
+  <table class="schema-table">
+    <tr style="background:var(--gray-light);">
+      <th style="color:var(--gray-dark);">Feature</th>
+      <th style="color:var(--gray-dark);">ArDefaultResolver</th>
+      <th style="color:var(--gray-dark);">Custom Resolver</th>
+    </tr>
+    <tr><td>Path format</td><td>File system paths (relative/absolute)</td><td>Any format — URIs, database IDs, version strings</td></tr>
+    <tr><td>Version control</td><td>None — you manage file versions manually</td><td>Can query "latest approved v3" from a database</td></tr>
+    <tr><td>Asset tracking</td><td>None</td><td>Can record which assets were loaded and when</td></tr>
+    <tr><td>Cross-platform</td><td>Limited — paths are OS-specific</td><td>Platform-independent abstract identifiers</td></tr>
+    <tr><td>Use case</td><td>Simple projects, offline work, learning</td><td>Studio pipelines with asset management systems</td></tr>
+  </table>
+</div>
+
+
+<div class="summary-box">
+  <h3>Day 8 key takeaways</h3>
+  <div class="summary-item"><span class="summary-num">1</span><span><strong>Instancing</strong> shares scenegraph data across multiple copies — one prototype, many instances. Saves memory and improves load time for large scenes.</span></div>
+  <div class="summary-item"><span class="summary-num">2</span><span><strong>Scenegraph instancing</strong>: set <code>instanceable=true</code> on prims sharing the same composition arcs. USD creates implicit <code>__Prototype__</code> prims. Good for dozens to thousands of complex assets.</span></div>
+  <div class="summary-item"><span class="summary-num">3</span><span>Instanceable prims are <strong>mutable at the root</strong> (you can move/rotate them) but their descendants are <strong>immutable</strong> — the hierarchy is shared. De-instance with <code>SetInstanceable(False)</code> to make per-instance child edits.</span></div>
+  <div class="summary-item"><span class="summary-num">4</span><span><strong>Nested instancing</strong>: instanceable prims can contain other instanceable prims — two levels of sharing, used for city-scale scenes (windows inside buildings inside blocks).</span></div>
+  <div class="summary-item"><span class="summary-num">5</span><span><strong>Point instancing</strong>: UsdGeomPointInstancer stores millions of instances as arrays (protoIndices, positions, orientations, scales). Best for grass, rocks, particles — simple repeated objects at massive scale.</span></div>
+  <div class="summary-item"><span class="summary-num">6</span><span><strong>IsA schemas</strong> (typed schemas) define what a prim IS — one per prim, sets typeName. Checked with <code>prim.IsA()</code>. Can be concrete (instantiable) or abstract (base class only).</span></div>
+  <div class="summary-item"><span class="summary-num">7</span><span><strong>API schemas</strong> define what a prim HAS — multiple can be applied per prim. Single-apply (MaterialBindingAPI), multiple-apply (CollectionAPI), non-applied (ModelAPI). Checked with <code>prim.HasAPI()</code>.</span></div>
+  <div class="summary-item"><span class="summary-num">8</span><span>Use <strong>custom properties</strong> for quick prototyping and pipeline-specific data. Use <strong>custom schemas</strong> when you need standardisation, fallback values, and generated APIs across teams and tools.</span></div>
+  <div class="summary-item"><span class="summary-num">9</span><span>Custom schemas are defined in <code>schema.usda</code> and generated into C++/Python code using <code>usdGenSchema</code>. The output is a USD plugin — registered so USD knows about your new types.</span></div>
+  <div class="summary-item"><span class="summary-num">10</span><span>The <strong>AssetResolver</strong> translates abstract asset identifiers into file paths. The default resolver uses file system paths. Custom resolvers connect to studio asset management databases — enabling abstract IDs, version queries, and cross-platform portability.</span></div>
+</div>
+
+<div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e3db;">
+  <p style="font-size:13px;color:var(--text-muted);">Day 8 complete · Next: Day 9 — Debugging + Troubleshooting (usdview tools, TfDebug, common errors)</p>
+</div>
+
+</div>
+</body>
+</html>
