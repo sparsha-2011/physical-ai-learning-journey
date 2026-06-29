@@ -1,0 +1,27 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+)
+
+def "World"
+{
+    def "OfficeArea"
+    {
+        def Xform "Chair"
+        {
+            custom float chair:height = 90
+            custom string chair:material = "wood"
+        }
+    }
+
+    def "DiningArea"
+    {
+        def Xform "Chair"
+        {
+            custom float chair:height = 75
+            custom string chair:material = "metal"
+        }
+    }
+}
+

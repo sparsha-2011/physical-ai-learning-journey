@@ -37,6 +37,10 @@ dining_layer = Sdf.Layer.CreateAnonymous("dining_chair_asset.usda")
 root.subLayerPaths = [office_layer.identifier, dining_layer.identifier]
 stage = Usd.Stage.Open(root)
 
+# Define /World as Xform so hierarchy is visible in usdview
+stage.SetEditTarget(office_layer)
+UsdGeom.Xform.Define(stage, "/World")
+
 # Office chair — wooden
 stage.SetEditTarget(office_layer)
 UsdGeom.Xform.Define(stage, "/World/Chair")
@@ -163,4 +167,88 @@ print(f"  GetPrimAtPath('/World/chair').IsValid(): {wrong.IsValid()}")
 print(f"""
   If your override isn't applying: check for case mismatch.
   This is one of the most common subtle path bugs.
+""")
+
+# ── USDVIEW EQUIVALENT + EXPORT ──────────────────────────────────────
+print(SEP)
+print("  USDVIEW — How namespace collisions appear visually")
+print(SEP)
+print("""
+  usdview makes namespace collisions very visible — you see
+  unexpected prims or wrong attribute values in the Scenegraph.
+
+  COLLISION STAGE:
+  1. .\\scripts\\usdview.bat debug_namespace_collision.usda
+
+  2. In the Scenegraph panel:
+     /World/Chair exists — but which chair is it?
+
+  3. Click /World/Chair → Properties panel
+     chair:material = 'wood'   (office won — it was index 0)
+     chair:height   = 90.0
+     The dining chair data is gone — silently overridden.
+
+  4. Metadata/Composition → LayerStack tab
+     RED FLAG: You see TWO unrelated asset layers:
+       office_chair_asset.usda  ← contributing to /World/Chair
+       dining_chair_asset.usda  ← also contributing to /World/Chair
+     When you expected only ONE — that's the collision.
+
+  FIXED STAGE:
+  5. .\\scripts\\usdview.bat debug_namespace_collision_fixed.usda
+
+  6. Scenegraph panel shows:
+     /World/OfficeArea/Chair
+     /World/DiningArea/Chair
+     Two separate prims. Neither overrides the other.
+
+  7. Click each → Properties panel
+     Each shows its own correct material and height.
+     LayerStack tab shows ONLY ONE layer for each.
+
+  The LayerStack tab showing multiple unrelated layers = collision.
+  LayerStack tab showing one layer = clean, no collision.
+""")
+
+import os
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Export collision stage
+out_collision = os.path.join(SCRIPT_DIR, "debug_namespace_collision.usda")
+path_office = os.path.join(SCRIPT_DIR, "debug_nc_office_asset.usda")
+path_dining = os.path.join(SCRIPT_DIR, "debug_nc_dining_asset.usda")
+
+for p in [path_office, path_dining, out_collision]:
+    if os.path.exists(p): os.remove(p)
+
+office_layer.Export(path_office)
+dining_layer.Export(path_dining)
+
+root_out = Sdf.Layer.CreateNew(out_collision)
+root_out.subLayerPaths = [
+    os.path.basename(path_office),
+    os.path.basename(path_dining),
+]
+root_out.Save()
+print(f"  Collision stage saved → {out_collision}")
+
+# Export fixed stage
+out_fixed = os.path.join(SCRIPT_DIR, "debug_namespace_collision_fixed.usda")
+stage2.Export(out_fixed)
+print(f"  Fixed stage saved → {out_fixed}")
+
+print(f"""
+  Open both in usdview and compare:
+    .\\scripts\\usdview.bat {out_collision}
+    .\\scripts\\usdview.bat {out_fixed}
+
+  Collision stage:
+    Click /World/Chair → LayerStack tab
+    → See BOTH asset layers contributing to same path
+    → chair:material = 'wood' (dining chair data is lost)
+
+  Fixed stage:
+    Click /World/OfficeArea/Chair → LayerStack tab → one layer only
+    Click /World/DiningArea/Chair → LayerStack tab → one layer only
+    Each chair has its correct independent data.
 """)

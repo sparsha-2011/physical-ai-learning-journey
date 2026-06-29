@@ -1,0 +1,8 @@
+#usda 1.0
+(
+    subLayers = [
+        @debug_sv_new_pipeline_v2.usda@,
+        @debug_sv_old_pipeline_v1.usda@
+    ]
+)
+

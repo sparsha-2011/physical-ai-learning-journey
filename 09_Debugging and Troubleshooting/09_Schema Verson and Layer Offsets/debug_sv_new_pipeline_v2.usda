@@ -1,0 +1,20 @@
+#usda 1.0
+(
+    customLayerData = {
+        string "pipeline:exportTool" = "MayaExporter_v2"
+        string "pipeline:schemaVersion" = "2.0"
+        string "pipeline:studio" = "AcmeStudios"
+    }
+)
+
+def "Looks"
+{
+    def "Mat"
+    {
+        def "Shader"
+        {
+            custom float inputs:roughness = 0.5
+        }
+    }
+}
+

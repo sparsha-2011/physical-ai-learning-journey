@@ -1,0 +1,15 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+)
+
+def "World"
+{
+    def Sphere "Chair"
+    {
+        custom string chair:colour = "blue"
+        custom float chair:height = 90
+    }
+}
+

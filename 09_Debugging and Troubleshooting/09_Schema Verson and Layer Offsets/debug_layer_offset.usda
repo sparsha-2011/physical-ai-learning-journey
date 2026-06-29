@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    timeCodesPerSecond = 24
+)
+
+def "World"
+{
+    def Xform "Character"
+    {
+        custom double3 xformOp:translate
+        double3 xformOp:translate.timeSamples = {
+            102: (0, 0, 0),
+            120: (5, 0, 0),
+            140: (10, 0, 0),
+        }
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+
