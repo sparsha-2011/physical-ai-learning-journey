@@ -198,7 +198,7 @@
       <td>Identifying which layer contributes which opinion</td>
     </tr>
     <tr>
-      <td>Usd.Debug.<br/>PrintComposition(prim)</td>
+      <td>prim.GetPrimIndex()<br/>.DumpToString()</td>
       <td>Prints detailed composition arc information — which layers contribute and how they combine.</td>
       <td>Most detailed programmatic composition arc debugging</td>
     </tr>
@@ -323,52 +323,154 @@
     <div><div class="section-title">04 — PrimStack, PropertyStack + PrintComposition</div></div>
   </div>
 
+  <h3>PrimStack — function signature + what it returns</h3>
+
+  <div style="background:var(--purple-light);border:1.5px solid var(--purple-mid);border-radius:var(--radius);padding:1.1rem;margin:.75rem 0 1rem">
+    <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--purple-dark);margin-bottom:.5rem">prim.GetPrimStack() → list[SdfPrimSpec]</div>
+    <p style="font-size:13px;color:var(--purple-dark);margin:0">
+      Called on: <strong>a prim</strong><br/>
+      Input: <strong>none — takes no parameters at all</strong><br/>
+      Why no TimeCode: prims either exist in a layer or they don't — there is no "at what time" concept for prim existence. A prim spec is permanent in a layer regardless of time.<br/>
+      Returns: all layers that have ANY opinion on this prim's existence or type, ordered strongest → weakest<br/>
+      Use when: prim has wrong type, prim is missing, unexpected specifier, you need to know which layer "owns" a prim
+    </p>
+  </div>
+
+  <div style="background:var(--gray-light);border-radius:var(--radius-sm);padding:.9rem 1.1rem;margin:.5rem 0 1rem;font-family:var(--mono);font-size:12.5px">
+    <div style="font-weight:700;color:var(--gray-dark);margin-bottom:.4rem">SdfPrimSpec fields</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 2rem;font-size:12px">
+      <span><span style="color:#534AB7">spec.layer</span> → the SdfLayer object</span>
+      <span><span style="color:#534AB7">spec.layer.identifier</span> → file path string</span>
+      <span><span style="color:#534AB7">spec.specifier</span> → def / over / class</span>
+      <span><span style="color:#534AB7">spec.typeName</span> → "Xform", "Sphere", "" etc</span>
+      <span><span style="color:#534AB7">spec.path</span> → the prim path</span>
+      <span><span style="color:#534AB7">spec.attributes.keys()</span> → attrs this layer authored</span>
+    </div>
+  </div>
+
+  <h3>PropertyStack — function signature + what the TimeCode input means</h3>
+
+  <div style="background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:var(--radius);padding:1.1rem;margin:.75rem 0 1rem">
+    <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:.5rem">attr.GetPropertyStack(timeCode) → list[SdfPropertySpec]</div>
+    <p style="font-size:13px;color:var(--blue-dark);margin:0">
+      Called on: <strong>a specific attribute</strong> — you must call GetAttribute("name") first<br/>
+      Input: <strong>REQUIRED — there is no default, omitting it throws TypeError</strong><br/>
+      Why required: attributes can have different layer opinions at different times. USD cannot guess which time you mean — you must always tell it.<br/>
+      Returns: all layers that have an opinion on this attribute at that time, ordered strongest → weakest<br/>
+      Use when: an attribute has the wrong value and you need to find which layer is responsible<br/><br/>
+      <strong>Safe starting point:</strong> always pass <code>Usd.TimeCode.Default()</code> first.<br/>
+      If the stack comes back empty, the attribute is time-sampled — switch to a frame number like <code>Usd.TimeCode(1)</code>.<br/><br/>
+      <strong>Shorthands:</strong> plain numbers work as shorthand for <code>Usd.TimeCode(n)</code> — so <code>attr.GetPropertyStack(24)</code> = <code>attr.GetPropertyStack(Usd.TimeCode(24))</code>.<br/>
+      <strong>However: <code>0</code> is NOT shorthand for <code>TimeCode.Default()</code></strong> — passing <code>0</code> means frame 0, which is a specific point in time. <code>TimeCode.Default()</code> is a special sentinel meaning "the plain authored default with no time" — it has no numeric shorthand and must always be written in full.
+    </p>
+  </div>
+
+  <div style="background:var(--amber-light);border-left:4px solid var(--amber-mid);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.25rem;margin:.75rem 0 1rem">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber-dark);margin-bottom:.3rem">Why the TimeCode input matters</div>
+    <p style="font-size:14px;color:var(--amber-dark);margin:0">A layer only appears in the PropertyStack if it has an opinion on this attribute <strong>at the requested time</strong>. If a layer only has a keyframe at frame 24, it won't appear when you ask at frame 1. The TimeCode tells USD: "show me which layers are actually contributing something at THIS moment."</p>
+  </div>
+
+  <div style="background:var(--gray-light);border-radius:var(--radius-sm);padding:.9rem 1.1rem;margin:.5rem 0 1rem;font-family:var(--mono);font-size:12.5px">
+    <div style="font-weight:700;color:var(--gray-dark);margin-bottom:.4rem">SdfPropertySpec fields</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 2rem;font-size:12px">
+      <span><span style="color:#185FA5">spec.layer</span> → the SdfLayer object</span>
+      <span><span style="color:#185FA5">spec.layer.identifier</span> → file path string</span>
+      <span><span style="color:#185FA5">spec.default</span> → plain authored value (None if time-sampled)</span>
+      <span><span style="color:#185FA5">spec.GetInfo("timeSamples")</span> → {frame: value} dict</span>
+      <span><span style="color:#185FA5">spec.typeName</span> → "Float", "Double3", "Color3f" etc</span>
+      <span><span style="color:#185FA5">spec.variability</span> → Varying or Uniform</span>
+    </div>
+  </div>
+
   <div class="code-block">
-    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">All three composition inspection APIs</span></div>
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Complete function signatures with all TimeCode options</span></div>
     <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdUtils</span>
 
 stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
 prim  = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
 
-<span class="cm"># ── 1. PrimStack — which layers have specs for this PRIM ─────────────</span>
+<span class="cm"># ── PRIMSTACK — no input needed ───────────────────────────────────────</span>
+<span class="cm"># Signature: prim.GetPrimStack() → list[SdfPrimSpec]</span>
+<span class="cm"># Called on the PRIM. No arguments. Returns all layers with prim specs.</span>
 <span class="ck">for</span> spec <span class="ck">in</span> prim.<span class="cw">GetPrimStack</span>():
-    <span class="ck">print</span>(<span class="cs">f"Layer: {spec.layer.identifier}"</span>)
-    <span class="ck">print</span>(<span class="cs">f"Specifier: {spec.specifier}"</span>)   <span class="cm"># def / over / class</span>
-    <span class="ck">print</span>(<span class="cs">f"TypeName:  {spec.typeName}"</span>)     <span class="cm"># Xform, Mesh, etc.</span>
-<span class="cm"># First spec = strongest layer contributing to this prim</span>
-<span class="cm"># Use for: wrong type, missing prim, wrong specifier</span>
+    <span class="ck">print</span>(<span class="cs">f"layer:     {spec.layer.identifier}"</span>)
+    <span class="ck">print</span>(<span class="cs">f"specifier: {spec.specifier}"</span>)   <span class="cm"># def / over / class</span>
+    <span class="ck">print</span>(<span class="cs">f"typeName:  {spec.typeName}"</span>)     <span class="cm"># "Xform", "Sphere", ""</span>
+    <span class="cm"># list all attribute names this layer authored on this prim</span>
+    <span class="ck">for</span> attr_name <span class="ck">in</span> spec.attributes.keys():
+        <span class="ck">print</span>(<span class="cs">f"  authored attr: {attr_name}"</span>)
 
-<span class="cm"># ── 2. PropertyStack — which layers have opinions on an ATTRIBUTE ────</span>
-attr = prim.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>)
-<span class="ck">for</span> spec <span class="ck">in</span> attr.<span class="cw">GetPropertyStack</span>(<span class="cn">Usd</span>.<span class="cp">TimeCode</span>.Default()):
-    <span class="ck">print</span>(<span class="cs">f"Layer: {spec.layer.identifier}"</span>)
-    <span class="ck">print</span>(<span class="cs">f"Value: {spec.default}"</span>)
-<span class="cm"># First spec = strongest opinion = the winning value</span>
-<span class="cm"># Use for: wrong property value</span>
+<span class="cm"># ── PROPERTYSTACK — must specify the ATTRIBUTE and a TIMECODE ────────</span>
+<span class="cm"># Signature: attr.GetPropertyStack(timeCode) → list[SdfPropertySpec]</span>
+<span class="cm"># Step 1: get the specific attribute you want to investigate</span>
+attr_brightness = prim.<span class="cw">GetAttribute</span>(<span class="cs">"chair:brightness"</span>)   <span class="cm"># plain float</span>
+attr_translate  = prim.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>)  <span class="cm"># animated</span>
 
-<span class="cm"># ── 3. Usd.Debug.PrintComposition — most detailed arc info ───────────</span>
-<span class="cn">Usd</span>.<span class="cp">Debug</span>.<span class="cw">PrintComposition</span>(prim)
-<span class="cm"># Prints full composition arc breakdown for the prim</span>
-<span class="cm"># Shows which layers contribute and how they combine</span>
-<span class="cm"># The MOST detailed programmatic composition debugging tool</span>
+<span class="cm"># Step 2: choose the TimeCode</span>
+<span class="cm">#</span>
+<span class="cm"># For NON-ANIMATED attributes (plain default value):</span>
+stack = attr_brightness.<span class="cw">GetPropertyStack</span>(<span class="cn">Usd</span>.<span class="cp">TimeCode</span>.Default())
+<span class="cm"># TimeCode.Default() = "show layers that have a plain default set"</span>
+<span class="cm"># spec.default will have the value</span>
+<span class="cm"># spec.GetInfo("timeSamples") will be empty</span>
+<span class="cm">#</span>
+<span class="cm"># For ANIMATED attributes (time samples):</span>
+stack = attr_translate.<span class="cw">GetPropertyStack</span>(<span class="cn">Usd</span>.<span class="cp">TimeCode</span>(<span class="cn">24</span>))  <span class="cm"># at frame 24</span>
+stack = attr_translate.<span class="cw">GetPropertyStack</span>(<span class="cn">Usd</span>.<span class="cp">TimeCode</span>(<span class="cn">1</span>))   <span class="cm"># at frame 1</span>
+stack = attr_translate.<span class="cw">GetPropertyStack</span>(<span class="cn">24</span>)                  <span class="cm"># shorthand for TimeCode(24)</span>
+stack = attr_translate.<span class="cw">GetPropertyStack</span>(<span class="cn">0</span>)                   <span class="cm"># shorthand for TimeCode(0) = frame 0</span>
+<span class="cm">#</span>
+<span class="cm"># ⚠️  0 is NOT shorthand for TimeCode.Default()</span>
+<span class="cm">#    TimeCode(0)   = frame 0, a real point in time</span>
+<span class="cm">#    TimeCode.Default() = the plain authored default with no time</span>
+<span class="cm">#                         completely different concept</span>
+<span class="cm">#                         no numeric shorthand exists — always write it in full</span>
+<span class="cm">#</span>
+<span class="cm"># A layer only appears if it has a keyframe AT or NEAR this time</span>
+<span class="cm"># spec.default will be None (no plain default for time-sampled attrs)</span>
+<span class="cm"># spec.GetInfo("timeSamples") will have the {frame: value} dict</span>
 
-<span class="cm"># ── 4. HasAuthoredValue — schema fallback vs explicit Set() ─────────</span>
-<span class="ck">print</span>(attr.<span class="cw">HasAuthoredValue</span>())
-<span class="cm"># True  = someone explicitly Set() this — it's intentional</span>
-<span class="cm"># False = value is the schema fallback — nobody has touched this</span>
+<span class="cm"># Step 3: read the results</span>
+<span class="ck">for</span> i, spec <span class="ck">in</span> <span class="cw">enumerate</span>(stack):
+    layer_name = spec.layer.identifier
+    default    = spec.default                       <span class="cm"># plain value or None</span>
+    ts         = spec.<span class="cw">GetInfo</span>(<span class="cs">"timeSamples"</span>)       <span class="cm"># {frame: val} or {}</span>
+    value      = default <span class="ck">if</span> default <span class="ck">is not None</span> <span class="ck">else</span> ts
+    winner     = <span class="cs">"← WINNER"</span> <span class="ck">if</span> i == <span class="cn">0</span> <span class="ck">else</span> <span class="cs">""</span>
+    <span class="ck">print</span>(<span class="cs">f"[{i}] {layer_name}  value={value}  {winner}"</span>)
 
-<span class="cm"># ── 5. GetPrimIndex — full composition graph ─────────────────────────</span>
+<span class="cm"># ── WHAT THE TWO STACKS ANSWER ───────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># PrimStack  → "which layers have opinions on this PRIM's existence?"</span>
+<span class="cm">#               input = nothing   output = list of SdfPrimSpec</span>
+<span class="cm">#</span>
+<span class="cm"># PropertyStack → "for THIS ATTRIBUTE, at THIS TIME,</span>
+<span class="cm">#                   which layers have an opinion and what is it?"</span>
+<span class="cm">#                  input = timeCode   output = list of SdfPropertySpec</span>
+
+<span class="cm"># ── OTHER INSPECTION APIS ────────────────────────────────────────────</span>
+<span class="cm"># HasAuthoredValue() — was this attribute explicitly Set() or schema default?</span>
+<span class="ck">print</span>(attr_brightness.<span class="cw">HasAuthoredValue</span>())
+<span class="cm"># True  = explicitly Set() — intentional</span>
+<span class="cm"># False = schema fallback — nobody has touched it</span>
+
+<span class="cm"># Composition arc inspection — use DumpToString() for pip usd-core compatibility</span>
 index = prim.<span class="cw">GetPrimIndex</span>()
 <span class="ck">print</span>(index.<span class="cw">DumpToString</span>())
-<span class="cm"># Dumps complete composition graph as text</span>
-<span class="cm"># Very verbose but comprehensive for hard-to-trace bugs</span>
+<span class="cm"># Usd.Debug.PrintComposition(prim) → same output but ONLY in full source builds</span>
+<span class="cm">#                                    NOT available in pip install usd-core</span>
+<span class="cm"># CLI equivalent: usdcat --print-composition scene.usda</span>
+
+<span class="cm"># prim.GetPrimIndex().DumpToString() — full composition graph as text</span>
+index = prim.<span class="cw">GetPrimIndex</span>()
+<span class="ck">print</span>(index.<span class="cw">DumpToString</span>())   <span class="cm"># very verbose but comprehensive</span>
 
 <span class="cm"># ── EXAM TRAP: GetPrimAtPath does NOT ignore composition ─────────────</span>
 composed_prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
 <span class="cm"># Returns the FULLY COMPOSED prim — all arcs already applied</span>
-<span class="cm"># It does NOT isolate individual arc contributions</span>
-<span class="cm"># Use it to: check if a prim exists, inspect composed values</span>
-<span class="cm"># Do NOT use it to: isolate composition issues (wrong tool for that)</span></code></pre>
+<span class="cm"># Does NOT isolate individual arc contributions</span>
+<span class="cm"># Use it to: check if a prim exists, read composed values</span>
+<span class="cm"># Do NOT use it to: isolate composition issues — wrong tool</span></code></pre>
   </div>
 
   <div class="callout warn">
@@ -747,7 +849,7 @@ prim  = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Ani
   <div class="summary-item"><span class="summary-num">1</span><span>Six root causes: wrong value winning, wrong structure, wrong edit target, composition arc conflict, performance, schema version mismatch.</span></div>
   <div class="summary-item"><span class="summary-num">2</span><span><strong>usdview composition debugger</strong> = first tool for unexpected composition. Shows visual breakdown of all arcs for a selected prim.</span></div>
   <div class="summary-item"><span class="summary-num">3</span><span><strong>PrimStack</strong> (prim.GetPrimStack()) = which layers have specs for a prim. <strong>PropertyStack</strong> (attr.GetPropertyStack()) = which layers have opinions on a specific attribute.</span></div>
-  <div class="summary-item"><span class="summary-num">4</span><span><strong>Usd.Debug.PrintComposition(prim)</strong> = most detailed programmatic composition arc debugging. <strong>usdcat --print-composition</strong> = same from CLI.</span></div>
+  <div class="summary-item"><span class="summary-num">4</span><span><strong>prim.GetPrimIndex().DumpToString()</strong> = composition arc graph, works in ALL builds including pip usd-core. <strong>Usd.Debug.PrintComposition(prim)</strong> = same but only in full source builds (not pip usd-core). <strong>usdcat --print-composition</strong> = CLI equivalent.</span></div>
   <div class="summary-item"><span class="summary-num">5</span><span><strong>UsdUtils.FlattenLayerStack()</strong> = merges sublayers only (not references/variants). Returns SdfLayer for inspection. Different from stage.Flatten().</span></div>
   <div class="summary-item"><span class="summary-num">6</span><span><strong>stage.Flatten()</strong> = resolves ALL composition arcs into one layer. Shows the fully composed scene. Reveals unexpected composition results. CLI: usdcat --flatten.</span></div>
   <div class="summary-item"><span class="summary-num">7</span><span><strong>Namespace/path collisions</strong> cause unexpected overrides and missing prims. Check with GetPrimStack(). Fix by using unique paths per asset.</span></div>
