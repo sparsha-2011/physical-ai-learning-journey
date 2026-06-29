@@ -29,14 +29,23 @@ broken_prim = UsdGeom.Sphere.Define(stage, "/World/BrokenChair").GetPrim()
 broken_prim.GetReferences().AddReference("./this_file_does_not_exist.usda")
 
 # Prim with valid reference but wrong internal path
-good_layer = Sdf.Layer.CreateAnonymous("good_asset.usda")
-good_stage = Usd.Stage.Open(good_layer)
+# Anonymous layers cannot be saved — use a real temp file on disk
+import tempfile, os as _os
+good_asset_path = _os.path.join(
+    _os.path.dirname(_os.path.abspath(__file__)), "debug_ce_good_asset.usda"
+)
+if _os.path.exists(good_asset_path):
+    _os.remove(good_asset_path)
+
+# Create and save as a real file so the reference can resolve
+good_stage = Usd.Stage.CreateNew(good_asset_path)
 UsdGeom.Xform.Define(good_stage, "/MyAsset")
 good_stage.GetRootLayer().Save()
 
+# Reference the real file path but point to a prim that doesn't exist
 prim_wrong_path = UsdGeom.Cube.Define(stage, "/World/WrongPath").GetPrim()
 prim_wrong_path.GetReferences().AddReference(
-    good_layer.identifier, "/PathThatDoesNotExist"
+    good_asset_path, "/PathThatDoesNotExist"
 )
 
 # ── STEP 1: CHECK COMPOSITION ERRORS ───────────────────────────────
@@ -127,6 +136,7 @@ print("""
   usdchecker scene.usda                 → pre-delivery validation
 """)
 
+print("Composition Errors:",stage.GetCompositionErrors())
 # ── USDVIEW EQUIVALENT + EXPORT ──────────────────────────────────────
 print(SEP)
 print("  USDVIEW — How composition errors appear visually")

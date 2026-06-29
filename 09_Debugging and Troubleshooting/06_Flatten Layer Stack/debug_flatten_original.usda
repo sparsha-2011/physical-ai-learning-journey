@@ -1,0 +1,8 @@
+#usda 1.0
+(
+    subLayers = [
+        @debug_fl_anim.usda@,
+        @debug_fl_layout.usda@
+    ]
+)
+

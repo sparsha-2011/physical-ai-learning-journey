@@ -1,0 +1,9 @@
+#usda 1.0
+(
+    subLayers = [
+        @debug_ml_fx.usda@,
+        @debug_ml_director.usda@,
+        @debug_ml_layout.usda@
+    ]
+)
+

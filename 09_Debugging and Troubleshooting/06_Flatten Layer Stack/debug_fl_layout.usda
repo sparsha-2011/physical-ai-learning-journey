@@ -1,0 +1,26 @@
+#usda 1.0
+
+def Xform "World"
+{
+    def Xform "Chair" (
+        variants = {
+            string material = "wood"
+        }
+        prepend variantSets = "material"
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        variantSet "material" = {
+            "metal" {
+                custom string mat:type = "metal"
+
+            }
+            "wood" {
+                custom string mat:type = "wood"
+
+            }
+        }
+    }
+}
+
