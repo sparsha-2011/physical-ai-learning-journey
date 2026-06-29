@@ -115,6 +115,11 @@
     <span class="hero-pill">Validators</span>
     <span class="hero-pill">usdchecker / usdcat</span>
     <span class="hero-pill">glTF conversion</span>
+    <span class="hero-pill">Conceptual data mapping</span>
+    <span class="hero-pill">Intermediate representation pattern</span>
+    <span class="hero-pill">Exporter hooks</span>
+    <span class="hero-pill">Stage caching</span>
+    <span class="hero-pill">Build configuration</span>
   </div>
 </div>
 
@@ -129,6 +134,12 @@
     <a class="toc-item" href="#s7"><span class="toc-num">07</span>Round-trip pipelines</a>
     <a class="toc-item" href="#s4"><span class="toc-num">04</span>DCC integration patterns</a>
     <a class="toc-item" href="#s8"><span class="toc-num">08</span>Data exchange — glTF and beyond</a>
+    <a class="toc-item" href="#s-mapping"><span class="toc-num">09</span>Conceptual data mapping docs</a>
+    <a class="toc-item" href="#s-importer"><span class="toc-num">10</span>Custom importers — intermediate pattern</a>
+    <a class="toc-item" href="#s-exchgaps"><span class="toc-num">11</span>Data interchange script best practices</a>
+    <a class="toc-item" href="#s-hooks"><span class="toc-num">12</span>Exporter hooks + proprietary deps</a>
+    <a class="toc-item" href="#s-flatten"><span class="toc-num">13</span>Flattening best practices</a>
+    <a class="toc-item" href="#s-build"><span class="toc-num">14</span>Build config + pipeline design</a>
   </div>
 </div>
 
@@ -727,6 +738,484 @@ usdzip -l my_delivery.usdz
 </div>
 
 
+<!-- ══ CONCEPTUAL DATA MAPPING ══ -->
+<div class="section s-teal" id="s-mapping">
+  <div class="section-header">
+    <div class="section-icon">🗺️</div>
+    <div><div class="section-title">09 — Conceptual Data Mapping Documents</div></div>
+  </div>
+
+  <p>A conceptual data mapping document is a <strong>logical blueprint</strong> that specifies how source schema attributes map to target USD schema attributes. It is created before writing any importer/exporter code. The exam tests exactly what belongs in this document and what does NOT.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">✅ Essential contents</h4>
+      <ul style="color:var(--teal-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li><strong>Attribute correspondences</strong> — source name → target name, data type, units</li>
+        <li><strong>Transformation rules</strong> — how complex conversions work (e.g. scale units, axis flip)</li>
+        <li><strong>Mandatory vs optional fields</strong> — which must be present for a valid exchange</li>
+        <li>Semantic alignment — what each attribute means in both schemas</li>
+      </ul>
+    </div>
+    <div style="background:var(--coral-light);border:1.5px solid var(--coral-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--coral-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">❌ Does NOT belong here</h4>
+      <ul style="color:var(--coral-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li><strong>Version histories</strong> — belongs in schema management, not mapping docs</li>
+        <li><strong>Physical storage format</strong> — implementation concern, not logical mapping</li>
+        <li><strong>Example payloads</strong> — belongs in testing/implementation docs</li>
+        <li>Build instructions or deployment steps</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Example</span><span class="code-desc">What a conceptual data mapping document entry looks like</span></div>
+    <pre><code><span class="cm"># ── EXAMPLE MAPPING ENTRY ────────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># Source (Maya): mesh.uvSet[0]  (float2, UV per face-vertex)</span>
+<span class="cm"># Target (USD):  primvars:st    (texCoord2f[], faceVarying)</span>
+<span class="cm">#</span>
+<span class="cm"># Attribute correspondence: uvSet[0] → primvars:st</span>
+<span class="cm"># Data type conversion:     float2 → texCoord2f</span>
+<span class="cm"># Interpolation:            per-face-vertex → faceVarying</span>
+<span class="cm"># Mandatory:                YES — required for texturing</span>
+<span class="cm"># Transformation rule:      V axis inverted (Maya V=0 bottom, USD V=0 top)</span>
+<span class="cm">#</span>
+<span class="cm"># ── WHAT THIS IS NOT ────────────────────────────────────────────────</span>
+<span class="cm"># NOT: "Maya schema version 2024.1" ← version history, wrong place</span>
+<span class="cm"># NOT: "Store in .usdc binary format" ← storage detail, wrong place</span>
+<span class="cm"># NOT: example mesh with UVs ← test payload, wrong place</span>
+<span class="cm">#</span>
+<span class="cm"># ── EXAM ANSWER PATTERN ─────────────────────────────────────────────</span>
+<span class="cm"># Q28 correct items: attribute correspondences + types + units,</span>
+<span class="cm">#                    transformation rules, mandatory/optional fields</span>
+<span class="cm"># Q28 wrong item you chose: "version histories" → schema management</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ CUSTOM IMPORTERS ══ -->
+<div class="section s-amber" id="s-importer">
+  <div class="section-header">
+    <div class="section-icon">📥</div>
+    <div><div class="section-title">10 — Custom Importers: The Intermediate Representation Pattern</div></div>
+  </div>
+
+  <p>The exam consistently tests the correct architecture for a custom USD importer. The answer is always the same: <strong>parse to an intermediate representation first, then populate USD</strong>. This decouples the two concerns and is the professional standard.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Importing a proprietary file directly into USD is like trying to translate a book from Japanese to English by writing English sentences word-by-word as you read each Japanese word. You'll miss context and grammar. The correct approach is to first understand the full Japanese sentence (intermediate representation), then write the English sentence (USD prims). Two separate passes — parsing then writing.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">The intermediate representation pattern — correct importer architecture</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">UsdShade</span>
+
+<span class="cm"># ── CORRECT PATTERN: Parse → Intermediate → USD ──────────────────────</span>
+
+<span class="cm"># STEP 1: Parse proprietary format into intermediate data structure</span>
+<span class="cm"># This isolates file format parsing from USD API calls</span>
+<span class="ck">def</span> <span class="cw">parse_proprietary_file</span>(filepath):
+    intermediate = {
+        <span class="cs">"meshes"</span>: [],
+        <span class="cs">"transforms"</span>: [],
+        <span class="cs">"materials"</span>: [],
+    }
+    <span class="cm"># Read and parse the proprietary file format here</span>
+    <span class="cm"># Validate, transform, convert units</span>
+    <span class="cm"># Store in clean Python data structures</span>
+    <span class="ck">return</span> intermediate
+
+<span class="cm"># STEP 2: Populate USD prims from the intermediate representation</span>
+<span class="cm"># This isolates USD API usage from file format specifics</span>
+<span class="ck">def</span> <span class="cw">populate_usd_stage</span>(intermediate, stage):
+    <span class="ck">for</span> mesh_data <span class="ck">in</span> intermediate[<span class="cs">"meshes"</span>]:
+        mesh = <span class="cn">UsdGeom</span>.<span class="cp">Mesh</span>.<span class="cw">Define</span>(stage, mesh_data[<span class="cs">"path"</span>])
+        mesh.<span class="cw">GetPointsAttr</span>().<span class="cw">Set</span>(mesh_data[<span class="cs">"points"</span>])
+        mesh.<span class="cw">GetFaceVertexCountsAttr</span>().<span class="cw">Set</span>(mesh_data[<span class="cs">"face_counts"</span>])
+        mesh.<span class="cw">GetFaceVertexIndicesAttr</span>().<span class="cw">Set</span>(mesh_data[<span class="cs">"indices"</span>])
+
+<span class="cm"># STEP 3: Wire it together</span>
+<span class="ck">def</span> <span class="cw">import_file</span>(filepath, output_usd):
+    intermediate = <span class="cw">parse_proprietary_file</span>(filepath)
+    stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateNew</span>(output_usd)
+    <span class="cw">populate_usd_stage</span>(intermediate, stage)
+    stage.<span class="cw">Save</span>()
+
+<span class="cm"># ── WHY THIS PATTERN ────────────────────────────────────────────────</span>
+<span class="cm"># 1. Decouples parsing from USD API — each can be tested independently</span>
+<span class="cm"># 2. Error handling is cleaner — validate data before committing to USD</span>
+<span class="cm"># 3. Easier to debug — know whether bug is in parsing or USD population</span>
+<span class="cm"># 4. Batch USD API calls — more efficient than interleaving with I/O</span>
+
+<span class="cm"># ── WRONG APPROACHES ────────────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Implementing a custom UsdSchema to represent proprietary data</span>
+<span class="cm">#    Custom schemas useful for EXTENDING USD, NOT required for importing</span>
+<span class="cm">#    Q31: "not strictly necessary for importing proprietary formats"</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Writing USD ASCII files directly without the USD API</span>
+<span class="cm">#    Error-prone, bypasses USD's validation and layering system</span>
+<span class="cm">#<br>
+<span class="cm"># ❌ Using UsdGeom namespace ONLY for all imports</span>
+<span class="cm">#    Animation may need UsdSkel, materials need UsdShade</span>
+<span class="cm">#    Not all data fits in UsdGeom</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ DATA INTERCHANGE SCRIPT BEST PRACTICES ══ -->
+<div class="section s-blue" id="s-exchgaps">
+  <div class="section-header">
+    <div class="section-icon">🔄</div>
+    <div><div class="section-title">11 — Data Interchange Script Best Practices</div></div>
+  </div>
+
+  <p>The exam tested several data interchange principles that were missing from the original notes. These are the correct practices for writing scripts that exchange data between USD stages.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">✅ Always do</h4>
+      <ul style="color:var(--teal-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li><strong>Leverage USD's layering and composition model</strong> to combine data sources — never manually merge in scripts</li>
+        <li><strong>Use the USD Python API</strong> to create and populate UsdPrims with schemas</li>
+        <li><strong>Use relative paths or asset resolvers</strong> for all references</li>
+        <li><strong>Respect USD schemas</strong> for attribute definitions and validation</li>
+        <li><strong>Use attribute variability and time-sampling</strong> for animated data</li>
+        <li>Implement custom schemas for application-specific data</li>
+      </ul>
+    </div>
+    <div style="background:var(--coral-light);border:1.5px solid var(--coral-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--coral-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">❌ Never do</h4>
+      <ul style="color:var(--coral-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>Use absolute file paths — reduces portability</li>
+        <li>Flatten all data into one ASCII file — loses modularity and performance</li>
+        <li>Ignore USD schemas — breaks validation and interoperability</li>
+        <li>Embed raw binary blobs without schema definitions</li>
+        <li>Write USD ASCII manually without using the USD API</li>
+        <li>Embed all proprietary metadata as unregistered string attributes</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Correct vs incorrect data interchange patterns</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>
+
+<span class="cm"># ── CORRECT: Use composition model, not manual merging ───────────────</span>
+<span class="cm"># Don't manually read two stages and copy data</span>
+<span class="cm"># Instead: use sublayers or references to compose them</span>
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateNew</span>(<span class="cs">"combined.usda"</span>)
+stage.<span class="cw">GetRootLayer</span>().<span class="cw">subLayerPaths = [</span><span class="cs">"./geometry.usda"</span>, <span class="cs">"./materials.usda"</span><span class="cw">]</span>
+<span class="cm"># USD's composition handles the merge — one line, not hundreds</span>
+
+<span class="cm"># ── CORRECT: Relative paths not absolute ────────────────────────────</span>
+<span class="cm"># WRONG:  chair.GetReferences().AddReference("C:/project/chair.usda")</span>
+<span class="cm"># RIGHT:  chair.GetReferences().AddReference("./assets/chair.usda")</span>
+<span class="cm"># Relative paths work on any machine. Absolute paths break portability.</span>
+
+<span class="cm"># ── CORRECT: Use USD API, not hand-written ASCII ─────────────────────</span>
+<span class="cm"># WRONG:  open("scene.usda", "w").write('#usda 1.0\ndef Mesh...')</span>
+<span class="cm"># RIGHT:  mesh = UsdGeom.Mesh.Define(stage, "/World/Chair")</span>
+<span class="cm">#         mesh.GetPointsAttr().Set(points)</span>
+<span class="cm"># API = validated, schema-compliant, correct. Hand-written = fragile.</span>
+
+<span class="cm"># ── CORRECT: Time-sampling for animated data ─────────────────────────</span>
+<span class="cm"># WRONG:  attr.Set(value)  ← static default, animation lost</span>
+<span class="cm"># RIGHT:  for frame, value in animation_data:</span>
+<span class="cm">#             attr.Set(value, time=frame)  ← animated correctly</span>
+
+<span class="cm"># ── CORRECT: Custom schemas for proprietary data ─────────────────────</span>
+<span class="cm"># WRONG:  prim.CreateAttribute("my_data", Sdf.ValueTypeNames.String)</span>
+<span class="cm">#              .Set(json.dumps(proprietary_data))</span>
+<span class="cm"># RIGHT:  use registered custom schema or proper metadata conventions</span>
+<span class="cm">#         this ensures interoperability and semantic meaning</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ EXPORTER HOOKS ══ -->
+<div class="section s-green" id="s-hooks">
+  <div class="section-header">
+    <div class="section-icon">🪝</div>
+    <div><div class="section-title">Exporter Hooks — Pre/Post Export</div></div>
+  </div>
+
+  <p>Exporter hooks are defined extension points in the export workflow where custom logic can be injected <strong>without modifying the core exporter code</strong>. This is the correct way to customise a USD exporter in a production pipeline.</p>
+
+  <div class="key-fact">
+    <div class="key-fact-icon">🔑</div>
+    <div class="key-fact-text"><strong>The exam principle:</strong> hooks EXTEND the pipeline at defined points. They never replace or override the core export function. Same as schema inheritance — extend, never override.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.5rem">Pre-export hook</h4>
+      <p style="color:var(--teal-dark);font-size:13px;margin:0">Runs BEFORE core export. Use to prepare data, validate input, set upAxis/metersPerUnit, add pipeline metadata to the stage.</p>
+    </div>
+    <div style="background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--blue-dark);font-size:14px;font-weight:700;margin-bottom:.5rem">Post-export hook</h4>
+      <p style="color:var(--blue-dark);font-size:13px;margin:0">Runs AFTER core export. Use to add custom attributes to exported prims, run usdchecker, register the asset in a pipeline database.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Pre/post-export hook pattern — correct approach</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdGeom</span>, <span class="cn">Sdf</span>
+
+<span class="ck">def</span> <span class="cw">pre_export_hook</span>(stage, export_options):
+    <span class="cm"># Runs BEFORE core export — prepare and configure</span>
+    <span class="cn">UsdGeom</span>.<span class="cw">SetStageUpAxis</span>(stage, <span class="cn">UsdGeom</span>.<span class="cp">Tokens</span>.y)
+    <span class="cn">UsdGeom</span>.<span class="cw">SetStageMetersPerUnit</span>(stage, <span class="cn">0.01</span>)
+    stage.<span class="cw">GetRootLayer</span>().<span class="cw">SetCustomLayerData</span>({
+        <span class="cs">"pipeline:version"</span>: <span class="cs">"2.1"</span>,
+        <span class="cs">"pipeline:studio"</span>: <span class="cs">"AcmeStudios"</span>
+    })
+
+<span class="ck">def</span> <span class="cw">post_export_hook</span>(stage, exported_path):
+    <span class="cm"># Runs AFTER core export — add custom data, validate</span>
+    <span class="ck">for</span> prim <span class="ck">in</span> stage.<span class="cw">Traverse</span>():
+        <span class="ck">if</span> prim.<span class="cw">IsA</span>(<span class="cn">UsdGeom</span>.<span class="cp">Mesh</span>):
+            prim.<span class="cw">CreateAttribute</span>(<span class="cs">"pipeline:exportVersion"</span>,
+                                  <span class="cn">Sdf</span>.<span class="cp">ValueTypeNames</span>.String).<span class="cw">Set</span>(<span class="cs">"2.1"</span>)
+    <span class="cm"># Register asset with pipeline database</span>
+    <span class="cm"># Run usdchecker on exported_path</span>
+
+<span class="cm"># ── WRONG APPROACHES ────────────────────────────────────────────────</span>
+<span class="cm"># ❌ Override main export function → loses built-in functionality</span>
+<span class="cm"># ❌ Modify USD file on disk post-export → error-prone, bypasses pipeline</span>
+<span class="cm"># ❌ Separate file generator for custom requirements → duplicates effort</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ PROPRIETARY DEPENDENCIES ══ -->
+<div class="section s-teal" id="s-proprietary">
+  <div class="section-header">
+    <div class="section-icon">🔓</div>
+    <div><div class="section-title">Removing Proprietary Dependencies</div></div>
+  </div>
+
+  <p>When USD assets depend on proprietary shaders or plugins (Arnold, RenderMan, studio-specific C++ plugins), they cannot be used by other tools. The correct fix is to <strong>refactor into USD native schemas and shader definitions</strong> — not to encapsulate, reference around, or replace USD.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--coral-light);border:1.5px solid var(--coral-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--coral-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">❌ Wrong approaches</h4>
+      <ul style="color:var(--coral-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>Replace USD with proprietary formats — increases dependency</li>
+        <li>Reference proprietary files without conversion — dependency stays</li>
+        <li>Encapsulate without converting — long-term maintenance problem</li>
+      </ul>
+    </div>
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">✅ Correct approach</h4>
+      <ul style="color:var(--teal-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>Refactor proprietary shaders → UsdPreviewSurface or MaterialX</li>
+        <li>Refactor proprietary schema types → registered custom USD schemas</li>
+        <li>Any USD-compliant tool can then read the assets</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-label">Why this matters for portability</div>
+    <p>A shader using <code>info:id = "ArnoldStandardSurface"</code> only works in Arnold. The same material using <code>info:id = "UsdPreviewSurface"</code> works in any USD-compliant renderer — Storm, RenderMan, Karma, Blender, Omniverse. Refactoring to USD native removes the vendor lock-in without losing the material data.</p>
+  </div>
+</div>
+
+
+<!-- ══ PIPELINE DOCUMENTATION ══ -->
+<div class="section s-purple" id="s-docs">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div><div class="section-title">Pipeline Documentation Standards</div></div>
+  </div>
+
+  <p>Good USD pipeline documentation is not just block diagrams. It must include enough technical detail for developers to implement and maintain the pipeline correctly.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">✅ Good pipeline docs include</h4>
+      <ul style="color:var(--teal-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>USD schema types at each node</li>
+        <li>Stage layering structure — which layers compose how</li>
+        <li>Data flow between nodes — what goes in, what comes out</li>
+        <li>Explicit composition arc annotations</li>
+        <li>Dependencies between pipeline stages</li>
+      </ul>
+    </div>
+    <div style="background:var(--coral-light);border:1.5px solid var(--coral-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--coral-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">❌ Insufficient docs</h4>
+      <ul style="color:var(--coral-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>Generic block diagrams without USD-specific detail</li>
+        <li>Code snippets only — no visual diagrams</li>
+        <li>High-level business flowcharts for technical work</li>
+        <li>Diagrams that hide dependencies between stages</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ FLATTENING BEST PRACTICES ══ -->
+<div class="section s-amber" id="s-flatten">
+  <div class="section-header">
+    <div class="section-icon">📄</div>
+    <div><div class="section-title">Flattening Best Practices</div></div>
+  </div>
+
+  <p>Flattening resolves composition arcs into a single self-contained layer. The exam tests exactly what flattening does and does NOT do.</p>
+
+  <table class="format-table">
+    <tr style="background:var(--amber-light);">
+      <th style="color:var(--amber-dark);">Action</th>
+      <th style="color:var(--amber-dark);">Part of flattening?</th>
+      <th style="color:var(--amber-dark);">Why</th>
+    </tr>
+    <tr><td>Remove references/payloads → self-contained</td><td style="color:var(--teal-dark);font-weight:600">✅ YES</td><td>All arcs resolved, file needs no external dependencies</td></tr>
+    <tr><td>Merge all layers into one</td><td style="color:var(--teal-dark);font-weight:600">✅ YES</td><td>The point of flattening — multiple layers become one</td></tr>
+    <tr><td>Ensure unique prim paths, no namespace collisions</td><td style="color:var(--teal-dark);font-weight:600">✅ YES</td><td>Merging assets can create collisions — must be resolved</td></tr>
+    <tr><td>Collapse variants to currently selected variant</td><td style="color:var(--teal-dark);font-weight:600">✅ YES</td><td>Only the active selection survives — switching is gone</td></tr>
+    <tr><td style="color:var(--coral-dark)">Bake time-sampled data to static values</td><td style="color:var(--coral-dark);font-weight:600">❌ NO</td><td>Time samples are PRESERVED. Baking is a separate explicit step.</td></tr>
+    <tr><td style="color:var(--coral-dark)">Convert geometry to a single mesh type</td><td style="color:var(--coral-dark);font-weight:600">❌ NO</td><td>Geometry types never change — flattening doesn't touch them</td></tr>
+    <tr><td style="color:var(--coral-dark)">Preserve variant sets exactly as original</td><td style="color:var(--coral-dark);font-weight:600">❌ NO</td><td>Variants collapse to selected. Sets are NOT preserved.</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-label">Critical exam trap — time samples</div>
+    <p>"Baking all time-sampled data into static values" is NOT part of flattening. Flattening PRESERVES animation time samples exactly as they were. Baking timeSamples to static defaults is a separate, deliberate optimisation operation. The flat file still has all your keyframes.</p>
+  </div>
+</div>
+
+
+<!-- ══ UI/UX FOR PIPELINES ══ -->
+<div class="section s-coral" id="s-uiux">
+  <div class="section-header">
+    <div class="section-icon">🖥️</div>
+    <div><div class="section-title">UI/UX for USD Pipelines</div></div>
+  </div>
+
+  <p>USD pipeline tools follow specific UI/UX design principles that match USD's modular, graph-based architecture. The exam tests which patterns are correct and which are anti-patterns.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">✅ Good pipeline UI/UX</h4>
+      <ul style="color:var(--teal-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li><strong>Node-based visual editor</strong> with drag-and-drop — matches USD's graph structure</li>
+        <li><strong>Real-time feedback</strong> on execution status and errors</li>
+        <li><strong>Context-sensitive help and tooltips</strong> for each node</li>
+        <li>Support for branching and merging node flows</li>
+        <li>Customisation options for different pipeline types</li>
+      </ul>
+    </div>
+    <div style="background:var(--coral-light);border:1.5px solid var(--coral-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--coral-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">❌ Anti-patterns</h4>
+      <ul style="color:var(--coral-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>Modal dialogs for every config change — disrupts workflow</li>
+        <li>Linear-only pipeline flows — USD branches and merges</li>
+        <li>No customisation — pipeline diversity requires flexibility</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Why node-based specifically?</div>
+    <p>USD's composition model is a graph — layers reference layers, assets reference assets, variants branch and merge. A node-based editor reflects this graph structure. Each node is a stage or layer. Connections are composition arcs. The UI matches the mental model of the technology.</p>
+  </div>
+</div>
+
+
+<!-- ══ BUILD CONFIGURATION ══ -->
+<div class="section s-purple" id="s-build">
+  <div class="section-header">
+    <div class="section-icon">🔧</div>
+    <div><div class="section-title">Build Configuration Management</div></div>
+  </div>
+
+  <p>USD pipeline builds require proper configuration management to be reproducible across machines, operating systems, and team members.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem">
+    <div style="background:var(--teal-light);border:1.5px solid var(--teal-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--teal-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">✅ Correct practices</h4>
+      <ul style="color:var(--teal-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li><strong>Explicit build variants</strong> in config files — toggle features clearly</li>
+        <li><strong>Centralised config management</strong> — version control build settings</li>
+        <li><strong>Conditional logic</strong> in build scripts for different platforms</li>
+        <li>Use build cache — faster iteration, not slower</li>
+        <li>Document all environment variables</li>
+      </ul>
+    </div>
+    <div style="background:var(--coral-light);border:1.5px solid var(--coral-mid);border-radius:var(--radius);padding:1.1rem">
+      <h4 style="color:var(--coral-dark);font-size:14px;font-weight:700;margin-bottom:.4rem">❌ Anti-patterns</h4>
+      <ul style="color:var(--coral-dark);font-size:13px;padding-left:1rem;line-height:1.7">
+        <li>Undocumented environment variables — breaks reproducibility</li>
+        <li>Hardcoding paths — fragile, not portable</li>
+        <li><strong>Ignoring build cache</strong> to force clean rebuilds — wastes time</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">Exam trap — build cache</div>
+    <p>"Ignoring build cache mechanisms to always force a clean rebuild" is WRONG. Build caches detect unchanged components and skip rebuilding them. Ignoring them causes unnecessary long build times. In production USD builds that may take hours, this is a critical efficiency concern.</p>
+  </div>
+</div>
+
+
+<!-- ══ PIPELINE DESIGN PRINCIPLES ══ -->
+<div class="section s-green" id="s-design">
+  <div class="section-header">
+    <div class="section-icon">🏗️</div>
+    <div><div class="section-title">Pipeline Design Principles + Stage Caching</div></div>
+  </div>
+
+  <p>Two topics never previously covered: <strong>stage caching</strong> and the <strong>change notification system</strong>. Both appeared in exam Q62.</p>
+
+  <h3>Stage caching — UsdStageCache</h3>
+  <p>Opening and composing a USD stage is expensive. Stage caching stores previously opened stages in memory so they can be reused without full recomposition. Critical for interactive tools and large pipelines.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">UsdStageCache and the change notification system</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">Sdf</span>
+
+<span class="cm"># ── STAGE CACHING ─────────────────────────────────────────────────────</span>
+cache = <span class="cn">Usd</span>.<span class="cp">StageCache</span>()
+
+<span class="ck">with</span> <span class="cn">Usd</span>.<span class="cp">StageCacheContext</span>(cache):
+    stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+    <span class="cm"># Stage is now cached</span>
+    <span class="cm"># Subsequent Open("scene.usda") returns cached stage — no recomposition</span>
+<span class="cm"># Avoids redundant opens and recompositions → performance improvement</span>
+
+<span class="cm"># ── CHANGE NOTIFICATION SYSTEM ───────────────────────────────────────</span>
+<span class="cm"># USD sends change notifications when the stage is modified</span>
+<span class="cm"># Listeners only update what actually changed — not the whole scene</span>
+<span class="cm">#</span>
+<span class="cm"># Without notifications: any edit → full scene reprocess</span>
+<span class="cm"># With notifications:    any edit → only affected prims reprocess</span>
+<span class="cm">#</span>
+<span class="cm"># SdfChangeBlock batches notifications for bulk operations</span>
+<span class="ck">with</span> <span class="cn">Sdf</span>.<span class="cp">ChangeBlock</span>():
+    <span class="ck">for</span> i <span class="ck">in</span> <span class="cw">range</span>(<span class="cn">10000</span>):
+        attr.<span class="cw">Set</span>(new_value[i], time=i)
+<span class="cm"># ONE notification after the block — not 10,000 — massive perf gain</span>
+
+<span class="cm"># ── CORE PIPELINE DESIGN PRINCIPLES ─────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># ✅ Strong layering and composition arcs — non-destructive, modular</span>
+<span class="cm"># ✅ Schema-based validation — enforce data integrity pipeline-wide</span>
+<span class="cm"># ✅ Stage caching — avoid redundant recomposition</span>
+<span class="cm"># ✅ Change notification system — only update what changed</span>
+<span class="cm"># ✅ USD native composition over external scripts for transformation</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Embed all data in one file — no modularity, no reuse</span>
+<span class="cm"># ❌ Avoid variant sets — they are powerful tools, not complexity sources</span>
+<span class="cm"># ❌ Rely solely on external scripts — ignores USD's native power</span></code></pre>
+  </div>
+</div>
+
+
 <div class="summary-box">
   <h3>Day 7 key takeaways</h3>
   <div class="summary-item"><span class="summary-num">1</span><span>Use <strong>.usdc</strong> for heavy data (geometry, animation). Use <strong>.usda</strong> for lightweight interface layers and debugging. Use <strong>.usdz</strong> for final delivery. Never use .usda for large geometry in production.</span></div>
@@ -739,6 +1228,14 @@ usdzip -l my_delivery.usdz
   <div class="summary-item"><span class="summary-num">8</span><span>DCC integration modes: Native USD (no translation), Plugin (translation at I/O), Standalone converter (external script). Each has different fidelity tradeoffs.</span></div>
   <div class="summary-item"><span class="summary-num">9</span><span>Conceptual data mapping must be documented explicitly — "UV set map1 maps to primvars:st as faceVarying texCoord2f." Don't assume the mapping is obvious.</span></div>
   <div class="summary-item"><span class="summary-num">10</span><span>upAxis and metersPerUnit are the two most common sources of scale/orientation bugs in data exchange. Always explicitly set both on export and check on import.</span></div>
+  <div class="summary-item"><span class="summary-num">11</span><span><strong>Conceptual mapping docs</strong> contain: attribute correspondences (types + units), transformation rules, mandatory/optional fields. NOT version histories, NOT storage format details, NOT example payloads.</span></div>
+  <div class="summary-item"><span class="summary-num">12</span><span><strong>Custom importer pattern</strong> — parse proprietary format to intermediate representation FIRST, then populate USD prims. Never write USD ASCII directly. Never use UsdGeom-only. Custom schema not required for importing.</span></div>
+  <div class="summary-item"><span class="summary-num">13</span><span><strong>Data interchange scripts</strong> — use USD's layering/composition model to combine sources. Relative paths not absolute. USD API not hand-written ASCII. Schemas for all attributes. Time-sampling for animation.</span></div>
+  <div class="summary-item"><span class="summary-num">14</span><span><strong>Exporter hooks</strong> — use pre/post hooks to extend export at defined points. Never override the main export function. Never modify USD files on disk after export.</span></div>
+  <div class="summary-item"><span class="summary-num">15</span><span><strong>Proprietary dependencies</strong> — refactor to USD native (UsdPreviewSurface, custom USD schemas). Encapsulating without converting does not remove the dependency.</span></div>
+  <div class="summary-item"><span class="summary-num">16</span><span><strong>Flattening preserves time samples</strong> — animation is NOT baked to static. Variants collapse to selected variant. Geometry types are never changed by flattening.</span></div>
+  <div class="summary-item"><span class="summary-num">17</span><span><strong>Build configuration</strong> — explicit variants, centralised version-controlled config, conditional platform logic. Never hardcode paths. Never ignore build cache.</span></div>
+  <div class="summary-item"><span class="summary-num">18</span><span><strong>Stage caching</strong> (UsdStageCache) avoids redundant recomposition. <strong>Change notification system</strong> limits updates to only changed elements. <strong>SdfChangeBlock</strong> batches notifications for bulk writes.</span></div>
 </div>
 
 <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e3db;">

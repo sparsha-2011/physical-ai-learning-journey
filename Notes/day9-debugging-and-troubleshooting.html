@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 9 — Debugging + Troubleshooting</title>
+<style>
+  :root {
+    --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#AFA9EC;--purple-dark:#3C3489;
+    --teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#5DCAA5;--teal-dark:#085041;
+    --coral:#D85A30;--coral-light:#FAECE7;--coral-mid:#F0997B;--coral-dark:#712B13;
+    --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#EF9F27;--amber-dark:#633806;
+    --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#85B7EB;--blue-dark:#0C447C;
+    --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#97C459;--green-dark:#27500A;
+    --gray:#5F5E5A;--gray-light:#F1EFE8;--gray-mid:#B4B2A9;--gray-dark:#2C2C2A;
+    --text:#1a1a1a;--text-muted:#5F5E5A;--bg:#fafaf8;--white:#ffffff;
+    --radius:10px;--radius-sm:6px;
+    --mono:'Courier New',monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+  .page{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  .hero{background:linear-gradient(135deg,#0C447C 0%,#534AB7 55%,#AFA9EC 100%);border-radius:16px;padding:2.5rem 2rem;margin-bottom:2.5rem;color:white;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;right:-50px;bottom:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.05)}
+  .hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:.5rem}
+  .hero h1{font-size:28px;font-weight:700;margin-bottom:.5rem}
+  .hero p{font-size:14px;opacity:.85;max-width:580px;line-height:1.6}
+  .hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem}
+  .hero-pill{background:rgba(255,255,255,0.18);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500}
+  .toc{background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:2.5rem}
+  .toc h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.75rem}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 2rem}
+  .toc-item{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 0;display:flex;align-items:center;gap:8px}
+  .toc-item:hover{color:var(--purple-dark)}
+  .toc-num{font-size:11px;background:var(--purple-light);color:var(--purple-dark);border-radius:4px;padding:1px 6px;font-weight:600;min-width:24px;text-align:center}
+  .section{margin-bottom:3.5rem}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid}
+  .section-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .section-title{font-size:21px;font-weight:700}
+  .s-purple .section-header{border-color:var(--purple-mid)}.s-purple .section-icon{background:var(--purple-light)}.s-purple .section-title{color:var(--purple-dark)}
+  .s-blue .section-header{border-color:var(--blue-mid)}.s-blue .section-icon{background:var(--blue-light)}.s-blue .section-title{color:var(--blue-dark)}
+  .s-teal .section-header{border-color:var(--teal-mid)}.s-teal .section-icon{background:var(--teal-light)}.s-teal .section-title{color:var(--teal-dark)}
+  .s-amber .section-header{border-color:var(--amber-mid)}.s-amber .section-icon{background:var(--amber-light)}.s-amber .section-title{color:var(--amber-dark)}
+  .s-coral .section-header{border-color:var(--coral-mid)}.s-coral .section-icon{background:var(--coral-light)}.s-coral .section-title{color:var(--coral-dark)}
+  .s-green .section-header{border-color:var(--green-mid)}.s-green .section-icon{background:var(--green-light)}.s-green .section-title{color:var(--green-dark)}
+  .s-gray .section-header{border-color:var(--gray-mid)}.s-gray .section-icon{background:var(--gray-light)}.s-gray .section-title{color:var(--gray-dark)}
+  p{margin-bottom:.9rem}
+  h3{font-size:16px;font-weight:600;margin:1.25rem 0 .6rem;color:var(--text)}
+  .analogy{background:var(--amber-light);border-left:4px solid var(--amber-mid);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .analogy-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber-dark);margin-bottom:.3rem}
+  .analogy p{margin:0;font-size:14px;color:var(--amber-dark)}
+  .callout{border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .callout-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+  .callout p{margin:0;font-size:14px;line-height:1.6}
+  .tip{background:var(--teal-light);border-left:4px solid var(--teal-mid)}.tip .callout-label{color:var(--teal-dark)}.tip p{color:var(--teal-dark)}
+  .warn{background:var(--coral-light);border-left:4px solid var(--coral-mid)}.warn .callout-label{color:var(--coral-dark)}.warn p{color:var(--coral-dark)}
+  .info{background:var(--blue-light);border-left:4px solid var(--blue-mid)}.info .callout-label{color:var(--blue-dark)}.info p{color:var(--blue-dark)}
+  .key{background:var(--purple-light);border-left:4px solid var(--purple-mid)}.key .callout-label{color:var(--purple-dark)}.key p{color:var(--purple-dark)}
+  .code-block{margin:1rem 0 1.25rem;border-radius:var(--radius);overflow:hidden;border:1px solid #e5e3db}
+  .code-header{background:#2C2C2A;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+  .code-lang{font-size:11px;color:#B4B2A9;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .code-desc{font-size:11px;color:#888780}
+  pre{background:#1e1e1c;padding:1rem 1.25rem;overflow-x:auto;line-height:1.8;margin:0}
+  code{font-family:var(--mono);font-size:12.5px}
+  .code-block pre code{color:#d4d2c9}
+  .cm{color:#6A9955;font-style:italic}.ck{color:#C586C0}.cs{color:#CE9178}.cn{color:#B5CEA8}.cv{color:#9CDCFE}.cp{color:#4EC9B0}.cw{color:#DCDCAA}
+  .tool-table{width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0;border:1px solid #e5e3db;border-radius:var(--radius);overflow:hidden}
+  .tool-table th{padding:9px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .tool-table td{padding:9px 14px;border-top:1px solid #e5e3db;vertical-align:top;line-height:1.5}
+  .tool-table td:first-child{font-family:var(--mono);font-weight:700;color:var(--purple-dark);font-size:12px}
+  .tool-table td:nth-child(2){color:var(--text-muted)}
+  .tool-table tr:hover td{background:var(--bg)}
+  .bug-table{width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0;border:1px solid #e5e3db;border-radius:var(--radius);overflow:hidden}
+  .bug-table th{padding:9px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .bug-table td{padding:9px 14px;border-top:1px solid #e5e3db;vertical-align:top;line-height:1.5}
+  .bug-table td:first-child{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--coral-dark)}
+  .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.5rem}
+  .comp-card{border-radius:var(--radius);padding:1.1rem;border:1.5px solid}
+  .comp-card h4{font-size:14px;font-weight:700;margin-bottom:.5rem}
+  .comp-card p,.comp-card li{font-size:13px;line-height:1.6;margin:0}
+  .comp-card ul{padding-left:1.1rem;margin-top:.3rem}
+  .summary-box{background:var(--gray-light);border-radius:var(--radius);padding:1.5rem;margin-top:2.5rem}
+  .summary-box h3{font-size:15px;font-weight:700;color:var(--gray-dark);margin-bottom:1rem}
+  .summary-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #D3D1C7;font-size:14px;align-items:flex-start}
+  .summary-item:last-child{border-bottom:none}
+  .summary-num{color:var(--purple);font-weight:700;min-width:20px;font-size:13px;margin-top:3px;flex-shrink:0}
+  svg{max-width:100%;height:auto}
+  @media(max-width:600px){.comp-grid{grid-template-columns:1fr}.toc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="hero-eyebrow">OpenUSD Certification · Day 9 — Updated</div>
+  <h1>Debugging + Troubleshooting</h1>
+  <p>Completely rebuilt from real exam questions. Covers every debugging tool and technique the exam tests — including UsdUtilsFlattenLayerStack, schema version validation, layer offsets, namespace collision debugging, and all the trap wrong answers.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">Debugging mindset</span>
+    <span class="hero-pill">usdview composition debugger</span>
+    <span class="hero-pill">PrimStack + PropertyStack</span>
+    <span class="hero-pill">Usd.Debug.PrintComposition</span>
+    <span class="hero-pill">UsdUtilsFlattenLayerStack</span>
+    <span class="hero-pill">stage.Flatten()</span>
+    <span class="hero-pill">usdcat --print-composition</span>
+    <span class="hero-pill">Schema version validation</span>
+    <span class="hero-pill">Layer offsets + time</span>
+    <span class="hero-pill">Namespace collisions</span>
+    <span class="hero-pill">TfDebug</span>
+    <span class="hero-pill">MuteLayer</span>
+    <span class="hero-pill">Common bugs + traps</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <div class="toc-grid">
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span>Debugging mindset — root causes</a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span>Flattening as a debug tool</a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span>The complete debugging toolkit</a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span>Namespace + path collision debugging</a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span>usdview debugging panels</a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span>Schema version validation</a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span>PrimStack + PropertyStack</span></a>
+    <a class="toc-item" href="#s9"><span class="toc-num">09</span>Layer offsets + time composition</a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span>TfDebug + MuteLayer</a>
+    <a class="toc-item" href="#s10"><span class="toc-num">10</span>Common bugs + exam traps</a>
+  </div>
+</div>
+
+
+<!-- ══ S1: DEBUGGING MINDSET ══ -->
+<div class="section s-purple" id="s1">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div><div class="section-title">01 — Debugging Mindset</div></div>
+  </div>
+
+  <p>Almost every USD debugging scenario comes down to one of five root causes. Identifying the type immediately tells you which tool to reach for.</p>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--coral-light);border-color:var(--coral-mid);">
+      <h4 style="color:var(--coral-dark);">Root cause 1 — Wrong value winning</h4>
+      <p style="color:var(--coral-dark);">A property shows the wrong value. Some layer has a stronger opinion than expected. <strong>Tool:</strong> PropertyStack, GetPropertyStack()</p>
+    </div>
+    <div class="comp-card" style="background:var(--amber-light);border-color:var(--amber-mid);">
+      <h4 style="color:var(--amber-dark);">Root cause 2 — Wrong structure / missing prims</h4>
+      <p style="color:var(--amber-dark);">Prims are missing despite being in source layers. Usually invalid references, namespace/path mismatches, or broken composition arcs. <strong>Tool:</strong> PrimStack, usdview composition tab, usdchecker</p>
+    </div>
+    <div class="comp-card" style="background:var(--blue-light);border-color:var(--blue-mid);">
+      <h4 style="color:var(--blue-dark);">Root cause 3 — Wrong layer getting edits</h4>
+      <p style="color:var(--blue-dark);">Value authored but went to wrong layer. Silent, no error. <strong>Tool:</strong> Check GetEditTarget() before authoring</p>
+    </div>
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">Root cause 4 — Composition arc conflict</h4>
+      <p style="color:var(--teal-dark);">Unexpected overrides from references, variants, or inherits. <strong>Tool:</strong> usdview composition debugger, Usd.Debug.PrintComposition, usdcat --print-composition</p>
+    </div>
+    <div class="comp-card" style="background:var(--green-light);border-color:var(--green-mid);">
+      <h4 style="color:var(--green-dark);">Root cause 5 — Performance / loading</h4>
+      <p style="color:var(--green-dark);">Stage loads slowly or viewport is laggy. <strong>Tool:</strong> TfDebug, check payload loading, verify instancing</p>
+    </div>
+    <div class="comp-card" style="background:var(--purple-light);border-color:var(--purple-mid);">
+      <h4 style="color:var(--purple-dark);">Root cause 6 — Schema version mismatch</h4>
+      <p style="color:var(--purple-dark);">Unexpected behavior from attribute differences across layers using different schema versions. <strong>Tool:</strong> Validate schema versions across all layers</p>
+    </div>
+  </div>
+
+  <div class="callout key">
+    <div class="callout-label">The most reliable symptom of poor authoring — exam Q49</div>
+    <p>The most reliable indicator of poorly authored USD data (invalid references or incorrect namespace usage) is: <strong>unexpected prims missing from the stage despite being present in source layers.</strong> This directly reflects broken composition arcs from invalid references or namespace collisions. Slow rendering, API deprecation warnings, and successful payload loading are NOT indicators of poor authoring.</p>
+  </div>
+</div>
+
+
+<!-- ══ S2: COMPLETE TOOLKIT ══ -->
+<div class="section s-blue" id="s2">
+  <div class="section-header">
+    <div class="section-icon">🧰</div>
+    <div><div class="section-title">02 — The Complete Debugging Toolkit</div></div>
+  </div>
+
+  <p>This is the full list of tools the exam tests. Know what each one does and when to use it.</p>
+
+  <table class="tool-table">
+    <tr style="background:var(--purple-light);">
+      <th style="color:var(--purple-dark);">Tool / Method</th>
+      <th style="color:var(--purple-dark);">What it does</th>
+      <th style="color:var(--purple-dark);">Use when</th>
+    </tr>
+    <tr>
+      <td>usdview<br/>composition tab</td>
+      <td>Visual breakdown of how layers and references compose for a selected prim. Shows all composition arcs and their contributions.</td>
+      <td>Unexpected overrides, missing prims, understanding arc conflicts</td>
+    </tr>
+    <tr>
+      <td>usdview<br/>Layers panel</td>
+      <td>Lists all layers contributing to the stage. Toggle layers on/off interactively.</td>
+      <td>Identifying which layer contributes which opinion</td>
+    </tr>
+    <tr>
+      <td>Usd.Debug.<br/>PrintComposition(prim)</td>
+      <td>Prints detailed composition arc information — which layers contribute and how they combine.</td>
+      <td>Most detailed programmatic composition arc debugging</td>
+    </tr>
+    <tr>
+      <td>prim.GetPrimStack()</td>
+      <td>Returns all SdfPrimSpecs contributing to a prim, strongest to weakest. Shows layer, specifier, typeName.</td>
+      <td>Wrong prim type, missing prim, unexpected specifier</td>
+    </tr>
+    <tr>
+      <td>attr.GetPropertyStack()</td>
+      <td>Returns all property specs for an attribute, strongest to weakest. Shows which layer's value is winning.</td>
+      <td>Wrong property value, unexpected override</td>
+    </tr>
+    <tr>
+      <td>UsdUtils.<br/>FlattenLayerStack(stage)</td>
+      <td>Merges all sublayers in the root layer stack into ONE inspectable layer WITHOUT resolving references or baking variants.</td>
+      <td>See the combined sublayer result, debug sublayer conflicts</td>
+    </tr>
+    <tr>
+      <td>stage.Flatten()</td>
+      <td>Resolves ALL composition arcs (references, variants, payloads) into one layer. Shows the fully composed scene.</td>
+      <td>See what the completely resolved scene looks like, spot unexpected composition results</td>
+    </tr>
+    <tr>
+      <td>usdcat --flatten</td>
+      <td>CLI equivalent of stage.Flatten(). Writes the flat result to a file or stdout for inspection.</td>
+      <td>Quick flattening from command line to inspect discrepancies</td>
+    </tr>
+    <tr>
+      <td>usdcat<br/>--print-composition</td>
+      <td>Prints the composition arc graph for each prim in the file. CLI equivalent of PrintComposition.</td>
+      <td>Inspecting composition arcs from command line without writing code</td>
+    </tr>
+    <tr>
+      <td>stage.GetLayerStack()</td>
+      <td>Returns all layers in the root layer stack, strongest to weakest.</td>
+      <td>Understanding which layers are loaded and their order</td>
+    </tr>
+    <tr>
+      <td>stage.GetRootLayer()</td>
+      <td>Returns the root layer — the primary layer before composition.</td>
+      <td>Examining base scene description before any composition</td>
+    </tr>
+    <tr>
+      <td>stage.GetSessionLayer()</td>
+      <td>Returns the session layer containing ephemeral in-memory overrides.</td>
+      <td>Checking what interactive changes have been made in this session</td>
+    </tr>
+    <tr>
+      <td>stage.MuteLayer()</td>
+      <td>Silences a layer without removing it. UnmuteLayer() reverses.</td>
+      <td>Isolating which layer causes a problem</td>
+    </tr>
+    <tr>
+      <td>stage.GetCompositionErrors()</td>
+      <td>Returns all composition errors on the stage.</td>
+      <td>Diagnosing broken references, invalid paths, arc cycles</td>
+    </tr>
+    <tr>
+      <td>usdchecker</td>
+      <td>Validates USD file against best practices — missing defaultPrim, extent, unresolved references etc.</td>
+      <td>Pre-delivery QA. Does NOT fix composition conflicts automatically.</td>
+    </tr>
+    <tr>
+      <td>Tf.Debug.<br/>SetDebugSymbolsByName()</td>
+      <td>Enables verbose internal USD logging for specific subsystems.</td>
+      <td>Path resolution failures, stage open issues, payload loading</td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ══ S3: USDVIEW PANELS ══ -->
+<div class="section s-teal" id="s3">
+  <div class="section-header">
+    <div class="section-icon">🔬</div>
+    <div><div class="section-title">03 — usdview Debugging Panels</div></div>
+  </div>
+
+  <p>The exam tests usdview panels specifically. Know each panel, what it shows, and when to use it.</p>
+
+  <h3>The Composition Tab — most important for the exam</h3>
+  <p>The <strong>composition debugger</strong> (Composition tab in Metadata/Composition panel) shows the full breakdown of how a prim is composed — every arc, every layer, every contribution. This is the first tool to reach for when a prim has unexpected values or a composition arc is not resolving correctly.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">usdview workflow</span><span class="code-desc">Using the composition debugger step by step</span></div>
+    <pre><code><span class="cm"># PROBLEM: /World/Chair has translate = (99,0,0) — expected (5,0,0)</span>
+<span class="cm">#</span>
+<span class="cm"># STEP 1: Open usdview</span>
+<span class="cm">#   .\\scripts\\usdview.bat scene.usda</span>
+<span class="cm">#</span>
+<span class="cm"># STEP 2: Click /World/Chair in the Scenegraph panel</span>
+<span class="cm">#</span>
+<span class="cm"># STEP 3: Open the Metadata/Composition panel → Composition Tab</span>
+<span class="cm">#   This shows the FULL composition arc graph for this prim</span>
+<span class="cm">#   Every reference, sublayer, variant, inherit is listed</span>
+<span class="cm">#   Each arc shows which layer it came from</span>
+<span class="cm">#</span>
+<span class="cm"># STEP 4: Open the LayerStack Tab</span>
+<span class="cm">#   Shows all layers contributing to this prim, strongest → weakest</span>
+<span class="cm">#   Shows which value each layer has for translate</span>
+<span class="cm">#   The FIRST layer with an opinion = the one that wins</span>
+<span class="cm">#</span>
+<span class="cm"># STEP 5: Open the Layers panel (View → Layers)</span>
+<span class="cm">#   Lists ALL layers in the stage</span>
+<span class="cm">#   You can TOGGLE layers on/off interactively</span>
+<span class="cm">#   Toggle a layer off → see if the wrong value disappears</span>
+<span class="cm">#   That tells you which layer is responsible</span></code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-label">usdview composition debugger — what it specifically provides</div>
+    <p>The composition debugger gives a <strong>visual, detailed breakdown</strong> of how layers and references compose for a selected prim. It helps pinpoint conflicting opinions and unexpected overrides. This is the exam's preferred "first tool" for unexpected composition results. It is NOT just a scene browser — it exposes the full arc-level composition structure.</p>
+  </div>
+</div>
+
+
+<!-- ══ S4: PRIMSTACK + PROPERTYSTACK ══ -->
+<div class="section s-amber" id="s4">
+  <div class="section-header">
+    <div class="section-icon">📚</div>
+    <div><div class="section-title">04 — PrimStack, PropertyStack + PrintComposition</div></div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">All three composition inspection APIs</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdUtils</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+prim  = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
+
+<span class="cm"># ── 1. PrimStack — which layers have specs for this PRIM ─────────────</span>
+<span class="ck">for</span> spec <span class="ck">in</span> prim.<span class="cw">GetPrimStack</span>():
+    <span class="ck">print</span>(<span class="cs">f"Layer: {spec.layer.identifier}"</span>)
+    <span class="ck">print</span>(<span class="cs">f"Specifier: {spec.specifier}"</span>)   <span class="cm"># def / over / class</span>
+    <span class="ck">print</span>(<span class="cs">f"TypeName:  {spec.typeName}"</span>)     <span class="cm"># Xform, Mesh, etc.</span>
+<span class="cm"># First spec = strongest layer contributing to this prim</span>
+<span class="cm"># Use for: wrong type, missing prim, wrong specifier</span>
+
+<span class="cm"># ── 2. PropertyStack — which layers have opinions on an ATTRIBUTE ────</span>
+attr = prim.<span class="cw">GetAttribute</span>(<span class="cs">"xformOp:translate"</span>)
+<span class="ck">for</span> spec <span class="ck">in</span> attr.<span class="cw">GetPropertyStack</span>(<span class="cn">Usd</span>.<span class="cp">TimeCode</span>.Default()):
+    <span class="ck">print</span>(<span class="cs">f"Layer: {spec.layer.identifier}"</span>)
+    <span class="ck">print</span>(<span class="cs">f"Value: {spec.default}"</span>)
+<span class="cm"># First spec = strongest opinion = the winning value</span>
+<span class="cm"># Use for: wrong property value</span>
+
+<span class="cm"># ── 3. Usd.Debug.PrintComposition — most detailed arc info ───────────</span>
+<span class="cn">Usd</span>.<span class="cp">Debug</span>.<span class="cw">PrintComposition</span>(prim)
+<span class="cm"># Prints full composition arc breakdown for the prim</span>
+<span class="cm"># Shows which layers contribute and how they combine</span>
+<span class="cm"># The MOST detailed programmatic composition debugging tool</span>
+
+<span class="cm"># ── 4. HasAuthoredValue — schema fallback vs explicit Set() ─────────</span>
+<span class="ck">print</span>(attr.<span class="cw">HasAuthoredValue</span>())
+<span class="cm"># True  = someone explicitly Set() this — it's intentional</span>
+<span class="cm"># False = value is the schema fallback — nobody has touched this</span>
+
+<span class="cm"># ── 5. GetPrimIndex — full composition graph ─────────────────────────</span>
+index = prim.<span class="cw">GetPrimIndex</span>()
+<span class="ck">print</span>(index.<span class="cw">DumpToString</span>())
+<span class="cm"># Dumps complete composition graph as text</span>
+<span class="cm"># Very verbose but comprehensive for hard-to-trace bugs</span>
+
+<span class="cm"># ── EXAM TRAP: GetPrimAtPath does NOT ignore composition ─────────────</span>
+composed_prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
+<span class="cm"># Returns the FULLY COMPOSED prim — all arcs already applied</span>
+<span class="cm"># It does NOT isolate individual arc contributions</span>
+<span class="cm"># Use it to: check if a prim exists, inspect composed values</span>
+<span class="cm"># Do NOT use it to: isolate composition issues (wrong tool for that)</span></code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">GetPrimAtPath is NOT for isolating composition — exam trap</div>
+    <p>Q46 specifically tested this. "UsdStage::GetPrimAtPath() retrieves prims ignoring composition arcs" is WRONG. GetPrimAtPath returns the fully COMPOSED prim — all composition arcs already applied. It is useful for verifying a prim exists and reading composed values. It is NOT useful for isolating which individual arc is contributing what — use PropertyStack or the composition debugger for that.</p>
+  </div>
+</div>
+
+
+<!-- ══ S5: TFDEBUG + MUTELAYER ══ -->
+<div class="section s-coral" id="s5">
+  <div class="section-header">
+    <div class="section-icon">🔊</div>
+    <div><div class="section-title">05 — TfDebug + MuteLayer</div></div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python + CLI</span><span class="code-desc">TfDebug verbose logging and MuteLayer isolation</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Tf</span>, <span class="cn">Usd</span>
+
+<span class="cm"># ── TfDebug — enable verbose internal logging ────────────────────────</span>
+<span class="cn">Tf</span>.<span class="cp">Debug</span>.<span class="cw">SetDebugSymbolsByName</span>(<span class="cs">"USD_STAGE_OPEN"</span>, <span class="cn">True</span>)
+<span class="cn">Tf</span>.<span class="cp">Debug</span>.<span class="cw">SetDebugSymbolsByName</span>(<span class="cs">"USD_COMPOSITION"</span>, <span class="cn">True</span>)
+<span class="cn">Tf</span>.<span class="cp">Debug</span>.<span class="cw">SetDebugSymbolsByName</span>(<span class="cs">"AR_RESOLVER_INIT"</span>, <span class="cn">True</span>)
+<span class="cn">Tf</span>.<span class="cp">Debug</span>.<span class="cw">SetDebugSymbolsByName</span>(<span class="cs">"USD_PAYLOADS"</span>, <span class="cn">True</span>)
+<span class="cn">Tf</span>.<span class="cp">Debug</span>.<span class="cw">SetDebugSymbolsByName</span>(<span class="cs">"USD_CHANGES"</span>, <span class="cn">True</span>)
+<span class="cn">Tf</span>.<span class="cp">Debug</span>.<span class="cw">SetDebugSymbolsByName</span>(<span class="cs">"USD_INSTANCING"</span>, <span class="cn">True</span>)
+
+<span class="cm"># CLI alternative — set TF_DEBUG env var before launching</span>
+<span class="cm"># Windows: set TF_DEBUG=USD_STAGE_OPEN AR_RESOLVER_INIT</span>
+<span class="cm"># Linux:   export TF_DEBUG=USD_STAGE_OPEN AR_RESOLVER_INIT</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+
+<span class="cm"># ── MuteLayer — isolate which layer causes a problem ─────────────────</span>
+<span class="cm"># Silences a layer without removing it — instant revert with Unmute</span>
+stage.<span class="cw">MuteLayer</span>(session_layer.identifier)
+<span class="ck">print</span>(attr.<span class="cw">Get</span>())   <span class="cm"># see value without session layer</span>
+stage.<span class="cw">UnmuteLayer</span>(session_layer.identifier)
+
+<span class="cm"># ── EXAM TRAP: Clearing the USD cache does NOT fix composition ───────</span>
+<span class="cm"># "Clear the USD cache or restart the USD runtime to reset composition"</span>
+<span class="cm"># → This is INCORRECT</span>
+<span class="cm"># USD composition is DETERMINISTIC and STATELESS per stage load</span>
+<span class="cm"># Clearing caches does NOT change composition results</span>
+<span class="cm"># The same files + same composition rules = same result every time</span>
+<span class="cm"># Caching only affects performance, never composition correctness</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S6: FLATTENING AS DEBUG TOOL ══ -->
+<div class="section s-green" id="s6">
+  <div class="section-header">
+    <div class="section-icon">📄</div>
+    <div><div class="section-title">06 — Flattening as a Debug Tool</div></div>
+  </div>
+
+  <p>The exam tests three different flattening APIs and distinguishes what each one does. These are NOT the same thing.</p>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--blue-light);border-color:var(--blue-mid);">
+      <h4 style="color:var(--blue-dark);">UsdUtils.FlattenLayerStack(stage)</h4>
+      <p style="color:var(--blue-dark);">Merges all <strong>sublayers</strong> in the root layer stack into one. Does NOT resolve references, payloads, or variants. Returns a SdfLayer. Used purely for debugging sublayer conflicts.</p>
+    </div>
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">stage.Flatten()</h4>
+      <p style="color:var(--teal-dark);">Resolves ALL composition arcs — references, payloads, variants, sublayers. Returns a complete single-layer representation. Shows the fully composed scene. Used to spot unexpected composition results.</p>
+    </div>
+    <div class="comp-card" style="background:var(--amber-light);border-color:var(--amber-mid);">
+      <h4 style="color:var(--amber-dark);">usdcat --flatten</h4>
+      <p style="color:var(--amber-dark);">CLI equivalent of stage.Flatten(). Writes the flattened result to stdout or a file. Useful for quick inspection without writing Python. Same full composition resolution as stage.Flatten().</p>
+    </div>
+    <div class="comp-card" style="background:var(--coral-light);border-color:var(--coral-mid);">
+      <h4 style="color:var(--coral-dark);">usdcat --print-composition</h4>
+      <p style="color:var(--coral-dark);">CLI equivalent of Usd.Debug.PrintComposition. Prints the composition arc graph for each prim. Does NOT flatten — it shows the ARCS not the resolved values. Used to understand arc structure from command line.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python + CLI</span><span class="code-desc">All four flattening and composition inspection approaches</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">UsdUtils</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+<span class="cm"># scene.usda has sublayers: [fx.usda, anim.usda, layout.usda, model.usda]</span>
+<span class="cm"># And references: chair.usda at /World/Chair</span>
+
+<span class="cm"># ── FlattenLayerStack — sublayers only ──────────────────────────────</span>
+flat_layer = <span class="cn">UsdUtils</span>.<span class="cw">FlattenLayerStack</span>(stage)
+<span class="cm"># flat_layer has all four sublayers merged</span>
+<span class="cm"># BUT /World/Chair still shows the reference arc</span>
+<span class="cm"># References/variants/payloads are NOT resolved</span>
+<span class="ck">print</span>(flat_layer.<span class="cw">ExportToString</span>())
+
+<span class="cm"># ── stage.Flatten() — full composition ───────────────────────────────</span>
+flat_stage_layer = stage.<span class="cw">Flatten</span>()
+<span class="cm"># Everything resolved: sublayers + references + variants + payloads</span>
+<span class="cm"># /World/Chair now shows actual geometry, not a reference arc</span>
+<span class="cm"># Use to check what the FINAL fully composed scene looks like</span>
+<span class="ck">print</span>(flat_stage_layer.<span class="cw">ExportToString</span>())
+
+<span class="cm"># ── CLI equivalents ──────────────────────────────────────────────────</span>
+<span class="cm"># usdcat --flatten scene.usda                → full flatten to stdout</span>
+<span class="cm"># usdcat --flatten scene.usda -o flat.usda   → full flatten to file</span>
+<span class="cm"># usdcat --print-composition scene.usda      → show arc graph</span>
+
+<span class="cm"># ── WHEN TO USE WHICH ────────────────────────────────────────────────</span>
+<span class="cm"># Wrong sublayer value?     → FlattenLayerStack to merge sublayers</span>
+<span class="cm"># Unexpected composed value? → stage.Flatten() / usdcat --flatten</span>
+<span class="cm"># Don't understand arc structure? → PrintComposition / --print-composition</span>
+<span class="cm"># Need to deliver an asset? → stage.Export() (not a debug tool)</span></code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">Flattening for debugging vs flattening for delivery — different things</div>
+    <p>In Day 4 notes, flatten was covered as a DELIVERY tool — flatten to remove composition for a vendor. Here it is a DEBUGGING tool — flatten to see what the composed scene actually looks like. Same operation, different purpose. The exam tests both contexts. As a debug tool, flattening reveals unexpected composition results by showing the final resolved scene. As a delivery tool, it removes the ability to switch variants or update references.</p>
+  </div>
+</div>
+
+
+<!-- ══ S7: NAMESPACE COLLISIONS ══ -->
+<div class="section s-purple" id="s7">
+  <div class="section-header">
+    <div class="section-icon">💥</div>
+    <div><div class="section-title">07 — Namespace + Path Collision Debugging</div></div>
+  </div>
+
+  <p>Namespace conflicts and path mismatches are one of the most commonly tested causes of unexpected composition. The exam tests whether you know what they cause and how to detect them.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>A namespace collision is like two employees at a company having identical names — John Smith in Finance and John Smith in Engineering. When a message is sent to "John Smith," the system doesn't know which one to route it to. In USD, two prims with the same path in overlapping layers will compose their opinions together — if you didn't intend that, you get unexpected overrides.</p>
+  </div>
+
+  <h3>What namespace collisions cause</h3>
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--coral-light);border-color:var(--coral-mid);">
+      <h4 style="color:var(--coral-dark);">Collision symptoms</h4>
+      <ul style="color:var(--coral-dark);">
+        <li>Prims appear at unexpected locations</li>
+        <li>Properties have wrong values due to unintended override</li>
+        <li>Prims missing entirely when they should exist</li>
+        <li>Geometry from one asset "bleeding into" another</li>
+        <li>References not resolving to the expected prim</li>
+      </ul>
+    </div>
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">How to detect and fix</h4>
+      <ul style="color:var(--teal-dark);">
+        <li>Check all referenced files use unique prim paths</li>
+        <li>Use usdview Scenegraph to look for unexpected prims</li>
+        <li>Run GetPrimStack() to see all layers contributing</li>
+        <li>Use namespacing conventions (/World/Geometry/, /World/Lights/)</li>
+        <li>Ensure referenced assets have their defaultPrim set correctly</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">Detecting namespace and path collision issues</span></div>
+    <pre><code><span class="cm"># ── SCENARIO: Two references both define /World/Chair ────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># scene.usda references both:</span>
+<span class="cm">#   office_chair.usda  → has /World/Chair (Xform, wooden legs)</span>
+<span class="cm">#   dining_chair.usda  → also has /World/Chair (Xform, metal legs)</span>
+<span class="cm">#</span>
+<span class="cm"># Both land at /World/Chair in your scene → COLLISION</span>
+<span class="cm"># Opinions from both compose together unexpectedly</span>
+<span class="cm"># Result: wrong chair, missing properties, or corrupt geometry</span>
+
+<span class="cm"># ── HOW TO DIAGNOSE ──────────────────────────────────────────────────</span>
+prim = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/Chair"</span>)
+
+<span class="cm"># PrimStack shows ALL layers contributing — if two asset files show up</span>
+<span class="cm"># when you expected only one, you have a path collision</span>
+<span class="ck">for</span> spec <span class="ck">in</span> prim.<span class="cw">GetPrimStack</span>():
+    <span class="ck">print</span>(<span class="cs">f"Contributing layer: {spec.layer.identifier}"</span>)
+<span class="cm"># If you see both office_chair.usda AND dining_chair.usda → collision found</span>
+
+<span class="cm"># ── FIX ──────────────────────────────────────────────────────────────</span>
+<span class="cm"># Reference them at different paths:</span>
+<span class="cm"># /World/OfficeSide/Chair  ← from office_chair.usda</span>
+<span class="cm"># /World/DiningSide/Chair  ← from dining_chair.usda</span>
+<span class="cm"># Now they occupy different namespace positions — no collision</span>
+
+<span class="cm"># ── PATH MISMATCHES ──────────────────────────────────────────────────</span>
+<span class="cm"># Trying to override /World/chair (lowercase c)</span>
+<span class="cm"># But asset defines /World/Chair (uppercase C)</span>
+<span class="cm"># USD is case-sensitive — these are completely different paths</span>
+<span class="cm"># Result: override never applies, original value persists</span>
+<span class="cm"># Fix: match case exactly — /World/Chair not /World/chair</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S8: SCHEMA VERSION VALIDATION ══ -->
+<div class="section s-amber" id="s8">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div><div class="section-title">08 — Schema Version Validation</div></div>
+  </div>
+
+  <p>This topic was in Q47 but was completely missing from the original Day 9 notes. Schema version mismatches across layers can cause subtle, hard-to-diagnose composition errors.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Imagine a contract written using an old legal standard, and amendments written using a new legal standard where some clause definitions changed. The words are the same but the meaning has shifted. When you combine the original contract with the amendments, the result is unexpected because the two documents don't agree on what certain terms mean. Schema version mismatches work exactly the same way.</p>
+  </div>
+
+  <h3>What schema version mismatches cause</h3>
+  <p>When layers in the same stage were authored with different versions of a USD schema, attribute definitions may differ — different default values, renamed attributes, or changed relationships. When these layers compose together, the result can be unexpected because the opinions don't agree on the structure of the data.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python + Concept</span><span class="code-desc">Checking schema versions across layers</span></div>
+    <pre><code><span class="cm"># ── WHY SCHEMA VERSION MISMATCHES CAUSE COMPOSITION ISSUES ───────────</span>
+<span class="cm">#</span>
+<span class="cm"># SCENARIO:</span>
+<span class="cm"># Layer A (old schema v1.0):</span>
+<span class="cm">#   attribute "shader:roughness" = 0.5</span>
+<span class="cm">#</span>
+<span class="cm"># Layer B (new schema v2.0 where attribute was renamed):</span>
+<span class="cm">#   attribute "inputs:roughness" = 0.3</span>
+<span class="cm">#</span>
+<span class="cm"># These are treated as DIFFERENT attributes — no override occurs</span>
+<span class="cm"># The material appears to have two roughness values</span>
+<span class="cm"># Or the wrong one is used depending on which schema version renders</span>
+<span class="cm">#</span>
+<span class="cm"># ── HOW TO VALIDATE ──────────────────────────────────────────────────</span>
+<span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+
+<span class="cm"># Check what schema version each layer was authored with</span>
+<span class="ck">for</span> layer <span class="ck">in</span> stage.<span class="cw">GetLayerStack</span>():
+    metadata = layer.<span class="cw">GetPseudoRoot</span>()
+    <span class="cm"># Look for customData or schema version metadata in each layer</span>
+    <span class="ck">print</span>(<span class="cs">f"Layer: {layer.identifier}"</span>)
+
+<span class="cm"># Run usdchecker — it reports schema version incompatibilities</span>
+<span class="cm"># usdchecker scene.usda</span>
+<span class="cm"># [WARNING] Layer uses schema version X but current version is Y</span>
+
+<span class="cm"># ── EXAM KEY POINT ────────────────────────────────────────────────────</span>
+<span class="cm"># "Validate the USD schema versions across all layers"</span>
+<span class="cm"># is a CORRECT strategy for unexpected composition behaviour</span>
+<span class="cm"># Schema version mismatches cause attribute naming and structure</span>
+<span class="cm"># differences that produce subtle incorrect composition results</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S9: LAYER OFFSETS + TIME ══ -->
+<div class="section s-blue" id="s9">
+  <div class="section-header">
+    <div class="section-icon">⏱️</div>
+    <div><div class="section-title">09 — Layer Offsets + Time-Based Composition</div></div>
+  </div>
+
+  <p>Q53 tested that layer offsets are NOT ignorable. This was missing from the original notes.</p>
+
+  <div class="callout warn">
+    <div class="callout-label">Exam trap — Q53</div>
+    <p>"Ignoring the layer offsets as they do not affect composition results" is INCORRECT. Layer offsets apply time transformations to referenced content. They DO affect composition — specifically for time-varying data (animation, simulation). A layer offset of offset=100, scale=2.0 shifts and scales all time samples from that layer. Ignoring offsets means you will not understand why animated data appears at the wrong time.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Concept</span><span class="code-desc">How layer offsets affect time-based composition</span></div>
+    <pre><code><span class="cm"># ── LAYER OFFSETS AFFECT TIME-VARYING DATA ───────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># A reference with a layer offset:</span>
+<span class="cm"># prepend references = @./anim.usda@ (offset=100, scale=2.0)</span>
+<span class="cm">#</span>
+<span class="cm"># An animation keyframe at time=10 in anim.usda</span>
+<span class="cm"># appears at time = (10 × 2.0) + 100 = 120 in the composed stage</span>
+<span class="cm">#</span>
+<span class="cm"># If you ignore layer offsets during debugging:</span>
+<span class="cm">#   You think the keyframe should be at time=10</span>
+<span class="cm">#   But you see it at time=120</span>
+<span class="cm">#   Mystery bug → actually just the layer offset</span>
+<span class="cm">#</span>
+<span class="cm"># ── HOW TO CHECK LAYER OFFSETS ──────────────────────────────────────</span>
+<span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+prim  = stage.<span class="cw">GetPrimAtPath</span>(<span class="cs">"/World/AnimChar"</span>)
+
+<span class="cm"># Get the layer offset for a reference arc</span>
+<span class="ck">for</span> spec <span class="ck">in</span> prim.<span class="cw">GetPrimStack</span>():
+    <span class="ck">print</span>(<span class="cs">f"Layer: {spec.layer.identifier}"</span>)
+    <span class="cm"># Layer offsets are stored on the arc itself</span>
+    <span class="cm"># Inspect via the composition arc APIs</span>
+
+<span class="cm"># ── ANIMATION DEBUGGING CHECKLIST ───────────────────────────────────</span>
+<span class="cm"># Animation appears at wrong time?</span>
+<span class="cm"># 1. Check layer offsets on the reference arc</span>
+<span class="cm"># 2. Check timeCodesPerSecond metadata matches between layers</span>
+<span class="cm"># 3. Check startTimeCode and endTimeCode metadata</span>
+<span class="cm"># 4. Verify time samples actually exist at the expected time codes</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S10: COMMON BUGS + EXAM TRAPS ══ -->
+<div class="section s-gray" id="s10">
+  <div class="section-header">
+    <div class="section-icon">🐛</div>
+    <div><div class="section-title">10 — Common Bugs + All Exam Trap Answers</div></div>
+  </div>
+
+  <h3>Common bugs reference table</h3>
+  <table class="bug-table">
+    <tr style="background:var(--green-light);">
+      <th style="color:var(--green-dark);">Bug</th>
+      <th style="color:var(--green-dark);">Symptom</th>
+      <th style="color:var(--green-dark);">Fix</th>
+    </tr>
+    <tr><td>Wrong edit target</td><td>Value authored but file looks unchanged. No error.</td><td>Check stage.GetEditTarget().GetLayer().identifier before Set()</td></tr>
+    <tr><td>Missing defaultPrim</td><td>Reference fails to resolve. Prim is empty.</td><td>stage.SetDefaultPrim(root_prim)</td></tr>
+    <tr><td>Stale extent</td><td>Mesh disappears from viewport after geometry changes.</td><td>Recalculate and update extent after every geometry change</td></tr>
+    <tr><td>Unencapsulated materials</td><td>Mesh renders grey after referencing.</td><td>Move /Looks inside the asset's root prim</td></tr>
+    <tr><td>CreateNew() on existing file</td><td>Script runs, output file only has #usda 1.0</td><td>Use CreateInMemory() + Export() or delete the file first</td></tr>
+    <tr><td>Session layer capturing edits</td><td>Value reverts when reopened. stage.Save() doesn't persist.</td><td>SetEditTarget(real_layer) before authoring</td></tr>
+    <tr><td>Missing MaterialBindingAPI.Apply()</td><td>Material bound but mesh renders grey.</td><td>Call MaterialBindingAPI.Apply(prim) before Bind()</td></tr>
+    <tr><td>Instance proxy edit fails</td><td>Edits to children of instanceable prim go nowhere.</td><td>SetInstanceable(False) first</td></tr>
+    <tr><td>Path mismatch</td><td>Override never applies. Original value persists.</td><td>Match case exactly — /World/Chair not /World/chair</td></tr>
+    <tr><td>Namespace collision</td><td>Prims from different assets composing unexpectedly.</td><td>Reference assets at unique paths</td></tr>
+    <tr><td>Schema version mismatch</td><td>Attributes have wrong values, unexpected behaviour.</td><td>Validate schema versions across all layers</td></tr>
+    <tr><td>Layer offset ignored</td><td>Animation appears at wrong time code.</td><td>Check layer offset values on the reference arc</td></tr>
+  </table>
+
+  <h3>Complete exam trap answers — things that are always WRONG</h3>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Exam elimination guide</span><span class="code-desc">Eliminate these immediately when you see them</span></div>
+    <pre><code><span class="cm"># ALWAYS WRONG — eliminate immediately:</span>
+<span class="cm">#</span>
+<span class="cm"># "GetPrimAtPath retrieves prims ignoring composition arcs"</span>
+<span class="cm"># → WRONG — GetPrimAtPath returns the FULLY COMPOSED prim</span>
+<span class="cm">#</span>
+<span class="cm"># "Directly editing the composed stage's in-memory representation"</span>
+<span class="cm"># → WRONG — composed stage is READ-ONLY. Edit underlying layers.</span>
+<span class="cm">#</span>
+<span class="cm"># "Clear the USD cache or restart runtime to reset composition"</span>
+<span class="cm"># → WRONG — USD composition is deterministic. Cache = performance only.</span>
+<span class="cm">#</span>
+<span class="cm"># "Manually edit root layer to remove all references and start over"</span>
+<span class="cm"># → WRONG — destructive. Does not address root cause systematically.</span>
+<span class="cm">#</span>
+<span class="cm"># "Delete all payloads and reload the stage"</span>
+<span class="cm"># → WRONG — destructive. Deletes data. Does not fix composition conflicts.</span>
+<span class="cm">#</span>
+<span class="cm"># "Modify the USD schema to force specific opinions"</span>
+<span class="cm"># → WRONG — schemas define data structure, not composition behaviour.</span>
+<span class="cm">#            Modifying schemas leads to instability and incompatibility.</span>
+<span class="cm">#</span>
+<span class="cm"># "Ignore layer offsets as they do not affect composition"</span>
+<span class="cm"># → WRONG — layer offsets affect time-varying data composition.</span>
+<span class="cm">#</span>
+<span class="cm"># "usdchecker automatically fixes composition issues"</span>
+<span class="cm"># → WRONG — usdchecker VALIDATES, it does NOT auto-fix composition.</span>
+<span class="cm">#</span>
+<span class="cm"># "Rely solely on GetSessionLayer() for all composition debugging"</span>
+<span class="cm"># → WRONG — session layer only contains ephemeral overrides, not the</span>
+<span class="cm">#            full composition. Relying only on it misses other layers.</span>
+<span class="cm">#</span>
+<span class="cm"># "Flatten the entire stage to minimize layer composition overhead"</span>
+<span class="cm"># (as a PERFORMANCE OPTIMISATION, not a debug tool)</span>
+<span class="cm"># → WRONG — flattening INCREASES memory and removes layering benefits.</span>
+<span class="cm">#            Use Hydra render delegates for performance optimisation.</span></code></pre>
+  </div>
+</div>
+
+
+<div class="summary-box">
+  <h3>Day 9 — complete key takeaways</h3>
+  <div class="summary-item"><span class="summary-num">1</span><span>Six root causes: wrong value winning, wrong structure, wrong edit target, composition arc conflict, performance, schema version mismatch.</span></div>
+  <div class="summary-item"><span class="summary-num">2</span><span><strong>usdview composition debugger</strong> = first tool for unexpected composition. Shows visual breakdown of all arcs for a selected prim.</span></div>
+  <div class="summary-item"><span class="summary-num">3</span><span><strong>PrimStack</strong> (prim.GetPrimStack()) = which layers have specs for a prim. <strong>PropertyStack</strong> (attr.GetPropertyStack()) = which layers have opinions on a specific attribute.</span></div>
+  <div class="summary-item"><span class="summary-num">4</span><span><strong>Usd.Debug.PrintComposition(prim)</strong> = most detailed programmatic composition arc debugging. <strong>usdcat --print-composition</strong> = same from CLI.</span></div>
+  <div class="summary-item"><span class="summary-num">5</span><span><strong>UsdUtils.FlattenLayerStack()</strong> = merges sublayers only (not references/variants). Returns SdfLayer for inspection. Different from stage.Flatten().</span></div>
+  <div class="summary-item"><span class="summary-num">6</span><span><strong>stage.Flatten()</strong> = resolves ALL composition arcs into one layer. Shows the fully composed scene. Reveals unexpected composition results. CLI: usdcat --flatten.</span></div>
+  <div class="summary-item"><span class="summary-num">7</span><span><strong>Namespace/path collisions</strong> cause unexpected overrides and missing prims. Check with GetPrimStack(). Fix by using unique paths per asset.</span></div>
+  <div class="summary-item"><span class="summary-num">8</span><span><strong>Schema version mismatches</strong> across layers cause subtle composition errors from attribute definition differences. Validate with usdchecker.</span></div>
+  <div class="summary-item"><span class="summary-num">9</span><span><strong>Layer offsets affect time-varying data</strong> — never ignore them. Animation at wrong time = check layer offset on the reference arc first.</span></div>
+  <div class="summary-item"><span class="summary-num">10</span><span>GetPrimAtPath returns the COMPOSED prim — it does NOT ignore arcs. The composed stage is READ-ONLY. USD composition is deterministic — clearing cache never helps.</span></div>
+  <div class="summary-item"><span class="summary-num">11</span><span>usdchecker VALIDATES — it does NOT auto-fix composition conflicts. Most reliable symptom of bad authoring = prims missing from stage despite being in source layers.</span></div>
+  <div class="summary-item"><span class="summary-num">12</span><span>TfDebug symbols: USD_STAGE_OPEN, USD_COMPOSITION, AR_RESOLVER_INIT, USD_PAYLOADS, USD_CHANGES, USD_INSTANCING. MuteLayer() isolates layers without removing them.</span></div>
+</div>
+
+<div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e3db;">
+  <p style="font-size:13px;color:var(--text-muted);">Day 9 — rebuilt from real exam Q46, Q47, Q48, Q49, Q50, Q51, Q52, Q53, Q54</p>
+</div>
+
+</div>
+</body>
+</html>

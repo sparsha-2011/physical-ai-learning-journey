@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Schemas — Deep Dive</title>
+<style>
+  :root {
+    --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#AFA9EC;--purple-dark:#3C3489;
+    --teal:#1D9E75;--teal-light:#E1F5EE;--teal-mid:#5DCAA5;--teal-dark:#085041;
+    --coral:#D85A30;--coral-light:#FAECE7;--coral-mid:#F0997B;--coral-dark:#712B13;
+    --amber:#BA7517;--amber-light:#FAEEDA;--amber-mid:#EF9F27;--amber-dark:#633806;
+    --blue:#185FA5;--blue-light:#E6F1FB;--blue-mid:#85B7EB;--blue-dark:#0C447C;
+    --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#97C459;--green-dark:#27500A;
+    --pink:#993556;--pink-light:#FBEAF0;--pink-mid:#ED93B1;--pink-dark:#72243E;
+    --gray:#5F5E5A;--gray-light:#F1EFE8;--gray-mid:#B4B2A9;--gray-dark:#2C2C2A;
+    --text:#1a1a1a;--text-muted:#5F5E5A;--bg:#fafaf8;--white:#ffffff;
+    --radius:10px;--radius-sm:6px;
+    --mono:'Courier New',monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;font-size:15px}
+  .page{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+  .hero{background:linear-gradient(135deg,#3C3489 0%,#534AB7 60%,#AFA9EC 100%);border-radius:16px;padding:2.5rem 2rem;margin-bottom:2.5rem;color:white;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;right:-50px;bottom:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.05)}
+  .hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:.5rem}
+  .hero h1{font-size:28px;font-weight:700;margin-bottom:.5rem}
+  .hero p{font-size:14px;opacity:.85;max-width:560px;line-height:1.6}
+  .hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem}
+  .hero-pill{background:rgba(255,255,255,0.18);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500}
+
+  .toc{background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:2.5rem}
+  .toc h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.75rem}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 2rem}
+  .toc-item{font-size:13px;color:var(--purple);text-decoration:none;padding:4px 0;display:flex;align-items:center;gap:8px}
+  .toc-item:hover{color:var(--purple-dark)}
+  .toc-num{font-size:11px;background:var(--purple-light);color:var(--purple-dark);border-radius:4px;padding:1px 6px;font-weight:600;min-width:24px;text-align:center}
+
+  .section{margin-bottom:3.5rem}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid}
+  .section-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .section-title{font-size:21px;font-weight:700}
+  .s-purple .section-header{border-color:var(--purple-mid)}.s-purple .section-icon{background:var(--purple-light)}.s-purple .section-title{color:var(--purple-dark)}
+  .s-blue .section-header{border-color:var(--blue-mid)}.s-blue .section-icon{background:var(--blue-light)}.s-blue .section-title{color:var(--blue-dark)}
+  .s-teal .section-header{border-color:var(--teal-mid)}.s-teal .section-icon{background:var(--teal-light)}.s-teal .section-title{color:var(--teal-dark)}
+  .s-amber .section-header{border-color:var(--amber-mid)}.s-amber .section-icon{background:var(--amber-light)}.s-amber .section-title{color:var(--amber-dark)}
+  .s-coral .section-header{border-color:var(--coral-mid)}.s-coral .section-icon{background:var(--coral-light)}.s-coral .section-title{color:var(--coral-dark)}
+  .s-green .section-header{border-color:var(--green-mid)}.s-green .section-icon{background:var(--green-light)}.s-green .section-title{color:var(--green-dark)}
+  .s-pink .section-header{border-color:var(--pink-mid)}.s-pink .section-icon{background:var(--pink-light)}.s-pink .section-title{color:var(--pink-dark)}
+  .s-gray .section-header{border-color:var(--gray-mid)}.s-gray .section-icon{background:var(--gray-light)}.s-gray .section-title{color:var(--gray-dark)}
+
+  p{margin-bottom:.9rem}
+  h3{font-size:16px;font-weight:600;margin:1.25rem 0 .6rem;color:var(--text)}
+  h4{font-size:14px;font-weight:600;margin:.75rem 0 .4rem;color:var(--text)}
+
+  .analogy{background:var(--amber-light);border-left:4px solid var(--amber-mid);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .analogy-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--amber-dark);margin-bottom:.3rem}
+  .analogy p{margin:0;font-size:14px;color:var(--amber-dark)}
+
+  .callout{border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:1rem 0 1.25rem}
+  .callout-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+  .callout p{margin:0;font-size:14px;line-height:1.6}
+  .tip{background:var(--teal-light);border-left:4px solid var(--teal-mid)}.tip .callout-label{color:var(--teal-dark)}.tip p{color:var(--teal-dark)}
+  .warn{background:var(--coral-light);border-left:4px solid var(--coral-mid)}.warn .callout-label{color:var(--coral-dark)}.warn p{color:var(--coral-dark)}
+  .info{background:var(--blue-light);border-left:4px solid var(--blue-mid)}.info .callout-label{color:var(--blue-dark)}.info p{color:var(--blue-dark)}
+  .key{background:var(--purple-light);border-left:4px solid var(--purple-mid)}.key .callout-label{color:var(--purple-dark)}.key p{color:var(--purple-dark)}
+
+  .code-block{margin:1rem 0 1.25rem;border-radius:var(--radius);overflow:hidden;border:1px solid #e5e3db}
+  .code-header{background:#2C2C2A;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+  .code-lang{font-size:11px;color:#B4B2A9;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .code-desc{font-size:11px;color:#888780}
+  pre{background:#1e1e1c;padding:1rem 1.25rem;overflow-x:auto;line-height:1.8;margin:0}
+  code{font-family:var(--mono);font-size:12.5px}
+  .code-block pre code{color:#d4d2c9}
+  .cm{color:#6A9955;font-style:italic}.ck{color:#C586C0}.cs{color:#CE9178}.cn{color:#B5CEA8}.cv{color:#9CDCFE}.cp{color:#4EC9B0}.cw{color:#DCDCAA}
+
+  .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.5rem}
+  .comp-card{border-radius:var(--radius);padding:1.1rem;border:1.5px solid}
+  .comp-card h4{font-size:14px;font-weight:700;margin-bottom:.5rem}
+  .comp-card p,.comp-card li{font-size:13px;line-height:1.6;margin:0}
+  .comp-card ul{padding-left:1.1rem;margin-top:.3rem}
+
+  .flow-box{display:flex;flex-direction:column;gap:0;margin:1rem 0 1.5rem}
+  .flow-step{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--white);border:1px solid #e5e3db;border-bottom:none}
+  .flow-step:first-child{border-radius:var(--radius) var(--radius) 0 0}
+  .flow-step:last-child{border-bottom:1px solid #e5e3db;border-radius:0 0 var(--radius) var(--radius)}
+  .flow-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
+  .flow-body{flex:1}
+  .flow-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+  .flow-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+  .flow-code{font-family:var(--mono);font-size:11px;background:var(--gray-light);padding:2px 6px;border-radius:3px;color:var(--gray-dark);display:inline-block;margin-top:4px}
+
+  .compare-table{width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0;border:1px solid #e5e3db;border-radius:var(--radius);overflow:hidden}
+  .compare-table th{padding:9px 14px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .compare-table td{padding:9px 14px;border-top:1px solid #e5e3db;vertical-align:top;line-height:1.5}
+  .compare-table td:first-child{font-weight:600}
+  .compare-table tr:hover td{background:var(--bg)}
+
+  .summary-box{background:var(--gray-light);border-radius:var(--radius);padding:1.5rem;margin-top:2.5rem}
+  .summary-box h3{font-size:15px;font-weight:700;color:var(--gray-dark);margin-bottom:1rem}
+  .summary-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid #D3D1C7;font-size:14px;align-items:flex-start}
+  .summary-item:last-child{border-bottom:none}
+  .summary-num{color:var(--purple);font-weight:700;min-width:20px;font-size:13px;margin-top:3px;flex-shrink:0}
+
+  svg{max-width:100%;height:auto}
+  @media(max-width:600px){.comp-grid{grid-template-columns:1fr}.toc-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="hero-eyebrow">Exam Gap Deep Dive</div>
+  <h1>Custom Schemas — Complete Guide</h1>
+  <p>Everything the real exam tested across Q19, Q24, Q25, Q26, Q27 — the full custom schema system explained from first principles with the exact distinctions the exam requires.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">UsdSchemaBase vs UsdTyped</span>
+    <span class="hero-pill">usdGenSchema workflow</span>
+    <span class="hero-pill">TfType registration</span>
+    <span class="hero-pill">SdfFileFormat plugin</span>
+    <span class="hero-pill">UsdModelKindRegistry</span>
+    <span class="hero-pill">Extending vs Overriding</span>
+    <span class="hero-pill">Variant Fallbacks</span>
+    <span class="hero-pill">Exam pattern recognition</span>
+  </div>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <div class="toc-grid">
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span>Why custom schemas exist</a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span>File format plugins — SdfFileFormat</a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span>The inheritance hierarchy — who to inherit from</a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span>Custom model kinds + UsdModelKindRegistry</a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span>The schema creation workflow</a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span>Variant fallback selections</a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span>TfType system — what registration actually means</a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span>Exam pattern recognition</a>
+  </div>
+</div>
+
+
+<!-- ══ S1: WHY CUSTOM SCHEMAS EXIST ══ -->
+<div class="section s-purple" id="s1">
+  <div class="section-header">
+    <div class="section-icon">🤔</div>
+    <div><div class="section-title">01 — Why Custom Schemas Exist</div></div>
+  </div>
+
+  <p>Before getting into how custom schemas work, it's critical to understand why they exist — because the exam tests whether you understand the PURPOSE, not just the mechanics.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>USD ships with schemas for common 3D concepts — Mesh, Sphere, Material, Light. These cover general-purpose use cases. But a factory automation company needs prims for "TemperatureSensor" and "ConveyorBelt." A film studio needs prims for "CharacterRig" and "ShotCamera." These don't exist in USD. Custom schemas let you ADD these as first-class USD citizens — with all the type safety, API generation, and tool integration of built-in schemas.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card" style="background:var(--teal-light);border-color:var(--teal-mid);">
+      <h4 style="color:var(--teal-dark);">Use custom schemas when you need</h4>
+      <ul style="color:var(--teal-dark);">
+        <li>Standardised types used across many tools and teams</li>
+        <li>Schema fallback values (defaults when nothing is authored)</li>
+        <li>prim.IsA() or prim.HasAPI() to work correctly</li>
+        <li>Generated C++ and Python API for properties</li>
+        <li>Full integration with USD's type system and tools</li>
+        <li>Custom validation rules on prim structure</li>
+      </ul>
+    </div>
+    <div class="comp-card" style="background:var(--coral-light);border-color:var(--coral-mid);">
+      <h4 style="color:var(--coral-dark);">Do NOT use custom schemas when</h4>
+      <ul style="color:var(--coral-dark);">
+        <li>You just need a few pipeline-specific attributes quickly</li>
+        <li>The data is one-off and not shared across teams</li>
+        <li>You don't need fallback values or type checking</li>
+        <li>Prototyping — use custom properties first, schema later</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ S2: INHERITANCE HIERARCHY ══ -->
+<div class="section s-blue" id="s2">
+  <div class="section-header">
+    <div class="section-icon">🧬</div>
+    <div><div class="section-title">02 — The Inheritance Hierarchy: Who to Inherit From</div></div>
+  </div>
+
+  <p>This is the exact thing the exam Q25 tested. There are multiple schema base classes and choosing the WRONG one was a common exam trap. Here's the full picture.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>The schema hierarchy is like an employee org chart. UsdSchemaBase is the CEO — everyone technically reports to them but you never hire someone who reports DIRECTLY to the CEO without going through the right management chain. UsdTyped is the VP of Scene Objects. UsdGeomImageable is the Manager of Renderable Objects. You hire new people (schemas) at the right level for their job — not all the way at the top.</p>
+  </div>
+
+  <div class="diagram" style="background:var(--white);border:1px solid #e5e3db;border-radius:var(--radius);padding:1.5rem;margin:1rem 0 1.5rem;overflow-x:auto">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:1.25rem;text-align:center">USD Schema Inheritance Hierarchy</div>
+    <svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+      <!-- UsdSchemaBase -->
+      <rect x="250" y="10" width="180" height="44" rx="8" fill="#534AB7"/>
+      <text x="340" y="30" font-size="12" font-weight="700" fill="white" text-anchor="middle">UsdSchemaBase</text>
+      <text x="340" y="47" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">Root of ALL schemas</text>
+
+      <!-- Line down -->
+      <line x1="340" y1="54" x2="340" y2="75" stroke="#AFA9EC" stroke-width="2"/>
+
+      <!-- UsdTyped -->
+      <rect x="140" y="75" width="180" height="44" rx="8" fill="#185FA5"/>
+      <text x="230" y="95" font-size="12" font-weight="700" fill="white" text-anchor="middle">UsdTyped</text>
+      <text x="230" y="112" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">Sets typeName on prims</text>
+
+      <!-- UsdAPISchemaBase -->
+      <rect x="360" y="75" width="180" height="44" rx="8" fill="#3B6D11"/>
+      <text x="450" y="95" font-size="12" font-weight="700" fill="white" text-anchor="middle">UsdAPISchemaBase</text>
+      <text x="450" y="112" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">Base for API schemas</text>
+
+      <!-- Lines -->
+      <line x1="300" y1="75" x2="230" y2="75" stroke="#AFA9EC" stroke-width="2"/>
+      <line x1="380" y1="75" x2="450" y2="75" stroke="#97C459" stroke-width="2"/>
+      <line x1="230" y1="119" x2="230" y2="140" stroke="#85B7EB" stroke-width="2"/>
+
+      <!-- UsdGeomImageable -->
+      <rect x="80" y="140" width="185" height="44" rx="8" fill="#D85A30"/>
+      <text x="172" y="160" font-size="12" font-weight="700" fill="white" text-anchor="middle">UsdGeomImageable</text>
+      <text x="172" y="177" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">All renderable prims</text>
+
+      <!-- Line -->
+      <line x1="280" y1="140" x2="300" y2="140" stroke="#85B7EB" stroke-width="2"/>
+      <rect x="300" y="118" width="180" height="44" rx="8" fill="#0C447C"/>
+      <text x="390" y="138" font-size="12" font-weight="700" fill="white" text-anchor="middle">Other UsdTyped</text>
+      <text x="390" y="155" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">subclasses (Material etc.)</text>
+
+      <line x1="172" y1="184" x2="172" y2="205" stroke="#F0997B" stroke-width="2"/>
+
+      <!-- UsdGeomGprim -->
+      <rect x="80" y="205" width="185" height="44" rx="8" fill="#BA7517"/>
+      <text x="172" y="225" font-size="12" font-weight="700" fill="white" text-anchor="middle">UsdGeomGprim</text>
+      <text x="172" y="242" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">All geometric prims</text>
+
+      <!-- YOUR CUSTOM SCHEMA arrow -->
+      <rect x="390" y="190" width="200" height="70" rx="8" fill="#EAF3DE" stroke="#97C459" stroke-width="2"/>
+      <text x="490" y="215" font-size="11" font-weight="700" fill="#27500A" text-anchor="middle">YOUR CUSTOM SCHEMA</text>
+      <text x="490" y="232" font-size="10" fill="#3B6D11" text-anchor="middle">Inherit from UsdTyped</text>
+      <text x="490" y="248" font-size="10" fill="#3B6D11" text-anchor="middle">or UsdGeomImageable</text>
+
+      <!-- Labels on right -->
+      <text x="600" y="30" font-size="10" fill="#D85A30" text-anchor="middle">❌ Don't inherit</text>
+      <text x="600" y="44" font-size="10" fill="#D85A30" text-anchor="middle">directly from this</text>
+    </svg>
+  </div>
+
+  <h3>The three inheritance choices — and when to use each</h3>
+
+  <table class="compare-table">
+    <tr style="background:var(--purple-light);">
+      <th style="color:var(--purple-dark);">Base class</th>
+      <th style="color:var(--purple-dark);">What it gives you</th>
+      <th style="color:var(--purple-dark);">When to use</th>
+      <th style="color:var(--purple-dark);">Exam answer?</th>
+    </tr>
+    <tr>
+      <td style="color:var(--coral-dark);">UsdSchemaBase</td>
+      <td>The absolute root. Requires implementing EVERYTHING manually including type registration, property management, and all API plumbing.</td>
+      <td>Almost never directly. Only if building completely new schema infrastructure.</td>
+      <td style="color:var(--coral-dark);">❌ Wrong answer — error-prone, not recommended</td>
+    </tr>
+    <tr>
+      <td style="color:var(--blue-dark);">UsdTyped</td>
+      <td>Sets typeName on the prim. All the plumbing for IsA() to work. Schema fallback values. The standard base for typed (IsA) schemas.</td>
+      <td>Any custom IsA schema that is a new "type" of prim. TemperatureSensor, ConveyorBelt, CharacterRig.</td>
+      <td style="color:var(--teal-dark);">✅ Correct — recommended standard base</td>
+    </tr>
+    <tr>
+      <td style="color:var(--coral-dark);">UsdGeomImageable</td>
+      <td>Everything UsdTyped gives PLUS visibility, purpose, and all rendering infrastructure. Inherits from UsdTyped already.</td>
+      <td>Custom schemas that are RENDERABLE objects — custom geometry types, custom lights.</td>
+      <td style="color:var(--teal-dark);">✅ Correct — when your schema needs rendering support</td>
+    </tr>
+  </table>
+
+  <div class="callout key">
+    <div class="callout-label">The exam trap — Python-only schemas</div>
+    <p>Q25 offered "Create a Python-only schema by subclassing Usd.Schema." This is WRONG. Python-only schemas do not fully integrate with USD's type system. They cannot participate in C++ performance-critical code paths, don't support all USD features, and prim.IsA() may not work correctly. Full custom schemas require C++ code generation via usdGenSchema.</p>
+  </div>
+</div>
+
+
+<!-- ══ S3: SCHEMA CREATION WORKFLOW ══ -->
+<div class="section s-teal" id="s3">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div><div class="section-title">03 — The Complete Schema Creation Workflow</div></div>
+  </div>
+
+  <p>This is the exact workflow the exam tests across Q19, Q25, and Q26. Every step matters — missing one means your schema doesn't fully integrate.</p>
+
+  <div class="flow-box">
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--purple-light);color:var(--purple-dark);">1</div>
+      <div class="flow-body">
+        <div class="flow-title">Write schema.usda — the definition file</div>
+        <div class="flow-desc">Define your schema class, what it inherits from, what attributes it has with their types and fallback values. This is the SOURCE of truth for your schema.</div>
+        <span class="flow-code">schema.usda</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--blue-light);color:var(--blue-dark);">2</div>
+      <div class="flow-body">
+        <div class="flow-title">Run usdGenSchema — the code generator</div>
+        <div class="flow-desc">This tool reads schema.usda and generates: C++ header files, C++ source files, Python bindings, and plugInfo.json for plugin registration. You do NOT write the C++ manually.</div>
+        <span class="flow-code">usdGenSchema schema.usda</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--teal-light);color:var(--teal-dark);">3</div>
+      <div class="flow-body">
+        <div class="flow-title">Compile the generated C++ into a shared library</div>
+        <div class="flow-desc">The generated C++ code inherits from UsdTyped (or UsdGeomImageable) and implements all the schema methods. You compile this into a .so / .dll plugin file.</div>
+        <span class="flow-code">cmake + make → mySchema.so</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--amber-light);color:var(--amber-dark);">4</div>
+      <div class="flow-body">
+        <div class="flow-title">Register with the TfType system</div>
+        <div class="flow-desc">The compiled plugin registers itself with TfType — USD's type identification system. This is what makes prim.IsA(MySchema) work. Without TfType registration, USD cannot find your schema type.</div>
+        <span class="flow-code">plugInfo.json → TfType registry</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num" style="background:var(--coral-light);color:var(--coral-dark);">5</div>
+      <div class="flow-body">
+        <div class="flow-title">Deploy the plugin so USD can discover it</div>
+        <div class="flow-desc">Place the plugin (.so/.dll + plugInfo.json) where USD can find it — either in PXR_PLUGINPATH_NAME or in the USD install directory. USD discovers plugins at startup.</div>
+        <span class="flow-code">PXR_PLUGINPATH_NAME=/path/to/myPlugin</span>
+      </div>
+    </div>
+    <div class="flow-step" style="border-radius:0 0 var(--radius) var(--radius);border-bottom:1px solid #e5e3db">
+      <div class="flow-num" style="background:var(--green-light);color:var(--green-dark);">6</div>
+      <div class="flow-body">
+        <div class="flow-title">Use your schema like any built-in USD schema</div>
+        <div class="flow-desc">MySchema.Define(stage, "/path"). prim.IsA(MySchema). MySchema(prim).GetTemperatureAttr(). Schema fallbacks work. All USD tools respect the type.</div>
+        <span class="flow-code">from pxr import MySchemaLib</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">USDA + Python</span><span class="code-desc">schema.usda definition and how the generated API looks</span></div>
+    <pre><code><span class="cm"># ── schema.usda — the definition file ───────────────────────────────</span>
+#usda 1.0
+(
+    subLayers = [
+        <span class="cs">@usd/schema.usda@</span>      <span class="cm"># inherit from base USD schemas</span>
+    ]
+)
+
+<span class="ck">over</span> <span class="cs">"GLOBAL"</span> (
+    customData = {
+        <span class="cv">string</span> libraryName   = <span class="cs">"acmeSensors"</span>   <span class="cm"># your library name</span>
+        <span class="cv">string</span> libraryPrefix = <span class="cs">"AcmeSensor"</span>    <span class="cm"># prefix for C++ class names</span>
+    }
+) {}
+
+<span class="cm"># ── Custom IsA schema — inherits from Xform (which is a UsdTyped) ───</span>
+<span class="ck">class</span> <span class="cn">Xform</span> <span class="cs">"TemperatureSensor"</span> (
+    customData = {
+        <span class="cv">string</span> className = <span class="cs">"TemperatureSensor"</span>
+    }
+    doc = <span class="cs">"""A prim representing a physical temperature sensor."""</span>
+    inherits = &lt;/Xform&gt;   <span class="cm"># Xform inherits from UsdTyped</span>
+)
+{
+    <span class="cm"># Attributes with fallback values — these work without Set()</span>
+    <span class="cv">float</span>  sensor:temperature = <span class="cn">20.0</span>
+    <span class="cv">float</span>  sensor:minRange    = <span class="cn">-40.0</span>
+    <span class="cv">float</span>  sensor:maxRange    = <span class="cn">125.0</span>
+    <span class="cv">string</span> sensor:serialNumber = <span class="cs">""</span>
+}
+
+<span class="cm">────────────────────────────────────────────</span>
+
+<span class="cm"># ── After running usdGenSchema + compiling, this is how you use it ──</span>
+<span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">AcmeSensors</span>   <span class="cm"># your generated module</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateInMemory</span>()
+
+<span class="cm"># Define a prim using your custom IsA schema</span>
+sensor = <span class="cn">AcmeSensors</span>.<span class="cp">TemperatureSensor</span>.<span class="cw">Define</span>(stage, <span class="cs">"/Factory/Sensor_001"</span>)
+
+<span class="cm"># Schema fallbacks work — even without Set()</span>
+<span class="ck">print</span>(sensor.<span class="cw">GetTemperatureAttr</span>().<span class="cw">Get</span>())   <span class="cm"># 20.0 ← fallback value</span>
+
+<span class="cm"># Type checking works properly</span>
+prim = sensor.<span class="cw">GetPrim</span>()
+<span class="ck">print</span>(prim.<span class="cw">GetTypeName</span>())                       <span class="cm"># "TemperatureSensor"</span>
+<span class="ck">print</span>(prim.<span class="cw">IsA</span>(<span class="cn">AcmeSensors</span>.<span class="cp">TemperatureSensor</span>)) <span class="cm"># True</span>
+<span class="ck">print</span>(prim.<span class="cw">IsA</span>(<span class="cn">UsdGeom</span>.<span class="cp">Xform</span>))               <span class="cm"># True — inherits from Xform</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S4: TFTYPE SYSTEM ══ -->
+<div class="section s-amber" id="s4">
+  <div class="section-header">
+    <div class="section-icon">🔖</div>
+    <div><div class="section-title">04 — The TfType System: What Registration Actually Means</div></div>
+  </div>
+
+  <p>TfType is USD's runtime type identification system. This is what makes <code>prim.IsA()</code>, <code>prim.HasAPI()</code>, and schema discovery work. The exam tests whether you understand WHY registration matters — not just that it exists.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>TfType registration is like registering a business with the government. Your business (schema) can exist and operate privately without registration — but without it, nobody else can officially recognise it, it won't appear in any official directory, and government systems (USD tools, type checking) can't find or validate it. Registration makes it an official, discoverable, first-class citizen.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Concept</span><span class="code-desc">What TfType registration enables — and what breaks without it</span></div>
+    <pre><code><span class="cm"># ── WITHOUT TfType registration ──────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># You might have a token "TemperatureSensor" in a USD file</span>
+<span class="cm"># But USD has no idea what that means:</span>
+<span class="cm">#</span>
+<span class="cm"># prim.IsA(TemperatureSensor) → ERROR or always False</span>
+<span class="cm"># prim.GetTypeName()          → "TemperatureSensor" (just a string)</span>
+<span class="cm"># AcmeSensors.TemperatureSensor.Define() → fails to find the schema</span>
+<span class="cm"># No fallback values             → Get() returns None not 20.0</span>
+<span class="cm"># usdview shows unknown type     → no schema introspection</span>
+<span class="cm">#</span>
+<span class="cm"># ── WITH TfType registration ─────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># USD knows this type exists, what it inherits from, what it contains:</span>
+<span class="cm">#</span>
+<span class="cm"># prim.IsA(TemperatureSensor) → True (type lookup works)</span>
+<span class="cm"># prim.IsA(UsdGeomXform)      → True (inheritance chain known)</span>
+<span class="cm"># Fallback values             → 20.0 returned from schema definition</span>
+<span class="cm"># usdview shows full schema   → all attributes with types and values</span>
+<span class="cm"># Schema API methods work     → GetTemperatureAttr() etc.</span>
+<span class="cm">#</span>
+<span class="cm"># ── HOW REGISTRATION HAPPENS ────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># usdGenSchema creates plugInfo.json</span>
+<span class="cm"># plugInfo.json declares the plugin and its types to the TfType system</span>
+<span class="cm"># When USD loads, it reads all plugInfo.json files in plugin paths</span>
+<span class="cm"># Each type described therein gets registered in the TfType registry</span>
+<span class="cm"># Now IsA(), HasAPI() can look up and resolve those types</span>
+<span class="cm">#</span>
+<span class="cm"># KEY EXAM POINT:</span>
+<span class="cm"># "Registering the token in TfType system WITHOUT any schema or API linkage"</span>
+<span class="cm"># → This is INSUFFICIENT. The type needs full schema linkage.</span>
+<span class="cm"># Token alone does not provide inheritance chain, fallbacks, or API.</span></code></pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-label">The exact exam trap — Q27</div>
+    <p>"Registering the custom model kind token in the TfType system without any schema or API linkage" — this was marked INCORRECT. Token registration alone is insufficient. The token needs to be linked with UsdModelAPI and proper schema definitions to function correctly. Think of the token as just a name — without the schema behind it, the name means nothing to USD.</p>
+  </div>
+</div>
+
+
+<!-- ══ S5: SDFFILEFORMAT PLUGIN ══ -->
+<div class="section s-coral" id="s5">
+  <div class="section-header">
+    <div class="section-icon">📄</div>
+    <div><div class="section-title">05 — File Format Plugins: SdfFileFormat</div></div>
+  </div>
+
+  <p>Q26 tested whether you know how to add support for a new file format (like .abc, .fbx, .myformat) to USD. This is completely separate from custom schemas — schemas define scene data types, file format plugins define how data is READ and WRITTEN.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>A custom schema is like defining a new type of document (a "sensor report"). A file format plugin is like teaching Microsoft Word to open PDF files. These are separate concerns. The schema defines what the data means. The file format plugin defines how to load and save a specific file format. USD already has schema types — you might just need to teach USD to read your company's proprietary .mysim format.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Concept + C++ structure</span><span class="code-desc">SdfFileFormat interface — the complete picture</span></div>
+    <pre><code><span class="cm"># ── WHAT SdfFileFormat IS ────────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># SdfFileFormat is the C++ interface that defines:</span>
+<span class="cm">#   - How USD reads a file of your format into a SdfLayer</span>
+<span class="cm">#   - How USD writes a SdfLayer back to your format</span>
+<span class="cm">#   - What file extensions your format uses (.mysim, .abc etc.)</span>
+<span class="cm">#   - The format's name and version</span>
+<span class="cm">#</span>
+<span class="cm"># ── THE CORRECT IMPLEMENTATION STEPS ───────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># 1. Create a C++ class inheriting from SdfFileFormat</span>
+<span class="cm">#    class MyFormatPlugin : public SdfFileFormat { ... }</span>
+<span class="cm">#</span>
+<span class="cm"># 2. Implement the required methods:</span>
+<span class="cm">#    bool Read(SdfLayer*, const string& resolvedPath, bool metadataOnly)</span>
+<span class="cm">#    bool WriteToFile(const SdfLayer&, const string& filePath, ...)</span>
+<span class="cm">#</span>
+<span class="cm"># 3. Register with TfType so USD discovers the plugin:</span>
+<span class="cm">#    TF_REGISTRY_FUNCTION(TfType) {</span>
+<span class="cm">#        TfType::Define&lt;MyFormatPlugin, TfType::Bases&lt;SdfFileFormat&gt;&gt;();</span>
+<span class="cm">#    }</span>
+<span class="cm">#</span>
+<span class="cm"># 4. Declare in plugInfo.json so USD finds it at startup</span>
+<span class="cm">#</span>
+<span class="cm"># ── WHAT HAPPENS WHEN USD OPENS A .mysim FILE ───────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># stage = Usd.Stage.Open("scene.mysim")</span>
+<span class="cm"># USD sees extension .mysim</span>
+<span class="cm"># Looks up registered SdfFileFormat plugins</span>
+<span class="cm"># Finds MyFormatPlugin (registered for .mysim)</span>
+<span class="cm"># Calls MyFormatPlugin.Read() to load the data into a SdfLayer</span>
+<span class="cm"># Stage composes normally from that point</span>
+<span class="cm">#</span>
+<span class="cm"># ── WRONG APPROACHES (exam traps) ───────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Override UsdStage::Open()</span>
+<span class="cm">#    UsdStage::Open is a static method, not designed to be overridden</span>
+<span class="cm">#    File loading happens at the SdfLayer level, not the Stage level</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Modify USD core source code</span>
+<span class="cm">#    USD is designed for extensibility via plugins</span>
+<span class="cm">#    Modifying core breaks compatibility with other USD tools</span>
+<span class="cm">#    Plugin mechanism exists specifically to avoid this</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Create a new UsdSchema for the file format</span>
+<span class="cm">#    Schemas define scene DESCRIPTION TYPES (what prims are)</span>
+<span class="cm">#    They do NOT control file I/O or parsing</span>
+<span class="cm">#    These are completely separate concerns</span></code></pre>
+  </div>
+
+  <div class="callout key">
+    <div class="callout-label">The key separation to memorise</div>
+    <p><strong>UsdSchema</strong> = defines what scene data IS (prim types, attributes, relationships). <strong>SdfFileFormat</strong> = defines how data is READ and WRITTEN from/to files. Custom schema for new prim types. SdfFileFormat plugin for new file formats. They are independent — you can have either without the other.</p>
+  </div>
+</div>
+
+
+<!-- ══ S6: CUSTOM MODEL KINDS ══ -->
+<div class="section s-green" id="s6">
+  <div class="section-header">
+    <div class="section-icon">🏷️</div>
+    <div><div class="section-title">06 — Custom Model Kinds + UsdModelKindRegistry</div></div>
+  </div>
+
+  <p>Q24 and Q27 both tested custom model kinds. The key thing the exam tests is the difference between the STANDARD kind system (assembly/group/component/subcomponent) and EXTENDING it with custom kinds.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>The standard model kinds (assembly, group, component, subcomponent) are like the standard job titles at a company (CEO, Manager, Employee, Intern). Custom model kinds are like adding new roles specific to your company (Factory_Unit, Sensor_Array, ProductionLine). You don't change the existing titles — you register new ones in the HR system (UsdModelKindRegistry) so the whole company (USD ecosystem) recognises them.</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python + Concept</span><span class="code-desc">The complete custom model kind system</span></div>
+    <pre><code><span class="cm"># ── THE STANDARD KIND HIERARCHY (built into USD) ─────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># assembly     → top-level published collection</span>
+<span class="cm"># group        → organisational container</span>
+<span class="cm"># component    → leaf reusable asset (most common for individual assets)</span>
+<span class="cm"># subcomponent → important internal node within a component</span>
+<span class="cm">#</span>
+<span class="cm"># ── ADDING CUSTOM KINDS ─────────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># Step 1: Define a unique token for your new kind</span>
+<span class="cm">#   "factory_unit" — a kind for factory floor assets</span>
+<span class="cm">#</span>
+<span class="cm"># Step 2: Register it with UsdModelKindRegistry</span>
+<span class="cm">#   This is the REGISTRY for model kinds (different from TfType)</span>
+<span class="cm">#   Without registration USD doesn't know factory_unit is a valid kind</span>
+<span class="cm">#   It also needs to know the parent kind in the hierarchy</span>
+<span class="cm">#   (e.g. factory_unit is a subkind of component)</span>
+<span class="cm">#</span>
+<span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>, <span class="cn">Kind</span>
+
+<span class="cm"># Step 3: Apply the custom kind to prims using UsdModelAPI</span>
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">CreateInMemory</span>()
+prim = stage.<span class="cw">DefinePrim</span>(<span class="cs">"/Factory/Unit_A"</span>, <span class="cs">"Xform"</span>)
+
+model_api = <span class="cn">Usd</span>.<span class="cp">ModelAPI</span>(prim)
+model_api.<span class="cw">SetKind</span>(<span class="cs">"factory_unit"</span>)
+<span class="cm"># This sets:  kind = "factory_unit"  in the prim's metadata</span>
+
+<span class="ck">print</span>(model_api.<span class="cw">GetKind</span>())   <span class="cm"># "factory_unit"</span>
+
+<span class="cm"># Step 4: Implement custom schema plugin inheriting from UsdModelAPI</span>
+<span class="cm">#   This encapsulates specialised behaviours and validation for factory_unit</span>
+<span class="cm">#   EXTEND UsdModelAPI — do NOT override it</span>
+<span class="cm">#   Your plugin ADDS to UsdModelAPI's capabilities</span>
+<span class="cm">#</span>
+<span class="cm"># Step 5: Extend UsdModelAPI's Validate() method</span>
+<span class="cm">#   Add custom validation rules specific to factory_unit:</span>
+<span class="cm">#   "factory_unit prims must have a sensor:serialNumber attribute"</span>
+<span class="cm">#   "factory_unit prims must have at least one child sensor"</span>
+<span class="cm">#   This ensures structural integrity</span>
+<span class="cm">#</span>
+<span class="cm"># ── EXAM TRAPS (what NOT to do) ──────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Override UsdModelAPI — this replaces existing behaviour, breaks things</span>
+<span class="cm">#    You must EXTEND (add to), not OVERRIDE (replace)</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Register token in TfType WITHOUT schema linkage</span>
+<span class="cm">#    Token alone gives you a name but no behaviour, validation, or API</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Use variants WITHIN the model kind to handle different behaviours</span>
+<span class="cm">#    Variants are for content variation (LOD, colour)</span>
+<span class="cm">#    Model kind is about CLASSIFICATION, not content variation</span>
+<span class="cm">#    These are completely separate concepts</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Modify USD core source</span>
+<span class="cm">#    USD's plugin and registry system exists precisely to avoid this</span></code></pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-label">Extend vs Override — the critical distinction Q27 tested</div>
+    <p>The exam marked "Overriding the default UsdModelAPI schema to change the behavior of existing model kinds" as WRONG. The word "overriding" means replacing existing behaviour — which breaks all existing prims using the standard kinds. "Implementing a custom schema plugin that INHERITS FROM UsdModelAPI" is CORRECT — you ADD new capabilities for your custom kind without touching the existing ones. Extend = add to. Override = replace. Always extend in USD.</p>
+  </div>
+</div>
+
+
+<!-- ══ S7: VARIANT FALLBACKS ══ -->
+<div class="section s-pink" id="s7">
+  <div class="section-header">
+    <div class="section-icon">🔀</div>
+    <div><div class="section-title">07 — Variant Fallback Selections</div></div>
+  </div>
+
+  <p>Q22 tested variant fallback selections — a topic not covered in the Day 3/4 variant notes. This is an advanced variant topic about what happens when a variant selection doesn't exist.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Real-world analogy</div>
+    <p>Imagine a restaurant menu with language variants — English, French, Spanish. A customer who speaks Portuguese opens the menu. There's no Portuguese option. The fallback selection tells the system: "If Portuguese is requested but doesn't exist, try Spanish first, then English." Without a fallback, the customer gets an empty menu. With a fallback, they get the best available alternative.</p>
+  </div>
+
+  <h3>The problem variant fallbacks solve</h3>
+  <p>In production, not every variant selection exists in every asset. A character might have "lod_high", "lod_medium", "lod_low" variants. In a render farm environment, someone accidentally requests "lod_ultra" which doesn't exist. Without fallbacks, the variant fails. With fallbacks, USD tries "lod_high" instead.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Python</span><span class="code-desc">All three correct variant fallback approaches</span></div>
+    <pre><code><span class="ck">from</span> <span class="cs">pxr</span> <span class="ck">import</span> <span class="cn">Usd</span>
+
+<span class="cm"># ── APPROACH 1: LayerStack fallback arcs ─────────────────────────────</span>
+<span class="cm"># Specify fallback variant selections in the stage's metadata</span>
+<span class="cm"># These are variant fallback arcs — explicit fallback definitions</span>
+<span class="cm"># in the layer stack</span>
+<span class="cm">#</span>
+<span class="cm"># In USDA at the root of a layer:</span>
+<span class="cm"># (</span>
+<span class="cm">#     variantFallbacks = {</span>
+<span class="cm">#         "lod":   ["high", "medium", "low"]</span>
+<span class="cm">#         "color": ["default"]</span>
+<span class="cm">#     }</span>
+<span class="cm"># )</span>
+<span class="cm"># If "lod_ultra" requested: try "high" first, then "medium", then "low"</span>
+
+<span class="cm"># ── APPROACH 2: UsdVariantFallback API — programmatic runtime control ─</span>
+<span class="cm"># The UsdVariantFallback API lets you SET fallbacks programmatically</span>
+<span class="cm"># at runtime — key for dynamic or environment-specific resolution</span>
+
+fallbacks = {
+    <span class="cs">"lod"</span>:   [<span class="cs">"high"</span>, <span class="cs">"medium"</span>, <span class="cs">"low"</span>],
+    <span class="cs">"color"</span>: [<span class="cs">"default"</span>]
+}
+<span class="cm"># Set global fallbacks — applies to all stages opened after this</span>
+<span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">SetGlobalVariantFallbacks</span>(fallbacks)
+
+<span class="cm"># Now when any stage opens with an unknown lod variant,</span>
+<span class="cm"># it tries "high" first, then "medium", then "low"</span>
+<span class="cm"># This is the UsdVariantFallback API for programmatic control</span>
+
+stage = <span class="cn">Usd</span>.<span class="cp">Stage</span>.<span class="cw">Open</span>(<span class="cs">"scene.usda"</span>)
+<span class="cm"># Stage uses the fallbacks set above</span>
+
+<span class="cm"># ── APPROACH 3: Session layer for user-specific fallbacks ────────────</span>
+<span class="cm"># Define fallback variants in the SESSION layer</span>
+<span class="cm"># This lets individual users customise their fallback preferences</span>
+<span class="cm"># WITHOUT modifying the shared base USD files</span>
+<span class="cm"># Session layer = strongest + in-memory + per-session</span>
+<span class="cm"># Perfect for user-specific or environment-specific overrides</span>
+
+session = stage.<span class="cw">GetSessionLayer</span>()
+stage.<span class="cw">SetEditTarget</span>(session)
+<span class="cm"># Write fallback variant selections into session</span>
+<span class="cm"># They only affect this session, never saved to files</span>
+
+<span class="cm"># ── WRONG APPROACHES ────────────────────────────────────────────────</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Embed fallback selections in prim metadata</span>
+<span class="cm">#    Prim metadata is not designed for fallback logic</span>
+<span class="cm">#    This leads to unpredictable behaviour</span>
+<span class="cm">#    Fallbacks belong at the stage/layer level, not the prim level</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Rely only on default variant selection in the schema</span>
+<span class="cm">#    Default selections alone don't cover cases where the</span>
+<span class="cm">#    requested variant doesn't exist at all</span>
+<span class="cm">#    Fallback lists are needed for robustness</span>
+<span class="cm">#</span>
+<span class="cm"># ❌ Use fallback selections only during composition, not runtime</span>
+<span class="cm">#    Fallbacks ARE relevant at runtime too — dynamic scenes</span>
+<span class="cm">#    can request variants that need fallback resolution</span></code></pre>
+  </div>
+</div>
+
+
+<!-- ══ S8: EXAM PATTERN RECOGNITION ══ -->
+<div class="section s-gray" id="s8">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div><div class="section-title">08 — Exam Pattern Recognition</div></div>
+  </div>
+
+  <p>The custom schema questions on the real exam follow very specific patterns. Once you recognise the pattern in the question, you can eliminate wrong answers systematically.</p>
+
+  <h3>Pattern 1 — "How do you create a custom schema?"</h3>
+  <div class="callout key">
+    <div class="callout-label">Answer framework</div>
+    <p>1. Write <strong>schema.usda</strong>. 2. Inherit from <strong>UsdTyped</strong> or <strong>UsdGeomImageable</strong> (NOT UsdSchemaBase directly). 3. Run <strong>usdGenSchema</strong> to generate C++ and Python. 4. Register with <strong>TfType system</strong>. 5. Deploy as plugin. Never: modify core, Python-only, inherit directly from UsdSchemaBase.</p>
+  </div>
+
+  <h3>Pattern 2 — "How do you add a new file format?"</h3>
+  <div class="callout key">
+    <div class="callout-label">Answer framework</div>
+    <p>Implement the <strong>SdfFileFormat interface</strong> + register with <strong>TfType system</strong>. Never: override UsdStage::Open(), modify core source, create a UsdSchema for it.</p>
+  </div>
+
+  <h3>Pattern 3 — "How do you create custom model kinds?"</h3>
+  <div class="callout key">
+    <div class="callout-label">Answer framework</div>
+    <p>Define unique token + register with <strong>UsdModelKindRegistry</strong> + set 'kind' metadata via <strong>UsdModelAPI</strong> + implement schema plugin that <strong>inherits</strong> (not overrides) UsdModelAPI + extend Validate() method. Never: use variants for this, register token alone, override UsdModelAPI.</p>
+  </div>
+
+  <h3>Pattern 4 — "Extend vs Override"</h3>
+  <div class="callout warn">
+    <div class="callout-label">Critical exam distinction</div>
+    <p>Any question option saying "override" an existing schema, API, or core system = <strong>WRONG</strong>. USD is always extended, never overridden. "Override" breaks existing functionality for all users of that schema. "Extend" (inherit from, add to) maintains backward compatibility while adding new capabilities. When you see "overriding" in an option about customising USD, eliminate it immediately.</p>
+  </div>
+
+  <h3>Quick elimination checklist for custom schema questions</h3>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">Exam strategy</span><span class="code-desc">Immediate eliminations when you see these phrases</span></div>
+    <pre><code><span class="cm"># IMMEDIATELY ELIMINATE any option containing:</span>
+<span class="cm">#</span>
+<span class="cm"># "Modify the core USD source code"</span>
+<span class="cm"># → Always wrong. USD uses plugins, not core modifications.</span>
+<span class="cm">#</span>
+<span class="cm"># "Python-only schema" or "subclassing Usd.Schema in Python"</span>
+<span class="cm"># → Always wrong. Full schemas need C++ + usdGenSchema.</span>
+<span class="cm">#</span>
+<span class="cm"># "Inheriting directly from UsdSchemaBase"</span>
+<span class="cm"># → Wrong for typical use. Correct base is UsdTyped or UsdGeomImageable.</span>
+<span class="cm">#</span>
+<span class="cm"># "Overriding" any existing schema, API, or method</span>
+<span class="cm"># → Wrong. Always EXTEND (inherit from, add to).</span>
+<span class="cm">#</span>
+<span class="cm"># "Override UsdStage::Open()"</span>
+<span class="cm"># → Wrong. File formats use SdfFileFormat, not Stage::Open override.</span>
+<span class="cm">#</span>
+<span class="cm"># "Register token in TfType WITHOUT schema or API linkage"</span>
+<span class="cm"># → Wrong. Token alone is insufficient without full schema backing.</span>
+<span class="cm">#</span>
+<span class="cm"># "Define schema in a .usd file at runtime"</span>
+<span class="cm"># → Wrong. Schemas are defined in schema.usda + compiled, not .usd files.</span>
+<span class="cm">#</span>
+<span class="cm"># "Create new UsdSchema to control file format I/O"</span>
+<span class="cm"># → Wrong. Schemas ≠ file I/O. Use SdfFileFormat for file format plugins.</span>
+<span class="cm">#</span>
+<span class="cm"># "Embed fallback variant selections in prim metadata"</span>
+<span class="cm"># → Wrong. Fallbacks belong at stage/layer level via UsdVariantFallback API.</span></code></pre>
+  </div>
+</div>
+
+
+<div class="summary-box">
+  <h3>Custom schemas — the 12 things to know cold</h3>
+  <div class="summary-item"><span class="summary-num">1</span><span>Custom schemas use: <strong>schema.usda → usdGenSchema → C++ compile → TfType register → plugin deploy</strong>. This is the complete chain.</span></div>
+  <div class="summary-item"><span class="summary-num">2</span><span>Inherit from <strong>UsdTyped</strong> (standard) or <strong>UsdGeomImageable</strong> (renderable). NOT directly from UsdSchemaBase. NOT Python-only.</span></div>
+  <div class="summary-item"><span class="summary-num">3</span><span><strong>TfType registration</strong> is what makes IsA(), HasAPI(), fallback values, and schema discovery work. Token registration alone is insufficient.</span></div>
+  <div class="summary-item"><span class="summary-num">4</span><span>File format plugins use the <strong>SdfFileFormat interface</strong> — completely separate from schema types. Never override UsdStage::Open().</span></div>
+  <div class="summary-item"><span class="summary-num">5</span><span>Custom model kinds: unique token + <strong>UsdModelKindRegistry</strong> + 'kind' metadata on root prim + schema plugin inheriting UsdModelAPI + extended Validate().</span></div>
+  <div class="summary-item"><span class="summary-num">6</span><span>Always <strong>EXTEND</strong> UsdModelAPI — never override it. Overriding replaces behaviour. Extending adds new capabilities.</span></div>
+  <div class="summary-item"><span class="summary-num">7</span><span>Variant fallbacks: <strong>UsdStage.SetGlobalVariantFallbacks()</strong> for programmatic control, LayerStack variantFallbacks for explicit arcs, session layer for user-specific preferences.</span></div>
+  <div class="summary-item"><span class="summary-num">8</span><span>Variant fallbacks are NOT embedded in prim metadata. They live at stage/layer level. Default selections alone are insufficient for missing variants.</span></div>
+  <div class="summary-item"><span class="summary-num">9</span><span>Variants within model kinds = WRONG. Variants serve content variation. Model kinds serve classification. These are separate systems.</span></div>
+  <div class="summary-item"><span class="summary-num">10</span><span>Never modify core USD source code. USD's entire extensibility architecture (plugins, schemas, file formats) exists to avoid this.</span></div>
+  <div class="summary-item"><span class="summary-num">11</span><span>SdfFileFormat = file I/O. UsdSchema = scene data types. Custom schema for new prim types. SdfFileFormat for new file formats. Independent concerns.</span></div>
+  <div class="summary-item"><span class="summary-num">12</span><span>Elimination rule: if an option says "override", "modify core", "Python-only", or "token without linkage" — eliminate it immediately.</span></div>
+</div>
+
+<div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e3db;">
+  <p style="font-size:13px;color:var(--text-muted);">Custom Schemas Deep Dive — covering Q19, Q24, Q25, Q26, Q27, Q22 from the real exam</p>
+</div>
+
+</div>
+</body>
+</html>
