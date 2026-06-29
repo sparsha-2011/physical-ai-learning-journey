@@ -18,11 +18,14 @@ SEP = "=" * 65
 # ── BUILD A STAGE WITH BROKEN REFERENCES ───────────────────────────
 stage = Usd.Stage.CreateInMemory()
 
+# Define /World as Xform so hierarchy is visible in usdview
+UsdGeom.Xform.Define(stage, "/World")
+
 # Valid prim — no reference
 valid_prim = UsdGeom.Xform.Define(stage, "/World/ValidObject")
 
 # Broken prim — references a file that does not exist
-broken_prim = stage.DefinePrim("/World/BrokenChair")
+broken_prim = UsdGeom.Sphere.Define(stage, "/World/BrokenChair").GetPrim()
 broken_prim.GetReferences().AddReference("./this_file_does_not_exist.usda")
 
 # Prim with valid reference but wrong internal path
@@ -31,7 +34,7 @@ good_stage = Usd.Stage.Open(good_layer)
 UsdGeom.Xform.Define(good_stage, "/MyAsset")
 good_stage.GetRootLayer().Save()
 
-prim_wrong_path = stage.DefinePrim("/World/WrongPath")
+prim_wrong_path = UsdGeom.Cube.Define(stage, "/World/WrongPath").GetPrim()
 prim_wrong_path.GetReferences().AddReference(
     good_layer.identifier, "/PathThatDoesNotExist"
 )
@@ -123,3 +126,51 @@ print("""
   prim.GetPrimIndex().DumpToString()    → full arc graph for one prim
   usdchecker scene.usda                 → pre-delivery validation
 """)
+
+# ── USDVIEW EQUIVALENT + EXPORT ──────────────────────────────────────
+print(SEP)
+print("  USDVIEW — How composition errors appear visually")
+print(SEP)
+print("""
+  usdview shows composition errors visually in two ways:
+
+  1. Open usdview:
+     .\\scripts\\usdview.bat debug_composition_errors.usda
+
+  2. In the Scenegraph panel:
+     /World/BrokenChair appears with a WARNING icon or
+     highlighted in a different colour — signalling a problem.
+     Its children will be missing or empty.
+
+  3. Click /World/BrokenChair
+
+  4. Metadata/Composition → Composition tab
+     Shows the broken reference arc with an ERROR annotation:
+     "Could not open asset @./this_file_does_not_exist.usda@"
+     This is the visual equivalent of stage.GetCompositionErrors()
+
+  5. Metadata/Composition → LayerStack tab
+     Only the local layer shows up — the reference failed to load.
+     If a reference had loaded, you'd see its layers here too.
+
+  6. The terminal / console at the bottom of usdview
+     Also shows composition error messages as text —
+     same text as GetCompositionErrors() returns in Python.
+
+  WORKFLOW:
+  Quick check → usdview Composition tab (visual, immediate)
+  Scripted check → stage.GetCompositionErrors() (automation, CI)
+  Deep investigation → prim.GetPrimIndex().DumpToString() (most detail)
+""")
+
+import os
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+output_path = os.path.join(SCRIPT_DIR, "debug_composition_errors.usda")
+stage.Export(output_path)
+print(f"  Saved → {output_path}")
+print(f"  Open in usdview:")
+print(f"    .\\scripts\\usdview.bat {output_path}")
+print(f"\n  In usdview:")
+print(f"    1. Look for warning icons on /World/BrokenChair")
+print(f"    2. Click it → Composition tab → see the broken arc")
+print(f"    3. Compare /World/ValidObject (clean) vs BrokenChair (error)")
