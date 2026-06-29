@@ -205,8 +205,8 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 output_path = os.path.join(SCRIPT_DIR, "debug_wrong_edit_target.usda")
 
-path_override = os.path.join(SCRIPT_DIR, "debug_wet_artist_override.usda")
-path_model    = os.path.join(SCRIPT_DIR, "debug_wet_model_base.usda")
+path_override = os.path.join(SCRIPT_DIR, "debug_artist_override.usda")
+path_model    = os.path.join(SCRIPT_DIR, "debug_model_base.usda")
 
 for p in [path_override, path_model, output_path]:
     if os.path.exists(p): os.remove(p)
