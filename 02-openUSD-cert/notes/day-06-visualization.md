@@ -292,6 +292,51 @@ Material.outputs:surface ← connected from PreviewSurface.outputs:surface
 > - `inputs:` and `outputs:` are **NOT deprecated** — they are fundamental to UsdShade
 > - `inputs:` can hold any data type — not just textures
 > - A Shader does NOT contain Materials — it's the reverse: Material contains Shaders
+> - Shader parameters MUST be defined using `UsdShadeInput`/`UsdShadeOutput` objects — setting arbitrary attributes on a shader without them breaks schema compliance and prevents shading network connections
+> - Texture file paths cannot be directly assigned on `UsdShadeMaterial` — textures must go through shader nodes (`UsdUVTexture`)
+
+### Material-Level Inputs — External Parameterisation
+
+A `UsdShadeMaterial` prim can expose `UsdShadeInput` objects at the **material level** — not just on the shader nodes inside it. This allows external systems to set parameters on the material without knowing its internal shader network.
+
+```python
+# Expose a parameter at the material level
+mat = UsdShade.Material.Define(stage, "/Looks/WoodMat")
+
+# UsdShadeInput on the MATERIAL PRIM — accepts external parameters
+mat_color_input = mat.CreateInput(
+    "baseColor", Sdf.ValueTypeNames.Color3f)
+mat_color_input.Set(Gf.Vec3f(0.6, 0.4, 0.2))
+
+# Connect material input → shader input
+shader = UsdShade.Shader.Define(stage, "/Looks/WoodMat/Shader")
+shader.CreateIdAttr("UsdPreviewSurface")
+shader_diff = shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f)
+shader_diff.ConnectToSource(mat_color_input)
+# Now the material's baseColor drives the shader's diffuseColor
+# External tools can set mat.GetInput("baseColor") without touching the shader
+```
+
+### Displacement Output
+
+`UsdShadeMaterial` has **two surface-related outputs** — not just one:
+
+```python
+# Surface output — connects the main shading network
+mat.CreateSurfaceOutput().ConnectToSource(surface_shader_out)
+
+# Displacement output — connects displacement shaders
+# Displacement shaders modify the geometry's surface POSITIONS during rendering
+# (pushes vertices in/out based on a texture — creates real geometric detail)
+mat.CreateDisplacementOutput().ConnectToSource(displacement_shader_out)
+```
+
+| Output                 | Purpose                                                           |
+| ---------------------- | ----------------------------------------------------------------- |
+| `outputs:surface`      | Main shading — colour, roughness, metallic, reflections           |
+| `outputs:displacement` | Geometry modification — pushes surface positions during rendering |
+
+> Displacement is distinct from normal maps — normal maps fake lighting, displacement actually moves geometry.
 
 ### Python API
 
@@ -381,18 +426,42 @@ All UsdLux lights inherit from `UsdGeomXformable` — they are **transformable a
 
 ### Common Attributes Across All Lights
 
-| Attribute       | Type      | Description                                          |
-| --------------- | --------- | ---------------------------------------------------- |
-| `intensity`     | `float`   | Brightness in lumens                                 |
-| `exposure`      | `float`   | Photographic stops: `final = intensity × 2^exposure` |
-| `color`         | `color3f` | Emitted colour tint                                  |
-| `falloffRadius` | `float`   | Maximum distance the light affects the scene         |
+| Attribute          | Type      | Description                                                                                                               |
+| ------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `intensity`        | `float`   | Brightness — measured in **candela (cd)** or **watts per steradian** depending on light type. **NOT lumens.**             |
+| `exposure`         | `float`   | Exponential brightness scaling in photographic stops: `final = intensity × 2^exposure`. Each unit **doubles** brightness. |
+| `color`            | `color3f` | Spectral colour tint of emitted light — directly affects hue in rendered scene                                            |
+| `colorTemperature` | `float`   | Colour temperature in Kelvin (e.g. 6500K = daylight, 3200K = tungsten)                                                    |
+| `falloffRadius`    | `float`   | Maximum distance the light affects — geometry beyond this radius receives no contribution                                 |
+| `enableShadows`    | `bool`    | **Explicitly toggles shadow casting on/off** — False by default on some renderers                                         |
+
+> **`intensity` units — common exam trap:** The notes previously said "lumens" — this is WRONG.  
+> `intensity` = **candela (cd)** or **watts per steradian** (radiant intensity), not lumens (luminous flux).  
+> Lumens measure total light output in all directions. Candela measures intensity in a specific direction.
 
 > **`falloffRadius` limits the light's effective range** — geometry beyond this radius receives no contribution. Used to optimise rendering by culling distant light calculations.
 
 ### Shadows Are NOT Automatic
 
-Shadow casting requires **explicit configuration** via shadow attributes. Lights do not cast shadows by default.
+Shadow casting requires **explicit configuration**. Use `enableShadows = true` to enable shadows on a specific light:
+
+```python
+# Shadows are NOT on by default — must explicitly enable
+light = UsdLux.SphereLight.Define(stage, "/World/Key")
+light.CreateIntensityAttr(500.0)
+
+# Enable shadows via the shadow API
+shadow_api = UsdLux.ShadowAPI.Apply(light.GetPrim())
+shadow_api.CreateShadowEnableAttr(True)
+# OR set directly:
+light.GetPrim().CreateAttribute(
+    "inputs:enableShadows", Sdf.ValueTypeNames.Bool
+).Set(True)
+```
+
+### Volumetric Scattering is NOT Inherent
+
+UsdLux lights do **not** automatically produce volumetric scattering (fog, god rays, participating media). This requires additional volumetric shaders or render-specific settings. This appears as a distractor on the exam — eliminate any option claiming UsdLux lights "inherently support" or "automatically simulate" volumetric effects.
 
 ### Light Types
 
@@ -505,24 +574,33 @@ UsdGeom.XformCommonAPI(camera).SetTranslate(Gf.Vec3d(10, 5, 15), time=48)
 
 ## 8. Key Takeaways
 
-| Concept                      | What to Remember                                                           |
-| ---------------------------- | -------------------------------------------------------------------------- |
-| **UsdGeomImageable**         | Base class for all renderable prims. Provides visibility and purpose ONLY. |
-| **Purpose tokens**           | render, proxy, guide, default. Guide = NEVER rendered.                     |
-| **Visibility inheritance**   | Parent invisible → all children invisible, regardless of their own setting |
-| **faceVertexIndices length** | = SUM of faceVertexCounts. Not point count. Not face count.                |
-| **holeIndices**              | Marks faces as holes — exist in topology, NOT rendered                     |
-| **UVs not auto-generated**   | Must author `primvars:st` explicitly                                       |
-| **Primvar interpolation**    | constant, uniform, vertex, faceVarying. NOT "indexed".                     |
-| **inputs: and outputs:**     | NOT deprecated. inputs = data IN. outputs = data OUT. Any type.            |
-| **MaterialBindingAPI**       | Must `Apply()` before `Bind()` — both steps required                       |
-| **falloffRadius**            | Controls max light range. NOT brightness.                                  |
-| **SphereLight radius**       | Controls shadow softness and spread. NOT brightness.                       |
-| **Shadows not automatic**    | Requires explicit shadow attribute configuration                           |
-| **Camera projections**       | Only `perspective` and `orthographic`. No others.                          |
-| **Sensor size**              | Always in millimetres. Never inches.                                       |
-| **clippingRange**            | IS in UsdGeomCamera schema. NOT handled externally.                        |
-| **fStop**                    | Controls depth of field only. NOT exposure time.                           |
+| Concept                          | What to Remember                                                                                |
+| -------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **UsdGeomImageable**             | Base class for all renderable prims. Provides visibility and purpose ONLY.                      |
+| **Purpose tokens**               | render, proxy, guide, default. Guide = NEVER rendered.                                          |
+| **Visibility inheritance**       | Parent invisible → all children invisible, regardless of their own setting                      |
+| **faceVertexIndices length**     | = SUM of faceVertexCounts. Not point count. Not face count.                                     |
+| **holeIndices**                  | Marks faces as holes — exist in topology, NOT rendered                                          |
+| **UVs not auto-generated**       | Must author `primvars:st` explicitly                                                            |
+| **Primvar interpolation**        | constant, uniform, vertex, faceVarying. NOT "indexed".                                          |
+| **inputs: and outputs:**         | NOT deprecated. inputs = data IN. outputs = data OUT. Any type.                                 |
+| **MaterialBindingAPI**           | Must `Apply()` before `Bind()` — both steps required                                            |
+| **`outputs:displacement`**       | Second material output — connects displacement shaders that move geometry positions             |
+| **Material-level inputs**        | `UsdShadeInput` on the Material prim exposes external parameters — not just on shaders          |
+| **Arbitrary attrs on shader**    | ❌ Wrong — shader params MUST use `UsdShadeInput`/`UsdShadeOutput` objects                      |
+| **Texture on Material directly** | ❌ Wrong — textures go through shader nodes (`UsdUVTexture`), not on Material prim              |
+| **`intensity` units**            | **Candela (cd) or watts per steradian** — NOT lumens. This is a direct exam trap.               |
+| **`exposure`**                   | Exponential scaling — each unit **doubles** brightness. `final = intensity × 2^exposure`        |
+| **`enableShadows`**              | Boolean attribute to explicitly toggle shadow casting. NOT automatic.                           |
+| **`colorTemperature`**           | Kelvin colour temperature attribute on lights                                                   |
+| **falloffRadius**                | Controls max light range. NOT brightness.                                                       |
+| **SphereLight radius**           | Controls shadow softness and spread. NOT brightness.                                            |
+| **Shadows not automatic**        | Requires `enableShadows = true` — not on by default                                             |
+| **Volumetric scattering**        | NOT inherent to UsdLux — requires additional volumetric shaders. Always a wrong answer on exam. |
+| **Camera projections**           | Only `perspective` and `orthographic`. No others.                                               |
+| **Sensor size**                  | Always in millimetres. Never inches.                                                            |
+| **clippingRange**                | IS in UsdGeomCamera schema. NOT handled externally.                                             |
+| **fStop**                        | Controls depth of field only. NOT exposure time.                                                |
 
 ---
 

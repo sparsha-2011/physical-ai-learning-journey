@@ -46,23 +46,24 @@ Almost every USD debugging scenario comes down to one of six root causes:
 
 ## 2. The Complete Debugging Toolkit
 
-| Tool / Method                        | What It Does                                             | When to Use                                         |
-| ------------------------------------ | -------------------------------------------------------- | --------------------------------------------------- |
-| `prim.GetPrimStack()`                | All SdfPrimSpecs for a prim, strongest → weakest         | Wrong prim type, missing prim, unexpected specifier |
-| `attr.GetPropertyStack(timeCode)`    | All property specs for an attribute, strongest → weakest | Wrong property value                                |
-| `Usd.Debug.PrintComposition(prim)`   | Full composition arc breakdown as text                   | Most detailed arc debugging (source builds only)    |
-| `prim.GetPrimIndex().DumpToString()` | Full composition graph as text                           | Same as above — works in all USD builds             |
-| `UsdUtils.FlattenLayerStack(stage)`  | Merges sublayers only — references/variants kept         | Debug sublayer conflicts                            |
-| `stage.Flatten()`                    | Resolves ALL arcs — full composed scene                  | See what the final scene actually looks like        |
-| `usdcat --flatten`                   | CLI equivalent of `stage.Flatten()`                      | Quick CLI inspection                                |
-| `usdcat --print-composition`         | CLI composition arc graph                                | CLI alternative to PrintComposition                 |
-| `stage.GetLayerStack()`              | All layers, strongest → weakest                          | Understanding which layers are loaded               |
-| `stage.GetRootLayer()`               | The root layer before composition                        | Examining base scene description                    |
-| `stage.GetSessionLayer()`            | Ephemeral in-memory overrides                            | Checking interactive changes                        |
-| `stage.MuteLayer(id)`                | Silences a layer without removing it                     | Isolating which layer causes a problem              |
-| `stage.GetCompositionErrors()`       | All composition errors on the stage                      | Broken references, invalid paths                    |
-| `usdchecker scene.usda`              | Validates file against best practices                    | Pre-delivery QA                                     |
-| `Tf.Debug.SetDebugSymbolsByName()`   | Enables verbose internal logging                         | Stage open issues, path resolution                  |
+| Tool / Method                          | What It Does                                             | When to Use                                                            |
+| -------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `prim.GetPrimStack()`                  | All SdfPrimSpecs for a prim, strongest → weakest         | Wrong prim type, missing prim, unexpected specifier                    |
+| `attr.GetPropertyStack(timeCode)`      | All property specs for an attribute, strongest → weakest | Wrong property value                                                   |
+| `Usd.Debug.PrintComposition(prim)`     | Full composition arc breakdown as text                   | Most detailed arc debugging (source builds only)                       |
+| `prim.GetPrimIndex().DumpToString()`   | Full composition graph as text                           | Same as above — works in all USD builds                                |
+| `SdfLayer.GetCompositionArcInfo(path)` | Detailed metadata for a specific arc at a path           | Arc type, arc strength, target file/prim — for targeted arc inspection |
+| `UsdUtils.FlattenLayerStack(stage)`    | Merges sublayers only — references/variants kept         | Debug sublayer conflicts                                               |
+| `stage.Flatten()`                      | Resolves ALL arcs — full composed scene                  | See what the final scene actually looks like                           |
+| `usdcat --flatten`                     | CLI equivalent of `stage.Flatten()`                      | Quick CLI inspection                                                   |
+| `usdcat --print-composition`           | CLI composition arc graph                                | CLI alternative to PrintComposition                                    |
+| `stage.GetLayerStack()`                | All layers, strongest → weakest                          | Understanding which layers are loaded                                  |
+| `stage.GetRootLayer()`                 | The root layer before composition                        | Examining base scene description                                       |
+| `stage.GetSessionLayer()`              | Ephemeral in-memory overrides                            | Checking interactive changes                                           |
+| `stage.MuteLayer(id)`                  | Silences a layer without removing it                     | Isolating which layer causes a problem                                 |
+| `stage.GetCompositionErrors()`         | All composition errors on the stage                      | Broken references, invalid paths                                       |
+| `usdchecker scene.usda`                | Validates file against best practices                    | Pre-delivery QA                                                        |
+| `Tf.Debug.SetDebugSymbolsByName()`     | Enables verbose internal logging                         | Stage open issues, path resolution                                     |
 
 ---
 
@@ -413,6 +414,67 @@ set TF_DEBUG=USD*
 
 ---
 
+## 11b. SdfLayer Arc Inspection — GetCompositionArcInfo
+
+`SdfLayer.GetCompositionArcInfo(path)` retrieves detailed metadata about a specific composition arc at a given prim path within a layer. Unlike `DumpToString()` which dumps the entire graph as text, this method gives you structured arc metadata for targeted inspection.
+
+```python
+from pxr import Sdf
+
+layer = Sdf.Layer.FindOrOpen("scene.usda")
+
+# Retrieve arc info at a specific path
+# Returns a list of arc info objects for arcs authored at that path
+arc_infos = layer.GetCompositionArcInfo(Sdf.Path("/World/Chair"))
+
+for arc in arc_infos:
+    print(arc)
+    # Each arc info contains:
+    # - arc type (reference, payload, inherit, specialize)
+    # - target file path or prim path
+    # - layer offset if present
+```
+
+> **When to use:** When you need to inspect exactly which arcs are authored **in a specific layer** at a specific path — not the full composed result, just what that one layer contributes. Useful for pipeline validation scripts that check whether assets have the expected arc structure.
+
+| Tool                                 | What it shows                                                |
+| ------------------------------------ | ------------------------------------------------------------ |
+| `GetCompositionArcInfo(path)`        | Arcs authored in ONE layer at ONE path — structured metadata |
+| `prim.GetPrimIndex().DumpToString()` | Full composition graph across ALL layers — text format       |
+| usdview Composition tab              | Full composition graph — visual format                       |
+
+---
+
+## 11c. usdrecord — What It Is and Why It's NOT a Debugging Tool
+
+`usdrecord` is a headless rendering tool — it renders USD stages to image files without opening an interactive viewer. It is **not** a composition debugging tool.
+
+```bash
+# What usdrecord actually does — renders frames to images
+usdrecord scene.usda output.png              # render frame 0
+usdrecord --frame 24 scene.usda frame24.png  # render specific frame
+usdrecord --frames 1:48 scene.usda out.####.png  # render frame range
+```
+
+It uses the Hydra pipeline (same as usdview) but with no GUI. Useful for automated render pipelines and CI/CD validation — not for inspecting composition.
+
+### Why it appears as a distractor on the exam
+
+Exam questions about composition debugging frequently list `usdrecord` as a wrong answer. The pattern to recognise:
+
+```
+"usdrecord captures composition changes during runtime"  → WRONG
+"usdrecord records arc evaluation for debugging"         → WRONG
+"usdrecord shows composition arc strength"               → WRONG
+
+usdrecord = headless renderer = outputs IMAGES
+It has no composition inspection capability whatsoever.
+```
+
+When you see `usdrecord` in a question about debugging composition, eliminate it immediately.
+
+---
+
 ## 12. Composition Arc Inspection
 
 ### `prim.GetPrimIndex().DumpToString()`
@@ -557,20 +619,22 @@ This is the visual equivalent of `HasAuthoredValue()`.
 
 Eliminate any option that contains these patterns:
 
-| Pattern in option                                                | Always wrong because                                        |
-| ---------------------------------------------------------------- | ----------------------------------------------------------- |
-| "Directly editing the composed stage's in-memory representation" | Composed stage is READ-ONLY                                 |
-| "Clear the USD cache to reset composition"                       | USD composition is deterministic — cache = performance only |
-| "Manually edit root layer to remove all references"              | Destructive, doesn't address root cause                     |
-| "Delete all payloads and reload"                                 | Destructive, doesn't fix composition conflicts              |
-| "Modify the USD schema to force specific opinions"               | Schemas define structure, not composition behaviour         |
-| "Ignore layer offsets as they don't affect composition"          | Layer offsets DO affect time-varying data                   |
-| "usdchecker automatically fixes composition issues"              | usdchecker VALIDATES only — never auto-fixes                |
-| "Rely solely on GetSessionLayer() for all composition debugging" | Session layer only contains ephemeral overrides             |
-| "Flatten the stage to minimize layer composition overhead"       | Flattening INCREASES memory and removes layering benefits   |
-| "GetPrimAtPath() retrieves prims ignoring composition arcs"      | Returns the FULLY COMPOSED prim — all arcs already applied  |
+| Pattern in option                                                | Always wrong because                                                                                                           |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| "Directly editing the composed stage's in-memory representation" | Composed stage is READ-ONLY                                                                                                    |
+| "Clear the USD cache to reset composition"                       | USD composition is deterministic — cache = performance only                                                                    |
+| "Manually edit root layer to remove all references"              | Destructive, doesn't address root cause                                                                                        |
+| "Delete all payloads and reload"                                 | Destructive, doesn't fix composition conflicts                                                                                 |
+| "Modify the USD schema to force specific opinions"               | Schemas define structure, not composition behaviour                                                                            |
+| "Ignore layer offsets as they don't affect composition"          | Layer offsets DO affect time-varying data                                                                                      |
+| "usdchecker automatically fixes composition issues"              | usdchecker VALIDATES only — never auto-fixes                                                                                   |
+| "usdrecord captures/records composition changes during runtime"  | usdrecord is a **headless renderer** that outputs images — zero composition debugging capability                               |
+| `"prim.GetCompositionArcs()"`                                    | This method does **not exist** in the USD Python API — raises AttributeError. Use `prim.GetPrimIndex().DumpToString()` instead |
+| "Rely solely on GetSessionLayer() for all composition debugging" | Session layer only contains ephemeral overrides                                                                                |
+| "Flatten the stage to minimize layer composition overhead"       | Flattening INCREASES memory and removes layering benefits                                                                      |
+| "GetPrimAtPath() retrieves prims ignoring composition arcs"      | Returns the FULLY COMPOSED prim — all arcs already applied                                                                     |
 
 ---
 
 _Previous: [Day 8 — Content Aggregation](day-08-content-aggregation.md)_  
-_Next: [Day 9 — Debugging and Troubleshooting](day-09-debugging-and-troubleshooting.md)_
+_Back to start: [Day 1 — USD Foundations](day-01-usd-foundations.md)_

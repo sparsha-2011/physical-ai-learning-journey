@@ -1,7 +1,7 @@
 # Day 7 — Pipeline Development and Data Exchange
 
 > **OpenUSD NCP Certification Study Notes**  
-> *File Formats, Exporters, Importers, Validators, Data Exchange, Pipeline Tools*
+> _File Formats, Exporters, Importers, Validators, Data Exchange, Pipeline Tools_
 
 ---
 
@@ -28,12 +28,12 @@
 
 ## 1. USD File Format Trade-offs
 
-| Extension | Format | Readable | Speed | Self-contained | Best for |
-|-----------|--------|----------|-------|----------------|---------|
-| `.usda` | ASCII text | ✅ Yes | Slow | ❌ No | Authoring, debugging, version control |
-| `.usdc` | Binary crate | ❌ No | Very fast | ❌ No | Production pipelines, large data |
-| `.usd` | Auto-detected | Depends | Depends | ❌ No | Generic — USD reads header to determine format |
-| `.usdz` | Zip archive | ❌ No | Fast | ✅ Yes | External delivery, AR/VR distribution |
+| Extension | Format        | Readable | Speed     | Self-contained | Best for                                       |
+| --------- | ------------- | -------- | --------- | -------------- | ---------------------------------------------- |
+| `.usda`   | ASCII text    | ✅ Yes   | Slow      | ❌ No          | Authoring, debugging, version control          |
+| `.usdc`   | Binary crate  | ❌ No    | Very fast | ❌ No          | Production pipelines, large data               |
+| `.usd`    | Auto-detected | Depends  | Depends   | ❌ No          | Generic — USD reads header to determine format |
+| `.usdz`   | Zip archive   | ❌ No    | Fast      | ✅ Yes         | External delivery, AR/VR distribution          |
 
 ### Renaming Rules
 
@@ -160,14 +160,14 @@ def export_scene(source_data: dict, output_path: str):
 
 ### Key Exporter Rules
 
-| ✅ Do | ❌ Don't |
-|-------|---------|
-| Use USD Python API to create UsdPrims with schemas | Write raw USD ASCII by hand |
-| Use relative paths for all references | Use absolute paths |
-| Set `defaultPrim` on the root prim | Leave `defaultPrim` unset |
-| Use time samples for animated data | Use only default values for animation |
-| Use registered schemas or metadata for proprietary data | Embed unregistered string blobs |
-| Use USD's layering model | Flatten everything into one file |
+| ✅ Do                                                   | ❌ Don't                              |
+| ------------------------------------------------------- | ------------------------------------- |
+| Use USD Python API to create UsdPrims with schemas      | Write raw USD ASCII by hand           |
+| Use relative paths for all references                   | Use absolute paths                    |
+| Set `defaultPrim` on the root prim                      | Leave `defaultPrim` unset             |
+| Use time samples for animated data                      | Use only default values for animation |
+| Use registered schemas or metadata for proprietary data | Embed unregistered string blobs       |
+| Use USD's layering model                                | Flatten everything into one file      |
 
 ---
 
@@ -176,6 +176,7 @@ def export_scene(source_data: dict, output_path: str):
 `usdchecker` validates a USD file or package against a defined set of rules designed to ensure the asset is **interoperable and renderable** by downstream tools.
 
 Common things `usdchecker` validates:
+
 - `defaultPrim` is set
 - All meshes have an `extent` attribute
 - All material bindings resolve to valid prims
@@ -210,6 +211,7 @@ Core exporter logic:
 ### Pre-Export Hook
 
 Runs before the core export. Use to:
+
 - Validate source data
 - Set stage metadata (upAxis, metersPerUnit)
 - Add pipeline version metadata to the root layer
@@ -217,6 +219,7 @@ Runs before the core export. Use to:
 ### Post-Export Hook
 
 Runs after the core export. Use to:
+
 - Add custom schema attributes to exported prims
 - Run `usdchecker` on the output
 - Register the exported asset in the pipeline database
@@ -242,44 +245,92 @@ def post_export_hook(stage, exported_path):
 
 ### Wrong Approaches
 
-| Wrong approach | Why |
-|----------------|-----|
-| Override the main export function | Loses all built-in functionality — hooks exist to avoid this |
-| Modify USD files on disk after export | Error-prone, bypasses pipeline control, risk of corruption |
-| Create a separate generator for custom requirements | Duplicates effort, breaks pipeline consistency |
+| Wrong approach                                      | Why                                                          |
+| --------------------------------------------------- | ------------------------------------------------------------ |
+| Override the main export function                   | Loses all built-in functionality — hooks exist to avoid this |
+| Modify USD files on disk after export               | Error-prone, bypasses pipeline control, risk of corruption   |
+| Create a separate generator for custom requirements | Duplicates effort, breaks pipeline consistency               |
 
 ---
 
 ## 7. Removing Proprietary Dependencies
 
-Proprietary shaders and plugins in USD assets create vendor lock-in — assets can only be used in tools that support the proprietary technology.
+Proprietary shaders, file formats, SDKs, and APIs in USD assets create **vendor lock-in** — assets can only be used in tools that support that specific proprietary technology. Removing these dependencies makes pipelines portable, maintainable, and future-proof.
 
-### The Correct Approach
+### The Five Correct Strategies
 
-Refactor proprietary shaders into **USD native schemas and shader definitions** (UsdPreviewSurface or MaterialX).
+**1. Replace proprietary shaders with USD-native shaders**
+
+Refactor proprietary renderer-specific shaders into UsdPreviewSurface or MaterialX — both are open standards readable by any USD-compliant renderer.
 
 ```
-Before (proprietary — Arnold only):
-  def Shader "Mat" {
-      uniform token info:id = "ArnoldStandardSurface"
-      float inputs:base = 0.8
-  }
+Before (proprietary — Arnold only):           After (USD native — any renderer):
+def Shader "Mat" {                            def Shader "Mat" {
+    token info:id = "ArnoldStandardSurface"       token info:id = "UsdPreviewSurface"
+    float inputs:base = 0.8                       color3f inputs:diffuseColor = (0.8,0.8,0.8)
+}                                                 float inputs:roughness = 0.3
+                                              }
+```
 
-After (USD native — any renderer):
-  def Shader "Mat" {
-      uniform token info:id = "UsdPreviewSurface"
-      color3f inputs:diffuseColor = (0.8, 0.8, 0.8)
-      float inputs:roughness = 0.3
-  }
+**2. Replace proprietary file formats with USD-native formats**
+
+Convert `.abc`, `.fbx`, `.obj` and other proprietary interchange formats to `.usda`, `.usdc`, or `.usdz`. Native USD formats have no external format dependency — any USD tool reads them directly.
+
+**3. Use open-source plugins instead of proprietary SDKs**
+
+Replace vendor-specific SDKs (e.g., a proprietary mesh processing library) with open-source USD plugins or standard USD APIs. Open-source plugins are auditable, portable, and community-maintained.
+
+```
+Proprietary SDK:   import VendorMeshSDK        # vendor lock-in
+USD native:        from pxr import UsdGeom     # open standard
+```
+
+**4. Implement custom USD schemas instead of proprietary extensions**
+
+When your pipeline needs new data types, build custom schemas adhering to the **USD specification** (via `usdGenSchema`) instead of creating proprietary extensions. Custom USD schemas are portable to any tool that loads the schema plugin — proprietary extensions are not.
+
+```
+Proprietary extension:  custom:vendor:property = ...  # only works with vendor tool
+Custom USD schema:      sensor:temperature = 20.0     # works anywhere with schema plugin
+```
+
+**5. Convert proprietary animation data into USD animation schemas**
+
+Animation stored in proprietary rigs, custom joint formats, or vendor-specific motion formats should be converted to USD's open animation schemas — `UsdSkel` for skeletal animation, time-sampled `xformOp` attributes for transform animation. This removes dependency on the source DCC tool for playback.
+
+```python
+# Convert proprietary animation → USD time samples
+for frame, transform in proprietary_animation.items():
+    prim.GetAttribute("xformOp:translate").Set(
+        Gf.Vec3d(*transform), time=frame
+    )
+# Now any USD tool can play back the animation with no proprietary dependency
 ```
 
 ### Wrong Approaches
 
-| Wrong approach | Why |
-|----------------|-----|
-| Replace USD with proprietary formats | Increases dependency, defeats USD's purpose |
-| Reference proprietary files without converting | Dependency still exists |
-| Encapsulate without converting | Long-term maintenance problem, dependency still present |
+| Wrong approach                                     | Why it's wrong                                                    |
+| -------------------------------------------------- | ----------------------------------------------------------------- |
+| Embed proprietary shaders directly into USD files  | Increases lock-in — assets now require that renderer specifically |
+| Reference proprietary files without converting     | The dependency still exists — just deferred to load time          |
+| Use vendor-specific APIs for USD stage composition | Introduces proprietary dependency at the processing level         |
+| Encapsulate without converting                     | Long-term maintenance problem — dependency still present inside   |
+| Replace USD with proprietary formats               | Increases dependency, defeats the purpose of using USD            |
+
+### What This Looks Like in a Real Pipeline
+
+```
+PROPRIETARY (before):               USD-NATIVE (after):
+─────────────────────               ────────────────────────────
+ArnoldStandardSurface  →            UsdPreviewSurface / MaterialX
+.fbx geometry files    →            .usdc geometry
+VendorRig format       →            UsdSkel + xformOp time samples
+ProprietaryShadowAPI   →            UsdLux shadow attributes
+VendorMeshSDK          →            pxr.UsdGeom Python API
+Proprietary extensions →            Custom USD schemas (usdGenSchema)
+```
+
+The goal: any tool in the ecosystem that supports OpenUSD should be able to open, read, and render the asset **without installing any vendor-specific software**.
 
 ---
 
@@ -305,15 +356,15 @@ Good USD pipeline documentation must include enough technical detail for develop
 
 ## 9. Flattening Best Practices
 
-| Action | Part of flattening? | Notes |
-|--------|--------------------|----|
-| Resolve references and payloads into one file | ✅ Yes | Self-contained output |
-| Merge all layers into one | ✅ Yes | Core purpose of flattening |
-| Ensure unique prim paths | ✅ Yes | Namespace collisions must be resolved |
-| Collapse variants to selected variant | ✅ Yes | Variant switching no longer possible |
-| Bake time-sampled data to static values | ❌ No | Animation is PRESERVED — separate operation |
-| Convert geometry to single mesh type | ❌ No | Geometry types never change |
-| Preserve all variant sets intact | ❌ No | Variants collapse to selected |
+| Action                                        | Part of flattening? | Notes                                       |
+| --------------------------------------------- | ------------------- | ------------------------------------------- |
+| Resolve references and payloads into one file | ✅ Yes              | Self-contained output                       |
+| Merge all layers into one                     | ✅ Yes              | Core purpose of flattening                  |
+| Ensure unique prim paths                      | ✅ Yes              | Namespace collisions must be resolved       |
+| Collapse variants to selected variant         | ✅ Yes              | Variant switching no longer possible        |
+| Bake time-sampled data to static values       | ❌ No               | Animation is PRESERVED — separate operation |
+| Convert geometry to single mesh type          | ❌ No               | Geometry types never change                 |
+| Preserve all variant sets intact              | ❌ No               | Variants collapse to selected               |
 
 ---
 
@@ -321,12 +372,12 @@ Good USD pipeline documentation must include enough technical detail for develop
 
 USD pipeline tools should reflect USD's modular, graph-based nature:
 
-| ✅ Good patterns | ❌ Anti-patterns |
-|-----------------|----------------|
-| Node-based visual editor with drag-and-drop | Modal dialogs for every configuration change |
+| ✅ Good patterns                                  | ❌ Anti-patterns                                     |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| Node-based visual editor with drag-and-drop       | Modal dialogs for every configuration change         |
 | Real-time feedback on execution status and errors | Linear-only pipeline flows (USD branches and merges) |
-| Context-sensitive help and tooltips for nodes | No customisation options |
-| Support for branching and merging node flows | — |
+| Context-sensitive help and tooltips for nodes     | No customisation options                             |
+| Support for branching and merging node flows      | —                                                    |
 
 > Node-based editors are specifically recommended because USD's composition model **is** a graph — layers reference layers, assets reference assets, variants branch and merge. The UI should reflect this structure.
 
@@ -334,12 +385,12 @@ USD pipeline tools should reflect USD's modular, graph-based nature:
 
 ## 11. Build Configuration Management
 
-| ✅ Correct practices | ❌ Anti-patterns |
-|--------------------|----------------|
-| Explicit build variants in config files | Undocumented environment variables |
-| Centralised version-controlled config | Hardcoded paths in build scripts |
+| ✅ Correct practices                      | ❌ Anti-patterns                                   |
+| ----------------------------------------- | -------------------------------------------------- |
+| Explicit build variants in config files   | Undocumented environment variables                 |
+| Centralised version-controlled config     | Hardcoded paths in build scripts                   |
 | Conditional logic for different platforms | Ignoring build cache (forces unnecessary rebuilds) |
-| Documented environment variables | — |
+| Documented environment variables          | —                                                  |
 
 ---
 
@@ -370,15 +421,75 @@ A conceptual data mapping document is the **logical blueprint** that specifies h
 
 ### Required Contents
 
-- **Attribute correspondences** — source name → target name, data type, units
-- **Transformation rules** — how complex conversions work (unit scaling, axis flipping)
-- **Mandatory vs optional fields** — which must be present for a valid exchange
+- **Schema correspondences** — explicit mapping between source prim types and target USD prim types (e.g. `FBXMesh` → `UsdGeomMesh`)
+- **Attribute correspondences** — source attribute name → target attribute name, data type, units (e.g. `diffuseColor` maps to `inputs:diffuseColor` as `color3f`)
+- **Transformation rules** — how complex conversions work: unit scaling, axis flipping, coordinate system conversion
+- **Mandatory vs optional fields** — which attributes must be present for a valid exchange, which may be omitted
+- **Metadata inheritance mapping** — how source metadata maps to USD layer/prim metadata, and which metadata propagates through the hierarchy
+- **Variant set mapping strategies** — how source asset variations (LOD levels, material swaps, configuration options) map to USD variant sets
 
 ### NOT in Mapping Documents
 
-- Version histories of source/target schemas (belongs in schema management)
-- Physical storage format details (implementation concern)
-- Example payloads with actual data (belongs in testing documentation)
+The following belong in OTHER documents — not in conceptual mapping docs:
+
+| What                                        | Where it belongs instead            |
+| ------------------------------------------- | ----------------------------------- |
+| Runtime performance optimisation techniques | Implementation or optimisation docs |
+| USD API usage examples and code snippets    | Technical implementation docs       |
+| Error handling and validation procedures    | Technical or operational docs       |
+| Version histories of source/target schemas  | Schema management docs              |
+| Physical storage format details             | Implementation docs                 |
+| Example payloads with actual data           | Testing documentation               |
+
+> **Exam pattern:** If an option mentions "API examples", "error handling", "runtime performance", or "storage format" in the context of a mapping document question — it is wrong. Mapping documents are about _data relationships_, not _implementation details_.
+
+---
+
+## 13b. Custom Exporters — Schema-Compliant Writing
+
+When building custom exporters, the goal is to leverage USD's schema system for built-in validation rather than bypassing it.
+
+### Correct Practices
+
+**Inherit from UsdGeom classes for schema validation**
+
+```python
+# Inherit from UsdGeom schemas — gets built-in validation for free
+mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")   # ← inherits UsdGeomMesh schema
+light = UsdLux.SphereLight.Define(stage, "/World/Key") # ← inherits UsdLuxLight schema
+# Schema-aware writing: correct attribute types enforced automatically
+# Wrong type → error at authoring time, not silently at render time
+```
+
+**Register custom schemas before exporting**
+
+```python
+# Custom schemas must be registered with TfType BEFORE export
+# This happens automatically when the schema plugin is deployed
+# (PXR_PLUGINPATH_NAME points to the plugInfo.json)
+# Without registration: custom attributes written but not schema-validated
+```
+
+**Use `stage.Export()` to serialise the entire scene graph**
+
+```python
+# stage.Export() is the standard serialisation method
+# Writes all prims, attributes, relationships, and metadata
+stage.Export("output.usda")   # ASCII
+stage.Export("output.usdc")   # binary crate
+
+# stage.Save() writes only to the root layer's backing file
+# stage.Export() writes a flat resolved copy to any path
+```
+
+### Wrong Approaches
+
+| Wrong approach                              | Why it's wrong                                                                                        |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Write raw binary data directly to USD files | Bypasses USD's serialisation — corrupts the file                                                      |
+| Embed external asset references as raw data | References/payloads maintain modularity. Raw embedding increases file size and breaks asset workflows |
+| Ignore variant sets during export           | Variant sets represent alternative configurations — ignoring them loses data fidelity                 |
+| Skip schema validation to speed up export   | Silent corruption — schema validation catches type mismatches at authoring time                       |
 
 ---
 
@@ -396,7 +507,7 @@ WRONG — interleaved (hard to debug, brittle):
 CORRECT — two-pass (clean separation):
   PASS 1: parse_proprietary_file() → intermediate Python dict/objects
            validates data, converts units, handles errors
-  
+
   PASS 2: populate_usd_stage(intermediate) → USD stage
            uses clean validated data, no file I/O concerns
 ```
@@ -428,46 +539,84 @@ def import_file(filepath: str, output_usd: str):
 
 ### Wrong Approaches
 
-| Wrong | Why |
-|-------|-----|
+| Wrong                                            | Why                                                                          |
+| ------------------------------------------------ | ---------------------------------------------------------------------------- |
 | `Implementing a custom UsdSchema` for the import | Custom schemas are for extending USD data types — not required for importing |
-| Writing USD ASCII files directly | Bypasses USD validation and layering |
-| Using only `UsdGeom` namespace | Animation may need `UsdSkel`, materials need `UsdShade` |
+| Writing USD ASCII files directly                 | Bypasses USD validation and layering                                         |
+| Using only `UsdGeom` namespace                   | Animation may need `UsdSkel`, materials need `UsdShade`                      |
 
 ---
 
 ## 15. Data Interchange Script Best Practices
 
-| ✅ Always do | ❌ Never do |
-|-------------|-----------|
-| Use USD's layering and composition to combine sources | Manually merge data in scripts |
-| Use USD Python API to create UsdPrims with schemas | Write USD ASCII by hand |
-| Use relative paths or asset resolvers | Use absolute file paths |
-| Use proper schemas for proprietary metadata | Embed unregistered string blobs |
-| Use time samples for animated data | Use static defaults for animation |
+### `UsdUtils.CopyLayer` — Duplicating Layers for Merging
+
+When merging data from multiple USD sources, `UsdUtils.CopyLayer` is the recommended utility for duplicating an entire layer accurately before merging.
+
+```python
+from pxr import UsdUtils, Sdf
+
+# CopyLayer duplicates an entire SdfLayer cleanly
+# Signature: UsdUtils.CopyLayer(source: SdfLayer, dest: SdfLayer) -> bool
+source_layer = Sdf.Layer.FindOrOpen("department_anim.usda")
+dest_layer   = Sdf.Layer.CreateAnonymous("merged.usda")
+
+success = UsdUtils.CopyLayer(source_layer, dest_layer)
+# dest_layer now contains all specs from source_layer
+# source_layer is unchanged
+
+# Use when: merging department layers, combining asset versions,
+#           duplicating a layer before modifying it (preserve original)
+```
+
+> **Why CopyLayer and not manual copying:** Manual layer copying with Python loops over specs is error-prone and can miss nested specs, metadata, relationships, and composition arc data. `UsdUtils.CopyLayer` handles the full layer spec graph correctly.
+
+### Complete Best Practices
+
+| ✅ Always do                                             | ❌ Never do                             |
+| -------------------------------------------------------- | --------------------------------------- |
+| Use `Usd.Stage` API with proper error handling           | Directly edit USD files as plain text   |
+| Use `UsdUtils.CopyLayer` to duplicate layers for merging | Manually loop over specs to copy layers |
+| Use USD's layering and composition to combine sources    | Manually merge data in scripts          |
+| Use USD Python API to create UsdPrims with schemas       | Write USD ASCII by hand                 |
+| Use relative paths or asset resolvers                    | Use absolute file paths                 |
+| Use proper schemas for proprietary metadata              | Embed unregistered string blobs         |
+| Use time samples for animated data                       | Use static defaults for animation       |
+| Maintain schema validation throughout                    | Skip validation to speed up script      |
 
 ---
 
 ## 16. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| `.usd` extension | Generic — USD auto-detects ASCII vs binary from file header |
-| Rename `.usda` → `.usdc` | Invalid — different binary formats |
-| `usdcat` | Format conversion and flattening. `usdzip` for `.usdz` packaging |
-| `usdchecker` | Validates. Does NOT auto-fix. |
-| Exporter hooks | Pre/post hooks extend export. Never override the main export function |
-| Proprietary dependencies | Refactor to USD native (UsdPreviewSurface, custom schemas) |
-| Mapping docs contain | Attribute correspondences, transformation rules, mandatory/optional fields |
-| Mapping docs exclude | Version histories, storage format details, example payloads |
-| Importer pattern | Parse to intermediate first, then populate USD |
-| Custom schema for import | NOT required for importing — only needed when extending USD data types |
-| Stage caching | `UsdStageCache` — avoids redundant recomposition |
-| `SdfChangeBlock` | Batches change notifications — critical for bulk authoring performance |
-| Flatten preserves | Time samples (animation), geometry types |
-| Flatten discards | Variant sets (collapsed), composition arcs |
+| Concept                                  | What to Remember                                                                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `.usd` extension                         | Generic — USD auto-detects ASCII vs binary from file header                                                                                                              |
+| Rename `.usda` → `.usdc`                 | Invalid — different binary formats                                                                                                                                       |
+| `usdcat`                                 | Format conversion and flattening. `usdzip` for `.usdz` packaging                                                                                                         |
+| `usdchecker`                             | Validates. Does NOT auto-fix.                                                                                                                                            |
+| Exporter hooks                           | Pre/post hooks extend export. Never override the main export function                                                                                                    |
+| Proprietary dependencies                 | 5 strategies: replace shaders, file formats, SDKs, proprietary extensions, animation formats                                                                             |
+| Open-source plugins                      | Use instead of proprietary SDKs — portable, maintainable, no vendor lock-in                                                                                              |
+| Custom schemas vs proprietary extensions | Custom USD schemas (usdGenSchema) are portable. Proprietary extensions require vendor tools.                                                                             |
+| Proprietary animation → USD              | Convert to `UsdSkel` or `xformOp` time samples — removes DCC dependency                                                                                                  |
+| Vendor-specific APIs for composition     | ❌ Wrong — introduces proprietary dependency at the processing level                                                                                                     |
+| Embed proprietary shaders in USD         | ❌ Wrong — increases lock-in, not removes it                                                                                                                             |
+| Mapping docs contain                     | Schema correspondences, attribute correspondences, transformation rules, mandatory/optional fields, **metadata inheritance mapping**, **variant set mapping strategies** |
+| Mapping docs exclude                     | API usage examples, error handling, runtime performance, storage format details, example payloads — these belong in implementation/technical docs                        |
+| Importer pattern                         | Parse to intermediate first, then populate USD                                                                                                                           |
+| Custom schema for import                 | NOT required for importing — only needed when extending USD data types                                                                                                   |
+| Custom exporter — inherit from UsdGeom   | Gets built-in schema validation automatically — correct approach                                                                                                         |
+| `stage.Export(path)`                     | Standard serialisation method — writes full resolved scene to any path                                                                                                   |
+| Raw binary to USD files                  | ❌ Wrong — corrupts file, bypasses USD serialisation                                                                                                                     |
+| Embed external refs as raw data          | ❌ Wrong — breaks modularity, increases file size                                                                                                                        |
+| `UsdUtils.CopyLayer(src, dest)`          | Correct tool for duplicating layers when merging data — handles full spec graph                                                                                          |
+| Manual spec copying                      | ❌ Wrong — error-prone, misses nested specs and metadata                                                                                                                 |
+| Stage caching                            | `UsdStageCache` — avoids redundant recomposition                                                                                                                         |
+| `SdfChangeBlock`                         | Batches change notifications — critical for bulk authoring performance                                                                                                   |
+| Flatten preserves                        | Time samples (animation), geometry types                                                                                                                                 |
+| Flatten discards                         | Variant sets (collapsed), composition arcs                                                                                                                               |
 
 ---
 
-*Previous: [Day 6 — Visualization](day-06-visualization.md)*  
-*Next: [Day 8 — Content Aggregation](day-08-content-aggregation.md)*
+_Previous: [Day 6 — Visualization](day-06-visualization.md)_  
+_Next: [Day 8 — Content Aggregation](day-08-content-aggregation.md)_

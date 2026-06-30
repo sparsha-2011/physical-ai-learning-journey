@@ -78,13 +78,13 @@ UsdSchemaBase                            ← root of ALL schemas
 
 ### Choosing the Right Base Class
 
-| Base Class         | What it gives you                                                                                                                    | When to use                                                                                         | Exam answer?                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `UsdSchemaBase`    | The absolute root — requires implementing everything manually including type registration, property management, and all API plumbing | Almost never directly — only for building completely new schema infrastructure                      | ❌ Wrong answer — error-prone, not recommended |
-| `UsdTyped`         | Sets `typeName` on the prim. All plumbing for `IsA()` to work. Schema fallback values. Standard base for typed IsA schemas.          | Any custom IsA schema that is a new prim type — `TemperatureSensor`, `ConveyorBelt`, `CharacterRig` | ✅ Correct — recommended standard base         |
-| `UsdGeomImageable` | Everything from UsdTyped + `visibility` + `purpose` attributes. The base for anything that renders.                                  | Custom schemas for renderable objects — custom geometry types, custom lights                        | ✅ Correct for renderable objects              |
+| Base Class         | What it gives you                                                                                                                  | When to use                                                                                                                                         | Exam answer?                                                                      |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `UsdSchemaBase`    | The absolute root of ALL schemas — provides the base interface. Technically valid but requires implementing all plumbing manually. | When the exam says "subclass `UsdSchemaBase` or a derived schema class" — this phrasing IS correct since `UsdTyped` is derived from `UsdSchemaBase` | ✅ **Correct** in exam phrasing — "subclass UsdSchemaBase **or a derived class**" |
+| `UsdTyped`         | Sets `typeName` on the prim. All plumbing for `IsA()` to work. Schema fallback values. Standard base for typed IsA schemas.        | Any custom IsA schema that is a new prim type — `TemperatureSensor`, `ConveyorBelt`, `CharacterRig`                                                 | ✅ Correct — recommended standard base                                            |
+| `UsdGeomImageable` | Everything from UsdTyped + `visibility` + `purpose` attributes. The base for anything that renders.                                | Custom schemas for renderable objects — custom geometry types, custom lights                                                                        | ✅ Correct for renderable objects                                                 |
 
-> **Critical exam trap:** "Inherit directly from `UsdSchemaBase`" is almost always the wrong answer. The correct base for a standard custom IsA schema is `UsdTyped`. For a renderable object, use `UsdGeomImageable`.
+> **Exam phrasing nuance:** Q22 and Q26 phrase the correct answer as "subclassing `UsdSchemaBase` or a derived schema class". This IS correct because `UsdTyped` and `UsdGeomImageable` ARE derived from `UsdSchemaBase`. The key phrase is **"or a derived class"** — it covers the full hierarchy. The wrong answer is "inheriting **directly** from `UsdSchemaBase`" when a more specific derived class should be used.
 
 ---
 
@@ -249,19 +249,59 @@ sensor.GetTemperatureAttr().Get()        # 20.0 ✅ — schema fallback works
 1. usdGenSchema generates plugInfo.json
    → declares library name, all schema types, their base types
 
-2. Plugin is deployed to PXR_PLUGINPATH_NAME
+2. In the generated C++ source, TF_REGISTRY_FUNCTION performs the actual registration:
 
-3. USD startup sequence:
+   TF_REGISTRY_FUNCTION(TfType) {
+       TfType::Define<AcmeTemperatureSensor,
+                      TfType::Bases<UsdGeomXform>>();
+   }
+
+   This is the MACRO that hooks the type into the TfType registry.
+   Registration via manifest file ALONE is not sufficient — the
+   TF_REGISTRY_FUNCTION macro in the C++ code is required.
+
+3. Plugin is deployed to PXR_PLUGINPATH_NAME
+
+4. USD startup sequence:
    → scans all directories in PXR_PLUGINPATH_NAME
    → reads every plugInfo.json found
-   → for each declared type: registers it in the TfType registry
-      including its base class chain
+   → loads the shared library (.so / .dll)
+   → TF_REGISTRY_FUNCTION runs, registering each type
+   → TfType registry now knows the full inheritance chain
 
-4. Now at runtime:
+5. Now at runtime:
    → prim.IsA(TemperatureSensor) triggers TfType lookup
    → registry knows: TemperatureSensor → Xform → Imageable → Typed → SchemaBase
    → can answer IsA() queries for the entire chain
 ```
+
+> **Exam trap — Q23:** "Implement the schema by subclassing `UsdGeomImageable` and registering it via a **plugin manifest file only**" is **WRONG**. The manifest file (`plugInfo.json`) enables discovery but the actual type registration requires the `TF_REGISTRY_FUNCTION` macro in the C++ source code. Both are required.
+
+### Defining Schema Attributes — `SdfPropertySpec` and `SdfPrimSpec`
+
+When defining schema attributes at the Sdf layer level (rather than via the generated high-level API), you use:
+
+```python
+from pxr import Sdf
+
+# SdfPrimSpec — defines a prim and its metadata at the Sdf layer level
+prim_spec = Sdf.CreatePrimInLayer(layer, "/TemperatureSensor")
+prim_spec.specifier = Sdf.SpecifierDef
+prim_spec.typeName  = "TemperatureSensor"
+
+# SdfPropertySpec (via SdfAttributeSpec) — defines an attribute and its schema
+# Signature: Sdf.AttributeSpec(owner, name, typeName) -> SdfAttributeSpec
+attr_spec = Sdf.AttributeSpec(
+    prim_spec,
+    "sensor:temperature",
+    Sdf.ValueTypeNames.Float
+)
+attr_spec.default     = 20.0      # schema fallback value
+attr_spec.variability = Sdf.VariabilityVarying
+attr_spec.documentation = "Current temperature reading in Celsius."
+```
+
+`SdfPropertySpec` and `SdfPrimSpec` are the Sdf-level objects used to describe schema attributes and prim metadata. `usdGenSchema` generates code that uses these objects internally. You interact with them directly when authoring at the Sdf level or when implementing custom schema validation.
 
 > **Exam trap:** "Registering the custom model kind token in the TfType system without any schema or API linkage" is **WRONG**. Token registration alone provides a name but no inheritance chain, no fallback values, and no API. The schema definition itself must be fully linked.
 
@@ -307,17 +347,54 @@ These address entirely different problems. A factory might need both: a custom `
    → Stage composes normally from that point
 ```
 
+### ArResolver — Handling External References During File I/O
+
+When your file format contains **references to external assets** (textures, sub-files, referenced layers), the plugin must integrate with **`ArResolver`** — USD's asset resolution system — to correctly locate those files.
+
+```
+Without ArResolver integration:
+  MyFormat file contains: texture = "textures/wood.png"
+  Plugin reads raw string "textures/wood.png" — but WHERE is it?
+  Relative to what? The answer depends on the resolver context.
+
+With ArResolver integration:
+  Plugin calls ArResolver to resolve "textures/wood.png"
+  → Resolver applies search paths, asset remapping, version pinning
+  → Returns the actual absolute path to the correct file
+  → File loading works correctly in all deployment environments
+```
+
+```cpp
+// Inside your SdfFileFormat::Read() implementation:
+ArResolver& resolver = ArGetResolver();
+ArResolverContext ctx = resolver.GetCurrentContext();
+
+// Resolve asset paths from the file using the resolver
+std::string resolved = resolver.Resolve("textures/wood.png");
+// resolved = "/project/assets/textures/wood.png"
+```
+
+> **Exam trap — Q20:** "Ensure thread safety by implementing custom locking mechanisms" is **WRONG**. USD core manages concurrent access — file format plugins do not implement their own locking. This is unnecessary and handled at a higher level.
+
+> **Exam trap:** "Embed a custom USD stage cache within the plugin" is **WRONG**. Stage caching is managed by USD core and clients, not inside file format plugins. Embedding one causes inconsistencies.
+
 ### Wrong Approaches
 
-| Wrong approach                           | Why it's wrong                                                                                                                               |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Override `UsdStage::Open()`              | Static method, not designed for overriding. File loading happens at the `SdfLayer` level, not `Stage` level.                                 |
-| Modify USD core source code              | USD is designed for extensibility via plugins. Modifying core breaks compatibility with all other USD tools and is never the correct answer. |
-| Create a `UsdSchema` for the file format | Schemas define scene description types. They do NOT control file I/O. These are completely separate concerns.                                |
+| Wrong approach                                 | Why it's wrong                                                                                               |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Override `UsdStage::Open()`                    | Static method, not designed for overriding. File loading happens at the `SdfLayer` level, not `Stage` level. |
+| Modify USD core source code                    | USD is designed for extensibility via plugins. Modifying core breaks compatibility.                          |
+| Create a `UsdSchema` for the file format       | Schemas define scene description types. They do NOT control file I/O.                                        |
+| Implement custom thread locking in Read/Write  | USD core manages concurrent access — plugins don't need custom locking                                       |
+| Embed a stage cache inside the plugin          | Stage caching belongs at the USD core/client level — not inside file format plugins                          |
+| Use `UsdUtils` exclusively to parse the format | UsdUtils provides utilities but does NOT replace implementing `SdfFileFormat` methods                        |
+| Implement a `UsdStage` subclass for the format | UsdStage is format-agnostic — file format I/O is `SdfFileFormat`'s responsibility                            |
 
 ---
 
-## 6. Custom Model Kinds — UsdModelKindRegistry
+## 6. Custom Model Kinds — UsdModelKindRegistry / UsdModelRegistry
+
+> **Naming note:** The exam uses both `UsdModelKindRegistry` and `UsdModelRegistry` in different questions. Both refer to the same concept — the registry that tracks model kind identifiers and their hierarchy. Use whichever term the question uses; they are functionally equivalent in exam context.
 
 USD has a built-in hierarchy of **model kinds** that classify prims by their role in the scene:
 
@@ -341,7 +418,23 @@ Custom model kinds extend this hierarchy with domain-specific classifications.
 
 **Step 2 — Register with `UsdModelKindRegistry`**
 
-The registry must know this kind exists and where it sits in the hierarchy (its parent kind).
+The registry must know this kind exists, where it sits in the hierarchy (its parent kind), and what prim types it allows:
+
+```python
+# Registration specifies:
+# - The new kind's unique identifier token ("factory_unit")
+# - Its parent in the hierarchy (e.g. "component")
+# - Its fallback prim type — what type a prim of this kind defaults to
+# - Its allowed root prim types — which prim types are valid for this kind
+```
+
+**Specify fallback prim type and allowed root prim types**
+
+This is specifically tested on the exam (Q27). When registering a custom model kind, you must define:
+
+- **Fallback prim type** — the default prim type used when a prim of this kind has no explicit type
+- **Allowed root prim types** — which prim types are valid as the root prim for this kind
+  These settings ensure schema validation behaves correctly for the new kind and integrate with USD's composition framework.
 
 **Step 3 — Apply to prims using `Usd.ModelAPI`**
 
@@ -439,13 +532,33 @@ stage.SetEditTarget(session)
 # Author fallback selections — never saved to disk
 ```
 
+### Approach 4 — Author `variantFallbacks` per referencing layer
+
+For consistency across all layers that reference an asset, explicitly author `variantFallbacks` in **each layer** that references the prim:
+
+```usda
+# department_shot.usda — this layer references the asset
+#usda 1.0
+(
+    variantFallbacks = {
+        string[] "lod"   = ["high", "medium", "low"]
+    }
+)
+# Now this layer AND any layer that sublayers it will use these fallbacks
+# without relying on the asset's own defaults
+```
+
+> **Why per-layer matters:** If only the asset defines fallbacks, a referencing layer that requests a non-existent variant may fail if its `variantFallbacks` context differs. Explicitly authoring fallbacks in each referencing layer ensures consistent behaviour regardless of which tool opens the stage.
+
 ### Wrong Approaches
 
-| Wrong approach                                           | Why                                                                                                       |
-| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Embed fallback selections in prim metadata               | Prim metadata is not designed for fallback logic — leads to unpredictable behaviour                       |
-| Rely only on the default variant selection in the schema | Default selections don't cover cases where the requested variant doesn't exist                            |
-| Use fallbacks only during composition, not runtime       | Fallbacks are relevant at runtime too — dynamic scenes can request variants that need fallback resolution |
+| Wrong approach                                          | Why                                                                                                                                                |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Embed fallback selections in prim metadata              | Prim metadata is not designed for fallback logic — leads to unpredictable behaviour                                                                |
+| Rely only on the default variant selection              | Default selections don't cover cases where the requested variant doesn't exist                                                                     |
+| Rely solely on session layer without defining fallbacks | Session layer can override but provides no fallback logic — must define fallbacks in asset or layer                                                |
+| Duplicate prims with different variant sets             | Increases complexity, not scalable — `variantFallbacks` metadata is the correct mechanism                                                          |
+| Assume USD auto-selects variants alphabetically         | **USD does NOT auto-select alphabetically** — fallback behaviour must be explicitly defined. No selection = no variant = potentially broken state. |
 
 ---
 
@@ -479,36 +592,45 @@ Unique token + **`UsdModelKindRegistry`** + `kind` metadata on root prim via **`
 
 Eliminate **any option** containing these phrases immediately:
 
-| Phrase in option                                               | Reason to eliminate                                      |
-| -------------------------------------------------------------- | -------------------------------------------------------- |
-| `"Modify the core USD source code"`                            | USD uses plugins — never modifies core                   |
-| `"Python-only schema"` or `"subclassing Usd.Schema in Python"` | Full schemas need C++ + usdGenSchema                     |
-| `"Inheriting directly from UsdSchemaBase"`                     | Correct base is `UsdTyped` or `UsdGeomImageable`         |
-| `"Overriding"` any existing schema, API, or method             | Always EXTEND — never override                           |
-| `"Override UsdStage::Open()"`                                  | File formats use `SdfFileFormat`, not Stage::Open        |
-| `"Register token in TfType WITHOUT schema or API linkage"`     | Token alone is insufficient — needs full schema backing  |
-| `"Define schema in a .usd file at runtime"`                    | Schemas defined in `schema.usda` + compiled offline      |
-| `"Create new UsdSchema to control file format I/O"`            | Schemas ≠ file I/O — use `SdfFileFormat`                 |
-| `"Embed fallback variant selections in prim metadata"`         | Fallbacks belong at stage/layer level, not prim metadata |
+| Phrase in option                                                | Reason to eliminate                                                                                 |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `"Modify the core USD source code"`                             | USD uses plugins — never modifies core                                                              |
+| `"Python-only schema"` or `"subclassing Usd.Schema in Python"`  | Full schemas need C++ + usdGenSchema                                                                |
+| `"Overriding"` any existing schema, API, or method              | Always EXTEND — never override                                                                      |
+| `"Override UsdStage::Open()"`                                   | File formats use `SdfFileFormat`, not Stage::Open                                                   |
+| `"Register token in TfType WITHOUT schema or API linkage"`      | Token alone is insufficient — needs full schema backing                                             |
+| `"Define schema in a .usd file at runtime"`                     | Schemas defined in `schema.usda` + compiled offline                                                 |
+| `"Create new UsdSchema to control file format I/O"`             | Schemas ≠ file I/O — use `SdfFileFormat`                                                            |
+| `"Embed fallback variant selections in prim metadata"`          | Fallbacks belong at stage/layer level, not prim metadata                                            |
+| `"Plugin manifest file only"` for schema registration           | `TF_REGISTRY_FUNCTION` macro in C++ source is ALSO required — manifest alone is insufficient        |
+| `"Custom locking in Read/Write"` for file format plugins        | USD core manages concurrency — plugins don't implement locking                                      |
+| `"Embed stage cache in file format plugin"`                     | Stage caching belongs at USD core/client level, not in plugins                                      |
+| `"Implement UsdStage subclass for new file format"`             | UsdStage is format-agnostic — use `SdfFileFormat`                                                   |
+| `"USD auto-selects variants alphabetically"`                    | USD does NOT auto-select variants — fallbacks must be explicitly defined                            |
+| `"UsdSchemaRegistry for dynamic loading without recompilation"` | Custom schemas require plugin mechanisms or compile-time registration — not dynamic runtime loading |
+| `"Using UsdUtils exclusively to parse custom format"`           | UsdUtils provides utilities but does not replace implementing `SdfFileFormat` methods               |
 
 ---
 
 ## 9. Key Takeaways — The 12 Things to Know Cold
 
-| #   | Concept                      | What to Remember                                                                                                                |
-| --- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **Complete schema workflow** | `schema.usda` → `usdGenSchema` → C++ compile → TfType register → plugin deploy                                                  |
-| 2   | **Correct base class**       | `UsdTyped` (standard) or `UsdGeomImageable` (renderable). NOT `UsdSchemaBase`. NOT Python-only.                                 |
-| 3   | **TfType registration**      | Makes `IsA()`, `HasAPI()`, fallback values, and schema discovery work. Token alone is insufficient.                             |
-| 4   | **SdfFileFormat**            | For new file formats — completely independent from schema types. Never override `UsdStage::Open()`.                             |
-| 5   | **Custom model kinds**       | Unique token + `UsdModelKindRegistry` + `kind` metadata on prim + schema plugin extending `UsdModelAPI` + extended `Validate()` |
-| 6   | **Extend vs Override**       | Always **EXTEND** `UsdModelAPI` — never override. Override breaks existing kinds.                                               |
-| 7   | **Variant fallbacks**        | `Usd.Stage.SetGlobalVariantFallbacks()` or `variantFallbacks` in layer metadata or session layer                                |
-| 8   | **Fallback placement**       | Fallbacks belong at stage/layer level — NOT embedded in prim metadata                                                           |
-| 9   | **Variants vs model kinds**  | Variants = content variation (LOD, colour). Model kinds = prim classification. Separate systems.                                |
-| 10  | **Never modify core**        | USD's entire extensibility architecture — plugins, schemas, file formats — exists to avoid core modification                    |
-| 11  | **Schema vs file format**    | Schema = what data IS. `SdfFileFormat` = how data is STORED. Independent concerns.                                              |
-| 12  | **Elimination rule**         | If an option says "override", "modify core", "Python-only", or "token without linkage" → eliminate immediately                  |
+| #   | Concept                                 | What to Remember                                                                                                                                |
+| --- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Complete schema workflow**            | `schema.usda` → `usdGenSchema` → C++ compile → `TF_REGISTRY_FUNCTION` → plugin deploy                                                           |
+| 2   | **Correct base class exam phrasing**    | "Subclass `UsdSchemaBase` **or a derived class**" = CORRECT. `UsdTyped` and `UsdGeomImageable` are derived from `UsdSchemaBase`.                |
+| 3   | **`TF_REGISTRY_FUNCTION` macro**        | The C++ macro that performs actual type registration. `plugInfo.json` alone is insufficient.                                                    |
+| 4   | **`SdfPropertySpec` and `SdfPrimSpec`** | Sdf-level objects used to define schema attributes and prim metadata — used in schema definition and authoring                                  |
+| 5   | **TfType registration**                 | Makes `IsA()`, `HasAPI()`, fallback values, and schema discovery work. Token alone is insufficient.                                             |
+| 6   | **SdfFileFormat**                       | For new file formats. Must implement `Read()`, `Write()`, `CanRead()`. Integrate with `ArResolver` for external refs.                           |
+| 7   | **ArResolver in file format plugins**   | Integrate with `ArResolver` to correctly resolve external asset paths during file I/O                                                           |
+| 8   | **File format plugin wrong patterns**   | No custom locking, no embedded stage cache, no `UsdStage` subclass, no `UsdUtils` exclusively                                                   |
+| 9   | **Custom model kinds**                  | Unique token + `UsdModelKindRegistry` (also called `UsdModelRegistry`) + fallback prim type + allowed root prim types + `UsdModelAPI` extension |
+| 10  | **Extend vs Override**                  | Always **EXTEND** `UsdModelAPI` — never override. Override breaks existing kinds.                                                               |
+| 11  | **Variant fallbacks — no alphabetical** | USD does NOT auto-select variants alphabetically. Fallbacks must be explicitly defined.                                                         |
+| 12  | **Variant fallbacks — per layer**       | Author `variantFallbacks` in each referencing layer for consistent behaviour across all tools                                                   |
+| 13  | **Never modify core**                   | USD's entire extensibility architecture exists to avoid core modification                                                                       |
+| 14  | **Schema vs file format**               | Schema = what data IS. `SdfFileFormat` = how data is STORED. Independent concerns.                                                              |
+| 15  | **Elimination rule**                    | "override", "modify core", "manifest only", "alphabetical fallback", "dynamic loading without recompile" → eliminate                            |
 
 ---
 

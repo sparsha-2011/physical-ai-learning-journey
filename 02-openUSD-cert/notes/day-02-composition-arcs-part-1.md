@@ -1,7 +1,7 @@
 # Day 2 — Composition Arcs Part 1
 
 > **OpenUSD NCP Certification Study Notes**  
-> *Sublayers, References, Payloads, and Value Resolution*
+> _Sublayers, References, Payloads, and Value Resolution_
 
 ---
 
@@ -105,30 +105,78 @@ print(attr.HasAuthoredValue())  # True = explicitly Set(), False = fallback
 
 ## 3. LIVERPS — The Strength Order
 
-When the same prim is contributed by multiple **different arc types**, which arc type wins? USD resolves this with a fixed priority order remembered by the acronym **LIVERPS**:
+When the same prim is contributed by multiple **different sources**, which source's opinion wins? USD resolves this with a fixed priority order remembered by the acronym **LIVERPS**:
 
 ```
 L — Local          (opinions authored directly in the local layer)
 I — Inherit
 V — Variant
 E — rEference  *note: the 'E' stands for the 'e' in reference
-R — payload (Relocates in older USD literature)
+R — (Relocates in older USD literature — ignore for NCP-OUSD)
 P — Payload
 S — Specializes
 ```
 
 This order is **fixed and cannot be changed**. Local opinions always beat inherited opinions, which always beat variant opinions, and so on.
 
-| Position | Arc Type | Strength | Notes |
-|----------|----------|----------|-------|
-| 1 (strongest) | **Local** | Highest | Direct opinions in the composing layer |
-| 2 | **Inherit** | High | Inherited from a class prim |
-| 3 | **Variant** | Medium-high | Selected variant's opinions |
-| 4 | **rEference** | Medium | Opinions from a referenced file |
-| 5 | **Payload** | Medium-low | Same as reference but deferred loading |
-| 6 (weakest) | **Specializes** | Lowest | Provides fallback defaults |
+| Position      | Source          | Strength    | Notes                                             |
+| ------------- | --------------- | ----------- | ------------------------------------------------- |
+| 1 (strongest) | **Local**       | Highest     | Direct opinions in the composing layer            |
+| 2             | **Inherit**     | High        | Inherited from a class prim via Inherit arc       |
+| 3             | **Variant**     | Medium-high | The active variant's opinions                     |
+| 4             | **rEference**   | Medium      | Opinions from a referenced file via Reference arc |
+| 5             | **Payload**     | Medium-low  | Opinions from a payload arc (deferred loading)    |
+| 6 (weakest)   | **Specializes** | Lowest      | Fallback defaults via Specialize arc              |
 
-> **Specializes is the weakest arc.** It provides fallback defaults that any other arc can override. It does NOT override anything — this is a common exam trap.
+> **Specializes is the weakest position.** It provides fallback defaults that any other source can override. It does NOT override anything — this is a common exam trap.
+
+### Critical Distinction — Variant is NOT an Arc Type
+
+This is one of the most precise distinctions in USD terminology and directly tested on the exam:
+
+**LIVERPS describes opinion strength** — where in the priority queue a value comes from.  
+**Arc types describe composition relationships** — structural edges that connect prims or pull in external data.
+
+These are related but **not the same thing**. Variant occupies a position in LIVERPS but is **not** a composition arc type.
+
+#### The 4 true composition arc types
+
+```
+Reference  → prepend references  = @./file.usda@     points to external file
+Payload    → prepend payload     = @./heavy.usda@     points to external file (deferred)
+Inherit    → prepend inherits    = </_ClassPrim>      points to another prim
+Specialize → prepend specializes = </_BasePrim>       points to another prim
+```
+
+Every real arc uses a **path or file reference** — it creates a directed edge to something external.
+
+#### Why Variant is different
+
+A variant set lives **entirely within the prim itself**. Selecting a variant does not create a cross-prim connection — it switches which **local block of opinions** is currently active:
+
+```usda
+def Xform "Chair" (
+    variants = { string color = "red" }   ← no path, no external file
+    prepend variantSets = "color"         ← activates a local block
+) {
+    variantSet "color" = {
+        "red"  { color3f[] primvars:displayColor = [(0.8, 0.2, 0.2)] }
+        "blue" { color3f[] primvars:displayColor = [(0.2, 0.4, 0.9)] }
+    }
+}
+```
+
+No external file. No other prim referenced. The variant just switches which block of the prim's **own data** is active. That's why it's not a composition arc — it doesn't compose anything from outside.
+
+#### The exam question pattern
+
+| Question asks                                     | Include Variant? |
+| ------------------------------------------------- | ---------------- |
+| "Which are composition **arc types**?"            | ❌ No            |
+| "Which are part of **LIVERPS**?"                  | ✅ Yes           |
+| "Which affect **composition strength order**?"    | ✅ Yes           |
+| "Which create a **directed edge** between prims?" | ❌ No            |
+| "Which **pull in external data**?"                | ❌ No            |
 
 ---
 
@@ -142,7 +190,7 @@ shot.usda          anim.usda            Composed result
 subLayers = [      over "Robot" {       /Robot.translate = (5,0,0)  ← anim wins
   anim.usda,         translate=(5,0,0)  /Robot.size      = (1,2,1)  ← model provides
   model.usda       }
-]                  
+]
                    model.usda
                    def Xform "Robot" {
                      size = (1,2,1)
@@ -152,11 +200,11 @@ subLayers = [      over "Robot" {       /Robot.translate = (5,0,0)  ← anim win
 
 ### When to Use Sublayers
 
-| ✅ Correct use | ❌ Wrong use |
-|----------------|-------------|
-| Separating workstreams on the same scene (anim, layout, fx, lighting) | Bringing in an external asset (use Reference) |
-| Non-destructive overrides on existing prims | Adding the same asset multiple times (sublayer = one instance) |
-| Department-specific layers in a shot | Heavy geometry you want to load lazily (use Payload) |
+| ✅ Correct use                                                        | ❌ Wrong use                                                   |
+| --------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Separating workstreams on the same scene (anim, layout, fx, lighting) | Bringing in an external asset (use Reference)                  |
+| Non-destructive overrides on existing prims                           | Adding the same asset multiple times (sublayer = one instance) |
+| Department-specific layers in a shot                                  | Heavy geometry you want to load lazily (use Payload)           |
 
 > **Key distinction — Sublayer vs Reference:**  
 > Sublayer = merge the whole namespace (same scene, different concerns)  
@@ -304,12 +352,12 @@ scene.usda opens quickly:          After stage.Load("/World/City/BuildingA"):
 
 ### Payload vs Reference
 
-| Property | Reference | Payload |
-|----------|-----------|---------|
-| Data loaded on open | ✅ Always | ❌ Only when explicitly loaded |
-| LIVERPS position | E (4th) | P (5th, weaker) |
-| Good for | Assets always needed | Heavy data, optional content |
-| Typical content | Props, characters, sets | High-res geometry, caches |
+| Property            | Reference               | Payload                        |
+| ------------------- | ----------------------- | ------------------------------ |
+| Data loaded on open | ✅ Always               | ❌ Only when explicitly loaded |
+| LIVERPS position    | E (4th)                 | P (5th, weaker)                |
+| Good for            | Assets always needed    | Heavy data, optional content   |
+| Typical content     | Props, characters, sets | High-res geometry, caches      |
 
 ### Python API
 
@@ -403,21 +451,24 @@ prim.GetReferences().AddReference(ref)
 
 ## 8. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **Composition** | USD assembles multiple layers at runtime into one unified stage |
-| **Opinion** | Any value stored in a layer for a specific property |
-| **Value resolution** | Strongest layer (first in stack) wins per property |
-| **LIVERPS** | Local → Inherit → Variant → rEference → Payload → Specializes |
-| **Specializes** | Weakest arc — provides fallback defaults, does NOT override |
-| **Sublayer** | Merges entire namespace. Same prims, different concerns. |
-| **Reference** | Grafts one prim from another file at a chosen path. Asset reuse. |
-| **Payload** | Like Reference but deferred — not loaded until `stage.Load()` |
-| **defaultPrim** | Must be set on every published asset for references to work |
-| **Layer offset** | Applies `composed = source × scale + offset` to all time samples |
-| **Non-destructive** | Stronger layers override without touching weaker ones |
+| Concept                | What to Remember                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Composition**        | USD assembles multiple layers at runtime into one unified stage                                              |
+| **Opinion**            | Any value stored in a layer for a specific property                                                          |
+| **Value resolution**   | Strongest layer (first in stack) wins per property                                                           |
+| **LIVERPS**            | Local → Inherit → Variant → rEference → Payload → Specializes                                                |
+| **Variant in LIVERPS** | Describes opinion _strength_ — not an arc type. Variants switch local data blocks, not external connections. |
+| **4 arc types**        | Reference, Payload, Inherit, Specialize — these create structural edges to external files or prims           |
+| **Variant ≠ arc**      | "Which are arc types?" → exclude Variant. "Which are in LIVERPS?" → include Variant.                         |
+| **Specializes**        | Weakest position — provides fallback defaults, does NOT override                                             |
+| **Sublayer**           | Merges entire namespace. Same prims, different concerns.                                                     |
+| **Reference**          | Grafts one prim from another file at a chosen path. Asset reuse.                                             |
+| **Payload**            | Like Reference but deferred — not loaded until `stage.Load()`                                                |
+| **defaultPrim**        | Must be set on every published asset for references to work                                                  |
+| **Layer offset**       | Applies `composed = source × scale + offset` to all time samples                                             |
+| **Non-destructive**    | Stronger layers override without touching weaker ones                                                        |
 
 ---
 
-*Previous: [Day 1 — USD Foundations](day-01-usd-foundations.md)*  
-*Next: [Day 3 — Composition Arcs Part 2](day-03-composition-arcs-part-2.md)*
+_Previous: [Day 1 — USD Foundations](day-01-usd-foundations.md)_  
+_Next: [Day 3 — Composition Arcs Part 2](day-03-composition-arcs-part-2.md)_

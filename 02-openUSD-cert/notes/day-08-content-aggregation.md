@@ -1,7 +1,7 @@
 # Day 8 — Content Aggregation
 
 > **OpenUSD NCP Certification Study Notes**  
-> *Instancing, PointInstancer, Asset Management, Scenegraph Best Practices*
+> _Instancing, PointInstancer, Asset Management, Scenegraph Best Practices_
 
 ---
 
@@ -107,13 +107,13 @@ instancer.GetProtoIndicesAttr().Set(proto_indices)
 
 Point instancing supports per-instance variation through the per-instance arrays:
 
-| Array | Type | Controls |
-|-------|------|---------|
-| `positions` | `point3f[]` | World position of each instance |
-| `orientations` | `quath[]` | Rotation (quaternion) of each instance |
-| `scales` | `float3[]` | Scale of each instance |
-| `protoIndices` | `int[]` | Which prototype each instance uses (enables variety) |
-| `invisibleIds` | `int64[]` | Instance IDs to hide |
+| Array          | Type        | Controls                                             |
+| -------------- | ----------- | ---------------------------------------------------- |
+| `positions`    | `point3f[]` | World position of each instance                      |
+| `orientations` | `quath[]`   | Rotation (quaternion) of each instance               |
+| `scales`       | `float3[]`  | Scale of each instance                               |
+| `protoIndices` | `int[]`     | Which prototype each instance uses (enables variety) |
+| `invisibleIds` | `int64[]`   | Instance IDs to hide                                 |
 
 ---
 
@@ -123,21 +123,142 @@ Point instancing supports per-instance attribute variations. Each instance can h
 
 ### Correct Override Approaches
 
-| Approach | How | Use case |
-|----------|-----|---------|
-| Per-instance transforms | `positions`, `orientations`, `scales` arrays | Different placement per instance |
-| Per-instance material variation | Connect `UsdShade` inputs to primvars | Different colour per instance |
-| `UsdReferences` with payloads | Reference asset at different paths with selective overrides | Targeted property overrides |
+| Approach                        | How                                                         | Use case                         |
+| ------------------------------- | ----------------------------------------------------------- | -------------------------------- |
+| Per-instance transforms         | `positions`, `orientations`, `scales` arrays                | Different placement per instance |
+| Per-instance material variation | Connect `UsdShade` inputs to primvars                       | Different colour per instance    |
+| `UsdReferences` with payloads   | Reference asset at different paths with selective overrides | Targeted property overrides      |
+
+### Variant Set Override on an Instanced Prim
+
+To override properties on a **specific instance** without touching the source asset, apply a variant selection override on the instance's prim path:
+
+```usda
+# The asset defines two color variants in chair_asset.usda
+# In the scene, ChairA gets the default "brown" variant
+# ChairB gets a "blue" variant override — locally, without editing the source
+
+def Xform "ChairA" (
+    prepend references = @./chair_asset.usda@
+) { }   # uses default variant from asset
+
+def Xform "ChairB" (
+    prepend references = @./chair_asset.usda@
+    variants = { string color = "blue" }   # ← local override on this instance
+) { }   # only this instance uses blue — asset unchanged
+```
+
+```python
+# Python equivalent — override variant on one instance
+chair_b = stage.GetPrimAtPath("/World/ChairB")
+chair_b.GetVariantSets().GetVariantSet("color").SetVariantSelection("blue")
+# ChairA is unaffected — still uses the default from the asset
+```
+
+This is the correct pattern for per-instance customisation when the asset already defines variant sets for the property you want to change.
 
 ### Wrong Approaches
 
-| Wrong approach | Why it's wrong |
-|----------------|---------------|
-| Modify the prototype prim directly | Changes ALL instances — not a per-instance override |
-| Duplicate the entire prototype for each instance | Destroys instancing efficiency — defeats the purpose |
-| Use `variantSets` on the prototype for per-instance variation | Variants on the prototype affect ALL instances globally |
+| Wrong approach                                                    | Why it's wrong                                                                         |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Modify the prototype prim directly                                | Changes ALL instances — not a per-instance override                                    |
+| Duplicate the entire prototype for each instance                  | Destroys instancing efficiency — defeats the purpose                                   |
+| Use `variantSets` on the **prototype** for per-instance variation | Variants on the prototype affect ALL instances globally                                |
+| Use a payload override to modify instance properties              | Payloads are for deferred loading — not for property overrides                         |
+| Create a new prim that "inherits" from the instanced prim         | USD prims don't derive from each other in the OOP sense — use references and overrides |
 
 > **Point instancing DOES support per-instance material variations.** This is a common exam trap — the false statement is "point instancing disables per-instance material variations." It does not. Per-instance materials work via primvar-driven shader inputs.
+
+---
+
+## 3b. Payload Pruning — Optimising Scene Aggregation
+
+When a scene contains many payloads, loading all of them at once creates unnecessary overhead. **Payload pruning** excludes unused or irrelevant payloads during aggregation, reducing load time and memory.
+
+```python
+from pxr import Usd
+
+# Open with LoadNone — no payloads loaded
+stage = Usd.Stage.Open("scene.usda", Usd.Stage.LoadNone)
+
+# Prune: only load payloads within a specific part of the scene
+# Everything outside /World/ActiveSets is never loaded
+stage.LoadAndUnload(
+    loadSet   = {"/World/ActiveSets"},   # load these subtrees
+    unloadSet = {}                        # unload nothing extra
+)
+
+# Check which payloads are loaded
+for prim in stage.Traverse():
+    if prim.HasPayload():
+        print(f"{prim.GetPath()}  loaded={prim.IsLoaded()}")
+```
+
+> **Payload pruning vs increasing granularity:** More small payloads = finer edit control BUT more overhead during aggregation. Fewer, well-pruned payloads = faster aggregation. The correct optimisation strategy is pruning, not adding more granular payloads.
+
+| Strategy                           | Effect on aggregation                                      |
+| ---------------------------------- | ---------------------------------------------------------- |
+| Payload pruning                    | ✅ Reduces load time — only loads what's needed            |
+| More granular payloads             | ❌ Increases overhead — more file loads even when unneeded |
+| Embedding all assets in root layer | ❌ Eliminates modularity, increases initial load           |
+| Disabling instancing               | ❌ Duplicates data — increases memory and aggregation cost |
+
+---
+
+## 3c. Interface Schemas — Loose Coupling for Composable Components
+
+**Interface schemas** define the boundary of what a component exposes to the outside world — its public "API". They allow components to be composed dynamically without tight coupling between the consumer and the internal structure of each asset.
+
+```
+Without interface schemas (tight coupling):
+  Scene needs to know: "chair asset has /Chair/Seat with primvars:displayColor"
+  → If asset restructures internally, the scene breaks
+
+With interface schemas (loose coupling):
+  Interface defines: "this asset exposes 'chair:color' as a public input"
+  → Scene only talks to the interface — internal structure can change freely
+  → Components can be swapped as long as they implement the same interface
+```
+
+```python
+# Asset exposes a public interface via UsdShadeInput on the root prim
+chair_root = stage.GetPrimAtPath("/Chair")
+
+# Interface attribute — public contract with the outside world
+color_input = chair_root.CreateAttribute(
+    "interface:color", Sdf.ValueTypeNames.Color3f
+)
+color_input.Set(Gf.Vec3f(0.6, 0.4, 0.2))
+
+# Internal shader is wired to read from interface:color
+# Consumer doesn't need to know about the internal shader network
+```
+
+> **When the exam asks about loose coupling and composability:** The correct answer involves interface schemas + USD references/payloads. Wrong answers: embedding all logic in one layer, hardcoding asset paths, duplicating data.
+
+---
+
+## 3d. Collaborative Aggregation — Composition Arcs vs File Locking
+
+USD's composition system is the **correct** mechanism for collaborative asset aggregation. Multiple artists contribute to separate files which are composed together non-destructively.
+
+```
+Artist A → anim.usda          ┐
+Artist B → layout.usda        ├── composition arcs → shot_042.usda
+Artist C → fx.usda            ┘
+
+Each artist works in their own file.
+No file locking needed.
+No overwriting.
+Composition resolves conflicts using LIVERPS.
+```
+
+| Mechanism                               | Correct for collaboration? | Why                                                                      |
+| --------------------------------------- | -------------------------- | ------------------------------------------------------------------------ |
+| Composition arcs (references, payloads) | ✅ Yes                     | Each contributor has their own file, composed non-destructively          |
+| File locking                            | ❌ No                      | Not scalable, doesn't leverage USD composition, blocks other artists     |
+| Single flat USD file                    | ❌ No                      | All changes serialised into one file — concurrent edits impossible       |
+| Variant sets for concurrent edits       | ❌ No                      | Variant sets = asset variations, not concurrent collaboration mechanisms |
 
 ---
 
@@ -190,11 +311,11 @@ stage.Load("/World/HighResCity")
 
 ### Version Control Best Practices
 
-| ✅ Do | ❌ Don't |
-|-------|---------|
-| Reference assets — one source of truth | Embed all data in each stage |
-| Use variant sets for version switching | Rely only on file naming conventions |
-| Version delivery files (`v001`, `v002`) | Overwrite original USD files directly |
+| ✅ Do                                               | ❌ Don't                               |
+| --------------------------------------------------- | -------------------------------------- |
+| Reference assets — one source of truth              | Embed all data in each stage           |
+| Use variant sets for version switching              | Rely only on file naming conventions   |
+| Version delivery files (`v001`, `v002`)             | Overwrite original USD files directly  |
 | Keep source composition files under version control | Edit flattened delivery files directly |
 
 ---
@@ -218,10 +339,10 @@ stage.Load("/World/HighResCity")
 
 ### `UsdGeomScope` vs `UsdGeomXform`
 
-| Schema | Transform? | Use case |
-|--------|-----------|---------|
-| `UsdGeomXform` | ✅ Yes | Grouping prims that need to move together |
-| `UsdGeomScope` | ❌ No | Namespace organisation only — no transform overhead |
+| Schema         | Transform? | Use case                                            |
+| -------------- | ---------- | --------------------------------------------------- |
+| `UsdGeomXform` | ✅ Yes     | Grouping prims that need to move together           |
+| `UsdGeomScope` | ❌ No      | Namespace organisation only — no transform overhead |
 
 Use `Scope` for containers like `/World/Looks/`, `/World/Lights/` where you need grouping but no transform. Use `Xform` where the group itself needs to be positioned or animated.
 
@@ -229,20 +350,27 @@ Use `Scope` for containers like `/World/Looks/`, `/World/Lights/` where you need
 
 ## 6. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **Native instancing** | `SetInstanceable(True)` — shares prototype data, reduces memory |
-| **PointInstancer** | Highest performance — for forests, crowds, particles |
-| **`positions`, `protoIndices`** | Core per-instance arrays on PointInstancer |
-| **Per-instance materials** | Supported via primvar-driven shader inputs — not disabled |
-| **Modify prototype = global change** | Affects ALL instances — not a per-instance override |
-| **References = single source of truth** | Update asset file → all referencing scenes update |
-| **Payloads for heavy assets** | `Stage.LoadNone` + explicit `Load()` — optimal for large scenes |
-| **UsdGeomScope** | Namespace grouping, no transform. For `/Looks/`, `/Lights/` |
-| **UsdGeomXform** | Transform container. For groups that need to move. |
-| **Don't overwrite originals** | Version deliveries (`v001`, `v002`), never overwrite source |
+| Concept                                  | What to Remember                                                                                            |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Native instancing**                    | `SetInstanceable(True)` — shares prototype data, reduces memory                                             |
+| **PointInstancer**                       | Highest performance — for forests, crowds, particles. Per-instance transforms without duplicating geometry. |
+| **`positions`, `protoIndices`**          | Core per-instance arrays on PointInstancer                                                                  |
+| **Per-instance materials**               | Supported via primvar-driven shader inputs — not disabled                                                   |
+| **Modify prototype = global change**     | Affects ALL instances — not a per-instance override                                                         |
+| **Variant set override on instance**     | Override variant selection on the instance's prim path — correct per-instance override mechanism            |
+| **Payload override ≠ property override** | Payloads = deferred loading. NOT for overriding instance properties.                                        |
+| **Payload pruning**                      | Exclude unused payloads during aggregation — reduces load time and memory                                   |
+| **More granular payloads**               | ❌ Increases overhead — pruning is the correct optimisation, not more payloads                              |
+| **Interface schemas**                    | Define public API for components — enables loose coupling and swappable assets                              |
+| **Collaboration = composition arcs**     | Each artist contributes their own file. File locking = wrong. Flat single file = wrong.                     |
+| **Variant sets ≠ collaboration**         | Variant sets = asset variations. NOT for managing concurrent edits by multiple artists.                     |
+| **References = single source of truth**  | Update asset file → all referencing scenes update                                                           |
+| **Payloads for heavy assets**            | `Stage.LoadNone` + explicit `Load()` — optimal for large scenes                                             |
+| **UsdGeomScope**                         | Namespace grouping, no transform. For `/Looks/`, `/Lights/`                                                 |
+| **UsdGeomXform**                         | Transform container. For groups that need to move.                                                          |
+| **Don't overwrite originals**            | Version deliveries (`v001`, `v002`), never overwrite source                                                 |
 
 ---
 
-*Previous: [Day 7 — Pipeline Development and Data Exchange](day-07-pipeline-and-data-exchange.md)*  
-*Next: [Day 9 — Debugging and Troubleshooting](day-09-debugging-and-troubleshooting.md)*
+_Previous: [Day 7 — Pipeline Development and Data Exchange](day-07-pipeline-and-data-exchange.md)_  
+_Next: [Day 9 — Debugging and Troubleshooting](day-09-debugging-and-troubleshooting.md)_

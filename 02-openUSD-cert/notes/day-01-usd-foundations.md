@@ -1,7 +1,7 @@
 # Day 1 — USD Foundations
 
 > **OpenUSD NCP Certification Study Notes**  
-> *Universal Scene Description — Core Architecture*
+> _Universal Scene Description — Core Architecture_
 
 ---
 
@@ -23,7 +23,7 @@
 
 The **Stage** (`Usd.Stage`) is the top-level in-memory container that represents your entire 3D scene. It is what renderers, viewports, and tools operate on. Everything — geometry, lights, cameras, materials — is accessed through the stage.
 
-> **Critical concept:** A Stage is *not* a file. It is a live, in-memory composition assembled from one or more **Layers**. When you open a USD file, USD reads it, resolves all references, and assembles a composed Stage in memory.
+> **Critical concept:** A Stage is _not_ a file. It is a live, in-memory composition assembled from one or more **Layers**. When you open a USD file, USD reads it, resolves all references, and assembles a composed Stage in memory.
 
 ```
                 ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
@@ -68,13 +68,13 @@ stage.Export("output.usdc")
 print(stage.ExportToString(addSourceFileComment=False))
 ```
 
-| Method | Behaviour |
-|--------|-----------|
-| `CreateNew(path)` | Creates file on disk immediately, returns writable stage |
-| `Open(path)` | Opens existing file, assembles all referenced layers |
-| `CreateInMemory()` | No disk file, all in RAM |
-| `Save()` | Writes dirty layers back to their backing files |
-| `Export(path)` | Flattens and writes to a new file at `path` |
+| Method             | Behaviour                                                |
+| ------------------ | -------------------------------------------------------- |
+| `CreateNew(path)`  | Creates file on disk immediately, returns writable stage |
+| `Open(path)`       | Opens existing file, assembles all referenced layers     |
+| `CreateInMemory()` | No disk file, all in RAM                                 |
+| `Save()`           | Writes dirty layers back to their backing files          |
+| `Export(path)`     | Flattens and writes to a new file at `path`              |
 
 ---
 
@@ -149,11 +149,11 @@ A **Prim** (Primitive) is every individual node in the scene graph. Every mesh, 
 
 Every prim in a USDA file begins with one of three **specifier keywords**. Understanding these is fundamental to understanding composition.
 
-| Specifier | Meaning | Use case |
-|-----------|---------|----------|
-| `def` | **Define** — creates a new prim and claims full ownership | Authoring new content |
-| `over` | **Override** — adds opinions on an *existing* prim without claiming ownership | Overriding values in a stronger layer |
-| `class` | **Class** — an abstract template prim, never rendered directly | Used with `inherits` arc |
+| Specifier | Meaning                                                                       | Use case                              |
+| --------- | ----------------------------------------------------------------------------- | ------------------------------------- |
+| `def`     | **Define** — creates a new prim and claims full ownership                     | Authoring new content                 |
+| `over`    | **Override** — adds opinions on an _existing_ prim without claiming ownership | Overriding values in a stronger layer |
+| `class`   | **Class** — an abstract template prim, never rendered directly                | Used with `inherits` arc              |
 
 ```usda
 # model.usda — defines the prim (weaker layer)
@@ -212,16 +212,16 @@ print(prim.HasAPI(UsdGeom.MotionAPI)) # True/False
 
 ### Common Prim Types
 
-| Schema Type | Module | Purpose |
-|-------------|--------|---------|
-| `Xform` | `UsdGeom` | Transform node — groups children, applies translate/rotate/scale |
-| `Scope` | `UsdGeom` | Namespace container — no transform |
-| `Mesh` | `UsdGeom` | Polygonal geometry |
-| `Sphere`, `Cube`, `Cylinder` | `UsdGeom` | Parametric primitives |
-| `Camera` | `UsdGeom` | Camera with lens attributes |
-| `DistantLight`, `SphereLight`, `RectLight`, `DomeLight` | `UsdLux` | Light sources |
-| `Material` | `UsdShade` | Shading network container |
-| `Shader` | `UsdShade` | Individual shading node |
+| Schema Type                                             | Module     | Purpose                                                          |
+| ------------------------------------------------------- | ---------- | ---------------------------------------------------------------- |
+| `Xform`                                                 | `UsdGeom`  | Transform node — groups children, applies translate/rotate/scale |
+| `Scope`                                                 | `UsdGeom`  | Namespace container — no transform                               |
+| `Mesh`                                                  | `UsdGeom`  | Polygonal geometry                                               |
+| `Sphere`, `Cube`, `Cylinder`                            | `UsdGeom`  | Parametric primitives                                            |
+| `Camera`                                                | `UsdGeom`  | Camera with lens attributes                                      |
+| `DistantLight`, `SphereLight`, `RectLight`, `DomeLight` | `UsdLux`   | Light sources                                                    |
+| `Material`                                              | `UsdShade` | Shading network container                                        |
+| `Shader`                                                | `UsdShade` | Individual shading node                                          |
 
 ---
 
@@ -231,7 +231,14 @@ Properties are the **data stored on a prim**. There are exactly two kinds:
 
 ### Attributes
 
-An attribute stores a **typed value** — a number, a vector, a colour, a string, an array. This is where all actual 3D data lives.
+An attribute stores a **typed value** — a number, a vector, a colour, a string, an array, a matrix, or any other supported type. This is where all actual 3D data lives.
+
+Key facts about attributes:
+
+- Can hold **simple types** (int, float, bool, string) AND **complex types** (arrays, matrices, structs)
+- Support **time-sampled data** — values that vary over time for animation
+- Support **fallback values** — schema-defined defaults returned when no authored value exists
+- Are **mutable** — can be modified or removed after creation without recreating the prim
 
 ```usda
 double   radius = 5.0
@@ -242,32 +249,99 @@ double3  xformOp:translate = (0, 5, 0)
 color3f  inputs:diffuseColor = (0.8, 0.2, 0.1)
 color3f[] primvars:displayColor = [(1, 0, 0)]
 int[]    faceVertexCounts = [4, 4, 4]
+matrix4d xformOp:transform = ( (1,0,0,0), (0,1,0,0), (0,0,1,0), (0,0,0,1) )
 ```
 
 ### Relationships
 
-A relationship stores a **path pointing to another prim** — no value, only a connection.
+A relationship stores **paths pointing to other prims** — no data values, only connections.
+
+Key facts about relationships:
+
+- Store **prim paths only** — NOT arbitrary data values, NOT numbers or strings
+- Can be **multi-target** — a single relationship can point to multiple prims simultaneously
+- Have **NO fallback values** — unlike attributes, relationships have no schema defaults because they are references, not data holders
+- Used for material binding, skeleton joints, light linking, constraint targets
 
 ```usda
-rel material:binding = </World/Materials/WoodMat>
+rel material:binding = </World/Materials/WoodMat>         # single target
+rel proxyPrim        = </World/Geometry/LowResMesh>       # single target
+rel skel:joints      = [</Rig/Hip>, </Rig/Spine>, </Rig/Head>]  # multi-target
 ```
+
+```python
+# Reading a relationship's targets
+rel = prim.GetRelationship("material:binding")
+targets = rel.GetTargets()       # list of Sdf.Path objects
+# targets = [Sdf.Path("/World/Materials/WoodMat")]
+
+# Multi-target relationship
+rel.AddTarget("/World/Materials/MetalMat")   # now has two targets
+rel.GetTargets()   # [Sdf.Path("/World/Materials/WoodMat"), Sdf.Path("/World/Materials/MetalMat")]
+```
+
+### Attributes vs Relationships — Side by Side
+
+| Property                | Attributes                                        | Relationships                                |
+| ----------------------- | ------------------------------------------------- | -------------------------------------------- |
+| Stores                  | Typed values (numbers, strings, arrays, matrices) | Prim paths only                              |
+| Time-sampled            | ✅ Yes — core animation mechanism                 | ❌ No                                        |
+| Fallback values         | ✅ Yes — schema defines defaults                  | ❌ No — no data to fall back to              |
+| Multi-valued            | Arrays via `T[]` types                            | ✅ Multi-target (multiple paths)             |
+| Mutable                 | ✅ Yes                                            | ✅ Yes                                       |
+| Common uses             | Geometry, transforms, colours, animation          | Material binding, joint targets, constraints |
+| Inherits down hierarchy | Via primvars                                      | ❌ No                                        |
+
+> **Exam trap — Relationships and fallback values:** Only attributes support fallback values. Relationships store references (paths), not data — there is nothing to fall back to. If a question says "relationships support fallback values" → eliminate it immediately.
+
+> **Exam trap — Relationships and data:** Relationships do NOT store numerical or string data values. They store prim paths ONLY. If a question says "relationships can store arbitrary data similar to attributes" → eliminate immediately.
 
 ### Value Types Reference
 
-| USDA Type | Python/Gf Equivalent | Description |
-|-----------|----------------------|-------------|
-| `double` | `float` | 64-bit float |
-| `float` | `float` | 32-bit float |
-| `int` | `int` | 32-bit integer |
-| `bool` | `bool` | Boolean |
-| `token` | `str` | Interned string (enum-like) |
-| `string` | `str` | Arbitrary string |
-| `double3` | `Gf.Vec3d` | 3-component double vector |
-| `float3` | `Gf.Vec3f` | 3-component float vector |
-| `color3f` | `Gf.Vec3f` | RGB colour |
-| `matrix4d` | `Gf.Matrix4d` | 4×4 transform matrix |
-| `asset` | `Sdf.AssetPath` | File path reference |
-| `T[]` | `Vt.Array` | Array of any type `T` |
+| USDA Type  | Python/Gf Equivalent | Description                                                                                                                                                                                                            |
+| ---------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `double`   | `float`              | 64-bit float                                                                                                                                                                                                           |
+| `float`    | `float`              | 32-bit float                                                                                                                                                                                                           |
+| `int`      | `int`                | 32-bit integer                                                                                                                                                                                                         |
+| `bool`     | `bool`               | Boolean                                                                                                                                                                                                                |
+| `token`    | `str`                | **Interned string** — immutable, optimised for fast comparison and repeated use. Used for identifiers and enum-like values (e.g. `"inherited"`, `"invisible"`, `"render"`). NOT for large or frequently changing text. |
+| `string`   | `str`                | Arbitrary mutable string — for large or changing text values                                                                                                                                                           |
+| `double3`  | `Gf.Vec3d`           | 3-component double vector                                                                                                                                                                                              |
+| `float3`   | `Gf.Vec3f`           | 3-component float vector                                                                                                                                                                                               |
+| `color3f`  | `Gf.Vec3f`           | RGB colour                                                                                                                                                                                                             |
+| `matrix4d` | `Gf.Matrix4d`        | 4×4 double-precision transform matrix — **CAN be time-sampled and animated**                                                                                                                                           |
+| `asset`    | `Sdf.AssetPath`      | File path reference                                                                                                                                                                                                    |
+| `T[]`      | `Vt.Array`           | Array of any type `T`                                                                                                                                                                                                  |
+
+### Token vs String — Critical Distinction
+
+`token` and `string` are both text but serve completely different purposes:
+
+```
+token:   immutable interned string
+         → stored once in a global table, all uses share the same memory
+         → extremely fast comparison (pointer comparison, not character-by-character)
+         → used for: enum-like values ("inherited", "render", "catmullClark")
+         → NOT for: large text, frequently changing values, arbitrary content
+         → examples: visibility, purpose, subdivisionScheme, projection
+
+string:  arbitrary mutable string
+         → standard heap-allocated string
+         → slower comparison, more memory per unique value
+         → used for: file paths, asset IDs, descriptions, any large/changing text
+         → examples: asset:description, pipeline:comment
+```
+
+```python
+# token — for identifiers and enum-like values
+mesh.GetSubdivisionSchemeAttr().Set(UsdGeom.Tokens.catmullClark)  # token
+imageable.GetVisibilityAttr().Set(UsdGeom.Tokens.inherited)       # token
+
+# string — for arbitrary text content
+prim.CreateAttribute("asset:id", Sdf.ValueTypeNames.String).Set("CHAIR_001_v3")  # string
+```
+
+> **Exam trap — Token mutability:** Tokens are **immutable** — they cannot be changed in place and are not suited for large or frequently changing data. If a question says "tokens are mutable and intended for frequently changing large text data" → eliminate immediately.
 
 ### Python API — `Usd.Attribute`
 
@@ -335,14 +409,14 @@ Every prim and property in a USD scene has a unique **path** — a string addres
 
 ### Path Syntax Rules
 
-| Rule | Example |
-|------|---------|
-| Always begins with `/` | `/World/Chair` |
-| Prim names separated by `/` | `/World/Geometry/Mesh` |
-| Property separated from prim by `.` | `/World/Chair.visibility` |
+| Rule                                         | Example                                    |
+| -------------------------------------------- | ------------------------------------------ |
+| Always begins with `/`                       | `/World/Chair`                             |
+| Prim names separated by `/`                  | `/World/Geometry/Mesh`                     |
+| Property separated from prim by `.`          | `/World/Chair.visibility`                  |
 | Colons `:` inside names indicate namespacing | `xformOp:translate`, `inputs:diffuseColor` |
-| No spaces anywhere in a path | `/World/My_Chair` ✅ `/World/My Chair` ❌ |
-| Case-sensitive | `/World/Chair` ≠ `/World/chair` |
+| No spaces anywhere in a path                 | `/World/My_Chair` ✅ `/World/My Chair` ❌  |
+| Case-sensitive                               | `/World/Chair` ≠ `/World/chair`            |
 
 ```python
 from pxr import Sdf
@@ -366,18 +440,19 @@ child = prim_path.AppendChild("Armrest")  # /World/Chair/Armrest
 
 USD supports four file extensions. Choosing the right format is a tested topic.
 
-| Extension | Format | Human-readable | Speed | Self-contained | Use case |
-|-----------|--------|---------------|-------|----------------|---------|
-| `.usda` | ASCII text | ✅ Yes | Slow | ❌ No | Authoring, debugging, version control |
-| `.usdc` | Binary crate | ❌ No | Very fast | ❌ No | Production pipelines, large geometry |
-| `.usd` | Either (auto-detected) | Depends | Depends | ❌ No | Generic — USD detects format at load time |
-| `.usdz` | Zip archive | ❌ No | Fast | ✅ Yes | Delivery to external parties, AR/VR distribution |
+| Extension | Format                 | Human-readable | Speed     | Self-contained | Use case                                         |
+| --------- | ---------------------- | -------------- | --------- | -------------- | ------------------------------------------------ |
+| `.usda`   | ASCII text             | ✅ Yes         | Slow      | ❌ No          | Authoring, debugging, version control            |
+| `.usdc`   | Binary crate           | ❌ No          | Very fast | ❌ No          | Production pipelines, large geometry             |
+| `.usd`    | Either (auto-detected) | Depends        | Depends   | ❌ No          | Generic — USD detects format at load time        |
+| `.usdz`   | Zip archive            | ❌ No          | Fast      | ✅ Yes         | Delivery to external parties, AR/VR distribution |
 
 ### Key Distinctions
 
 **`.usd`** is a **generic extension** — USD examines the file header at load time and determines whether it is ASCII or binary. Renaming a `.usda` file to `.usd` is valid and USD will handle it correctly. Renaming `.usda` to `.usdc` is **not valid** — they have different internal formats.
 
 **`.usdz`** is a **zip archive** that bundles the root USD file plus all its dependencies (textures, sublayers, referenced files). It is:
+
 - The correct format for delivering assets to external studios
 - The correct format for AR/VR distribution (Apple RealityKit, USDZ for web)
 - Read-only — you cannot reference external files from inside a `.usdz`
@@ -421,7 +496,7 @@ Metadata is scene-wide or prim-level configuration data stored **in the layer he
     startTimeCode = 1
     endTimeCode = 240
     defaultPrim = "World"      # which prim references should target by default
-    
+
     subLayers = [
         @./anim.usda@,
         @./layout.usda@
@@ -475,17 +550,48 @@ version = custom.get("pipeline:schemaVersion", "unknown")
 USD represents animation through **time samples** — a dictionary mapping time codes (frame numbers) to values. An attribute can have:
 
 - A **default value** — a single value with no time association, returned when no time samples are present or when `Usd.TimeCode.Default()` is requested
-- **Time samples** — multiple values keyed by time code
+- **Time samples** — multiple values keyed by time code, stored as a sparse dictionary
+
+### Key Facts About Time Samples
+
+**Sparse sampling is valid** — time samples do NOT need to exist at every frame. You only author keyframes at the times that matter. USD interpolates between them automatically.
 
 ```usda
+# Sparse — only 3 keyframes over 48 frames. Frames 2-23, 25-47 are interpolated.
 def Xform "Ball" {
     double3 xformOp:translate.timeSamples = {
-        1:  (0, 0, 0),
-        24: (5, 0, 0),
-        48: (10, 0, 0)
+        1:  (0, 0, 0),    ← keyframe at frame 1
+        24: (5, 0, 0),    ← keyframe at frame 24 (frames 2-23 interpolated)
+        48: (10, 0, 0)    ← keyframe at frame 48 (frames 25-47 interpolated)
     }
     uniform token[] xformOpOrder = ["xformOp:translate"]
 }
+```
+
+**Any attribute type can be time-sampled** — not just numeric types. String attributes, token attributes, bool attributes, and matrix4d attributes can all have time samples:
+
+```python
+# String attribute with time samples — valid
+name_attr = prim.CreateAttribute("char:name", Sdf.ValueTypeNames.String)
+name_attr.Set("idle",    time=1)    # string time sample
+name_attr.Set("running", time=24)   # string changes at frame 24
+
+# matrix4d with time samples — valid and common for transforms
+xform_attr = prim.CreateAttribute("xformOp:transform", Sdf.ValueTypeNames.Matrix4d)
+xform_attr.Set(Gf.Matrix4d(1), time=1)
+xform_attr.Set(rotated_matrix,  time=24)
+```
+
+**Do NOT clear all samples before updating** — `attr.Set(value, time=n)` adds or updates that specific time code without touching others. Clearing all existing samples before setting new ones is inefficient and unnecessary.
+
+```python
+# WRONG — clears everything then re-adds all samples
+attr.Clear()                        # ← unnecessary, loses existing samples
+attr.Set(Gf.Vec3d(5,0,0), time=24)
+
+# CORRECT — just set the specific time code you want to update
+attr.Set(Gf.Vec3d(5,0,0), time=24)  # ← adds/updates only frame 24
+# All other existing time samples are untouched
 ```
 
 USD **interpolates** between time samples automatically. Between frames 1 and 24, the ball is linearly interpolated from `(0,0,0)` to `(5,0,0)`.
@@ -535,11 +641,11 @@ stack = attr.GetPropertyStack(Usd.TimeCode(24))
 
 ### `Usd.TimeCode` — Critical Distinction
 
-| Expression | Meaning |
-|------------|---------|
-| `Usd.TimeCode.Default()` | The plain authored default value — no time association |
-| `Usd.TimeCode(24)` or just `24` | The value at time code 24 (frame 24) |
-| `Usd.TimeCode(0)` or just `0` | The value at time code 0 — **NOT the same as Default()** |
+| Expression                      | Meaning                                                  |
+| ------------------------------- | -------------------------------------------------------- |
+| `Usd.TimeCode.Default()`        | The plain authored default value — no time association   |
+| `Usd.TimeCode(24)` or just `24` | The value at time code 24 (frame 24)                     |
+| `Usd.TimeCode(0)` or just `0`   | The value at time code 0 — **NOT the same as Default()** |
 
 `TimeCode.Default()` has no numeric shorthand — it must always be written in full.
 
@@ -547,26 +653,33 @@ stack = attr.GetPropertyStack(Usd.TimeCode(24))
 
 ## 9. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **Stage** | In-memory composition of layers. Not a file. |
-| **Layer** | A physical USD file or in-memory buffer. |
-| **Prim** | Every node in the scene graph. Has a path, a type, properties. |
-| **`def`** | Creates a prim. Claims ownership. Has a type. |
-| **`over`** | Overrides an existing prim. No type. No effect without a `def`. |
-| **`class`** | Abstract template. Used with `inherits`. Never rendered. |
-| **Attribute** | Stores typed values on a prim. Can be time-sampled. |
-| **Relationship** | Stores a path to another prim. Used for material binding. |
-| **SdfPath** | Unique address of every prim and property. Case-sensitive. |
-| **`.usda`** | ASCII text — human-readable, slow, good for debugging |
-| **`.usdc`** | Binary crate — fast, compact, production format |
-| **`.usdz`** | Zip archive — self-contained, for delivery and AR/VR |
-| **`defaultPrim`** | Must be set on every published asset for references to work |
-| **`upAxis`** | Always set explicitly — `Y` for DCC, `Z` for engineering tools |
-| **`metersPerUnit`** | Always set explicitly — `0.01` = centimetres (common in DCC) |
-| **Time samples** | Animation keyframes. `Set(value, time=n)` creates one. |
-| **`TimeCode.Default()`** | The plain default — distinct from `TimeCode(0)` (frame 0) |
+| Concept                   | What to Remember                                                                                                                        |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Stage**                 | In-memory composition of layers. Not a file.                                                                                            |
+| **Layer**                 | A physical USD file or in-memory buffer.                                                                                                |
+| **Prim**                  | Every node in the scene graph. Has a path, a type, properties.                                                                          |
+| **`def`**                 | Creates a prim. Claims ownership. Has a type.                                                                                           |
+| **`over`**                | Overrides an existing prim. No type. No effect without a `def`.                                                                         |
+| **`class`**               | Abstract template. Used with `inherits`. Never rendered.                                                                                |
+| **Attribute**             | Stores typed values. Any type. Can be time-sampled. Has fallback values. Mutable.                                                       |
+| **Relationship**          | Stores prim paths ONLY. Can be multi-target. NO fallback values. NOT for data.                                                          |
+| **Attribute fallbacks**   | Attributes have schema-defined fallback values. Relationships do NOT.                                                                   |
+| **Time samples**          | Sparse — only author keyframes you need. Any type can be time-sampled, including string.                                                |
+| **Updating time samples** | Just `Set(value, time=n)` — no need to clear existing samples first.                                                                    |
+| **`token` type**          | Immutable interned string. Fast comparison. For identifiers/enums. NOT for large/changing text.                                         |
+| **`string` type**         | Arbitrary mutable text. For file paths, descriptions, large content.                                                                    |
+| **`matrix4d`**            | 4×4 double matrix. CAN be time-sampled and animated.                                                                                    |
+| **Schema validation**     | Built-in schemas define expected structure but do NOT auto-enforce validation at runtime. Tools or custom code must perform validation. |
+| **SdfPath**               | Unique address of every prim and property. Case-sensitive.                                                                              |
+| **`.usda`**               | ASCII text — human-readable, slow, good for debugging                                                                                   |
+| **`.usdc`**               | Binary crate — fast, compact, production format                                                                                         |
+| **`.usdz`**               | Zip archive — self-contained, for delivery and AR/VR                                                                                    |
+| **`defaultPrim`**         | Must be set on every published asset for references to work                                                                             |
+| **`upAxis`**              | Always set explicitly — `Y` for DCC, `Z` for engineering tools                                                                          |
+| **`metersPerUnit`**       | Always set explicitly — `0.01` = centimetres (common in DCC)                                                                            |
+| **Time samples**          | Animation keyframes. `Set(value, time=n)` creates one.                                                                                  |
+| **`TimeCode.Default()`**  | The plain default — distinct from `TimeCode(0)` (frame 0)                                                                               |
 
 ---
 
-*Next: [Day 2 — Composition Arcs Part 1](day-02-composition-arcs-part-1.md)*
+_Next: [Day 2 — Composition Arcs Part 1](day-02-composition-arcs-part-1.md)_
