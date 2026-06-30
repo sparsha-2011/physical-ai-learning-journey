@@ -7,32 +7,38 @@
 
 ## Study Guide
 
-| Day | Topic | Domains Covered |
-|-----|-------|----------------|
-| [Day 1](day-01-usd-foundations.md) | USD Foundations | Stage, Layer, Prim, Properties, Paths, File Formats, Metadata, Time Samples |
-| [Day 2](day-02-composition-arcs-part-1.md) | Composition Arcs Part 1 | Opinions, Value Resolution, LIVERPS, Sublayers, References, Payloads |
-| [Day 3](day-03-composition-arcs-part-2.md) | Composition Arcs Part 2 | Variants, Inherits, Specializes, Fallback Selections |
-| [Day 4](day-04-advanced-composition.md) | Advanced Composition | Edit Target, Session Layer, Sparse Overrides, Flatten, Encapsulation |
-| [Day 5](day-05-schemas-and-data-modeling.md) | Schemas and Data Modeling | IsA/API schemas, usdGenSchema, TfType, SdfFileFormat, Model Kinds |
-| [Day 6](day-06-visualization.md) | Visualization | Mesh, Primvars, Materials, Shaders, Lights, UsdGeomCamera |
-| [Day 7](day-07-pipeline-and-data-exchange.md) | Pipeline and Data Exchange | Exporters, Importers, usdchecker, Hooks, Data Mapping, Build Config |
-| [Day 8](day-08-content-aggregation.md) | Content Aggregation | Instancing, PointInstancer, Asset Management |
-| [Day 9](day-09-debugging-and-troubleshooting.md) | Debugging and Troubleshooting | PrimStack, PropertyStack, TfDebug, MuteLayer, Composition Errors |
+| Day                                              | Topic                            | Domains Covered                                                                                                                          |
+| ------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| [Day 1](day-01-usd-foundations.md)               | USD Foundations                  | Stage, Layer, Prim, Properties, Paths, File Formats, Metadata, Time Samples                                                              |
+| [Day 2](day-02-composition-arcs-part-1.md)       | Composition Arcs Part 1          | Opinions, Value Resolution, LIVERPS, Sublayers, References, Payloads                                                                     |
+| [Day 3](day-03-composition-arcs-part-2.md)       | Composition Arcs Part 2          | Variants, Inherits, Specializes, Fallback Selections                                                                                     |
+| [Day 4](day-04-advanced-composition.md)          | Advanced Composition             | Edit Target, Session Layer, Sparse Overrides, Flatten, Encapsulation                                                                     |
+| [Day 5](day-05-schemas-and-data-modeling.md)     | Schemas and Data Modeling        | IsA/API schemas, usdGenSchema, TfType, SdfFileFormat, Model Kinds                                                                        |
+| [Custom Schemas](custom-schemas-deep-dive.md)    | **Custom Schemas Deep Dive**     | schema.usda structure, usdGenSchema workflow, TfType registration, SdfFileFormat, Model Kinds, Variant Fallbacks, exam elimination guide |
+| [Day 6](day-06-visualization.md)                 | Visualization                    | Mesh, Primvars, Materials, Shaders, Lights, UsdGeomCamera                                                                                |
+| [Day 7](day-07-pipeline-and-data-exchange.md)    | Pipeline and Data Exchange       | Exporters, Importers, usdchecker, Hooks, Data Mapping, Build Config                                                                      |
+| [Day 8](day-08-content-aggregation.md)           | Content Aggregation              | Instancing, PointInstancer, Asset Management                                                                                             |
+| [Day 9](day-09-debugging-and-troubleshooting.md) | Debugging and Troubleshooting    | PrimStack, PropertyStack, TfDebug, MuteLayer, Composition Errors                                                                         |
+| [Day 10](day-10-custom-schemas.md)               | Customizing USD — Custom Schemas | IsA/API schemas, usdGenSchema, TfType, SdfFileFormat, Model Kinds, Variant Fallbacks                                                     |
 
 ---
 
 ## Exam Domain Weightings
 
-| Domain | Approximate Weight |
-|--------|-------------------|
-| Composition | High |
-| Data Modeling | High |
-| Pipeline Development | High |
-| Content Aggregation | Medium |
-| Data Exchange | Medium |
-| Debugging and Troubleshooting | Medium |
-| Visualization | Medium |
-| USD Customization | Medium |
+_Source: [NVIDIA Official Exam Blueprint](https://www.nvidia.com/en-us/learn/certification/openusd-development-professional/)_
+
+| Domain                            | % of Exam | What is Tested                                                                                                   |
+| --------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Composition**                   | **23%**   | All composition arcs, LIVERPS, debugging complex composition scenarios                                           |
+| **Data Exchange**                 | **15%**   | Conceptual data mapping documents, custom importers, exporters, interchange scripts                              |
+| **Pipeline Development**          | **14%**   | Pipeline design, asset management, versioning, exporters, build config, flattening, removing proprietary deps    |
+| **Data Modeling**                 | **13%**   | Usd/Sdf data structures, prims, attributes, relationships, primvars, value types, time samples, built-in schemas |
+| **Debugging and Troubleshooting** | **11%**   | Introspect stages, fix composition results, identify poorly authored data, optimise load/render                  |
+| **Content Aggregation**           | **10%**   | Modular components, instancing (native and point), strategies for overriding instanced assets                    |
+| **Visualization**                 | **8%**    | UsdGeom, UsdShade, UsdLux — meshes, cameras, materials, lights                                                   |
+| **Customizing USD**               | **6%**    | Custom schemas, file format plugins, custom model kinds, variant fallback selections                             |
+
+> **Total: 100%** — Composition is the single heaviest domain at nearly a quarter of the exam. Combined, Composition + Data Exchange + Pipeline Development + Data Modeling account for **65%** of all questions.
 
 ---
 
@@ -115,6 +121,7 @@ UsdUtils.CreateNewUsdzPackage(src: str, dst: str)
 ## Key Mnemonics
 
 **LIVERPS** — composition arc strength order, strongest to weakest:
+
 ```
 L — Local
 I — Inherit
@@ -126,6 +133,7 @@ S — Specializes
 ```
 
 **`def` / `over` / `class`** — the three prim specifiers:
+
 ```
 def   = Define  — creates and owns the prim
 over  = Override — modifies without owning
@@ -134,4 +142,4 @@ class = Class   — abstract template, never rendered
 
 ---
 
-*Notes built from the NVIDIA Learn OpenUSD curriculum and real NCP-OUSD exam analysis.*
+_Notes built from the NVIDIA Learn OpenUSD curriculum and real NCP-OUSD exam analysis._
