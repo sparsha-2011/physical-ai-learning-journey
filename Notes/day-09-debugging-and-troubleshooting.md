@@ -1,7 +1,7 @@
 # Day 9 — Debugging and Troubleshooting
 
 > **OpenUSD NCP Certification Study Notes**  
-> *PrimStack, PropertyStack, TfDebug, MuteLayer, Flattening, Composition Errors, Schema Versions*
+> _PrimStack, PropertyStack, TfDebug, MuteLayer, Flattening, Composition Errors, Schema Versions_
 
 ---
 
@@ -31,14 +31,14 @@
 
 Almost every USD debugging scenario comes down to one of six root causes:
 
-| Root Cause | Symptom | Primary Tool |
-|------------|---------|-------------|
-| **Wrong value winning** | Property shows incorrect value | `GetPropertyStack()` |
-| **Wrong structure / missing prims** | Prims missing despite being in source | `GetPrimStack()`, composition tab |
-| **Wrong edit target** | Value authored but file looks unchanged | Check `GetEditTarget()` |
-| **Composition arc conflict** | Unexpected overrides or missing data | `GetCompositionErrors()`, PrintComposition |
-| **Schema version mismatch** | Unexpected attribute behaviour across layers | Inspect `customLayerData`, `usdchecker` |
-| **Performance / loading** | Slow stage open, viewport lag | `TfDebug`, check payload loading |
+| Root Cause                          | Symptom                                      | Primary Tool                               |
+| ----------------------------------- | -------------------------------------------- | ------------------------------------------ |
+| **Wrong value winning**             | Property shows incorrect value               | `GetPropertyStack()`                       |
+| **Wrong structure / missing prims** | Prims missing despite being in source        | `GetPrimStack()`, composition tab          |
+| **Wrong edit target**               | Value authored but file looks unchanged      | Check `GetEditTarget()`                    |
+| **Composition arc conflict**        | Unexpected overrides or missing data         | `GetCompositionErrors()`, PrintComposition |
+| **Schema version mismatch**         | Unexpected attribute behaviour across layers | Inspect `customLayerData`, `usdchecker`    |
+| **Performance / loading**           | Slow stage open, viewport lag                | `TfDebug`, check payload loading           |
 
 > **Most reliable symptom of poor authoring (invalid references or namespace issues):** prims that are missing from the stage despite being present in source layers. This directly indicates broken composition arcs — either invalid references, missing `defaultPrim`, or namespace collisions.
 
@@ -46,23 +46,23 @@ Almost every USD debugging scenario comes down to one of six root causes:
 
 ## 2. The Complete Debugging Toolkit
 
-| Tool / Method | What It Does | When to Use |
-|---------------|-------------|-------------|
-| `prim.GetPrimStack()` | All SdfPrimSpecs for a prim, strongest → weakest | Wrong prim type, missing prim, unexpected specifier |
-| `attr.GetPropertyStack(timeCode)` | All property specs for an attribute, strongest → weakest | Wrong property value |
-| `Usd.Debug.PrintComposition(prim)` | Full composition arc breakdown as text | Most detailed arc debugging (source builds only) |
-| `prim.GetPrimIndex().DumpToString()` | Full composition graph as text | Same as above — works in all USD builds |
-| `UsdUtils.FlattenLayerStack(stage)` | Merges sublayers only — references/variants kept | Debug sublayer conflicts |
-| `stage.Flatten()` | Resolves ALL arcs — full composed scene | See what the final scene actually looks like |
-| `usdcat --flatten` | CLI equivalent of `stage.Flatten()` | Quick CLI inspection |
-| `usdcat --print-composition` | CLI composition arc graph | CLI alternative to PrintComposition |
-| `stage.GetLayerStack()` | All layers, strongest → weakest | Understanding which layers are loaded |
-| `stage.GetRootLayer()` | The root layer before composition | Examining base scene description |
-| `stage.GetSessionLayer()` | Ephemeral in-memory overrides | Checking interactive changes |
-| `stage.MuteLayer(id)` | Silences a layer without removing it | Isolating which layer causes a problem |
-| `stage.GetCompositionErrors()` | All composition errors on the stage | Broken references, invalid paths |
-| `usdchecker scene.usda` | Validates file against best practices | Pre-delivery QA |
-| `Tf.Debug.SetDebugSymbolsByName()` | Enables verbose internal logging | Stage open issues, path resolution |
+| Tool / Method                        | What It Does                                             | When to Use                                         |
+| ------------------------------------ | -------------------------------------------------------- | --------------------------------------------------- |
+| `prim.GetPrimStack()`                | All SdfPrimSpecs for a prim, strongest → weakest         | Wrong prim type, missing prim, unexpected specifier |
+| `attr.GetPropertyStack(timeCode)`    | All property specs for an attribute, strongest → weakest | Wrong property value                                |
+| `Usd.Debug.PrintComposition(prim)`   | Full composition arc breakdown as text                   | Most detailed arc debugging (source builds only)    |
+| `prim.GetPrimIndex().DumpToString()` | Full composition graph as text                           | Same as above — works in all USD builds             |
+| `UsdUtils.FlattenLayerStack(stage)`  | Merges sublayers only — references/variants kept         | Debug sublayer conflicts                            |
+| `stage.Flatten()`                    | Resolves ALL arcs — full composed scene                  | See what the final scene actually looks like        |
+| `usdcat --flatten`                   | CLI equivalent of `stage.Flatten()`                      | Quick CLI inspection                                |
+| `usdcat --print-composition`         | CLI composition arc graph                                | CLI alternative to PrintComposition                 |
+| `stage.GetLayerStack()`              | All layers, strongest → weakest                          | Understanding which layers are loaded               |
+| `stage.GetRootLayer()`               | The root layer before composition                        | Examining base scene description                    |
+| `stage.GetSessionLayer()`            | Ephemeral in-memory overrides                            | Checking interactive changes                        |
+| `stage.MuteLayer(id)`                | Silences a layer without removing it                     | Isolating which layer causes a problem              |
+| `stage.GetCompositionErrors()`       | All composition errors on the stage                      | Broken references, invalid paths                    |
+| `usdchecker scene.usda`              | Validates file against best practices                    | Pre-delivery QA                                     |
+| `Tf.Debug.SetDebugSymbolsByName()`   | Enables verbose internal logging                         | Stage open issues, path resolution                  |
 
 ---
 
@@ -82,14 +82,14 @@ prim.GetPrimStack() → list[SdfPrimSpec]
 
 ### `SdfPrimSpec` Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `spec.layer` | `SdfLayer` | The layer object containing this spec |
-| `spec.layer.identifier` | `str` | File path of that layer |
-| `spec.specifier` | `Sdf.Specifier` | `Sdf.SpecifierDef`, `Sdf.SpecifierOver`, `Sdf.SpecifierClass` |
-| `spec.typeName` | `str` | Type like `"Xform"`, `"Mesh"`, or `""` for `over` |
-| `spec.path` | `Sdf.Path` | The prim path |
-| `spec.attributes.keys()` | `list[str]` | All attribute names this layer authored on this prim |
+| Field                    | Type            | Description                                                   |
+| ------------------------ | --------------- | ------------------------------------------------------------- |
+| `spec.layer`             | `SdfLayer`      | The layer object containing this spec                         |
+| `spec.layer.identifier`  | `str`           | File path of that layer                                       |
+| `spec.specifier`         | `Sdf.Specifier` | `Sdf.SpecifierDef`, `Sdf.SpecifierOver`, `Sdf.SpecifierClass` |
+| `spec.typeName`          | `str`           | Type like `"Xform"`, `"Mesh"`, or `""` for `over`             |
+| `spec.path`              | `Sdf.Path`      | The prim path                                                 |
+| `spec.attributes.keys()` | `list[str]`     | All attribute names this layer authored on this prim          |
 
 ### Python API
 
@@ -111,12 +111,12 @@ for i, spec in enumerate(prim.GetPrimStack()):
 
 ### What to Look For
 
-| Observation | Meaning |
-|-------------|---------|
-| Two unrelated asset layers in the stack | Namespace collision — two assets defining the same path |
-| `specifier=over`, `typeName=''` at index 0 | Sparse override — this layer doesn't own the prim |
-| `specifier=def`, `typeName='Mesh'` at index 0 | This layer owns the prim and its type |
-| Only `over` specs, no `def` spec | Prim is not truly defined — `IsDefined()` will return False |
+| Observation                                   | Meaning                                                     |
+| --------------------------------------------- | ----------------------------------------------------------- |
+| Two unrelated asset layers in the stack       | Namespace collision — two assets defining the same path     |
+| `specifier=over`, `typeName=''` at index 0    | Sparse override — this layer doesn't own the prim           |
+| `specifier=def`, `typeName='Mesh'` at index 0 | This layer owns the prim and its type                       |
+| Only `over` specs, no `def` spec              | Prim is not truly defined — `IsDefined()` will return False |
 
 ---
 
@@ -136,23 +136,23 @@ attr.GetPropertyStack(timeCode: Usd.TimeCode) -> list[SdfPropertySpec]
 
 ### TimeCode Parameter — Critical Distinction
 
-| Expression | Meaning |
-|------------|---------|
-| `Usd.TimeCode.Default()` | The **plain authored default** — no time association. Use for non-animated attributes. |
-| `Usd.TimeCode(24)` or `24` | The value **at frame 24**. Use for animated attributes. |
-| `Usd.TimeCode(0)` or `0` | The value **at frame 0** — a real point in time. **NOT the same as `Default()`** |
+| Expression                 | Meaning                                                                                |
+| -------------------------- | -------------------------------------------------------------------------------------- |
+| `Usd.TimeCode.Default()`   | The **plain authored default** — no time association. Use for non-animated attributes. |
+| `Usd.TimeCode(24)` or `24` | The value **at frame 24**. Use for animated attributes.                                |
+| `Usd.TimeCode(0)` or `0`   | The value **at frame 0** — a real point in time. **NOT the same as `Default()`**       |
 
 `TimeCode.Default()` has no numeric shorthand — it must always be written in full. `0` means frame 0, which is distinct from the default value.
 
 ### `SdfPropertySpec` Fields
 
-| Field | Description |
-|-------|-------------|
-| `spec.layer` | The `SdfLayer` object |
-| `spec.layer.identifier` | File path of the layer |
-| `spec.default` | The plain authored value (None if time-sampled only) |
-| `spec.GetInfo("timeSamples")` | `{frame: value}` dict for time-sampled attrs |
-| `spec.typeName` | Value type (e.g., `"Float"`, `"Double3"`) |
+| Field                         | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `spec.layer`                  | The `SdfLayer` object                                |
+| `spec.layer.identifier`       | File path of the layer                               |
+| `spec.default`                | The plain authored value (None if time-sampled only) |
+| `spec.GetInfo("timeSamples")` | `{frame: value}` dict for time-sampled attrs         |
+| `spec.typeName`               | Value type (e.g., `"Float"`, `"Double3"`)            |
 
 ### Python API
 
@@ -170,13 +170,13 @@ print(f"Number of specs: {len(stack)}")
 for i, spec in enumerate(stack):
     layer_name = os.path.basename(spec.layer.identifier)
     note = "<── WINNER" if i == 0 else ""
-    
+
     # spec.default = plain value. None if time-sampled.
     value = spec.default
     if value is None:
         ts = spec.GetInfo("timeSamples")
         value = ts  # {frame: value} dict
-    
+
     print(f"[{i}] {layer_name:<35} value={value} {note}")
 
 # Animated attribute — use a specific frame
@@ -208,6 +208,7 @@ print(attr.HasAuthoredValue()) # True = explicitly Set()  False = schema fallbac
 ## 6. Edit Target — The Most Common Silent Bug
 
 When you author a value on the wrong edit target:
+
 - No error is raised
 - The value is written successfully — to the wrong layer
 - The wrong layer may not be visible in the composed result you're examining
@@ -247,11 +248,11 @@ candidates = [layer_fx, layer_director, layer_layout]
 for layer in candidates:
     stage.MuteLayer(layer.identifier)
     val = attr.Get()
-    
+
     if val_is_correct(val):
         print(f"CULPRIT: {layer.identifier}")
         # This layer was causing the wrong value
-    
+
     stage.UnmuteLayer(layer.identifier)  # always restore before trying next
 
 # API reference
@@ -261,11 +262,11 @@ stage.IsLayerMuted(identifier)   # True/False
 
 ### Muting Rules
 
-| Safe to mute | Never mute |
-|-------------|-----------|
-| Any sublayer | Root layer of a referenced asset — causes composition error |
-| The session layer | — |
-| Any payload layer | — |
+| Safe to mute      | Never mute                                                  |
+| ----------------- | ----------------------------------------------------------- |
+| Any sublayer      | Root layer of a referenced asset — causes composition error |
+| The session layer | —                                                           |
+| Any payload layer | —                                                           |
 
 > Muting the **root layer of a reference** causes a composition error — USD treats it as if the referenced file doesn't exist at all.
 
@@ -290,11 +291,11 @@ for err in errors:
 # PcpErrorType_ArcCycle           → circular reference A→B→A
 ```
 
-| Error Type | Cause | Fix |
-|------------|-------|-----|
-| `InvalidAssetPath` | Referenced file doesn't exist | Ensure file exists at the relative path |
-| `InvalidPrimPath` | File found, prim path doesn't exist | Set `defaultPrim` on the referenced asset |
-| `ArcCycle` | A references B which references A | Break the circular dependency |
+| Error Type         | Cause                               | Fix                                       |
+| ------------------ | ----------------------------------- | ----------------------------------------- |
+| `InvalidAssetPath` | Referenced file doesn't exist       | Ensure file exists at the relative path   |
+| `InvalidPrimPath`  | File found, prim path doesn't exist | Set `defaultPrim` on the referenced asset |
+| `ArcCycle`         | A references B which references A   | Break the circular dependency             |
 
 ---
 
@@ -325,13 +326,13 @@ flat_layer_full.Export("delivery.usda")
 
 ### FlattenLayerStack vs stage.Flatten()
 
-| Feature | `UsdUtils.FlattenLayerStack()` | `stage.Flatten()` |
-|---------|-------------------------------|-------------------|
-| Sublayers merged | ✅ Yes | ✅ Yes |
-| References resolved | ❌ No — kept as-is | ✅ Yes |
-| Variants preserved | ✅ Yes | ❌ No — collapsed to selected |
-| Time samples preserved | ✅ Yes | ✅ Yes |
-| Use for | Debug sublayer conflicts | See fully composed scene |
+| Feature                | `UsdUtils.FlattenLayerStack()` | `stage.Flatten()`             |
+| ---------------------- | ------------------------------ | ----------------------------- |
+| Sublayers merged       | ✅ Yes                         | ✅ Yes                        |
+| References resolved    | ❌ No — kept as-is             | ✅ Yes                        |
+| Variants preserved     | ✅ Yes                         | ❌ No — collapsed to selected |
+| Time samples preserved | ✅ Yes                         | ✅ Yes                        |
+| Use for                | Debug sublayer conflicts       | See fully composed scene      |
 
 ---
 
@@ -388,14 +389,14 @@ Tf.Debug.IsDebugSymbolNameEnabled("USD_COMPOSITION")  # True/False
 
 ### Key Debug Symbols
 
-| Symbol | Use when |
-|--------|---------|
-| `USD_STAGE_OPEN` | Stage opens but prims are wrong or missing |
-| `USD_COMPOSITION` | Reference or variant not resolving as expected |
-| `AR_RESOLVER_INIT` | Asset path fails to resolve to a file |
-| `USD_PAYLOADS` | Payload geometry not appearing |
-| `USD_CHANGES` | Too many change notifications — performance issue |
-| `USD_INSTANCING` | Instancing not sharing prototypes correctly |
+| Symbol             | Use when                                          |
+| ------------------ | ------------------------------------------------- |
+| `USD_STAGE_OPEN`   | Stage opens but prims are wrong or missing        |
+| `USD_COMPOSITION`  | Reference or variant not resolving as expected    |
+| `AR_RESOLVER_INIT` | Asset path fails to resolve to a file             |
+| `USD_PAYLOADS`     | Payload geometry not appearing                    |
+| `USD_CHANGES`      | Too many change notifications — performance issue |
+| `USD_INSTANCING`   | Instancing not sharing prototypes correctly       |
 
 ### CLI Alternative
 
@@ -444,11 +445,11 @@ else:
 
 ### Availability Summary
 
-| Method | pip usd-core | Source build | CLI |
-|--------|-------------|--------------|-----|
-| `prim.GetPrimIndex().DumpToString()` | ✅ | ✅ | — |
-| `Usd.Debug.PrintComposition(prim)` | ❌ `AttributeError` | ✅ | — |
-| `usdcat --print-composition` | ✅ | ✅ | ✅ |
+| Method                               | pip usd-core        | Source build | CLI |
+| ------------------------------------ | ------------------- | ------------ | --- |
+| `prim.GetPrimIndex().DumpToString()` | ✅                  | ✅           | —   |
+| `Usd.Debug.PrintComposition(prim)`   | ❌ `AttributeError` | ✅           | —   |
+| `usdcat --print-composition`         | ✅                  | ✅           | ✅  |
 
 ---
 
@@ -529,6 +530,7 @@ ref = Sdf.Reference(
 ### Properties Panel
 
 Click any property in the Properties panel:
+
 - **Greyed/muted value** = schema fallback — nobody called `Set()` on this attribute
 - **Normal/bright value** = explicitly authored value
 
@@ -538,16 +540,16 @@ This is the visual equivalent of `HasAuthoredValue()`.
 
 ## 16. Common Bugs Reference
 
-| Bug | Symptom | Fix |
-|-----|---------|-----|
-| Wrong edit target | Value authored but file unchanged. No error. | Check `GetEditTarget()` before every Set() |
-| Missing defaultPrim | Reference fails, prim is empty | `stage.SetDefaultPrim(root_prim)` |
-| Session layer not saved | Value reverts on next open | SetEditTarget to a file-backed layer |
-| `CreateNew()` on existing file | Output file has only `#usda 1.0` | Delete file first, or use `CreateInMemory()` + Export |
-| Namespace collision | Wrong attributes on a prim | Use unique paths per asset |
-| Path case mismatch | Override never applies | Match case exactly — `/World/Chair` not `/World/chair` |
-| Schema version mismatch | Duplicate attributes, wrong values | Tag layers with `customLayerData` version info |
-| Layer offset ignored | Animation at wrong time code | Check `Sdf.LayerOffset` on reference arc |
+| Bug                            | Symptom                                      | Fix                                                    |
+| ------------------------------ | -------------------------------------------- | ------------------------------------------------------ |
+| Wrong edit target              | Value authored but file unchanged. No error. | Check `GetEditTarget()` before every Set()             |
+| Missing defaultPrim            | Reference fails, prim is empty               | `stage.SetDefaultPrim(root_prim)`                      |
+| Session layer not saved        | Value reverts on next open                   | SetEditTarget to a file-backed layer                   |
+| `CreateNew()` on existing file | Output file has only `#usda 1.0`             | Delete file first, or use `CreateInMemory()` + Export  |
+| Namespace collision            | Wrong attributes on a prim                   | Use unique paths per asset                             |
+| Path case mismatch             | Override never applies                       | Match case exactly — `/World/Chair` not `/World/chair` |
+| Schema version mismatch        | Duplicate attributes, wrong values           | Tag layers with `customLayerData` version info         |
+| Layer offset ignored           | Animation at wrong time code                 | Check `Sdf.LayerOffset` on reference arc               |
 
 ---
 
@@ -555,20 +557,20 @@ This is the visual equivalent of `HasAuthoredValue()`.
 
 Eliminate any option that contains these patterns:
 
-| Pattern in option | Always wrong because |
-|-------------------|---------------------|
-| "Directly editing the composed stage's in-memory representation" | Composed stage is READ-ONLY |
-| "Clear the USD cache to reset composition" | USD composition is deterministic — cache = performance only |
-| "Manually edit root layer to remove all references" | Destructive, doesn't address root cause |
-| "Delete all payloads and reload" | Destructive, doesn't fix composition conflicts |
-| "Modify the USD schema to force specific opinions" | Schemas define structure, not composition behaviour |
-| "Ignore layer offsets as they don't affect composition" | Layer offsets DO affect time-varying data |
-| "usdchecker automatically fixes composition issues" | usdchecker VALIDATES only — never auto-fixes |
-| "Rely solely on GetSessionLayer() for all composition debugging" | Session layer only contains ephemeral overrides |
-| "Flatten the stage to minimize layer composition overhead" | Flattening INCREASES memory and removes layering benefits |
-| "GetPrimAtPath() retrieves prims ignoring composition arcs" | Returns the FULLY COMPOSED prim — all arcs already applied |
+| Pattern in option                                                | Always wrong because                                        |
+| ---------------------------------------------------------------- | ----------------------------------------------------------- |
+| "Directly editing the composed stage's in-memory representation" | Composed stage is READ-ONLY                                 |
+| "Clear the USD cache to reset composition"                       | USD composition is deterministic — cache = performance only |
+| "Manually edit root layer to remove all references"              | Destructive, doesn't address root cause                     |
+| "Delete all payloads and reload"                                 | Destructive, doesn't fix composition conflicts              |
+| "Modify the USD schema to force specific opinions"               | Schemas define structure, not composition behaviour         |
+| "Ignore layer offsets as they don't affect composition"          | Layer offsets DO affect time-varying data                   |
+| "usdchecker automatically fixes composition issues"              | usdchecker VALIDATES only — never auto-fixes                |
+| "Rely solely on GetSessionLayer() for all composition debugging" | Session layer only contains ephemeral overrides             |
+| "Flatten the stage to minimize layer composition overhead"       | Flattening INCREASES memory and removes layering benefits   |
+| "GetPrimAtPath() retrieves prims ignoring composition arcs"      | Returns the FULLY COMPOSED prim — all arcs already applied  |
 
 ---
 
-*Previous: [Day 8 — Content Aggregation](day-08-content-aggregation.md)*  
-*Back to start: [Day 1 — USD Foundations](day-01-usd-foundations.md)*
+_Previous: [Day 8 — Content Aggregation](day-08-content-aggregation.md)_  
+_Next: [Day 9 — Debugging and Troubleshooting](day-09-debugging-and-troubleshooting.md)_
