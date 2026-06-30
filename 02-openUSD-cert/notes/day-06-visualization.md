@@ -1,7 +1,7 @@
 # Day 6 — Visualization
 
 > **OpenUSD NCP Certification Study Notes**  
-> *UsdGeomMesh, UsdGeomCamera, UsdShadeMaterial, Lights, Primvars, Visibility*
+> _UsdGeomMesh, UsdGeomCamera, UsdShadeMaterial, Lights, Primvars, Visibility_
 
 ---
 
@@ -49,14 +49,63 @@ computed = imageable.ComputeVisibility()
 
 > **Visibility inherits down the hierarchy.** If a parent prim is invisible, all its children are invisible even if they have `visibility = "inherited"`. `ComputeVisibility()` resolves this by walking up the prim hierarchy.
 
+### Why Purpose Exists — The Real-World Problem
+
+Imagine a hero robot character with 2 million polygons. Every time an animator scrubs the timeline, the viewport has to render 2 million polygons just to move the character slightly. It grinds to a halt.
+
+The solution: the same character exists **three times** in the USD file, each version tagged with a different purpose:
+
+```
+/World/Robot
+  ├── /World/Robot/HeroGeo      purpose = "render"   ← 2M polygons, full detail
+  ├── /World/Robot/ProxyGeo     purpose = "proxy"    ← 500 polygon box
+  └── /World/Robot/RigControls  purpose = "guide"    ← circles and arrows for animators
+```
+
+Each tool only loads what it needs:
+
+```
+usdview (viewport):        shows → proxy      fast lightweight stand-in
+                           hides → render     too heavy for interactive use
+                           hides → guide      rig controls not needed here
+
+Final renderer:            shows → render     the real 2M polygon geometry
+                           hides → proxy      don't render the low-res box
+                           hides → guide      NEVER appears in a render
+
+Rigging / animation tool:  shows → guide      the circles animators grab to pose
+                           shows → proxy      so animators can see roughly where the robot is
+                           hides → render     too heavy for the rig context
+```
+
+**One USD file. Three audiences. Zero duplication. No manual hiding.**
+
+### What Is a Rigging Tool?
+
+A **rigging tool** (Maya, Houdini, Blender) is the software used to build the control system that makes a character move. A raw mesh is just a static bag of polygons — rigging adds:
+
+- A **skeleton** (joints/bones) inside the mesh
+- **Control curves** (circles and arrows) that animators grab
+- **Rules** connecting controls → joints → mesh deformation
+
+The control curves are what get tagged `guide` purpose in USD. They exist purely so animators can pose the character — they have no visual meaning in a final rendered image and must **never** appear in a beauty render.
+
+```
+Animator grabs the circle (guide prim) → joint rotates → mesh deforms → arm lifts
+         ↑ visible in rig tool                          ↑ visible in final render
+         ↑ NEVER in final render                        ↑ NEVER in rig tool
+```
+
 ### Purpose Tokens
 
-| Purpose | Who sees it | Use case |
-|---------|-------------|---------|
-| `"render"` | Final render passes only | Full-resolution production geometry |
-| `"proxy"` | Viewport stand-in | Low-poly representation for interactive use |
-| `"guide"` | Rigging context only — NEVER rendered | Rig controls, helper geometry, bones |
-| `"default"` | All contexts (fallback) | General objects with no special context |
+| Purpose     | Who sees it                                    | Real-world example                                |
+| ----------- | ---------------------------------------------- | ------------------------------------------------- |
+| `"render"`  | Final render passes only                       | 2M polygon hero geometry                          |
+| `"proxy"`   | Viewport / interactive tools                   | 500 polygon bounding box stand-in                 |
+| `"guide"`   | Rigging / animation tools — **NEVER rendered** | IK control curves, joint display, helper geometry |
+| `"default"` | All contexts (fallback)                        | Simple props with no heavy/light split needed     |
+
+> **`guide` is the hardest to understand** — it is not about being "hidden" like visibility. It is about being in a completely separate rendering context that is never a final render. A prim can be `guide` purpose AND `visibility = inherited` — it is still never rendered. These are independent axes.
 
 ```python
 imageable.GetPurposeAttr().Set(UsdGeom.Tokens.render)
@@ -67,6 +116,10 @@ imageable.GetPurposeAttr().Set(UsdGeom.Tokens.default_)
 # Compute resolved purpose (inherits from parents)
 purpose = imageable.ComputePurpose()
 ```
+
+### In usdview
+
+usdview has **Purposes** toggle buttons in the toolbar — icons for render, proxy, and guide. Click the render button off and the 2M polygon geometry disappears, leaving only the proxy box. That is purpose working live. This is also why the `viz_visibility_and_purpose.py` exercise exports all four purpose tokens — open it in usdview and toggle each purpose button to see exactly which prims appear and disappear.
 
 ---
 
@@ -104,12 +157,12 @@ int[] faceVertexIndices = [0,1,2,3,  4,5,6,7,  0,1,5]
 
 ### Additional Mesh Attributes
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `subdivisionScheme` | `token` | `"none"` (flat), `"catmullClark"` (smooth), `"loop"`, `"bilinear"` |
-| `holeIndices` | `int[]` | Face indices to treat as holes — geometry exists but is NOT rendered |
-| `doubleSided` | `bool` | Whether to render back faces |
-| `extent` | `float3[2]` | Axis-aligned bounding box — required for correct viewport display |
+| Attribute           | Type        | Description                                                          |
+| ------------------- | ----------- | -------------------------------------------------------------------- |
+| `subdivisionScheme` | `token`     | `"none"` (flat), `"catmullClark"` (smooth), `"loop"`, `"bilinear"`   |
+| `holeIndices`       | `int[]`     | Face indices to treat as holes — geometry exists but is NOT rendered |
+| `doubleSided`       | `bool`      | Whether to render back faces                                         |
+| `extent`            | `float3[2]` | Axis-aligned bounding box — required for correct viewport display    |
 
 ### Python API
 
@@ -152,11 +205,11 @@ mesh.GetExtentAttr().Set(Vt.Vec3fArray([
 
 The `interpolation` metadata on a primvar determines how many values are needed and how they map to geometry:
 
-| Interpolation | Values needed | Maps to |
-|---------------|--------------|---------|
-| `constant` | 1 | Entire prim — one value for everything |
-| `uniform` | 1 per face | Each face has its own value |
-| `vertex` | 1 per point | Each vertex has a value, interpolated across faces |
+| Interpolation | Values needed     | Maps to                                             |
+| ------------- | ----------------- | --------------------------------------------------- |
+| `constant`    | 1                 | Entire prim — one value for everything              |
+| `uniform`     | 1 per face        | Each face has its own value                         |
+| `vertex`      | 1 per point       | Each vertex has a value, interpolated across faces  |
 | `faceVarying` | 1 per face-vertex | Most precise — one per entry in `faceVertexIndices` |
 
 > **`faceVarying` is used for UVs** because the same 3D vertex can have different UV coordinates on different faces (at seams). `faceVarying` count = `faceVertexIndices.length` = sum of `faceVertexCounts`.
@@ -235,6 +288,7 @@ Material.outputs:surface ← connected from PreviewSurface.outputs:surface
 ```
 
 > **Exam traps:**
+>
 > - `inputs:` and `outputs:` are **NOT deprecated** — they are fundamental to UsdShade
 > - `inputs:` can hold any data type — not just textures
 > - A Shader does NOT contain Materials — it's the reverse: Material contains Shaders
@@ -278,14 +332,14 @@ binding_api.Bind(mat)
 
 ### Key Inputs
 
-| Input | Type | Description |
-|-------|------|-------------|
-| `diffuseColor` | `color3f` | Base surface colour |
-| `roughness` | `float` | 0 = mirror smooth, 1 = completely rough |
-| `metallic` | `float` | 0 = dielectric, 1 = full metal |
-| `opacity` | `float` | 1 = opaque, 0 = transparent |
-| `normal` | `normal3f` | Normal map (tangent space) |
-| `emissiveColor` | `color3f` | Self-illumination colour |
+| Input           | Type       | Description                             |
+| --------------- | ---------- | --------------------------------------- |
+| `diffuseColor`  | `color3f`  | Base surface colour                     |
+| `roughness`     | `float`    | 0 = mirror smooth, 1 = completely rough |
+| `metallic`      | `float`    | 0 = dielectric, 1 = full metal          |
+| `opacity`       | `float`    | 1 = opaque, 0 = transparent             |
+| `normal`        | `normal3f` | Normal map (tangent space)              |
+| `emissiveColor` | `color3f`  | Self-illumination colour                |
 
 ### Reading a Texture — Three-Node Chain
 
@@ -327,12 +381,12 @@ All UsdLux lights inherit from `UsdGeomXformable` — they are **transformable a
 
 ### Common Attributes Across All Lights
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `intensity` | `float` | Brightness in lumens |
-| `exposure` | `float` | Photographic stops: `final = intensity × 2^exposure` |
-| `color` | `color3f` | Emitted colour tint |
-| `falloffRadius` | `float` | Maximum distance the light affects the scene |
+| Attribute       | Type      | Description                                          |
+| --------------- | --------- | ---------------------------------------------------- |
+| `intensity`     | `float`   | Brightness in lumens                                 |
+| `exposure`      | `float`   | Photographic stops: `final = intensity × 2^exposure` |
+| `color`         | `color3f` | Emitted colour tint                                  |
+| `falloffRadius` | `float`   | Maximum distance the light affects the scene         |
 
 > **`falloffRadius` limits the light's effective range** — geometry beyond this radius receives no contribution. Used to optimise rendering by culling distant light calculations.
 
@@ -342,13 +396,13 @@ Shadow casting requires **explicit configuration** via shadow attributes. Lights
 
 ### Light Types
 
-| Schema | Analogy | Key attribute |
-|--------|---------|---------------|
-| `UsdLuxDistantLight` | Directional sun | `angle` (angular size of sun disk) |
-| `UsdLuxSphereLight` | Point light with size | `radius` — controls shadow softness |
-| `UsdLuxRectLight` | Studio softbox | `width`, `height` |
-| `UsdLuxDomeLight` | HDRI environment | `textureFile` (path to .exr/.hdr) |
-| `UsdLuxConeLight` | Spotlight | `shaping:cone:angle`, `shaping:cone:softness` |
+| Schema               | Analogy               | Key attribute                                 |
+| -------------------- | --------------------- | --------------------------------------------- |
+| `UsdLuxDistantLight` | Directional sun       | `angle` (angular size of sun disk)            |
+| `UsdLuxSphereLight`  | Point light with size | `radius` — controls shadow softness           |
+| `UsdLuxRectLight`    | Studio softbox        | `width`, `height`                             |
+| `UsdLuxDomeLight`    | HDRI environment      | `textureFile` (path to .exr/.hdr)             |
+| `UsdLuxConeLight`    | Spotlight             | `shaping:cone:angle`, `shaping:cone:softness` |
 
 ### SphereLight Radius — Critical Exam Topic
 
@@ -378,24 +432,24 @@ camera.GetProjectionAttr().Set(UsdGeom.Tokens.orthographic)
 # No fisheye, cylindrical, or spherical — only these two exist
 ```
 
-| Projection | Behaviour | Use case |
-|------------|-----------|---------|
-| `perspective` | Objects farther away appear smaller | Film, games, visualisation |
+| Projection     | Behaviour                             | Use case                           |
+| -------------- | ------------------------------------- | ---------------------------------- |
+| `perspective`  | Objects farther away appear smaller   | Film, games, visualisation         |
 | `orthographic` | All objects same size at any distance | CAD, technical drawings, isometric |
 
 ### Complete Attribute Reference
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `projection` | `token` | `"perspective"` | Only `perspective` or `orthographic` |
-| `focalLength` | `float` | `50.0 mm` | Lens-to-image-plane distance. Controls FOV. |
-| `horizontalAperture` | `float` | `20.955 mm` | Sensor width **in millimetres** (NOT inches) |
-| `verticalAperture` | `float` | `15.291 mm` | Sensor height in millimetres |
-| `horizontalApertureOffset` | `float` | `0.0` | Horizontal lens shift (tilt-shift effect) |
-| `verticalApertureOffset` | `float` | `0.0` | Vertical lens shift |
-| `clippingRange` | `float2` | `(1, 1000000)` | Near and far clip planes **— IS in the schema** |
-| `fStop` | `float` | `0.0` | Aperture f-number — controls depth of field |
-| `focusDistance` | `float` | `0.0` | Distance to in-focus plane |
+| Attribute                  | Type     | Default         | Description                                     |
+| -------------------------- | -------- | --------------- | ----------------------------------------------- |
+| `projection`               | `token`  | `"perspective"` | Only `perspective` or `orthographic`            |
+| `focalLength`              | `float`  | `50.0 mm`       | Lens-to-image-plane distance. Controls FOV.     |
+| `horizontalAperture`       | `float`  | `20.955 mm`     | Sensor width **in millimetres** (NOT inches)    |
+| `verticalAperture`         | `float`  | `15.291 mm`     | Sensor height in millimetres                    |
+| `horizontalApertureOffset` | `float`  | `0.0`           | Horizontal lens shift (tilt-shift effect)       |
+| `verticalApertureOffset`   | `float`  | `0.0`           | Vertical lens shift                             |
+| `clippingRange`            | `float2` | `(1, 1000000)`  | Near and far clip planes **— IS in the schema** |
+| `fStop`                    | `float`  | `0.0`           | Aperture f-number — controls depth of field     |
+| `focusDistance`            | `float`  | `0.0`           | Distance to in-focus plane                      |
 
 ### Focal Length and Field of View
 
@@ -439,38 +493,38 @@ UsdGeom.XformCommonAPI(camera).SetTranslate(Gf.Vec3d(10, 5, 15), time=48)
 
 ### Exam Traps
 
-| Wrong statement | Correct fact |
-|-----------------|-------------|
-| "Sensor size is in inches" | Sensor size is in **millimetres** |
-| "clippingRange is handled externally by the renderer" | `clippingRange` IS in the schema |
-| "fStop controls exposure time" | `fStop` controls **depth of field** only |
-| "Camera auto-updates from animation clips" | Requires **explicit time samples** |
-| "Only perspective is supported" | Both **perspective and orthographic** exist |
+| Wrong statement                                       | Correct fact                                |
+| ----------------------------------------------------- | ------------------------------------------- |
+| "Sensor size is in inches"                            | Sensor size is in **millimetres**           |
+| "clippingRange is handled externally by the renderer" | `clippingRange` IS in the schema            |
+| "fStop controls exposure time"                        | `fStop` controls **depth of field** only    |
+| "Camera auto-updates from animation clips"            | Requires **explicit time samples**          |
+| "Only perspective is supported"                       | Both **perspective and orthographic** exist |
 
 ---
 
 ## 8. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **UsdGeomImageable** | Base class for all renderable prims. Provides visibility and purpose ONLY. |
-| **Purpose tokens** | render, proxy, guide, default. Guide = NEVER rendered. |
-| **Visibility inheritance** | Parent invisible → all children invisible, regardless of their own setting |
-| **faceVertexIndices length** | = SUM of faceVertexCounts. Not point count. Not face count. |
-| **holeIndices** | Marks faces as holes — exist in topology, NOT rendered |
-| **UVs not auto-generated** | Must author `primvars:st` explicitly |
-| **Primvar interpolation** | constant, uniform, vertex, faceVarying. NOT "indexed". |
-| **inputs: and outputs:** | NOT deprecated. inputs = data IN. outputs = data OUT. Any type. |
-| **MaterialBindingAPI** | Must `Apply()` before `Bind()` — both steps required |
-| **falloffRadius** | Controls max light range. NOT brightness. |
-| **SphereLight radius** | Controls shadow softness and spread. NOT brightness. |
-| **Shadows not automatic** | Requires explicit shadow attribute configuration |
-| **Camera projections** | Only `perspective` and `orthographic`. No others. |
-| **Sensor size** | Always in millimetres. Never inches. |
-| **clippingRange** | IS in UsdGeomCamera schema. NOT handled externally. |
-| **fStop** | Controls depth of field only. NOT exposure time. |
+| Concept                      | What to Remember                                                           |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| **UsdGeomImageable**         | Base class for all renderable prims. Provides visibility and purpose ONLY. |
+| **Purpose tokens**           | render, proxy, guide, default. Guide = NEVER rendered.                     |
+| **Visibility inheritance**   | Parent invisible → all children invisible, regardless of their own setting |
+| **faceVertexIndices length** | = SUM of faceVertexCounts. Not point count. Not face count.                |
+| **holeIndices**              | Marks faces as holes — exist in topology, NOT rendered                     |
+| **UVs not auto-generated**   | Must author `primvars:st` explicitly                                       |
+| **Primvar interpolation**    | constant, uniform, vertex, faceVarying. NOT "indexed".                     |
+| **inputs: and outputs:**     | NOT deprecated. inputs = data IN. outputs = data OUT. Any type.            |
+| **MaterialBindingAPI**       | Must `Apply()` before `Bind()` — both steps required                       |
+| **falloffRadius**            | Controls max light range. NOT brightness.                                  |
+| **SphereLight radius**       | Controls shadow softness and spread. NOT brightness.                       |
+| **Shadows not automatic**    | Requires explicit shadow attribute configuration                           |
+| **Camera projections**       | Only `perspective` and `orthographic`. No others.                          |
+| **Sensor size**              | Always in millimetres. Never inches.                                       |
+| **clippingRange**            | IS in UsdGeomCamera schema. NOT handled externally.                        |
+| **fStop**                    | Controls depth of field only. NOT exposure time.                           |
 
 ---
 
-*Previous: [Day 5 — Schemas and Data Modeling](day-05-schemas-and-data-modeling.md)*  
-*Next: [Day 7 — Pipeline Development and Data Exchange](day-07-pipeline-and-data-exchange.md)*
+_Previous: [Day 5 — Schemas and Data Modeling](day-05-schemas-and-data-modeling.md)_  
+_Next: [Day 7 — Pipeline Development and Data Exchange](day-07-pipeline-and-data-exchange.md)_

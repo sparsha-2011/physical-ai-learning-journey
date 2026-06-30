@@ -1,0 +1,85 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    upAxis = "Y"
+)
+
+def Xform "World"
+{
+    def Xform "Geometry"
+    {
+        def Mesh "Constant"
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-1, -1, 0), (1, 1, 0)]
+            int[] faceVertexCounts = [4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 4, 3, 1, 2, 5, 4, 3, 4, 7, 6, 4, 5, 8, 7]
+            point3f[] points = [(-1, -1, 0), (0, -1, 0), (1, -1, 0), (-1, 0, 0), (0, 0, 0), (1, 0, 0), (-1, 1, 0), (0, 1, 0), (1, 1, 0)]
+            color3f[] primvars:displayColor = [(0.8, 0.2, 0.2)] (
+                interpolation = "constant"
+            )
+            uniform token subdivisionScheme = "none"
+            double3 xformOp:translate = (-8, 1.5, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "Uniform"
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-1, -1, 0), (1, 1, 0)]
+            int[] faceVertexCounts = [4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 4, 3, 1, 2, 5, 4, 3, 4, 7, 6, 4, 5, 8, 7]
+            point3f[] points = [(-1, -1, 0), (0, -1, 0), (1, -1, 0), (-1, 0, 0), (0, 0, 0), (1, 0, 0), (-1, 1, 0), (0, 1, 0), (1, 1, 0)]
+            color3f[] primvars:displayColor = [(1, 0.2, 0.2), (0.2, 0.7, 0.2), (0.2, 0.4, 1), (1, 0.8, 0.1)] (
+                interpolation = "uniform"
+            )
+            uniform token subdivisionScheme = "none"
+            double3 xformOp:translate = (-3, 1.5, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "Vertex"
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-1, -1, 0), (1, 1, 0)]
+            int[] faceVertexCounts = [4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 4, 3, 1, 2, 5, 4, 3, 4, 7, 6, 4, 5, 8, 7]
+            point3f[] points = [(-1, -1, 0), (0, -1, 0), (1, -1, 0), (-1, 0, 0), (0, 0, 0), (1, 0, 0), (-1, 1, 0), (0, 1, 0), (1, 1, 0)]
+            color3f[] primvars:displayColor = [(1, 0.2, 0.2), (1, 0.5, 0), (0.2, 0.7, 0.2), (1, 0, 0.8), (1, 1, 1), (0.2, 0.8, 0.8), (0.2, 0.2, 1), (0.8, 0.2, 1), (0.2, 0.9, 0.4)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+            double3 xformOp:translate = (3, 1.5, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "FaceVarying"
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-1, -1, 0), (1, 1, 0)]
+            int[] faceVertexCounts = [4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 4, 3, 1, 2, 5, 4, 3, 4, 7, 6, 4, 5, 8, 7]
+            point3f[] points = [(-1, -1, 0), (0, -1, 0), (1, -1, 0), (-1, 0, 0), (0, 0, 0), (1, 0, 0), (-1, 1, 0), (0, 1, 0), (1, 1, 0)]
+            color3f[] primvars:displayColor = [(1, 0, 0), (1, 0.3, 0.3), (1, 0, 0), (1, 0.3, 0.3), (0.3, 1, 0.3), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0.3, 0.3, 1), (0, 0, 1), (0.3, 0.3, 1), (0, 0, 1), (1, 1, 0), (1, 0.8, 0), (1, 0.8, 0), (1, 1, 0)] (
+                interpolation = "faceVarying"
+            )
+            texCoord2f[] primvars:st = [(0, 0), (0.5, 0), (0.5, 0.5), (0, 0.5), (0.5, 0), (1, 0), (1, 0.5), (0.5, 0.5), (0, 0.5), (0.5, 0.5), (0.5, 1), (0, 1), (0.5, 0.5), (1, 0.5), (1, 1), (0.5, 1)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "none"
+            double3 xformOp:translate = (8, 1.5, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "Looks"
+    {
+    }
+
+    def DomeLight "Light"
+    {
+        float inputs:intensity = 1
+    }
+}
+

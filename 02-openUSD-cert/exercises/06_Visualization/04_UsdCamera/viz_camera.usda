@@ -1,0 +1,139 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    endTimeCode = 48
+    startTimeCode = 1
+    timeCodesPerSecond = 24
+    upAxis = "Y"
+)
+
+def Xform "World"
+{
+    def Xform "Cameras"
+    {
+        def Camera "StandardPerspective"
+        {
+            float2 clippingRange = (0.1, 1000)
+            float focalLength = 35
+            float horizontalAperture = 24
+            token projection = "perspective"
+            float verticalAperture = 13.5
+            float3 xformOp:rotateXYZ = (-15, 0, 0)
+            double3 xformOp:translate = (0, 3, 12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+
+        def Camera "WideAngle"
+        {
+            float2 clippingRange = (0.1, 1000)
+            float focalLength = 18
+            float horizontalAperture = 24
+            token projection = "perspective"
+            float verticalAperture = 13.5
+            float3 xformOp:rotateXYZ = (-10, 10, 0)
+            double3 xformOp:translate = (-8, 3, 12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+
+        def Camera "Telephoto"
+        {
+            float2 clippingRange = (0.1, 1000)
+            float focalLength = 85
+            float horizontalAperture = 24
+            token projection = "perspective"
+            float verticalAperture = 13.5
+            float3 xformOp:rotateXYZ = (-10, -10, 0)
+            double3 xformOp:translate = (8, 3, 12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+
+        def Camera "Orthographic"
+        {
+            float2 clippingRange = (0.1, 1000)
+            float horizontalAperture = 20
+            token projection = "orthographic"
+            float verticalAperture = 20
+            float3 xformOp:rotateXYZ = (-90, 0, 0)
+            double3 xformOp:translate = (0, 10, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+
+        def Camera "DepthOfField"
+        {
+            float2 clippingRange = (0.1, 1000)
+            float focalLength = 50
+            float focusDistance = 8
+            float fStop = 1.4
+            float horizontalAperture = 24
+            token projection = "perspective"
+            float verticalAperture = 13.5
+            float3 xformOp:rotateXYZ = (-10, 0, 0)
+            double3 xformOp:translate = (0, 2, 8)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+
+        def Camera "AnimatedCam"
+        {
+            float2 clippingRange = (0.1, 1000)
+            float focalLength = 35
+            float horizontalAperture = 24
+            token projection = "perspective"
+            float verticalAperture = 13.5
+            float3 xformOp:rotateXYZ.timeSamples = {
+                1: (-15, 20, 0),
+                24: (-15, 0, 0),
+                48: (-15, -20, 0),
+            }
+            double3 xformOp:translate.timeSamples = {
+                1: (-8, 3, 10),
+                24: (0, 3, 12),
+                48: (8, 3, 10),
+            }
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+    }
+
+    def Xform "Geometry"
+    {
+        def Sphere "Left"
+        {
+            double radius = 1
+            double3 xformOp:translate = (-4, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "LeftBox"
+        {
+            double3 xformOp:translate = (-4, 0.5, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "Centre"
+        {
+            double radius = 1
+            double3 xformOp:translate = (0, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "CentreBox"
+        {
+            double3 xformOp:translate = (0, 0.5, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "Right"
+        {
+            double radius = 1
+            double3 xformOp:translate = (4, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "RightBox"
+        {
+            double3 xformOp:translate = (4, 0.5, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+

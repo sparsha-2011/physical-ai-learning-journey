@@ -1,0 +1,74 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    upAxis = "Y"
+)
+
+def Xform "World"
+{
+    def DomeLight "Light"
+    {
+        float inputs:intensity = 1
+    }
+
+    def Mesh "Quad"
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-1, -1, 0), (1, 1, 0)]
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        point3f[] points = [(-1, -1, 0), (1, -1, 0), (1, 1, 0), (-1, 1, 0)]
+        color3f[] primvars:displayColor = [(0.8, 0.3, 0.2)] (
+            interpolation = "constant"
+        )
+        uniform token subdivisionScheme = "none"
+        double3 xformOp:translate = (-6, 1, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Mesh "Cube"
+    {
+        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 5, 4, 2, 3, 7, 6, 0, 3, 7, 4, 1, 2, 6, 5]
+        point3f[] points = [(-1, -1, -1), (1, -1, -1), (1, -1, 1), (-1, -1, 1), (-1, 1, -1), (1, 1, -1), (1, 1, 1), (-1, 1, 1)]
+        color3f[] primvars:displayColor = [(0.2, 0.5, 0.8)] (
+            interpolation = "constant"
+        )
+        uniform token subdivisionScheme = "none"
+        double3 xformOp:translate = (0, 1, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Mesh "SubdivCube"
+    {
+        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 5, 4, 2, 3, 7, 6, 0, 3, 7, 4, 1, 2, 6, 5]
+        point3f[] points = [(-1, -1, -1), (1, -1, -1), (1, -1, 1), (-1, -1, 1), (-1, 1, -1), (1, 1, -1), (1, 1, 1), (-1, 1, 1)]
+        color3f[] primvars:displayColor = [(0.2, 0.7, 0.3)] (
+            interpolation = "constant"
+        )
+        uniform token subdivisionScheme = "catmullClark"
+        double3 xformOp:translate = (6, 1, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Mesh "Frame"
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-2, -2, 0), (2, 2, 0)]
+        int[] faceVertexCounts = [4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 4, 3, 1, 2, 5, 4, 3, 4, 7, 6, 4, 5, 8, 7]
+        int[] holeIndices = [3]
+        point3f[] points = [(-2, -2, 0), (0, -2, 0), (2, -2, 0), (-2, 0, 0), (0, 0, 0), (2, 0, 0), (-2, 2, 0), (0, 2, 0), (2, 2, 0)]
+        color3f[] primvars:displayColor = [(0.8, 0.7, 0.1)] (
+            interpolation = "constant"
+        )
+        uniform token subdivisionScheme = "none"
+        double3 xformOp:translate = (-12, 2, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+

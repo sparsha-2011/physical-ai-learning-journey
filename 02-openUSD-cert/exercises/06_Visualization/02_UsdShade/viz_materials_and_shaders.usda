@@ -1,0 +1,112 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    upAxis = "Y"
+)
+
+def Xform "World"
+{
+    def Xform "Geometry"
+    {
+        def Sphere "RedSphere" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </World/Looks/RedMaterial>
+            double radius = 1
+            double3 xformOp:translate = (-3, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "RoughPlasticSphere" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </World/Looks/RoughPlastic>
+            double radius = 1
+            double3 xformOp:translate = (0, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "ShinyPlasticSphere" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </World/Looks/ShinyPlastic>
+            double radius = 1
+            double3 xformOp:translate = (3, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "MetalSphere" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </World/Looks/Metal>
+            double radius = 1
+            double3 xformOp:translate = (6, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "Looks"
+    {
+        def Material "RedMaterial"
+        {
+            token outputs:surface.connect = </World/Looks/RedMaterial/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.1, 0.1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "RoughPlastic"
+        {
+            token outputs:surface.connect = </World/Looks/RoughPlastic/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.4, 0.8)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+        def Material "ShinyPlastic"
+        {
+            token outputs:surface.connect = </World/Looks/ShinyPlastic/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.8, 0.2)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.1
+                token outputs:surface
+            }
+        }
+
+        def Material "Metal"
+        {
+            token outputs:surface.connect = </World/Looks/Metal/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.7, 0.3)
+                float inputs:metallic = 1
+                float inputs:roughness = 0.2
+                token outputs:surface
+            }
+        }
+    }
+}
+

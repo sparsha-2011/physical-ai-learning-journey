@@ -1,0 +1,67 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    upAxis = "Y"
+)
+
+def Xform "World"
+{
+    def Xform "VisGroup"
+    {
+        token visibility = "inherited"
+
+        def Sphere "SphereA"
+        {
+            double3 xformOp:translate = (-4, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "SphereB"
+        {
+            token visibility = "invisible"
+            double3 xformOp:translate = (0, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "SphereC"
+        {
+            double3 xformOp:translate = (4, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "PurposeGroup"
+    {
+        def Sphere "FullResModel"
+        {
+            uniform token purpose = "render"
+            double radius = 1.5
+            double3 xformOp:translate = (-6, 1, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "LowResProxy"
+        {
+            uniform token purpose = "proxy"
+            double3 xformOp:translate = (-6, 1, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "RigControl"
+        {
+            uniform token purpose = "guide"
+            double radius = 0.3
+            double3 xformOp:translate = (0, 3, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "DefaultObject"
+        {
+            uniform token purpose = "default"
+            double3 xformOp:translate = (6, 1, -4)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+

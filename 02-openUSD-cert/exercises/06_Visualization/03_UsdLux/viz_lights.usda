@@ -1,0 +1,89 @@
+#usda 1.0
+(
+    doc = """Generated from Composed Stage of root layer 
+"""
+    upAxis = "Y"
+)
+
+def Xform "World"
+{
+    def Xform "Lights"
+    {
+        def DistantLight "Sun"
+        {
+            color3f inputs:color = (1, 0.95, 0.8)
+            float inputs:intensity = 1
+            float3 xformOp:rotateXYZ = (-45, 30, 0)
+            uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
+        }
+
+        def SphereLight "PointLight"
+        {
+            color3f inputs:color = (1, 0.9, 0.7)
+            float inputs:intensity = 500
+            float inputs:radius = 0.5
+            double3 xformOp:translate = (0, 5, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def SphereLight "SoftLight"
+        {
+            color3f inputs:color = (0.7, 0.8, 1)
+            float inputs:intensity = 500
+            float inputs:radius = 3
+            double3 xformOp:translate = (6, 5, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def RectLight "AreaLight"
+        {
+            color3f inputs:color = (0.9, 0.95, 1)
+            float inputs:height = 2
+            float inputs:intensity = 200
+            float inputs:width = 4
+            float3 xformOp:rotateXYZ = (-60, 0, 0)
+            double3 xformOp:translate = (-6, 4, 2)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        }
+
+        def DomeLight "Environment"
+        {
+            color3f inputs:color = (0.5, 0.6, 0.8)
+            float inputs:intensity = 0.5
+        }
+    }
+
+    def Xform "Geometry"
+    {
+        def Mesh "Ground"
+        {
+            float3[] extent = [(-10, 0, -10), (10, 0, 10)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            point3f[] points = [(-10, 0, -10), (10, 0, -10), (10, 0, 10), (-10, 0, 10)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Sphere "SphereA"
+        {
+            double radius = 1
+            double3 xformOp:translate = (-6, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "SphereB"
+        {
+            double radius = 1
+            double3 xformOp:translate = (0, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Sphere "SphereC"
+        {
+            double radius = 1
+            double3 xformOp:translate = (6, 1, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+
