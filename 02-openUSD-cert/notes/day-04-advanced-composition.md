@@ -1,7 +1,7 @@
 # Day 4 — Advanced Composition Concepts
 
 > **OpenUSD NCP Certification Study Notes**  
-> *Edit Targets, Session Layer, Sparse Overrides, Flattening, and Asset Structure*
+> _Edit Targets, Session Layer, Sparse Overrides, Flattening, and Asset Structure_
 
 ---
 
@@ -157,37 +157,159 @@ shot.usda                          flat_delivery.usda
 
 ### What Flattening Preserves vs Discards
 
-| Preserved | Discarded |
-|-----------|-----------|
+| Preserved                      | Discarded                                   |
+| ------------------------------ | ------------------------------------------- |
 | ✅ All winning property values | ❌ Composition arcs (references, sublayers) |
-| ✅ Animation time samples | ❌ Variant sets (collapsed to selected) |
-| ✅ All prim hierarchy | ❌ Layer stack structure |
-| ✅ Geometry types | ❌ Payload lazy-loading |
+| ✅ Animation time samples      | ❌ Variant sets (collapsed to selected)     |
+| ✅ All prim hierarchy          | ❌ Layer stack structure                    |
+| ✅ Geometry types              | ❌ Payload lazy-loading                     |
 
 > **Time samples are PRESERVED.** Flattening does NOT bake animation to static values. That is a separate, deliberate operation.
 
-### `stage.Flatten()` vs `UsdUtils.FlattenLayerStack()`
+## `stage.Flatten()` vs `UsdUtils.FlattenLayerStack()`
 
-| Method | What it resolves | Returns |
-|--------|-----------------|---------|
-| `stage.Flatten()` | Everything — sublayers, references, variants, payloads | `SdfLayer` |
-| `UsdUtils.FlattenLayerStack(stage)` | Sublayers only — references and variants kept intact | `SdfLayer` |
-| `usdcat --flatten` | Same as `stage.Flatten()` | CLI output |
+Both methods return a new `SdfLayer` in memory. The original stage and all its source files are **never modified**. Think of both as taking a photograph of the stage at that moment — the scene itself is untouched.
+
+---
+
+### What each one resolves
+
+| Method                         | Sublayers | References  | Payloads    | Variants              | Time samples |
+| ------------------------------ | --------- | ----------- | ----------- | --------------------- | ------------ |
+| `UsdUtils.FlattenLayerStack()` | Merged    | Kept intact | Kept intact | Kept intact           | Preserved    |
+| `stage.Flatten()`              | Merged    | Resolved    | Resolved    | Collapsed to selected | Preserved    |
+| `usdcat --flatten`             | Merged    | Resolved    | Resolved    | Collapsed to selected | Preserved    |
+
+> Time samples are **always preserved** by both methods. Neither flattens animation to a static value.
+
+---
+
+### The true difference — what the output SdfLayer looks like
+
+Say you have this stage:
+
+```
+shot.usda
+  ├── anim.usda          (sublayer — translate keyframes)
+  └── layout.usda        (sublayer — base positions)
+      /World/Chair       (has reference → chair_asset.usda)
+      /World/Chair       (has variantSet "color", selection = "red")
+```
+
+**After `UsdUtils.FlattenLayerStack(stage)`:**
+
+```usda
+#usda 1.0
+(
+    # sublayers are GONE — merged into one layer
+    # but arcs are PRESERVED exactly as authored
+)
+
+def Xform "Chair" (
+    prepend references = @./chair_asset.usda@   ← reference STILL HERE
+    variants = { string color = "red" }          ← variant set STILL HERE
+    prepend variantSets = "color"
+) {
+    double3 xformOp:translate.timeSamples = {    ← anim + layout merged
+        1:  (0, 0, 0),
+        24: (5, 0, 0),
+    }
+}
+```
+
+The reference to `chair_asset.usda` is still there. The variant set still exists and can still be switched. The sublayer opinions from `anim.usda` and `layout.usda` are merged into one layer but the composition structure is preserved.
+
+**After `stage.Flatten()`:**
+
+```usda
+#usda 1.0
+(
+    # everything resolved — no arcs, no sublayers
+)
+
+def Xform "Chair" {
+    # reference is GONE — geometry inlined from chair_asset.usda
+    def Mesh "seat_geo" {
+        point3f[] points = [(-1,0,-1), (1,0,-1), ...]  ← geometry inlined
+        int[] faceVertexCounts = [4, 4, 4, ...]
+    }
+    def Mesh "legs_geo" { ... }
+
+    # variant set is GONE — only the selected variant's data remains
+    color3f[] primvars:displayColor = [(0.8, 0.2, 0.2)]  ← "red" baked in
+    # cannot switch to "blue" anymore — that data is gone
+
+    double3 xformOp:translate.timeSamples = {    ← time samples preserved
+        1:  (0, 0, 0),
+        24: (5, 0, 0),
+    }
+}
+```
+
+The reference is gone — the geometry from `chair_asset.usda` is inlined directly. The variant set is gone — only the currently selected variant's data remains. You cannot switch variants on a fully flattened file.
+
+---
+
+### When to use each
+
+**Use `UsdUtils.FlattenLayerStack()` when:**
+
+- You want to debug sublayer conflicts — see what the merged layer looks like without the noise of multiple files
+- You need to deliver a file but want to keep references and variants intact for the recipient
+- You are merging department layers (anim + layout + fx) into one file while preserving asset modularity
+
+**Use `stage.Flatten()` when:**
+
+- You are delivering a fully self-contained file to an external party with no dependencies
+- You need to bake a snapshot of the exact current state for archiving
+- You are handing off to a renderer or tool that does not support USD composition
+
+---
+
+### Code
 
 ```python
 from pxr import Usd, UsdUtils
 
 stage = Usd.Stage.Open("shot.usda")
 
-# Full flatten — resolves EVERYTHING
-flat_layer = stage.Flatten()
-flat_layer.Export("delivery.usda")   # save flat result to disk
-# Original shot.usda and all its layers are completely untouched
-
 # Sublayer-only flatten — references and variants preserved
 flat_sublayers = UsdUtils.FlattenLayerStack(stage)
-flat_stage = Usd.Stage.Open(flat_sublayers)
-# inspect the result...
+flat_stage     = Usd.Stage.Open(flat_sublayers)
+
+# Confirm reference still exists
+chair = flat_stage.GetPrimAtPath("/World/Chair")
+print(chair.GetMetadata("references"))   # still has reference arc
+
+# Confirm variant set still exists
+print(chair.GetVariantSets().GetNames()) # ["color"] — still switchable
+
+# Full flatten — resolves everything
+flat_full = stage.Flatten()
+flat_stage_b = Usd.Stage.Open(flat_full)
+
+chair_b = flat_stage_b.GetPrimAtPath("/World/Chair")
+print(chair_b.GetMetadata("references"))     # None — reference gone
+print(chair_b.GetVariantSets().GetNames())   # [] — variant set gone
+print(chair_b.GetChildren())                 # [seat_geo, legs_geo] — inlined
+
+# Save flat result to disk for delivery
+flat_full.Export("delivery.usda")
+# Original shot.usda completely untouched
+```
+
+---
+
+### The key mental model
+
+```
+UsdUtils.FlattenLayerStack()
+  "Merge the filing cabinet drawers into one drawer
+   but keep all the folder tabs and references intact"
+
+stage.Flatten()
+  "Photocopy every single document in the cabinet
+   into one pile — no folders, no tabs, just the final content"
 ```
 
 > **Flatten is safe to call for debugging** — `stage.Flatten()` returns a **new** `SdfLayer` object. It never modifies the original stage. Inspect the flat layer and discard it when done. For delivery, call `.Export()` on the result.
@@ -262,7 +384,7 @@ cache = Usd.StageCache()
 with Usd.StageCacheContext(cache):
     # First open — reads from disk and runs composition
     stage = Usd.Stage.Open("scene.usda")
-    
+
     # Second open of the SAME file — returns cached stage instantly
     stage2 = Usd.Stage.Open("scene.usda")
     assert stage is stage2  # same object
@@ -296,22 +418,22 @@ When USD composes a prim, it collects all **PrimSpecs** from every layer that ha
 
 ## 8. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **Edit target** | Controls which layer receives all authoring operations |
-| **Default edit target** | Root layer — always check before authoring in multi-layer stages |
-| **Session layer** | Always strongest. In-memory. Never saved. `stage.GetSessionLayer()` |
-| **Sparse override** | `over` spec changes only specific properties. Non-destructive. |
-| **`stage.Flatten()`** | Returns new `SdfLayer` with all composition resolved. Never modifies source. |
-| **`FlattenLayerStack()`** | Merges sublayers only. References and variants kept intact. |
-| **Time samples preserved** | Flattening does NOT bake animation to static values |
-| **Variants collapsed** | Flattening collapses variant sets to the currently selected variant |
-| **Encapsulation** | Materials and all prims inside the asset root prim. Relative paths. |
-| **defaultPrim** | Must be set on every published asset |
-| **SdfChangeBlock** | Batch many edits into one notification — critical for performance |
-| **UsdStageCache** | Cache open stages to avoid redundant recomposition |
+| Concept                    | What to Remember                                                             |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| **Edit target**            | Controls which layer receives all authoring operations                       |
+| **Default edit target**    | Root layer — always check before authoring in multi-layer stages             |
+| **Session layer**          | Always strongest. In-memory. Never saved. `stage.GetSessionLayer()`          |
+| **Sparse override**        | `over` spec changes only specific properties. Non-destructive.               |
+| **`stage.Flatten()`**      | Returns new `SdfLayer` with all composition resolved. Never modifies source. |
+| **`FlattenLayerStack()`**  | Merges sublayers only. References and variants kept intact.                  |
+| **Time samples preserved** | Flattening does NOT bake animation to static values                          |
+| **Variants collapsed**     | Flattening collapses variant sets to the currently selected variant          |
+| **Encapsulation**          | Materials and all prims inside the asset root prim. Relative paths.          |
+| **defaultPrim**            | Must be set on every published asset                                         |
+| **SdfChangeBlock**         | Batch many edits into one notification — critical for performance            |
+| **UsdStageCache**          | Cache open stages to avoid redundant recomposition                           |
 
 ---
 
-*Previous: [Day 3 — Composition Arcs Part 2](day-03-composition-arcs-part-2.md)*  
-*Next: [Day 5 — Schemas and Data Modeling](day-05-schemas-and-data-modeling.md)*
+_Previous: [Day 3 — Composition Arcs Part 2](day-03-composition-arcs-part-2.md)_  
+_Next: [Day 5 — Schemas and Data Modeling](day-05-schemas-and-data-modeling.md)_
