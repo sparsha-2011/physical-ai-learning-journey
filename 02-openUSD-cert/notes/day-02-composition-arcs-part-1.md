@@ -286,13 +286,6 @@ asset_stage.SetDefaultPrim(root_prim)
 asset_stage.Save()
 ```
 
-### Reference Composition Rules
-
-- References are positioned at **E** in LIVERPS — weaker than local, inherit, and variant
-- Local opinions on the referencing prim **override** opinions from the reference
-- References can point to a specific prim path within the file: `@./asset.usda@</SpecificPrim>`
-- Multiple references can be stacked on one prim: `prepend references = [@./a.usda@, @./b.usda@]`
-
 ### `prepend` and `append` — List Insertion Behaviour
 
 Both keywords control where a new arc is inserted relative to existing arcs of the same type on that prim.
@@ -328,6 +321,13 @@ append items → fill the back of the list (weakest)
 Final order: [prepend[0], prepend[1], ..., append[0], append[1], ...]
 
 **On a fresh prim with no existing arcs, `prepend` and `append` produce identical results** — the distinction only matters when arcs already exist on the prim.
+
+### Reference Composition Rules
+
+- References are positioned at **E** in LIVERPS — weaker than local, inherit, and variant
+- Local opinions on the referencing prim **override** opinions from the reference
+- References can point to a specific prim path within the file: `@./asset.usda@</SpecificPrim>`
+- Multiple references can be stacked on one prim: `prepend references = [@./a.usda@, @./b.usda@]`
 
 ### USDA Syntax
 
