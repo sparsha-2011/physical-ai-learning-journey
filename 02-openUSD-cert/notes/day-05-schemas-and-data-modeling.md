@@ -1,7 +1,7 @@
 # Day 5 — Schemas and Data Modeling
 
 > **OpenUSD NCP Certification Study Notes**  
-> *USD Schemas, Schema Types, usdGenSchema, Custom Schemas, SdfFileFormat*
+> _USD Schemas, Schema Types, usdGenSchema, Custom Schemas, SdfFileFormat_
 
 ---
 
@@ -27,13 +27,13 @@ USD ships with built-in schemas for common 3D concepts (`Mesh`, `Camera`, `Mater
 
 ### Why Custom Schemas (vs plain attributes)?
 
-| With custom schema | Without (plain attributes) |
-|-------------------|---------------------------|
-| `prim.IsA(TemperatureSensor)` works | No type checking |
-| Schema fallback values work | No defaults |
-| Generated Python and C++ API | Manual attribute access |
-| Full usdview introspection | Just arbitrary data |
-| Validates at authoring time | Silent errors |
+| With custom schema                  | Without (plain attributes) |
+| ----------------------------------- | -------------------------- |
+| `prim.IsA(TemperatureSensor)` works | No type checking           |
+| Schema fallback values work         | No defaults                |
+| Generated Python and C++ API        | Manual attribute access    |
+| Full usdview introspection          | Just arbitrary data        |
+| Validates at authoring time         | Silent errors              |
 
 ---
 
@@ -72,11 +72,11 @@ prim.HasAPI(UsdPhysics.RigidBodyAPI)   # True
 prim.IsA(UsdGeom.Mesh)                 # Still True
 ```
 
-| Property | IsA Schema | API Schema |
-|----------|-----------|-----------|
-| Sets `typeName` | ✅ Yes | ❌ No |
-| Number per prim | Exactly 1 | Multiple |
-| Checking | `prim.IsA()` | `prim.HasAPI()` |
+| Property            | IsA Schema            | API Schema                   |
+| ------------------- | --------------------- | ---------------------------- |
+| Sets `typeName`     | ✅ Yes                | ❌ No                        |
+| Number per prim     | Exactly 1             | Multiple                     |
+| Checking            | `prim.IsA()`          | `prim.HasAPI()`              |
 | Declaration in USDA | `def TypeName "name"` | `prepend apiSchemas = [...]` |
 
 ---
@@ -106,12 +106,12 @@ UsdSchemaBase                    ← root of ALL schemas
 
 ### Choosing the Right Base Class for Custom Schemas
 
-| Base Class | Use when |
-|------------|---------|
-| `UsdSchemaBase` | ❌ Almost never — requires implementing everything manually |
-| `UsdTyped` | ✅ Standard IsA schema that is a new prim type |
+| Base Class         | Use when                                                      |
+| ------------------ | ------------------------------------------------------------- |
+| `UsdSchemaBase`    | ❌ Almost never — requires implementing everything manually   |
+| `UsdTyped`         | ✅ Standard IsA schema that is a new prim type                |
 | `UsdGeomImageable` | ✅ Custom renderable object that needs visibility and purpose |
-| `UsdGeomXformable` | ✅ Custom object that needs transforms |
+| `UsdGeomXformable` | ✅ Custom object that needs transforms                        |
 
 > **Exam trap:** "Inherit directly from UsdSchemaBase" is typically the wrong answer. The correct base is `UsdTyped` for standard custom IsA schemas, or `UsdGeomImageable` if the schema is a renderable object.
 
@@ -157,65 +157,316 @@ class Xform "TemperatureSensor" (
 
 ## 5. The usdGenSchema Workflow
 
-`usdGenSchema` is the code generation tool that transforms a `schema.usda` definition into compilable C++ code and Python bindings.
+`usdGenSchema` is the code generation tool that transforms a `schema.usda` definition into compilable C++ code and Python bindings. Understanding where TfType fits into each step is essential — it explains why each step exists and what breaks if you skip any of them.
 
 ```
-STEP 1: Write schema.usda
-        Define schema class, base class, attributes + defaults
+STEP 1  Write schema.usda
+        ─────────────────────────────────────────────────────
+        Define the schema class, base class, and attributes.
+        This is your source of truth — human-readable intent.
 
-STEP 2: Run usdGenSchema
-        usdGenSchema schema.usda
-        Generates:
-          - C++ header and source files
-          - Python bindings
-          - plugInfo.json (for plugin discovery)
+        class Xform "TemperatureSensor" (
+            inherits = </Xform>
+        ) {
+            float sensor:temperature = 20.0
+        }
 
-STEP 3: Compile the generated C++ into a shared library
-        cmake + make → acmeSensors.so / acmeSensors.dll
+        TfType relevance: NONE YET
+        The type does not exist anywhere at runtime.
+        It is only an intent written in a text file.
 
-STEP 4: Deploy the plugin
-        Place .so + plugInfo.json where USD can discover it
-        PXR_PLUGINPATH_NAME=/path/to/acmeSensors
+        ↓
 
-STEP 5: Use like any built-in schema
-        from pxr import AcmeSensors
-        sensor = AcmeSensors.TemperatureSensor.Define(stage, "/Factory/S01")
-        sensor.GetTemperatureAttr().Get()   # 20.0 (schema fallback)
+STEP 2  Run usdGenSchema schema.usda
+        ─────────────────────────────────────────────────────
+        usdGenSchema reads schema.usda and generates:
+
+          acmeSensors.h           ← C++ class declaration
+          acmeSensors.cpp         ← C++ implementation
+                                     CONTAINS TF_REGISTRY_FUNCTION  ← key output
+          wrapAcmeSensors.cpp     ← Python bindings
+          plugInfo.json           ← plugin discovery metadata
+
+        TfType relevance: TF_REGISTRY_FUNCTION IS GENERATED HERE
+        usdGenSchema writes the registration macro automatically.
+        You never write TF_REGISTRY_FUNCTION by hand.
+        It is compiled into the library in the next step.
+
+        What TF_REGISTRY_FUNCTION looks like in the generated source:
+
+          TF_REGISTRY_FUNCTION(TfType) {
+              TfType::Define<AcmeSensors_TemperatureSensor,
+                             TfType::Bases<UsdGeomXform>>();
+          }
+
+        ↓
+
+STEP 3  Compile C++ into a shared library
+        ─────────────────────────────────────────────────────
+        cmake + make → acmeSensors.so (Linux) / acmeSensors.dll (Windows)
+
+        TfType relevance: TF_REGISTRY_FUNCTION IS NOW IN THE BINARY
+        The macro is compiled into the .so file.
+        It exists on disk but has NOT run yet.
+        The TfType registry is still empty for this type.
+
+        ↓
+
+STEP 4  Deploy the plugin
+        ─────────────────────────────────────────────────────
+        Place acmeSensors.so + plugInfo.json in a directory.
+        Set PXR_PLUGINPATH_NAME=/path/to/acmeSensors/
+
+        TfType relevance: DISCOVERY ENABLED, REGISTRATION STILL PENDING
+        USD now knows where to find the library (plugInfo.json).
+        But TF_REGISTRY_FUNCTION has still NOT run.
+        The registry is still empty for TemperatureSensor.
+        This is why manifest-file-only is wrong — discovery ≠ registration.
+
+        ↓
+
+STEP 5  First use of the type in a running process
+        ─────────────────────────────────────────────────────
+        prim.IsA(TemperatureSensor) is called for the first time.
+        USD checks registry → not found → loads acmeSensors.so.
+        Loading the .so triggers TF_REGISTRY_FUNCTION to run.
+
+        TfType relevance: REGISTRATION HAPPENS NOW
+        TF_REGISTRY_FUNCTION executes:
+          Registry entry created:
+          TemperatureSensor → Xform → Xformable → Imageable → Typed → SchemaBase
+
+        From this point until the process ends:
+          prim.IsA(TemperatureSensor)         → True
+          prim.IsA(UsdGeom.Xform)             → True
+          sensor.GetTemperatureAttr().Get()   → 20.0
+          usdview shows all schema attributes → True
+
+        When process ends → registry gone.
+        Next process starts from Step 4 again.
+```
+
+### The TfType Journey in One View
+
+```
+schema.usda          →   usdGenSchema   →   acmeSensors.so    →   Running process
+(text file)              (code gen)         (binary)               (in-memory registry)
+
+"TemperatureSensor       TF_REGISTRY_      TF_REGISTRY_           TemperatureSensor
+ inherits Xform"    →    FUNCTION         FUNCTION               → Xform
+                         written in   →   compiled into   →      → Xformable
+                         .cpp             .so                    → Imageable
+                                          (dormant)              → Typed
+                                                                 → SchemaBase
+                    [intent]         [generated]        [on disk] [active in RAM]
 ```
 
 ### Why Not Python-Only?
 
-Python-only schemas do **not** provide:
-- Full USD type system integration
-- Schema fallback values
-- `prim.IsA()` working correctly  
-- C++ performance code paths
+Python has no mechanism to run `TF_REGISTRY_FUNCTION`. There is no `.so` binary, no compiled macro, nothing that writes into the TfType registry at load time. The type name exists as a string but the registry never gets populated.
 
-Full custom schemas require C++ code generation via `usdGenSchema`. Python-only approaches are limited and are marked incorrect on the exam.
+| Capability                       | Python-only                   | Full C++ via usdGenSchema         |
+| -------------------------------- | ----------------------------- | --------------------------------- |
+| `TF_REGISTRY_FUNCTION` in binary | None                          | Generated automatically in Step 2 |
+| `prim.IsA()`                     | False or error                | Works — registry populated        |
+| Inheritance chain known          | No                            | Full chain in registry            |
+| Schema fallback values           | `Get()` returns None          | Returns schema default            |
+| Generated accessor methods       | Manual `GetAttribute("name")` | `GetTemperatureAttr()`            |
+| Correct for                      | Prototyping only              | Production pipelines              |
 
 ---
 
 ## 6. TfType Registration
 
-**TfType** is USD's runtime type identification system. Registration is what makes `prim.IsA()`, `prim.HasAPI()`, and schema discovery work.
+### What Problem TfType Solves
 
-Without TfType registration:
-```python
-prim.IsA(TemperatureSensor)   # ERROR or always False
-prim.GetTypeName()             # "TemperatureSensor" (just a string, no type knowledge)
-sensor.GetTemperatureAttr().Get()  # returns None (no schema fallback)
+When USD reads a file containing `def TemperatureSensor "Sensor_001"`, it sees a string. Without something telling USD what that string means, it cannot answer:
+
+- What attributes does this prim have?
+- What does it inherit from?
+- What fallback values apply?
+- Does `prim.IsA(UsdGeom.Xform)` return True?
+
+That "something" is the **TfType registry** — USD's runtime type identification system. Registration is what transforms a string into a meaningful type with a full inheritance chain, fallback values, and a generated API.
+
+> **Where TfType fits in the workflow:** See Section 5 above. `TF_REGISTRY_FUNCTION` is generated in Step 2 (by usdGenSchema), compiled in Step 3, deployed in Step 4, and finally **runs** in Step 5 when the type is first used. The registry is populated at Step 5 only.
+
+> **Analogy — The Immigration Database**
+>
+> Think of USD as a border system. A passport says "citizen of AcmeSensors Corp."
+> That string means nothing until the border system looks it up in a registry
+> that knows: what rights does this citizen have, what languages do they speak?
+>
+> The TfType registry is that database. Without it, `TemperatureSensor` is a
+> passport from a country the system has never heard of — the string exists
+> but carries no meaning. With it, USD knows the full profile.
+>
+> The `schema.usda` is the passport application. `usdGenSchema` prints the passport.
+> `TF_REGISTRY_FUNCTION` is the moment it gets stamped and entered into the database.
+> `plugInfo.json` is the address where the passport office is located.
+
+### Without Registration vs With Registration
+
+```
+WITHOUT TfType registration          WITH TfType registration
+────────────────────────────────     ────────────────────────────────
+prim.GetTypeName()                   prim.GetTypeName()
+→ "TemperatureSensor"                → "TemperatureSensor"
+  (just a string, no meaning)          (meaningful — registry knows it)
+
+prim.IsA(TemperatureSensor)          prim.IsA(TemperatureSensor)
+→ False or AttributeError            → True
+
+prim.IsA(UsdGeom.Xform)             prim.IsA(UsdGeom.Xform)
+→ False (ancestry unknown)           → True (ancestry chain known)
+
+sensor.GetTemperatureAttr().Get()    sensor.GetTemperatureAttr().Get()
+→ None (no schema fallback)          → 20.0 (schema fallback works)
+
+usdview:                             usdview:
+→ "unknown schema type"              → all attributes listed with types
+→ no attribute listing               → schema documentation visible
 ```
 
-With TfType registration (via `usdGenSchema`-generated `plugInfo.json`):
-```python
-prim.IsA(TemperatureSensor)    # True ✅
-prim.IsA(UsdGeomXform)         # True ✅ (inheritance chain known)
-sensor.GetTemperatureAttr().Get()  # 20.0 ✅ (schema fallback works)
+Same USD file. Same prim. The difference is entirely whether the registry has been populated for this process.
+
+---
+
+### The Two Components — Both Required
+
+Registration requires exactly two things working together. Neither alone is sufficient.
+
+**Component 1 — `plugInfo.json` (Discovery)**
+
+This file tells USD: "there is a plugin here, go load it when someone needs `TemperatureSensor`." It is the _address_ of the library. It does not perform registration itself.
+
+```json
+{
+  "Plugins": [
+    {
+      "Name": "acmeSensors",
+      "LibraryPath": "acmeSensors.so",
+      "Types": {
+        "AcmeSensors_TemperatureSensor": {
+          "bases": ["UsdGeomXform"],
+          "alias": { "UsdSchemaBase": "TemperatureSensor" }
+        }
+      }
+    }
+  ]
+}
 ```
 
-TfType registration happens automatically when `usdGenSchema` generates `plugInfo.json` and the plugin is deployed to a path in `PXR_PLUGINPATH_NAME`. USD loads `plugInfo.json` at startup and registers all described types.
+**Component 2 — `TF_REGISTRY_FUNCTION` (Actual Registration)**
 
-> **Exam trap:** "Register the custom model kind token in the TfType system without any schema or API linkage" is **WRONG**. Token registration alone provides no inheritance chain, no fallback values, and no API. The schema definition itself must be linked.
+This C++ macro is generated by `usdGenSchema` inside the compiled source. It runs when the shared library loads into memory, writing the type into the TfType registry.
+
+```cpp
+// Generated by usdGenSchema — do not write manually
+// Runs when acmeSensors.so is loaded into the process
+
+TF_REGISTRY_FUNCTION(TfType)
+{
+    TfType::Define<AcmeSensors_TemperatureSensor,
+                   TfType::Bases<UsdGeomXform>>();
+    // After this line:
+    // Registry knows: TemperatureSensor → Xform → Xformable → Imageable → Typed → SchemaBase
+}
+```
+
+> **Analogy — Street Address vs Showing Up**
+>
+> `plugInfo.json` is like posting your address on a directory — it tells people
+> where to find you. But until you open the door and introduce yourself,
+> you are not registered with the neighbourhood.
+>
+> `TF_REGISTRY_FUNCTION` is the moment of showing up. The address (manifest)
+> and the introduction (macro) are both required. One without the other does nothing.
+
+> **Exam trap — manifest file only:** "Implement the schema by subclassing UsdGeomImageable
+> and registering it via a plugin manifest file **only**" is **WRONG**.
+> The manifest enables discovery. `TF_REGISTRY_FUNCTION` in the C++ source
+> performs the actual registration. Both are required.
+
+---
+
+### When Registration Runs — Per Process, Not Forever
+
+This is the most commonly misunderstood aspect. Registration does **not** persist between processes and is never written to disk. Every new process rebuilds the registry by loading the plugin.
+
+```
+Process lifecycle for a custom schema type:
+
+  Process starts
+       |
+       v
+  USD scans PXR_PLUGINPATH_NAME
+  Reads all plugInfo.json files
+  Notes which plugins exist — does NOT load them yet
+       |
+       v
+  Someone calls prim.IsA(TemperatureSensor)
+       |
+       v
+  Registry check: "do I know TemperatureSensor?"
+  Answer: No → "plugInfo.json says there's a library for this"
+       |
+       v
+  acmeSensors.so loads into memory
+  TF_REGISTRY_FUNCTION runs
+  Type written into registry
+       |
+       v
+  IsA(), fallbacks, API all work
+  (for the lifetime of THIS process only)
+       |
+       v
+  Process ends → registry gone from memory
+  Next process starts from zero
+```
+
+> **Analogy — A Guest List at a Venue**
+>
+> Each time a new event starts (a new process), the venue sets up a fresh guest list.
+> The plugin library is a guest who must check in at the door each time the event runs.
+> Once checked in, they can move around freely for the whole event.
+> When the event ends, the list is discarded — next event, check in again.
+>
+> This is why `PXR_PLUGINPATH_NAME` must be set in every environment that uses
+> your custom schema — every render farm node, every artist machine, every CI runner.
+> Each new process needs to find the plugin and register it fresh.
+
+### What Happens Without the Plugin Deployed
+
+If a colleague opens your USD file without the plugin in their `PXR_PLUGINPATH_NAME`:
+
+```python
+# The raw data is still readable — the file is not corrupted
+prim.GetTypeName()                             # "TemperatureSensor" — string is there
+prim.GetAttribute("sensor:temperature").Get()  # 23.5 — raw value readable
+
+# But schema knowledge is gone
+prim.IsA(TemperatureSensor)                    # False — type unknown
+prim.IsA(UsdGeom.Xform)                        # False — ancestry unknown
+sensor.GetTemperatureAttr()                    # AttributeError — API not available
+sensor.GetTemperatureAttr().Get()              # None — no fallback
+```
+
+The file is not broken. The raw data is readable. But without the plugin, USD cannot interpret the type — no inheritance, no fallbacks, no generated API. The type name is just a string until the registry is populated.
+
+---
+
+### Exam Trap Summary for TfType
+
+| Option phrasing                                               | Verdict | Why                                                          |
+| ------------------------------------------------------------- | ------- | ------------------------------------------------------------ |
+| "Register via plugin manifest file only"                      | Wrong   | `TF_REGISTRY_FUNCTION` in C++ source also required           |
+| "Python-only schema"                                          | Wrong   | No `TF_REGISTRY_FUNCTION` — `IsA()` and fallbacks don't work |
+| "Token registration without schema linkage"                   | Wrong   | Token alone = no inheritance, no fallbacks, no API           |
+| "Modify USD core source to add the type"                      | Wrong   | Plugin system exists to avoid core modification entirely     |
+| "UsdSchemaRegistry for dynamic loading without recompilation" | Wrong   | Requires plugin mechanisms or compile-time registration      |
+| "Register with TfType AND deploy via PXR_PLUGINPATH_NAME"     | Correct | Both components required                                     |
+| "Subclass UsdSchemaBase or a derived class"                   | Correct | UsdTyped and UsdGeomImageable ARE derived from UsdSchemaBase |
 
 ---
 
@@ -255,11 +506,11 @@ SdfFileFormat = defines how data is READ and WRITTEN to/from a file format
 
 ### Wrong Approaches
 
-| Wrong approach | Why it's wrong |
-|----------------|----------------|
-| Override `UsdStage::Open()` | Static method, not designed for this |
-| Modify USD core source | Defeats modularity, breaks compatibility |
-| Create a UsdSchema for the format | Schemas define data types, not file I/O |
+| Wrong approach                    | Why it's wrong                           |
+| --------------------------------- | ---------------------------------------- |
+| Override `UsdStage::Open()`       | Static method, not designed for this     |
+| Modify USD core source            | Defeats modularity, breaks compatibility |
+| Create a UsdSchema for the format | Schemas define data types, not file I/O  |
 
 ---
 
@@ -310,31 +561,36 @@ Custom validation ensures `factory_unit` prims always have the required structur
 
 ### Wrong Approaches
 
-| Wrong approach | Why |
-|----------------|-----|
-| Override (not extend) UsdModelAPI | Replaces existing behaviour — breaks standard kinds |
-| Register token in TfType without schema linkage | Provides a name but no behaviour, API, or validation |
-| Use variants within the model kind | Variants = content variation. Model kinds = classification. Separate concerns. |
-| Modify USD core source | USD's plugin and registry system exists to avoid this |
+| Wrong approach                                  | Why                                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| Override (not extend) UsdModelAPI               | Replaces existing behaviour — breaks standard kinds                            |
+| Register token in TfType without schema linkage | Provides a name but no behaviour, API, or validation                           |
+| Use variants within the model kind              | Variants = content variation. Model kinds = classification. Separate concerns. |
+| Modify USD core source                          | USD's plugin and registry system exists to avoid this                          |
 
 ---
 
 ## 9. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **IsA schema** | Defines a prim type. Sets `typeName`. One per prim. Check with `prim.IsA()` |
-| **API schema** | Augments a prim. No `typeName`. Multiple per prim. Check with `prim.HasAPI()` |
-| **Custom schema base** | `UsdTyped` for standard schemas. `UsdGeomImageable` for renderable. NOT `UsdSchemaBase` directly |
-| **usdGenSchema** | Generates C++ and Python from `schema.usda`. Required for full integration |
-| **TfType registration** | Makes `IsA()`, `HasAPI()`, fallback values work. Done via `plugInfo.json` |
-| **Python-only schemas** | Limited — no full type system integration. NOT correct for production schemas |
-| **SdfFileFormat** | For teaching USD to read/write new file formats. Independent of schemas |
-| **UsdModelKindRegistry** | Register custom model kinds here. Use `Usd.ModelAPI.SetKind()` to apply |
-| **Extend vs Override** | Always EXTEND UsdModelAPI — never override. Override breaks existing kinds |
-| **Schema file format separation** | Schema = what data IS. SdfFileFormat = how data is STORED. Independent. |
+| Concept                            | What to Remember                                                                                                        |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **IsA schema**                     | Defines a prim type. Sets `typeName`. One per prim. Check with `prim.IsA()`                                             |
+| **API schema**                     | Augments a prim. No `typeName`. Multiple per prim. Check with `prim.HasAPI()`                                           |
+| **Custom schema base**             | `UsdTyped` for standard schemas. `UsdGeomImageable` for renderable. NOT `UsdSchemaBase` directly                        |
+| **usdGenSchema**                   | Generates C++ and Python from `schema.usda`. Required for full integration                                              |
+| **TfType = runtime type registry** | Transforms a type name string into a meaningful type with full inheritance chain, fallbacks, and API                    |
+| **Two components required**        | `plugInfo.json` (discovery address) + `TF_REGISTRY_FUNCTION` in C++ (actual registration). Neither alone is sufficient. |
+| **`TF_REGISTRY_FUNCTION`**         | C++ macro generated by `usdGenSchema`. Runs when library loads into memory. Writes type into registry.                  |
+| **Registration is per-process**    | Registry lives in memory only. Every new process reloads the plugin and re-registers. Never written to disk.            |
+| **Without plugin deployed**        | Raw data readable. But `IsA()` = False, fallbacks = None, API = AttributeError. File not corrupted.                     |
+| **`PXR_PLUGINPATH_NAME`**          | Must be set in every environment — render farm, artist machine, CI. Each new process needs to find the plugin.          |
+| **Python-only schemas**            | No `TF_REGISTRY_FUNCTION` generated — `IsA()` and fallbacks don't work. Prototyping only, not production.               |
+| **SdfFileFormat**                  | For teaching USD to read/write new file formats. Independent of schemas                                                 |
+| **UsdModelKindRegistry**           | Register custom model kinds here. Use `Usd.ModelAPI.SetKind()` to apply                                                 |
+| **Extend vs Override**             | Always EXTEND UsdModelAPI — never override. Override breaks existing kinds                                              |
+| **Schema file format separation**  | Schema = what data IS. SdfFileFormat = how data is STORED. Independent.                                                 |
 
 ---
 
-*Previous: [Day 4 — Advanced Composition Concepts](day-04-advanced-composition.md)*  
-*Next: [Day 6 — Visualization](day-06-visualization.md)*
+_Previous: [Day 4 — Advanced Composition Concepts](day-04-advanced-composition.md)_  
+_Next: [Day 6 — Visualization](day-06-visualization.md)_
