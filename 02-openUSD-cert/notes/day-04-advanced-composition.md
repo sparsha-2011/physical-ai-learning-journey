@@ -246,8 +246,6 @@ def Xform "Chair" {
 
 The reference is gone — the geometry from `chair_asset.usda` is inlined directly. The variant set is gone — only the currently selected variant's data remains. You cannot switch variants on a fully flattened file.
 
----
-
 ### When to use each
 
 **Use `UsdUtils.FlattenLayerStack()` when:**
@@ -261,8 +259,6 @@ The reference is gone — the geometry from `chair_asset.usda` is inlined direct
 - You are delivering a fully self-contained file to an external party with no dependencies
 - You need to bake a snapshot of the exact current state for archiving
 - You are handing off to a renderer or tool that does not support USD composition
-
----
 
 ### Code
 
@@ -295,8 +291,6 @@ print(chair_b.GetChildren())                 # [seat_geo, legs_geo] — inlined
 flat_full.Export("delivery.usda")
 # Original shot.usda completely untouched
 ```
-
----
 
 ### The key mental model
 
