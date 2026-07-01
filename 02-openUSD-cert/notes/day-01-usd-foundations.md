@@ -674,7 +674,10 @@ stack = attr.GetPropertyStack(Usd.TimeCode(24))
 
 Every line of USD Python code uses one or more of three foundational libraries. Knowing which library to reach for is the first step to reading and writing USD code fluently.
 
+<div align="center">
+
 <img src="assets/gf-sdf-usd-api-reference.svg" width="700" alt="Gf, Sdf, and Usd API reference — key classes and methods by library"/>
+</div>
 
 | Library | Full Name                        | Job                                              | Knows about composition?  |
 | ------- | -------------------------------- | ------------------------------------------------ | ------------------------- |
