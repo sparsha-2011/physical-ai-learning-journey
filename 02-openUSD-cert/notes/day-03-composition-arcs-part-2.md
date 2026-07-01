@@ -1,7 +1,7 @@
 # Day 3 — Composition Arcs Part 2
 
 > **OpenUSD NCP Certification Study Notes**  
-> *Variants, Inherits, Specializes, and Advanced Composition Patterns*
+> _Variants, Inherits, Specializes, and Advanced Composition Patterns_
 
 ---
 
@@ -137,51 +137,81 @@ my_car.GetVariantSets().GetVariantSet("color").SetVariantSelection("blue")
 
 ### Three Correct Approaches
 
-**Approach 1 — LayerStack fallback arcs (USDA)**
+### Variant Fallback Selections
+
+When a scene requests a variant that does not exist in an asset, `variantFallbacks` defines what USD tries instead.
+
+**Approach 1 — `variantFallbacks` in root layer metadata (USDA)**
+
+This goes in the **root layer header** of the stage entry point — the same block as `upAxis`, `metersPerUnit`, and `subLayers`. It is stage-wide policy, not tied to any specific prim.
 
 ```usda
 #usda 1.0
 (
+    upAxis = "Y"
     variantFallbacks = {
-        string[] "lod" = ["high", "medium", "low"]
+        string[] "lod"   = ["high", "medium", "low"]
+        string[] "color" = ["default"]
     }
-    # If "lod=ultra" is requested but doesn't exist:
-    # Try "high" first, then "medium", then "low"
+    subLayers = [
+        @./anim.usda@,
+        @./layout.usda@
+    ]
 )
 ```
 
+If `lod = "ultra"` is requested but does not exist on any prim, USD tries `"high"` first, then `"medium"`, then `"low"`.
+
+- Baked into the file on disk
+- Applies whenever that file is opened as a root layer
+- Persists across sessions automatically
+
+> `variantFallbacks` belongs in the **root layer or sublayer metadata header only**.
+> Do NOT author it in prim metadata — it has no effect there and is not standard practice.
+
 **Approach 2 — `Usd.Stage.SetGlobalVariantFallbacks()` (Python)**
+
+Equivalent to Approach 1 but set in code. Must be called **before** `Usd.Stage.Open()`.
 
 ```python
 from pxr import Usd
 
-# Set global fallbacks applied to all stages opened after this call
-fallbacks = {
+Usd.Stage.SetGlobalVariantFallbacks({
     "lod":   ["high", "medium", "low"],
-    "color": ["default"]
-}
-Usd.Stage.SetGlobalVariantFallbacks(fallbacks)
+    "color": ["default"],
+})
 
-# All subsequently opened stages use these fallbacks
-stage = Usd.Stage.Open("scene.usda")
+stage = Usd.Stage.Open("shot.usda")   # fallbacks apply to this and all subsequent opens
 ```
 
-**Approach 3 — Session layer overrides**
+- Must be called before opening the stage — has no effect on already-open stages
+- Applies only to stages opened after the call in this process
+- Does not persist — must be set again each new process
+- Use for environment-specific or tool-specific overrides set at startup
 
-Author fallback variant selections into the session layer. This allows per-user or per-environment fallback preferences without modifying shared base files.
+> Approach 1 and Approach 2 set the **same policy** through different interfaces.
+> Use Approach 1 for shared pipeline defaults baked into the shot file.
+> Use Approach 2 for per-tool or per-environment overrides at process startup.
+
+**Approach 3 — Session layer**
+
+Author fallback selections into the session layer for per-user or per-environment preferences without modifying shared files.
 
 ```python
-stage  = Usd.Stage.Open("scene.usda")
+stage   = Usd.Stage.Open("shot.usda")
 session = stage.GetSessionLayer()
 stage.SetEditTarget(session)
-# Author variant selections into the session layer
-# They only affect this session and are never saved to disk
+# Author fallback selections here — never saved to disk
 ```
 
-### What NOT to Do
+**Wrong approaches**
 
-- ❌ Embed fallback selections in prim metadata — not standard, leads to unpredictable behaviour
-- ❌ Rely only on the default variant selection — insufficient when the requested variant doesn't exist
+| Wrong                                       | Why                                                                             |
+| ------------------------------------------- | ------------------------------------------------------------------------------- |
+| Author in prim metadata                     | No effect — fallbacks are a stage-level concept, not prim-level                 |
+| Rely on session layer alone                 | Provides no fallback logic — fallbacks must be defined in a layer or via Python |
+| Assume USD selects alphabetically           | USD does NOT auto-select variants — fallbacks must be explicit                  |
+| Duplicate prims with different variant sets | Increases complexity — `variantFallbacks` is the correct mechanism              |
 
 ---
 
@@ -336,13 +366,13 @@ stage.Save()
 
 This distinction is one of the most commonly tested topics in the certification exam.
 
-| Property | Inherits | Specializes |
-|----------|----------|-------------|
-| LIVERPS position | **I** — 2nd strongest | **S** — weakest (last) |
-| Opinion strength | Strong — beats variant, reference, payload | Weak — beaten by everything |
-| Purpose | Broadcast properties across many prims | Provide fallback defaults |
-| Typical use | Shared properties (visibility, scale conventions) | Material base classes, default settings |
-| Keyword | `prepend inherits = <path>` | `prepend specializes = <path>` |
+| Property         | Inherits                                          | Specializes                             |
+| ---------------- | ------------------------------------------------- | --------------------------------------- |
+| LIVERPS position | **I** — 2nd strongest                             | **S** — weakest (last)                  |
+| Opinion strength | Strong — beats variant, reference, payload        | Weak — beaten by everything             |
+| Purpose          | Broadcast properties across many prims            | Provide fallback defaults               |
+| Typical use      | Shared properties (visibility, scale conventions) | Material base classes, default settings |
+| Keyword          | `prepend inherits = <path>`                       | `prepend specializes = <path>`          |
 
 ### Mental Model
 
@@ -362,40 +392,40 @@ Specializes:  "I am a SPECIALIZATION of BasePlastic — use its values as my fal
 
 ### Do
 
-| Practice | Arc | Why |
-|----------|-----|-----|
-| Use **references** to bring in external assets | Reference | Grafts prim hierarchy without creating new composition arcs in the root layer |
-| Use **payloads** for heavy assets that don't need to load immediately | Payload | Creates arc but defers loading — balances modularity and performance |
-| Use **variant sets** to switch between different asset configurations | Variant | Enables flexible scene variations within controlled composition |
-| Use **sublayers** to separate workstream concerns (anim, fx, lighting) | Sublayer | Same namespace, different concerns — proper team collaboration pattern |
+| Practice                                                               | Arc       | Why                                                                           |
+| ---------------------------------------------------------------------- | --------- | ----------------------------------------------------------------------------- |
+| Use **references** to bring in external assets                         | Reference | Grafts prim hierarchy without creating new composition arcs in the root layer |
+| Use **payloads** for heavy assets that don't need to load immediately  | Payload   | Creates arc but defers loading — balances modularity and performance          |
+| Use **variant sets** to switch between different asset configurations  | Variant   | Enables flexible scene variations within controlled composition               |
+| Use **sublayers** to separate workstream concerns (anim, fx, lighting) | Sublayer  | Same namespace, different concerns — proper team collaboration pattern        |
 
 ### Don't
 
-| Anti-pattern | Why it's wrong |
-|--------------|----------------|
-| Overuse sublayers for many small unrelated changes | Makes composition unpredictable, hard to debug |
-| Directly edit payloaded assets in the root layer | Breaks encapsulation, can corrupt composition arcs |
-| Nest references inside payloads | Technically possible but creates complex, unpredictable composition — avoid in production |
-| Assume specializes overrides weaker arcs | Specializes IS the weakest arc — it provides fallbacks only |
+| Anti-pattern                                       | Why it's wrong                                                                            |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Overuse sublayers for many small unrelated changes | Makes composition unpredictable, hard to debug                                            |
+| Directly edit payloaded assets in the root layer   | Breaks encapsulation, can corrupt composition arcs                                        |
+| Nest references inside payloads                    | Technically possible but creates complex, unpredictable composition — avoid in production |
+| Assume specializes overrides weaker arcs           | Specializes IS the weakest arc — it provides fallbacks only                               |
 
 ---
 
 ## 7. Key Takeaways
 
-| Concept | What to Remember |
-|---------|-----------------|
-| **Variant set** | Named collection of alternatives. One active at a time. V in LIVERPS. |
-| **Variant selection** | Which variant is active. Can be overridden by a stronger layer. |
-| **`GetVariantEditContext()`** | Context manager for authoring content into a specific variant |
-| **Variant fallbacks** | `SetGlobalVariantFallbacks()` or session layer — for when requested variant doesn't exist |
-| **Inherits** | Propagates class opinions as STRONG opinions. I = 2nd in LIVERPS. |
-| **`class` specifier** | Template prim. Skipped by traversals and renderers. Used with inherits. |
-| **Specializes** | Propagates class opinions as WEAK fallbacks. S = last in LIVERPS. |
-| **Inherits vs Specializes** | Inherits = strong broadcast. Specializes = weak fallback. |
-| **Arc path syntax** | Inherits/Specializes use `<prim path>`. References/Payloads use `@file path@`. |
-| **LIVERPS complete** | Local → Inherit → Variant → rEference → Payload → Specializes |
+| Concept                       | What to Remember                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------------------- |
+| **Variant set**               | Named collection of alternatives. One active at a time. V in LIVERPS.                     |
+| **Variant selection**         | Which variant is active. Can be overridden by a stronger layer.                           |
+| **`GetVariantEditContext()`** | Context manager for authoring content into a specific variant                             |
+| **Variant fallbacks**         | `SetGlobalVariantFallbacks()` or session layer — for when requested variant doesn't exist |
+| **Inherits**                  | Propagates class opinions as STRONG opinions. I = 2nd in LIVERPS.                         |
+| **`class` specifier**         | Template prim. Skipped by traversals and renderers. Used with inherits.                   |
+| **Specializes**               | Propagates class opinions as WEAK fallbacks. S = last in LIVERPS.                         |
+| **Inherits vs Specializes**   | Inherits = strong broadcast. Specializes = weak fallback.                                 |
+| **Arc path syntax**           | Inherits/Specializes use `<prim path>`. References/Payloads use `@file path@`.            |
+| **LIVERPS complete**          | Local → Inherit → Variant → rEference → Payload → Specializes                             |
 
 ---
 
-*Previous: [Day 2 — Composition Arcs Part 1](day-02-composition-arcs-part-1.md)*  
-*Next: [Day 4 — Data Modeling](day-04-data-modeling.md)*
+_Previous: [Day 2 — Composition Arcs Part 1](day-02-composition-arcs-part-1.md)_  
+_Next: [Day 4 — Data Modeling](day-04-data-modeling.md)_
