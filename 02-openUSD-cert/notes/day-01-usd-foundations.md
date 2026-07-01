@@ -7,6 +7,7 @@
 
 ## Table of Contents
 
+0. [The Three Core Libraries](#0-the-three-core-libraries)
 1. [The Stage](#1-the-stage)
 2. [Layers](#2-layers)
 3. [Prims — The Scene Graph](#3-prims--the-scene-graph)
@@ -15,7 +16,25 @@
 6. [USD File Formats](#6-usd-file-formats)
 7. [Metadata](#7-metadata)
 8. [Time Samples and Animation](#8-time-samples-and-animation)
-9. [Key Takeaways](#9-key-takeaways)
+9. [The Three Core Libraries — Gf, Sdf, and Usd](#9-the-three-core-libraries--gf-sdf-and-usd)
+10. [Key Takeaways](#9-key-takeaways)
+
+---
+
+## 0. The Three Core Libraries
+
+Every USD Python script begins with `from pxr import ...`. Understanding which library does what prevents confusion when reading API documentation.
+
+| Library    | Full Name                        | Job                                                                                         | Knows about                                   |
+| ---------- | -------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `Usd`      | **Universal Scene Description**  | Composed scene — opens stages, traverses prims, reads winning values after all arcs resolve | Everything — composition, arcs, layers, types |
+| `Sdf`      | **Scene Description Foundation** | Raw layer data — one file's opinions, no composition                                        | One layer at a time. No arc resolution.       |
+| `Gf`       | **Graphics Foundational**        | Math types only — vectors, matrices, quaternions                                            | Nothing about USD scenes                      |
+| `Vt`       | **Value Types**                  | Array containers for bulk geometry data                                                     | Works alongside Gf                            |
+| `UsdGeom`  | **USD Geometry schemas**         | Typed schemas for meshes, cameras, xforms, lights                                           | Builds on top of Usd                          |
+| `UsdShade` | **USD Shading schemas**          | Materials, shaders, shader networks                                                         | Builds on top of Usd                          |
+| `UsdLux`   | **USD Lighting schemas**         | Light source schemas                                                                        | Builds on top of Usd                          |
+| `UsdUtils` | **USD Utilities**                | Helper functions — flattening, layer copying, validation                                    | Builds on top of Usd and Sdf                  |
 
 ---
 
@@ -651,7 +670,179 @@ stack = attr.GetPropertyStack(Usd.TimeCode(24))
 
 ---
 
-## 9. Key Takeaways
+## 9. The Three Core Libraries — Gf, Sdf, and Usd
+
+Every line of USD Python code uses one or more of three foundational libraries. Knowing which library to reach for is the first step to reading and writing USD code fluently.
+
+![Gf Sdf Usd API Reference](assets/gf-sdf-usd-api-reference.svg)
+
+| Library | Full Name                        | Job                                              | Knows about composition?  |
+| ------- | -------------------------------- | ------------------------------------------------ | ------------------------- |
+| `Gf`    | **Graphics Foundational**        | Math types only — vectors, matrices, quaternions | No — pure math            |
+| `Vt`    | **Value Types**                  | Bulk array containers for Gf types               | No — pure data containers |
+| `Sdf`   | **Scene Description Foundation** | Raw layer data — one file's opinion at a time    | No — single layer only    |
+| `Usd`   | **Universal Scene Description**  | Composed scene — all arcs resolved, final truth  | Yes — this is composition |
+
+---
+
+### Gf — Graphics Foundational
+
+`Gf` is a math library. It has no concept of scenes, prims, or layers. It provides the data types that USD attributes hold.
+
+```python
+from pxr import Gf
+
+# Vectors
+Gf.Vec3f(1.0, 0.0, 0.0)      # 32-bit float 3-component vector
+Gf.Vec3d(0.0, 5.0, 0.0)      # 64-bit double 3-component vector
+Gf.Vec2f(0.5, 0.5)            # UV coordinate
+Gf.Vec4f(1.0, 0.0, 0.0, 1.0) # RGBA colour
+
+# Transforms
+Gf.Matrix4d()                  # 4x4 double matrix — the standard transform type
+Gf.Quatf(1.0, 0.0, 0.0, 0.0) # Quaternion — rotation
+Gf.Rotation(Gf.Vec3d(0,1,0), 45.0)  # axis-angle rotation
+
+# Ranges and bounds
+Gf.Range3f(Gf.Vec3f(-1,-1,-1), Gf.Vec3f(1,1,1))  # 3D range
+Gf.BBox3d()                   # bounding box
+```
+
+### Vt — Value Types (bulk arrays)
+
+`Vt` provides the array container versions of Gf types. Used whenever an attribute holds multiple values — mesh points, face indices, UV coordinates.
+
+```python
+from pxr import Vt, Gf
+
+Vt.Vec3fArray([Gf.Vec3f(0,0,0), Gf.Vec3f(1,0,0)])  # points array
+Vt.IntArray([4, 4, 4, 4])                            # faceVertexCounts
+Vt.Vec2fArray([Gf.Vec2f(0,0), Gf.Vec2f(1,0)])       # UV coordinates
+Vt.FloatArray([0.5, 0.8, 0.3])                       # float array
+Vt.TokenArray(["xformOp:translate"])                  # token array
+```
+
+---
+
+### Sdf — Scene Description Foundation
+
+`Sdf` operates on individual layers. It never runs composition — it tells you what one specific file says, not what the composed scene looks like.
+
+```python
+from pxr import Sdf
+
+# Layer — one USD file in memory
+layer = Sdf.Layer.CreateNew("model.usda")
+layer = Sdf.Layer.FindOrOpen("model.usda")
+layer.Save()
+layer.identifier          # file path string
+layer.subLayerPaths       # list of sublayer paths
+layer.customLayerData     # dict of pipeline metadata
+layer.Clear()             # remove all opinions from this layer
+
+# Spec — one entry in a layer for a specific path
+prim_spec = Sdf.CreatePrimInLayer(layer, "/World/Chair")
+prim_spec.specifier = Sdf.SpecifierDef    # def / over / class
+prim_spec.typeName  = "Xform"
+
+attr_spec = Sdf.AttributeSpec(prim_spec, "myAttr", Sdf.ValueTypeNames.Float)
+attr_spec.default       = 5.0            # raw authored value
+attr_spec.documentation = "My attribute"
+attr_spec.GetInfo("timeSamples")         # {frame: value} dict
+
+# Path — address of any prim or property
+path = Sdf.Path("/World/Chair.xformOp:translate")
+path.GetParentPath()     # /World/Chair
+path.AppendChild("Leg")  # /World/Chair/Leg
+path.IsPropertyPath()    # True
+path.name                # "xformOp:translate"
+
+# Utilities
+Sdf.LayerOffset(offset=100.0, scale=2.0)      # time shift for references
+Sdf.Reference("./asset.usda", "/Chair")        # reference arc definition
+Sdf.ValueTypeNames.Float                       # type name constant
+Sdf.ChangeBlock()                              # batch change notifications
+```
+
+---
+
+### Usd — Universal Scene Description
+
+`Usd` opens stages, runs composition, and gives you the final resolved scene. This is the API you use 90% of the time.
+
+```python
+from pxr import Usd, UsdGeom
+
+# Stage — fully composed scene
+stage = Usd.Stage.Open("shot.usda")
+stage = Usd.Stage.CreateNew("scene.usda")
+stage = Usd.Stage.CreateInMemory()
+stage.Save()
+stage.Export("output.usda")           # flat resolved copy to any path
+stage.Flatten()                       # returns new SdfLayer with all arcs resolved
+stage.GetLayerStack()                 # all layers, strongest → weakest
+stage.GetEditTarget()                 # which layer receives authoring
+stage.SetEditTarget(layer)
+stage.MuteLayer(layer.identifier)
+stage.Traverse()                      # depth-first prim iterator
+stage.GetCompositionErrors()
+
+# Prim — composed node, all arcs resolved
+prim = stage.GetPrimAtPath("/World/Chair")
+prim = stage.DefinePrim("/World/Chair", "Xform")
+prim.IsA(UsdGeom.Mesh)               # True/False — type check
+prim.HasAPI(UsdGeom.MotionAPI)       # True/False — API schema check
+prim.GetTypeName()                   # "Xform"
+prim.GetChildren()                   # child prims
+prim.GetPrimStack()                  # list[SdfPrimSpec] — no parameters
+prim.IsActive()
+prim.SetInstanceable(True)
+prim.GetPrimIndex().DumpToString()   # full composition arc graph
+
+# Attribute — composed value after all layers resolve
+# Both attributes and relationships are accessed from the PRIM
+attr = prim.GetAttribute("xformOp:translate")   # typed value
+attr.Get()                           # composed value (default time)
+attr.Get(time=24)                    # composed value at frame 24
+attr.Set(Gf.Vec3d(5,0,0))           # author default value
+attr.Set(Gf.Vec3d(5,0,0), time=24)  # author time sample
+attr.GetTimeSamples()                # [1.0, 24.0, 48.0]
+attr.HasAuthoredValue()              # True/False
+attr.GetPropertyStack(Usd.TimeCode.Default())  # list[SdfPropertySpec]
+
+# Relationship — prim paths (NOT data values) — also at prim level
+rel = prim.GetRelationship("material:binding")  # prim path pointer
+rel.GetTargets()                     # [Sdf.Path("/World/Looks/WoodMat")]
+rel.AddTarget("/World/Looks/MetalMat")          # add another target
+rel.SetTargets([Sdf.Path("/World/Looks/WoodMat")])  # replace all targets
+rel.HasAuthoredTargets()             # True/False
+# Relationships have NO fallback values and NO Get(timeCode)
+# They store prim paths only — not typed data
+```
+
+---
+
+### The Same Chair — Two Different Answers
+
+```python
+# Sdf sees what ONE LAYER says:
+layer = Sdf.Layer.FindOrOpen("model.usda")
+spec  = layer.GetAttributeAtPath("/World/Chair.xformOp:translate")
+spec.default   # (0, 0, 0)  — model.usda authored this value
+
+# Usd sees the COMPOSED RESULT after all layers resolve:
+stage = Usd.Stage.Open("shot.usda")   # shot includes anim + model sublayers
+attr  = stage.GetPrimAtPath("/World/Chair").GetAttribute("xformOp:translate")
+attr.Get()     # (5, 0, 0)  — anim layer won, composition applied
+
+# Same underlying file data. Completely different question being answered.
+# Sdf: "what does this specific file say?"
+# Usd: "what is the final truth after everything composes?"
+```
+
+---
+
+## 10. Key Takeaways
 
 | Concept                   | What to Remember                                                                                                                        |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
