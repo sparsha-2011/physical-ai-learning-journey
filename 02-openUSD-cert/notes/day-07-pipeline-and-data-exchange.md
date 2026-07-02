@@ -225,8 +225,6 @@ Option B — Use hooks
 
 Hooks exist so you can always do Option B.
 
----
-
 ### What a Hook Actually Is
 
 A hook is a **variable that holds a function**. By default it holds an empty do-nothing function — a lambda that takes arguments and immediately returns nothing. The exporter calls whatever is stored in that variable at a designated moment in the workflow.
@@ -320,6 +318,27 @@ exporter.post_export_hook = my_post_hook
 # Run the export — your hooks fire automatically at the right moments
 exporter.run_export(maya_scene, "/output/chair_v003.usda", options)
 ```
+
+### Pre-Export Hook — runs BEFORE the core export starts
+
+- Set stage metadata (`upAxis`, `metersPerUnit`, pipeline version)
+- Validate that required data is present — fail early before any work is done
+- Configure export settings based on the environment (render farm vs artist machine)
+- Set the edit target to the correct layer before authoring begins
+- Tag the root layer with `customLayerData` (studio name, schema version, export tool)
+
+### Post-Export Hook — runs AFTER the core export completes
+
+- Add pipeline-specific attributes to exported prims (asset IDs, department tags)
+- Run `usdchecker` automatically — catch problems before delivery
+- Register the exported file path in an asset management database
+- Send a notification to downstream departments that a new version is available
+- Write export logs or audit trails for pipeline tracking
+- Validate that the output matches what was expected (prim count, file size checks)
+
+---
+
+> **Rule of thumb:** pre-export = set up and validate inputs. Post-export = verify and record outputs.
 
 ### What Happens Step by Step
 
