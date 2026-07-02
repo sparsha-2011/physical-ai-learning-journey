@@ -873,7 +873,7 @@ plugInfo.json
 }
 ```
 
-````
+```
 
 What you run:
 cmake + make ← compiles your C++ into factoryUnit.so
@@ -1019,4 +1019,7 @@ Eliminate **any option** containing these phrases immediately:
 
 _Previous: [Day 4 — Advanced Composition Concepts](day-04-advanced-composition.md)_
 _Next: [Day 6 — Visualization](day-06-visualization.md)_
-````
+
+```
+
+```
