@@ -27,16 +27,6 @@ A **schema** is a formal definition of a prim type — what attributes it has, w
 
 USD ships with built-in schemas for common 3D concepts (`Mesh`, `Camera`, `Material`, `DistantLight`). When your pipeline needs a type that doesn't exist in USD — a `TemperatureSensor`, a `ConveyorBelt`, a `ShotCamera` — you create a **custom schema**.
 
-### Why Custom Schemas (vs plain attributes)?
-
-| With custom schema                  | Without (plain attributes) |
-| ----------------------------------- | -------------------------- |
-| `prim.IsA(TemperatureSensor)` works | No type checking           |
-| Schema fallback values work         | No defaults                |
-| Generated Python and C++ API        | Manual attribute access    |
-| Full usdview introspection          | Just arbitrary data        |
-| Validates at authoring time         | Silent errors              |
-
 ---
 
 ## 2. IsA Schemas vs API Schemas
