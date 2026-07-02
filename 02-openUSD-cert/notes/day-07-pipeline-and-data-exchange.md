@@ -199,57 +199,208 @@ for error in errors:
 
 ## 6. Exporter Hooks — Pre/Post Export
 
-Exporter hooks are **extension points** in the export workflow where custom logic can be injected **without modifying the core exporter code**. This follows the same principle as schema inheritance: extend, never override.
+### The Problem
+
+Your studio has a Maya-to-USD exporter built and maintained by the pipeline team. It handles geometry, materials, lights, and cameras. Every department depends on it.
+
+Your department needs to add custom behaviour on top — tagging exported meshes with a `pipeline:assetId`, running `usdchecker` automatically, registering the exported file in an asset database. You have two options:
 
 ```
-Core exporter logic:
-  pre_export_hook()   ← inject custom logic BEFORE
-  [core export runs]
-  post_export_hook()  ← inject custom logic AFTER
+Option A — Modify the core exporter directly
+  Open the pipeline team's exporter source code
+  Add your custom logic inside it
+  → Your version now diverges from the maintained version
+  → Pipeline team releases a bug fix → you have to merge manually
+  → Your change runs for every department's export → risk of breaking FX, lighting etc.
+  → Hard to roll back if something breaks in production
+
+Option B — Use hooks
+  The exporter provides designated extension points
+  You register your function into those points
+  → Core exporter is never touched
+  → Pipeline team updates their exporter → your hooks still work automatically
+  → Your hook only runs when you register it → other departments unaffected
+  → Remove your hook in one line if something breaks
 ```
 
-### Pre-Export Hook
+Hooks exist so you can always do Option B.
 
-Runs before the core export. Use to:
+---
 
-- Validate source data
-- Set stage metadata (upAxis, metersPerUnit)
-- Add pipeline version metadata to the root layer
+### What a Hook Actually Is
 
-### Post-Export Hook
+A hook is a **variable that holds a function**. By default it holds an empty do-nothing function — a lambda that takes arguments and immediately returns nothing. The exporter calls whatever is stored in that variable at a designated moment in the workflow.
 
-Runs after the core export. Use to:
-
-- Add custom schema attributes to exported prims
-- Run `usdchecker` on the output
-- Register the exported asset in the pipeline database
+In Python, functions are first-class objects — they can be assigned to variables just like any other value:
 
 ```python
-def pre_export_hook(stage, export_options):
+# Assign a function to a variable — no () because you are not calling it
+# you are pointing the variable at the function object
+def my_function(x):
+    print(x)
+
+hook = my_function   # hook now holds the function
+hook("hello")        # calls my_function("hello") → prints "hello"
+
+# Reassign it to a different function
+hook = lambda x: None   # now hook does nothing
+hook("hello")            # nothing happens
+```
+
+This is the entire mechanism. No inheritance. No class system. Just a variable holding a callable.
+
+### Inside the Core Exporter
+
+This is what the core exporter looks like internally — you never see or modify this:
+
+```python
+# Core exporter — owned by pipeline team, never touched by you
+
+# Default hooks — empty lambdas that do nothing
+pre_export_hook  = lambda stage, options: None
+post_export_hook = lambda stage, path:    None
+
+def run_export(maya_scene, output_path, options):
+    stage = create_usd_stage()
+
+    pre_export_hook(stage, options)    # calls whatever is in this variable
+                                       # default = does nothing
+
+    export_geometry(maya_scene, stage)
+    export_materials(maya_scene, stage)
+    export_lights(maya_scene, stage)
+    stage.Export(output_path)
+
+    post_export_hook(stage, output_path)  # calls whatever is in this variable
+                                           # default = does nothing
+```
+
+When nobody has registered a hook, the exporter calls the empty lambda — the export runs exactly as if the hook call was not there at all.
+
+### How You Use It
+
+You define your own functions and reassign the hook variables. Your code lives entirely in your department's repo — completely separate from the core exporter:
+
+```python
+# YOUR code — your department's repo, not the core exporter
+
+# Pre-export hook — runs BEFORE the core export starts
+def my_pre_hook(stage, options):
+    # Set pipeline metadata on the stage before export
     UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.y)
     stage.GetRootLayer().customLayerData = {
-        "pipeline:version": "2.1",
-        "pipeline:studio": "AcmeStudios",
+        "pipeline:schemaVersion": "2.0",
+        "pipeline:studio":        "AcmeStudios",
+        "pipeline:assetId":       options["assetId"],
     }
+    # Validate required data is present before export runs
+    if not options.get("assetId"):
+        raise ValueError("assetId must be set before exporting")
 
-def post_export_hook(stage, exported_path):
+# Post-export hook — runs AFTER the core export completes
+def my_post_hook(stage, output_path):
+    # Add pipeline attributes to every exported mesh
     for prim in stage.Traverse():
         if prim.IsA(UsdGeom.Mesh):
             prim.CreateAttribute(
                 "pipeline:exportVersion",
                 Sdf.ValueTypeNames.String
-            ).Set("2.1")
-    # Run validation
-    # Register with asset database
+            ).Set("2.0")
+    # Run usdchecker automatically
+    errors = UsdUtils.ComplianceChecker.GetErrors(stage)
+    if errors:
+        raise RuntimeError(f"Export validation failed: {errors}")
+    # Register in asset database
+    asset_db.register(output_path, {"department": "modeling"})
+
+# Reassign the hook variables — your function replaces the empty lambda
+exporter.pre_export_hook  = my_pre_hook
+exporter.post_export_hook = my_post_hook
+
+# Run the export — your hooks fire automatically at the right moments
+exporter.run_export(maya_scene, "/output/chair_v003.usda", options)
 ```
+
+### What Happens Step by Step
+
+```
+1. exporter.pre_export_hook  = my_pre_hook
+   → variable now holds your function instead of the empty lambda
+
+2. exporter.run_export() is called
+
+3. Core exporter calls pre_export_hook(stage, options)
+   → your my_pre_hook runs
+   → metadata written, validation passes
+
+4. Core export logic runs unchanged
+   → geometry, materials, lights exported normally
+
+5. Core exporter calls post_export_hook(stage, output_path)
+   → your my_post_hook runs
+   → pipeline attributes added, usdchecker runs, asset registered
+
+6. Export complete
+```
+
+The core exporter code did not change at all. Only the values stored in those two variables changed.
+
+### Multiple Departments — List of Hooks
+
+Real exporters store a **list** of functions so multiple departments can each register their own hook without overwriting each other:
+
+```python
+# Inside the core exporter
+pre_export_hooks = []   # empty list by default
+
+def run_export(maya_scene, output_path, options):
+    stage = create_usd_stage()
+
+    for hook in pre_export_hooks:   # calls every registered hook in order
+        hook(stage, options)
+
+    # core export...
+
+# Modeling department registers their hook
+pre_export_hooks.append(modeling_pre_hook)
+
+# FX department registers their hook independently
+pre_export_hooks.append(fx_pre_hook)
+
+# Both run in order — neither overwrites the other
+```
+
+### How Hooks Solve Each Problem
+
+| Problem without hooks                 | How hooks solve it                                                                |
+| ------------------------------------- | --------------------------------------------------------------------------------- |
+| Change affects every department       | Hook only runs when you register it — other departments unaffected                |
+| Fork diverges from maintained version | Core exporter updates automatically — your hook file is untouched                 |
+| Hard to roll back if something breaks | Unregister your hook in one line — export runs as before                          |
+| Unclear ownership                     | One exporter owned by pipeline team — your additions are your responsibility only |
 
 ### Wrong Approaches
 
-| Wrong approach                                      | Why                                                          |
-| --------------------------------------------------- | ------------------------------------------------------------ |
-| Override the main export function                   | Loses all built-in functionality — hooks exist to avoid this |
-| Modify USD files on disk after export               | Error-prone, bypasses pipeline control, risk of corruption   |
-| Create a separate generator for custom requirements | Duplicates effort, breaks pipeline consistency               |
+| Wrong                                               | Why                                                        |
+| --------------------------------------------------- | ---------------------------------------------------------- |
+| Override the main export function                   | You now own all the core logic — must maintain it forever  |
+| Modify USD files on disk after export               | Bypasses pipeline control, error-prone, risk of corruption |
+| Create a separate generator for custom requirements | Duplicates effort, breaks pipeline consistency             |
+
+### When to Use Hooks
+
+```
+Use hooks when:
+  Adding pipeline metadata to every exported asset
+  Running usdchecker automatically after every export
+  Registering assets in a pipeline database
+  Applying custom schema attributes post-export
+  Setting environment-specific stage configuration pre-export
+
+Not needed for:
+  One-off manual exports with no pipeline integration
+  Simple test exports where the core exporter handles everything
+```
 
 ---
 
