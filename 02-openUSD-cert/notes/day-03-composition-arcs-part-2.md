@@ -204,6 +204,24 @@ stage.SetEditTarget(session)
 # Author fallback selections here — never saved to disk
 ```
 
+\*\*Approach 4 — Author `variantFallbacks` per referencing layer
+
+For consistency across all layers that reference an asset, explicitly author `variantFallbacks` in **each layer** that references the prim:
+
+```usda
+# department_shot.usda — this layer references the asset
+#usda 1.0
+(
+    variantFallbacks = {
+        string[] "lod"   = ["high", "medium", "low"]
+    }
+)
+# Now this layer AND any layer that sublayers it will use these fallbacks
+# without relying on the asset's own defaults
+```
+
+> **Why per-layer matters:** If only the asset defines fallbacks, a referencing layer that requests a non-existent variant may fail if its `variantFallbacks` context differs. Explicitly authoring fallbacks in each referencing layer ensures consistent behaviour regardless of which tool opens the stage.
+
 **Wrong approaches**
 
 | Wrong                                       | Why                                                                             |

@@ -15,7 +15,8 @@
 6. [TfType Registration](#6-tftype-registration)
 7. [Custom File Format Plugins — SdfFileFormat](#7-custom-file-format-plugins--sdffileformat)
 8. [Custom Model Kinds — UsdModelKindRegistry](#8-custom-model-kinds--usdmodelkindregistry)
-9. [Key Takeaways](#9-key-takeaways)
+9. [Exam Pattern Recognition — Elimination Guide](#9-exam-pattern-recognition--elimination-guide)
+10. [Key Takeaways](#9-key-takeaways)
 
 ---
 
@@ -118,6 +119,30 @@ UsdSchemaBase                    ← root of ALL schemas
 ---
 
 ## 4. Creating Custom Schemas
+
+USD ships with schemas for common 3D concepts — `Mesh`, `Sphere`, `Material`, `DistantLight`. These cover general-purpose use cases. But a factory automation company needs prims for `TemperatureSensor` and `ConveyorBelt`. A film studio needs `ShotCamera` and `CharacterRig`. These don't exist in USD out of the box.
+
+Custom schemas let you add new prim types as **first-class USD citizens** — with the same type safety, API generation, schema fallbacks, and tool integration as built-in schemas.
+
+### Plain Attributes vs Custom Schema
+
+| Capability                    | Plain custom attributes           | Custom schema                        |
+| ----------------------------- | --------------------------------- | ------------------------------------ |
+| `prim.IsA(TemperatureSensor)` | ❌ No type checking               | ✅ Works correctly                   |
+| Schema fallback values        | ❌ Returns `None` if unset        | ✅ Returns defined default           |
+| Generated Python/C++ API      | ❌ Manual `GetAttribute("name")`  | ✅ `sensor.GetTemperatureAttr()`     |
+| usdview introspection         | ❌ Arbitrary data, no schema info | ✅ Full attribute listing with types |
+| Validation at authoring time  | ❌ Silent errors                  | ✅ Type-checked at definition        |
+| Inheritance chain known       | ❌ No                             | ✅ `IsA(UsdGeomXform)` also works    |
+
+### When to Use
+
+| ✅ Use custom schemas when                 | ❌ Don't use for                          |
+| ------------------------------------------ | ----------------------------------------- |
+| Standardised types shared across teams     | Quick one-off pipeline attributes         |
+| `prim.IsA()` and `prim.HasAPI()` must work | Data not shared across tools              |
+| Schema fallback values are needed          | Rapid prototyping (use plain attrs first) |
+| Full C++ and Python API is needed          | One-time migration scripts                |
 
 Custom schemas are defined in a `schema.usda` file that describes the schema's class, what it inherits from, and what attributes it provides with their types and default values.
 
@@ -504,13 +529,48 @@ SdfFileFormat = defines how data is READ and WRITTEN to/from a file format
    → Stage composes normally from that point
 ```
 
+### ArResolver — Handling External References During File I/O
+
+When your file format contains **references to external assets** (textures, sub-files, referenced layers), the plugin must integrate with **`ArResolver`** — USD's asset resolution system — to correctly locate those files.
+
+```
+Without ArResolver integration:
+  MyFormat file contains: texture = "textures/wood.png"
+  Plugin reads raw string "textures/wood.png" — but WHERE is it?
+  Relative to what? The answer depends on the resolver context.
+
+With ArResolver integration:
+  Plugin calls ArResolver to resolve "textures/wood.png"
+  → Resolver applies search paths, asset remapping, version pinning
+  → Returns the actual absolute path to the correct file
+  → File loading works correctly in all deployment environments
+```
+
+```cpp
+// Inside your SdfFileFormat::Read() implementation:
+ArResolver& resolver = ArGetResolver();
+ArResolverContext ctx = resolver.GetCurrentContext();
+
+// Resolve asset paths from the file using the resolver
+std::string resolved = resolver.Resolve("textures/wood.png");
+// resolved = "/project/assets/textures/wood.png"
+```
+
+> **Note 1:** "Ensure thread safety by implementing custom locking mechanisms" is **WRONG**. USD core manages concurrent access — file format plugins do not implement their own locking. This is unnecessary and handled at a higher level.
+
+> **Note 2:** "Embed a custom USD stage cache within the plugin" is **WRONG**. Stage caching is managed by USD core and clients, not inside file format plugins. Embedding one causes inconsistencies.
+
 ### Wrong Approaches
 
-| Wrong approach                    | Why it's wrong                           |
-| --------------------------------- | ---------------------------------------- |
-| Override `UsdStage::Open()`       | Static method, not designed for this     |
-| Modify USD core source            | Defeats modularity, breaks compatibility |
-| Create a UsdSchema for the format | Schemas define data types, not file I/O  |
+| Wrong approach                                 | Why it's wrong                                                                                               |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Override `UsdStage::Open()`                    | Static method, not designed for overriding. File loading happens at the `SdfLayer` level, not `Stage` level. |
+| Modify USD core source code                    | USD is designed for extensibility via plugins. Modifying core breaks compatibility.                          |
+| Create a `UsdSchema` for the file format       | Schemas define scene description types. They do NOT control file I/O.                                        |
+| Implement custom thread locking in Read/Write  | USD core manages concurrent access — plugins don't need custom locking                                       |
+| Embed a stage cache inside the plugin          | Stage caching belongs at the USD core/client level — not inside file format plugins                          |
+| Use `UsdUtils` exclusively to parse the format | UsdUtils provides utilities but does NOT replace implementing `SdfFileFormat` methods                        |
+| Implement a `UsdStage` subclass for the format | UsdStage is format-agnostic — file format I/O is `SdfFileFormat`'s responsibility                            |
 
 ---
 
@@ -570,7 +630,57 @@ Custom validation ensures `factory_unit` prims always have the required structur
 
 ---
 
-## 9. Key Takeaways
+## 9. Exam Pattern Recognition — Elimination Guide
+
+### Pattern 1 — "How do you create a custom schema?"
+
+**Correct answer framework:**
+
+1. Write `schema.usda`
+2. Inherit from **`UsdTyped`** or **`UsdGeomImageable`** (NOT `UsdSchemaBase` directly)
+3. Run **`usdGenSchema`** to generate C++ and Python
+4. Register with **TfType system** via `plugInfo.json`
+5. Deploy as plugin via `PXR_PLUGINPATH_NAME`
+
+### Pattern 2 — "How do you add a new file format?"
+
+**Correct answer framework:**
+Implement the **`SdfFileFormat` interface** + register with **TfType system** + declare in `plugInfo.json`
+
+### Pattern 3 — "How do you create custom model kinds?"
+
+**Correct answer framework:**
+Unique token + **`UsdModelKindRegistry`** + `kind` metadata on root prim via **`UsdModelAPI`** + schema plugin that **inherits** (EXTENDS, not overrides) `UsdModelAPI` + extended `Validate()` method
+
+### Pattern 4 — "Extend vs Override"
+
+> Any option saying "**override**" an existing schema, API, or core system = **WRONG**. USD is always extended, never overridden. Overriding breaks existing functionality for all users of that schema. Extending (inheriting from, adding to) maintains backward compatibility while adding new capabilities.
+
+### Instant Elimination Phrases
+
+Eliminate **any option** containing these phrases immediately:
+
+| Phrase in option                                                | Reason to eliminate                                                                                 |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `"Modify the core USD source code"`                             | USD uses plugins — never modifies core                                                              |
+| `"Python-only schema"` or `"subclassing Usd.Schema in Python"`  | Full schemas need C++ + usdGenSchema                                                                |
+| `"Overriding"` any existing schema, API, or method              | Always EXTEND — never override                                                                      |
+| `"Override UsdStage::Open()"`                                   | File formats use `SdfFileFormat`, not Stage::Open                                                   |
+| `"Register token in TfType WITHOUT schema or API linkage"`      | Token alone is insufficient — needs full schema backing                                             |
+| `"Define schema in a .usd file at runtime"`                     | Schemas defined in `schema.usda` + compiled offline                                                 |
+| `"Create new UsdSchema to control file format I/O"`             | Schemas ≠ file I/O — use `SdfFileFormat`                                                            |
+| `"Embed fallback variant selections in prim metadata"`          | Fallbacks belong at stage/layer level, not prim metadata                                            |
+| `"Plugin manifest file only"` for schema registration           | `TF_REGISTRY_FUNCTION` macro in C++ source is ALSO required — manifest alone is insufficient        |
+| `"Custom locking in Read/Write"` for file format plugins        | USD core manages concurrency — plugins don't implement locking                                      |
+| `"Embed stage cache in file format plugin"`                     | Stage caching belongs at USD core/client level, not in plugins                                      |
+| `"Implement UsdStage subclass for new file format"`             | UsdStage is format-agnostic — use `SdfFileFormat`                                                   |
+| `"USD auto-selects variants alphabetically"`                    | USD does NOT auto-select variants — fallbacks must be explicitly defined                            |
+| `"UsdSchemaRegistry for dynamic loading without recompilation"` | Custom schemas require plugin mechanisms or compile-time registration — not dynamic runtime loading |
+| `"Using UsdUtils exclusively to parse custom format"`           | UsdUtils provides utilities but does not replace implementing `SdfFileFormat` methods               |
+
+---
+
+## 10. Key Takeaways
 
 | Concept                            | What to Remember                                                                                                        |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
