@@ -14,9 +14,10 @@
 5. [The usdGenSchema Workflow](#5-the-usdgenschema-workflow)
 6. [TfType Registration](#6-tftype-registration)
 7. [Custom File Format Plugins — SdfFileFormat](#7-custom-file-format-plugins--sdffileformat)
-8. [Custom Model Kinds — UsdModelKindRegistry](#8-custom-model-kinds--usdmodelkindregistry)
-9. [Exam Pattern Recognition — Elimination Guide](#9-exam-pattern-recognition--elimination-guide)
-10. [Key Takeaways](#9-key-takeaways)
+8. [Model Kinds — Classifying Prims by Pipeline Role](#8-model-kinds--classifying-prims-by-pipeline-role)
+9. [Custom Model Kinds — UsdModelKindRegistry](#9-custom-model-kinds--usdmodelkindregistry)
+10. [Exam Pattern Recognition — Elimination Guide](#1--exam-pattern-recognition--elimination-guide)
+11. [Key Takeaways](#11-key-takeaways)
 
 ---
 
@@ -588,7 +589,196 @@ std::string resolved = resolver.Resolve("textures/wood.png");
 
 ---
 
-## 8. Custom Model Kinds — UsdModelKindRegistry
+## 8. Model Kinds — Classifying Prims by Pipeline Role
+
+A **model kind** is a metadata tag on a prim that describes its
+**role in the pipeline** — not what it looks like geometrically,
+but what function it serves in the scene assembly hierarchy.
+
+```python
+from pxr import Usd
+
+model_api = Usd.ModelAPI(prim)
+model_api.SetKind("component")   # tag this prim with its role
+print(model_api.GetKind())       # "component"
+```
+
+Schema type answers: "what IS this prim?" (Mesh, Sphere, Light)
+Model kind answers: "what ROLE does this prim play?" (assembly, component)
+
+---
+
+### The Four Built-in Kinds
+
+```
+assembly
+  └── group
+        └── component
+              └── subcomponent
+```
+
+#### assembly
+
+The top-level container that represents a complete published scene
+or set. An assembly is what gets handed off between departments or
+delivered to a client. It contains everything needed for the scene.
+
+```
+/ShotsRoot                   kind = assembly
+  /ShotsRoot/Shot_042        kind = assembly
+    /ShotsRoot/Shot_042/Set  kind = group
+```
+
+**Real example:** A complete city block handed from the environments
+department to the lighting department. The whole city block is one
+assembly — it is a self-contained deliverable.
+
+```python
+scene = stage.DefinePrim("/CityBlock", "Xform")
+Usd.ModelAPI(scene).SetKind("assembly")
+```
+
+#### group
+
+An organisational container inside an assembly. Groups do not
+represent reusable assets — they are structural containers that
+organise components into logical units.
+
+```
+/CityBlock                   kind = assembly
+  /CityBlock/Buildings       kind = group     ← organises buildings
+  /CityBlock/Streets         kind = group     ← organises streets
+  /CityBlock/Props           kind = group     ← organises props
+```
+
+**Real example:** Inside the city block assembly, all the building
+assets are grouped under `/CityBlock/Buildings`. The group itself
+is not a reusable asset — it is just organisation.
+
+```python
+buildings = stage.DefinePrim("/CityBlock/Buildings", "Xform")
+Usd.ModelAPI(buildings).SetKind("group")
+```
+
+#### component
+
+A leaf reusable asset — the fundamental unit of content that gets
+referenced into scenes. A component is self-contained, has a
+`defaultPrim`, and can be referenced independently.
+
+```
+/CityBlock/Buildings/BuildingA   kind = component  ← one reusable building
+/CityBlock/Buildings/BuildingB   kind = component  ← another building
+/CityBlock/Props/Bench_001       kind = component  ← a bench asset
+/CityBlock/Props/Lamppost_003    kind = component  ← a lamppost asset
+```
+
+**Real example:** A single chair asset. It has its own USD file,
+its own materials, its own LOD variants. It is the smallest unit
+that gets independently published, versioned, and referenced.
+
+```python
+chair = stage.DefinePrim("/World/Chair", "Xform")
+Usd.ModelAPI(chair).SetKind("component")
+```
+
+**Components must:**
+
+- Have `defaultPrim` set on their USD file
+- Be self-contained (all materials inside the root prim)
+- Be independently referenceable
+
+#### subcomponent
+
+An important named internal node within a component. Subcomponents
+are not independently reusable — they exist only inside a component
+and are tagged to signal that they are structurally significant.
+
+```
+/Chair                    kind = component
+  /Chair/SeatGeo          kind = subcomponent  ← significant internal part
+  /Chair/BackGeo          kind = subcomponent  ← significant internal part
+  /Chair/LegFL            kind = subcomponent  ← front-left leg
+  /Chair/LegFR            kind = subcomponent
+```
+
+**Real example:** Inside a character component, the head, torso,
+and limbs are subcomponents — they are significant named parts
+that tools might need to reference specifically (e.g. for attaching
+accessories or applying targeted effects), but they are not
+independently published assets.
+
+```python
+seat = stage.DefinePrim("/Chair/SeatGeo", "Mesh")
+Usd.ModelAPI(seat).SetKind("subcomponent")
+```
+
+### The Full Hierarchy in a Real Scene
+
+```
+/Shot_042                          kind = assembly
+  /Shot_042/Environment            kind = group
+    /Shot_042/Environment/CityBlock  kind = assembly  ← nested assembly
+      /Shot_042/.../Buildings        kind = group
+        /Shot_042/.../BuildingA      kind = component
+          /Shot_042/.../BuildingA/Facade  kind = subcomponent
+  /Shot_042/Characters             kind = group
+    /Shot_042/Characters/Hero      kind = component
+      /Shot_042/.../Hero/Head      kind = subcomponent
+      /Shot_042/.../Hero/Torso     kind = subcomponent
+  /Shot_042/Props                  kind = group
+    /Shot_042/Props/Bench_001      kind = component
+```
+
+### Why Model Kinds Matter in Practice
+
+**Asset management tools** use model kinds to traverse the scene
+and find all components — without having to know the specific
+paths or types:
+
+```python
+from pxr import Usd
+
+# Find all component-level assets in the scene
+for prim in stage.Traverse():
+    kind = Usd.ModelAPI(prim).GetKind()
+    if kind == "component":
+        print(f"Component asset: {prim.GetPath()}")
+        # → can now check version, load payload, apply overrides
+```
+
+**Renderers and pipeline tools** use model kinds to decide what
+to load, what to show in asset browsers, and what to include in
+render submissions — without needing custom logic per project.
+
+### Kind vs Schema Type — The Key Distinction
+
+```
+Schema type  answers: WHAT IS IT?
+  prim.GetTypeName() → "Mesh", "Sphere", "Xform"
+  Describes the geometric or functional type
+
+Model kind   answers: WHAT ROLE DOES IT PLAY?
+  Usd.ModelAPI(prim).GetKind() → "component", "assembly"
+  Describes the pipeline and organisational role
+
+A prim can be both:
+  typeName = "Xform"      ← it IS an Xform (schema type)
+  kind     = "component"  ← it PLAYS THE ROLE of a component (model kind)
+```
+
+### Quick Reference
+
+| Kind           | Role                                     | Reusable?                         | Example                               |
+| -------------- | ---------------------------------------- | --------------------------------- | ------------------------------------- |
+| `assembly`     | Top-level complete scene or deliverable  | Yes — published                   | Full city block, complete shot        |
+| `group`        | Organisational container within a scene  | No — structural only              | `/Buildings`, `/Props`, `/Characters` |
+| `component`    | Leaf reusable asset — fundamental unit   | Yes — independently referenced    | Chair, building, character            |
+| `subcomponent` | Significant internal part of a component | No — exists inside component only | Head, seat, facade panel              |
+
+---
+
+## 9. Custom Model Kinds — UsdModelKindRegistry
 
 USD has a built-in hierarchy of **model kinds** that classify prims by their role in the scene:
 
@@ -644,7 +834,7 @@ Custom validation ensures `factory_unit` prims always have the required structur
 
 ---
 
-## 9. Exam Pattern Recognition — Elimination Guide
+## 10. Exam Pattern Recognition — Elimination Guide
 
 ### Pattern 1 — "How do you create a custom schema?"
 
@@ -694,7 +884,7 @@ Eliminate **any option** containing these phrases immediately:
 
 ---
 
-## 10. Key Takeaways
+## 11. Key Takeaways
 
 | Concept                            | What to Remember                                                                                                        |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
