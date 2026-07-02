@@ -13,8 +13,9 @@
 4. [Flattening — Baking Composition](#4-flattening--baking-composition)
 5. [Encapsulation — Asset Structure Principles](#5-encapsulation--asset-structure-principles)
 6. [Change Processing and SdfChangeBlock](#6-change-processing-and-sdfchangeblock)
-7. [Full Composition Mental Model](#7-full-composition-mental-model)
-8. [Key Takeaways](#8-key-takeaways)
+7. [Working Directly with Layers](#7-working-directly-with-layers)
+8. [Full Composition Mental Model](#7-full-composition-mental-model)
+9. [Key Takeaways](#8-key-takeaways)
 
 ---
 
@@ -459,7 +460,92 @@ stage.Reload()   # re-reads all layers from disk
 
 ---
 
-## 7. Full Composition Mental Model
+## 7. Working Directly with Layers
+
+Most USD authoring goes through the high-level `Usd` API — `stage.DefinePrim()`, `attr.Set()`, `UsdGeom.Mesh.Define()`. These are schema-aware and handle composition, type validation, and fallback values automatically.
+
+Sometimes you need to bypass this and work directly on the raw layer data. This is the **Sdf level** — you are constructing layer specs manually with no schema safety net.
+
+### The two levels side by side
+
+```python
+# HIGH-LEVEL — schema-aware, goes through Usd API
+# USD handles type validation, composition, and fallbacks
+stage = Usd.Stage.CreateNew("model.usda")
+mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")
+mesh.GetPointsAttr().Set(Vt.Vec3fArray([...]))
+
+# LOW-LEVEL — raw layer data, goes through Sdf directly
+# No schema awareness — you describe the structure manually
+layer     = Sdf.Layer.CreateNew("model.usda")
+prim_spec = Sdf.CreatePrimInLayer(layer, "/World/Chair")
+prim_spec.specifier = Sdf.SpecifierDef
+prim_spec.typeName  = "Mesh"
+
+attr_spec = Sdf.AttributeSpec(
+    prim_spec,
+    "points",
+    Sdf.ValueTypeNames.Point3fArray
+)
+attr_spec.default       = Vt.Vec3fArray([...])
+attr_spec.documentation = "Mesh vertex positions."
+```
+
+Both produce the same USDA output. The high-level route is safer and faster to write. The Sdf route gives you direct control over exactly what goes into the layer.
+
+### SdfPrimSpec — defining a prim in a layer
+
+```python
+from pxr import Sdf
+
+layer = Sdf.Layer.CreateNew("scene.usda")
+
+# Define a prim directly in the layer
+prim_spec = Sdf.CreatePrimInLayer(layer, "/World/Chair")
+prim_spec.specifier = Sdf.SpecifierDef    # def / over / class
+prim_spec.typeName  = "Xform"             # the schema type
+
+# Read what was authored
+print(prim_spec.specifier)   # Sdf.SpecifierDef
+print(prim_spec.typeName)    # "Xform"
+print(prim_spec.path)        # Sdf.Path("/World/Chair")
+```
+
+### SdfAttributeSpec (subclass of SdfPropertySpec) — defining an attribute in a layer
+
+```python
+# Define an attribute on the prim spec
+attr_spec = Sdf.AttributeSpec(
+    prim_spec,                          # parent prim spec
+    "sensor:temperature",               # attribute name
+    Sdf.ValueTypeNames.Float            # value type
+)
+
+# Set schema-level properties on the attribute
+attr_spec.default       = 20.0                    # fallback value
+attr_spec.variability   = Sdf.VariabilityVarying  # animated or static
+attr_spec.documentation = "Temperature in Celsius."
+
+# Read back what was authored in this layer
+print(attr_spec.default)        # 20.0
+print(attr_spec.typeName)       # Sdf.ValueTypeNames.Float
+print(attr_spec.documentation)  # "Temperature in Celsius."
+```
+
+### When you actually use this
+
+| Scenario                                 | Why Sdf level                                                                                                                           |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Writing a pipeline validator             | Need to inspect raw layer contents, not composed result                                                                                 |
+| Building a layer without opening a stage | Procedural generation, test fixtures                                                                                                    |
+| Inside usdGenSchema-generated code       | The generated C++ uses SdfPropertySpec internally to register schema attributes                                                         |
+| PropertyStack and PrimStack debugging    | `GetPropertyStack()` and `GetPrimStack()` return `SdfPropertySpec` and `SdfPrimSpec` objects — understanding them helps read the output |
+
+> **Key distinction:** The high-level API (`attr.Set()`, `UsdGeom.Mesh.Define()`) is schema-aware — it knows about types, fallbacks, and composition. The Sdf level is raw layer data — you are writing directly into one file's spec list with no schema validation. Both produce the same on-disk result.
+
+---
+
+## 8. Full Composition Mental Model
 
 When USD composes a prim, it collects all **PrimSpecs** from every layer that has an opinion on that prim, orders them by LIVERPS strength, and merges the winning values:
 
@@ -483,7 +569,7 @@ When USD composes a prim, it collects all **PrimSpecs** from every layer that ha
 
 ---
 
-## 8. Key Takeaways
+## 9. Key Takeaways
 
 | Concept                    | What to Remember                                                             |
 | -------------------------- | ---------------------------------------------------------------------------- |

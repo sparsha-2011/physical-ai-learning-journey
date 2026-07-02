@@ -355,6 +355,20 @@ usdview:                             usdview:
 
 Same USD file. Same prim. The difference is entirely whether the registry has been populated for this process.
 
+### What usdGenSchema Uses Internally — SdfPropertySpec
+
+When `usdGenSchema` generates the C++ code that registers your schema, it also generates code that uses `SdfPropertySpec` and `SdfPrimSpec` to describe what attributes the schema type has — their names, types, default values, and documentation.
+
+This is why `sensor.GetTemperatureAttr().Get()` returns `20.0` even without ever calling `Set()` — the generated code used `SdfAttributeSpec` to register that default at schema definition time, not at authoring time.
+
+You interact with `SdfPropertySpec` directly when:
+
+- Reading `GetPropertyStack()` or `GetPrimStack()` results — both return Sdf spec objects
+- Writing pipeline validators that inspect raw layer contents
+- Authoring directly into a layer without a full stage
+
+> **Full explanation and code examples:** [Day 4 Section 3b — Working Directly with Layers](day-04-advanced-composition.md#3b-working-directly-with-layers--sdfprimspec-and-sdfpropertyspec)
+
 ---
 
 ### The Two Components — Both Required
