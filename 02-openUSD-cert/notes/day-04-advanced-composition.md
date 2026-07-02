@@ -447,8 +447,6 @@ stage.Reload()   # re-reads all layers from disk
 | Picks up external disk changes | No — call `stage.Reload()` to re-read from disk             |
 | Caches different path strings  | No — `"scene.usda"` and `"./scene.usda"` are different keys |
 
----
-
 ### When it matters in production
 
 ```python
