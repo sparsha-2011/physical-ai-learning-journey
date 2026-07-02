@@ -135,21 +135,66 @@ my_car.GetVariantSets().GetVariantSet("color").SetVariantSelection("blue")
 
 **Variant fallback selections** define what USD should use when the requested variant does not exist in a given asset. They prevent hard failures when a pipeline environment requests a variant that wasn't authored.
 
-### Three Correct Approaches
+### Three Things That Sound Similar But Are Different
 
-### Variant Fallback Selections
+Before the approaches, it is critical to understand three concepts that are easy to confuse:
 
-When a scene requests a variant that does not exist in an asset, `variantFallbacks` defines what USD tries instead.
+```
+1. Default variant selection on the prim
+   variants = { string lod = "high" }    ← in the prim definition
+   "if nobody overrides this, use high"
+   → VALID and standard practice
 
-**Approach 1 — `variantFallbacks` in root layer metadata (USDA)**
+2. variantFallbacks in layer metadata header
+   #usda 1.0
+   (
+       variantFallbacks = { string[] "lod" = ["high", "medium"] }
+   )
+   → VALID — stage-wide policy in the layer header
 
-This goes in the **root layer header** of the stage entry point — the same block as `upAxis`, `metersPerUnit`, and `subLayers`. It is stage-wide policy, not tied to any specific prim.
+3. variantFallbacks in PRIM metadata
+   def Xform "Chair" (
+       variantFallbacks = { ... }    ← inside a prim block
+   ) { }
+   → WRONG — has no effect, not standard practice
+```
+
+> The exam specifically tests the difference between (1) and (3). Setting a default selection **on the prim** is correct and is what "defining fallback variants at the prim definition layer" means. Putting `variantFallbacks` **in prim metadata** is wrong and has no effect.
+
+---
+
+### Approach 1 — Default variant selection on the prim (asset level)
+
+Set a default selection directly in the variant set definition. This is the baseline — if no stronger layer overrides it, USD uses this selection.
+
+```usda
+def Xform "Chair" (
+    prepend variantSets = "lod"
+    variants = { string lod = "high" }   ← default selection on the prim
+) {
+    variantSet "lod" = {
+        "high"   { ... }
+        "medium" { ... }
+        "low"    { ... }
+    }
+}
+```
+
+- Lives in the asset file itself
+- Applies when no other layer overrides the selection
+- This is what "defining fallback variants at the prim definition layer" means in exam language
+
+---
+
+### Approach 2 — `variantFallbacks` in root layer metadata
+
+Stage-wide fallback policy. Goes in the **root layer metadata header** — the same block as `upAxis`, `metersPerUnit`, and `subLayers`. NOT in any prim definition.
 
 ```usda
 #usda 1.0
 (
     upAxis = "Y"
-    variantFallbacks = {
+    variantFallbacks = {        ← layer metadata header — correct placement
         string[] "lod"   = ["high", "medium", "low"]
         string[] "color" = ["default"]
     }
@@ -160,76 +205,103 @@ This goes in the **root layer header** of the stage entry point — the same blo
 )
 ```
 
-If `lod = "ultra"` is requested but does not exist on any prim, USD tries `"high"` first, then `"medium"`, then `"low"`.
-
 - Baked into the file on disk
-- Applies whenever that file is opened as a root layer
+- Applies whenever this file is opened as a root layer
 - Persists across sessions automatically
+- Equivalent to Approach 3 but authored in USDA instead of Python
+  > Approach 2 and Approach 3 are **equivalent** — same policy, different interfaces. Approach 2 is in the file. Approach 3 is in Python code. Both set the same stage-wide fallback.
 
-> `variantFallbacks` belongs in the **root layer or sublayer metadata header only**.
-> Do NOT author it in prim metadata — it has no effect there and is not standard practice.
+---
 
-**Approach 2 — `Usd.Stage.SetGlobalVariantFallbacks()` (Python)**
+### Approach 3 — `Usd.Stage.SetGlobalVariantFallbacks()` (Python)
 
-Equivalent to Approach 1 but set in code. Must be called **before** `Usd.Stage.Open()`.
+Must be called **before** `Usd.Stage.Open()`. Has no effect on already-open stages.
 
 ```python
 from pxr import Usd
 
+# Call BEFORE opening — has no effect on already-open stages
 Usd.Stage.SetGlobalVariantFallbacks({
     "lod":   ["high", "medium", "low"],
     "color": ["default"],
 })
 
-stage = Usd.Stage.Open("shot.usda")   # fallbacks apply to this and all subsequent opens
+stage = Usd.Stage.Open("scene.usda")   # fallbacks apply here
 ```
 
-- Must be called before opening the stage — has no effect on already-open stages
-- Applies only to stages opened after the call in this process
+- Must be called before opening the stage
 - Does not persist — must be set again each new process
-- Use for environment-specific or tool-specific overrides set at startup
+- Use for environment-specific or tool-specific overrides at startup
 
-> Approach 1 and Approach 2 set the **same policy** through different interfaces.
-> Use Approach 1 for shared pipeline defaults baked into the shot file.
-> Use Approach 2 for per-tool or per-environment overrides at process startup.
+---
 
-**Approach 3 — Session layer**
+### Approach 4 — Session layer (runtime changes)
 
-Author fallback selections into the session layer for per-user or per-environment preferences without modifying shared files.
+The session layer is always the strongest layer and is never saved to disk. Use it for **runtime changes** — after the stage is already open — without touching any shared file.
 
 ```python
 stage   = Usd.Stage.Open("shot.usda")
 session = stage.GetSessionLayer()
 stage.SetEditTarget(session)
-# Author fallback selections here — never saved to disk
+
+# Override variant selection at runtime
+prim = stage.GetPrimAtPath("/World/Car")
+prim.GetVariantSets().GetVariantSet("lod").SetVariantSelection("proxy")
+# Takes effect immediately — no file change, no reopen needed
+
+# Clear when done
+stage.GetSessionLayer().Clear()
 ```
 
-\*\*Approach 4 — Author `variantFallbacks` per referencing layer
+- Strongest layer — overrides everything else
+- In-memory only — `stage.Save()` never writes it to disk
+- Discarded when process ends
+- The correct mechanism for runtime variant changes — NOT "avoid runtime changes"
+  > **Exam trap:** "Use fallback selections only during stage composition and avoid runtime changes" is **WRONG**. The session layer exists specifically to support runtime variant changes.
 
-For consistency across all layers that reference an asset, explicitly author `variantFallbacks` in **each layer** that references the prim:
+---
+
+### Approach 5 — `variantFallbacks` per referencing layer
+
+For consistency across departments, author `variantFallbacks` in each layer that references the asset:
 
 ```usda
-# department_shot.usda — this layer references the asset
+# department_anim.usda
 #usda 1.0
 (
     variantFallbacks = {
-        string[] "lod"   = ["high", "medium", "low"]
+        string[] "lod" = ["high", "medium", "low"]
     }
 )
-# Now this layer AND any layer that sublayers it will use these fallbacks
-# without relying on the asset's own defaults
 ```
 
-> **Why per-layer matters:** If only the asset defines fallbacks, a referencing layer that requests a non-existent variant may fail if its `variantFallbacks` context differs. Explicitly authoring fallbacks in each referencing layer ensures consistent behaviour regardless of which tool opens the stage.
+- Ensures consistent fallback behaviour regardless of which tool opens the stage
+- Prevents failures when a tool's environment differs from the asset's defaults
 
-**Wrong approaches**
+---
 
-| Wrong                                       | Why                                                                             |
-| ------------------------------------------- | ------------------------------------------------------------------------------- |
-| Author in prim metadata                     | No effect — fallbacks are a stage-level concept, not prim-level                 |
-| Rely on session layer alone                 | Provides no fallback logic — fallbacks must be defined in a layer or via Python |
-| Assume USD selects alphabetically           | USD does NOT auto-select variants — fallbacks must be explicit                  |
-| Duplicate prims with different variant sets | Increases complexity — `variantFallbacks` is the correct mechanism              |
+### Comparison Table
+
+| Approach                         | Where authored                       | Persists?        | When it applies                  | Use case                         |
+| -------------------------------- | ------------------------------------ | ---------------- | -------------------------------- | -------------------------------- |
+| Default selection on prim        | Inside prim definition in asset file | Yes — on disk    | When no stronger override exists | Asset-level baseline             |
+| `variantFallbacks` in root layer | Root layer metadata header `()`      | Yes — on disk    | Stage composition                | Shared pipeline defaults         |
+| `SetGlobalVariantFallbacks()`    | Python code before `Stage.Open()`    | No — per process | Stage composition                | Tool/environment startup         |
+| Session layer                    | In-memory, never saved               | No — per session | Runtime, after stage open        | Interactive overrides, debugging |
+| Per referencing layer            | Each sublayer metadata header        | Yes — on disk    | Per-layer composition            | Department consistency           |
+
+---
+
+### Wrong Approaches
+
+| Wrong                                       | Why                                                                          |
+| ------------------------------------------- | ---------------------------------------------------------------------------- |
+| `variantFallbacks` in **prim metadata**     | Prim metadata has no effect for fallbacks — must be in layer metadata header |
+| Rely only on default prim selection         | Does not cover cases where the requested variant doesn't exist at all        |
+| Rely solely on session layer                | Session layer overrides selections but does not define fallback logic        |
+| Duplicate prims with different variant sets | Increases complexity — `variantFallbacks` is the correct mechanism           |
+| Assume USD auto-selects alphabetically      | USD does NOT auto-select variants — fallbacks must be explicitly defined     |
+| Avoid runtime changes                       | WRONG — session layer exists specifically for runtime variant changes        |
 
 ---
 
