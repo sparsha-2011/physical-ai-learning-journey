@@ -341,32 +341,71 @@ When an asset is referenced into a scene, only the hierarchy under the reference
 
 ## 6. Change Processing and SdfChangeBlock
 
-USD sends **change notifications** whenever the stage is modified. Listeners (e.g., Hydra, viewport updates) receive these notifications and update only the parts of the scene that changed. This is far more efficient than a full scene re-evaluation on every edit.
+Every time you modify anything on a USD stage — set an attribute value, add a prim, change a variant selection — USD immediately broadcasts a **change notification** to every system listening to the stage.
 
-### SdfChangeBlock — Batching Notifications
+**Who listens to these notifications:**
 
-`Sdf.ChangeBlock` defers all change notifications until the block exits, then sends one consolidated notification. This is critical for performance when making many edits in a loop.
+- **Hydra** — the renderer. Every notification triggers a viewport redraw.
+- **Scenegraph panels** — usdview updates its prim tree.
+- **Asset management systems** — marks layers as dirty, needing save.
+- **Custom callbacks** — anything registered with `stage.GetObjectsChangedNotice()`.
+
+This is fine for a handful of interactive edits. One translate change → one redraw → instant. The problem arises with bulk authoring:
 
 ```python
-from pxr import Usd, Sdf
-
-stage = Usd.Stage.Open("scene.usda")
-attr  = stage.GetPrimAtPath("/World/Mesh").GetAttribute("points")
-
-# Without ChangeBlock: 10,000 individual notifications
-for i in range(10000):
-    attr.Set(new_points[i], time=i)    # 10,000 notifications sent
-
-# With ChangeBlock: ONE consolidated notification
-with Sdf.ChangeBlock():
-    for i in range(10000):
-        attr.Set(new_points[i], time=i)
-# ONE notification sent after the block exits — ~10,000× faster
+# Importing a 500-frame animation cache WITHOUT SdfChangeBlock
+for frame in range(500):
+    attr.Set(positions[frame], time=frame)
+    # notification fires here — Hydra tries to redraw
+    # notification fires here — Hydra tries to redraw
+    # ... 500 times
+    # UI freezes, import takes 10x longer than it should
 ```
 
-### Stage Caching — `Usd.StageCache`
+Each `Set()` call fires a notification. Hydra receives 500 separate redraw requests. The viewport stutters, the import grinds, and all 499 intermediate redraws are completely wasted work.
 
-Opening a stage is expensive — it reads all layers and runs composition. `UsdStageCache` stores previously opened stages so they can be reused without re-opening.
+### `Sdf.ChangeBlock` — batch everything into one notification
+
+`Sdf.ChangeBlock` holds all notifications in a queue until the block exits, then sends **one consolidated notification** covering everything that changed inside the block.
+
+```python
+from pxr import Sdf
+
+# WITH SdfChangeBlock — one notification, one redraw
+with Sdf.ChangeBlock():
+    for frame in range(500):
+        attr.Set(positions[frame], time=frame)
+# ONE notification sent here — Hydra redraws once
+# Import completes instantly
+```
+
+The data is still written to the layer in real time inside the block — only the notifications are deferred. There is no risk of inconsistent state.
+
+### Production example — importing a point cache
+
+```python
+# Loading 240 frames of simulation data
+with Sdf.ChangeBlock():
+    for frame, frame_points in cache_data.items():
+        points.Set(Vt.Vec3fArray(frame_points), time=frame)
+# 240 frames written, 1 notification sent, viewport updates once
+```
+
+### When to use it
+
+| Situation                                               | Use SdfChangeBlock?           |
+| ------------------------------------------------------- | ----------------------------- |
+| Single attribute edit in a UI interaction               | No — one notification is fine |
+| Writing time samples in a loop                          | Yes — wrap the entire loop    |
+| Importing a simulation cache                            | Yes                           |
+| Populating a PointInstancer with thousands of positions | Yes                           |
+| Building a large prim hierarchy programmatically        | Yes                           |
+
+> **Rule of thumb:** any time you are authoring inside a `for` loop, wrap it in `Sdf.ChangeBlock()`.
+
+### Stage Caching (`UsdStageCache`) — Avoiding Redundant Composition
+
+Opening a USD stage is expensive — reading all layers from disk and running composition across hundreds of references and sublayers can take several seconds. `UsdStageCache` stores already-opened stage objects in memory so that opening the same file a second time returns the cached stage instantly instead of re-running composition.
 
 ```python
 from pxr import Usd
@@ -374,13 +413,51 @@ from pxr import Usd
 cache = Usd.StageCache()
 
 with Usd.StageCacheContext(cache):
-    # First open — reads from disk and runs composition
+    # First open — reads from disk, runs composition, stored in cache
     stage = Usd.Stage.Open("scene.usda")
 
-    # Second open of the SAME file — returns cached stage instantly
+    # Second open of the same file — returns cached stage instantly
     stage2 = Usd.Stage.Open("scene.usda")
-    assert stage is stage2  # same object
+
+    print(stage is stage2)   # True — exact same object
 ```
+
+### Will you see old/stale output?
+
+No — the cache stores a reference to the **live Stage object**, not a frozen snapshot. Any edits made to the stage after caching are immediately visible when you retrieve it from the cache. You always see the current state.
+
+The only scenario where you see stale data is if the **files on disk change externally** after the stage was cached:
+
+```python
+stage = Usd.Stage.Open("scene.usda")   # reads disk at this moment
+# someone edits scene.usda externally on disk
+stage2 = Usd.Stage.Open("scene.usda")  # returns cached stage — disk changes NOT picked up
+
+# To pick up external changes:
+stage.Reload()   # re-reads all layers from disk
+```
+
+### What the cache does and does not do
+
+|                                | Behaviour                                                   |
+| ------------------------------ | ----------------------------------------------------------- |
+| Stores                         | A reference to the live Stage object — not a copy           |
+| Returns                        | The same Stage object — edits visible everywhere            |
+| Persists across processes      | No — lives in RAM, gone when process ends                   |
+| Picks up external disk changes | No — call `stage.Reload()` to re-read from disk             |
+| Caches different path strings  | No — `"scene.usda"` and `"./scene.usda"` are different keys |
+
+---
+
+### When it matters in production
+
+```python
+# Render manager opens the same shot for 10 render passes
+# Without cache: 10 composition runs x 3 seconds = 30 seconds
+# With cache:    1 composition run + 9 instant lookups = 3 seconds
+```
+
+> **Rule of thumb:** use `UsdStageCache` any time the same stage file is opened more than once in a single process — render managers, pipeline tools with multiple panels, batch processors.
 
 ---
 
