@@ -336,8 +336,6 @@ exporter.run_export(maya_scene, "/output/chair_v003.usda", options)
 - Write export logs or audit trails for pipeline tracking
 - Validate that the output matches what was expected (prim count, file size checks)
 
----
-
 > **Rule of thumb:** pre-export = set up and validate inputs. Post-export = verify and record outputs.
 
 ### What Happens Step by Step
