@@ -793,6 +793,20 @@ To add a new kind (`factory_unit`) to this hierarchy:
 
 The kind must be registered with the registry so USD recognises it as valid.
 
+```python
+from pxr import Usd
+
+registry = Usd.ModelKindRegistry.GetInstance()
+
+registry.Register(
+    "factory_unit",   # new kind name
+    "component",      # parent kind — places it under component in hierarchy
+)
+
+# USD hierarchy after registration:
+# assembly → group → component → factory_unit
+```
+
 **Step 2 — Set the kind on prims using `Usd.ModelAPI`**
 
 ```python
@@ -810,14 +824,108 @@ print(model_api.GetKind())   # "factory_unit"
 
 **Step 3 — Implement a schema plugin that INHERITS (not overrides) UsdModelAPI**
 
-```
+````
 EXTEND UsdModelAPI   ← adds behaviour for the new kind
-OVERRIDE UsdModelAPI ← WRONG — replaces existing behaviour, breaks standard kinds
+
+What you write manually:
+  FactoryUnitAPI.h          ← C++ header declaring your class
+  FactoryUnitAPI.cpp        ← C++ implementation
+                               contains TF_REGISTRY_FUNCTION (written manually)
+  plugInfo.json             ← manifest file (written manually)
+
+```python
+# In C++ — your schema plugin adds behaviour without replacing existing
+#
+# class FactoryUnitAPI : public UsdModelAPI {   ← EXTENDS UsdModelAPI
+# public:
+#
+#     // Add new behaviour specific to factory_unit
+#     bool GetFacilityId(std::string* facilityId) const;
+#     bool SetFacilityId(const std::string& facilityId);
+#
+#     // Original UsdModelAPI methods still work unchanged:
+#     // GetKind(), SetKind(), IsModel(), IsGroup() etc.
+#     // Nothing is replaced — only added
+# };
+#
+# In Python after the plugin is deployed:
+factory_api = FactoryUnitAPI(prim)
+factory_api.GetFacilityId()   # new method you added
+factory_api.GetKind()         # original UsdModelAPI method still works
+
+````
+
 ```
+{
+  "Plugins": [{
+    "Name": "factoryUnit",
+    "LibraryPath": "factoryUnit.so",
+    "Types": {
+      "FactoryUnitAPI": {
+        "bases": ["UsdModelAPI"]
+      }
+    }
+  }]
+}
+```
+
+What you run:
+cmake + make ← compiles your C++ into factoryUnit.so
+
+What you deploy:
+factoryUnit.so
+plugInfo.json
+→ both placed in a directory
+→ PXR_PLUGINPATH_NAME points to that directory
+
+````
 
 **Step 4 — Extend the `Validate()` method for domain-specific rules**
 
 Custom validation ensures `factory_unit` prims always have the required structure.
+```python
+# In C++ — override Validate() to add factory_unit specific checks
+#
+# bool FactoryUnitAPI::Validate(std::string* reason) const {
+#
+#     // First run the parent validation — do NOT skip this
+#     if (!UsdModelAPI::Validate(reason)) {
+#         return false;   // fails standard component rules → reject
+#     }
+#
+#     // Now add factory_unit specific rules on top
+#     UsdPrim prim = GetPrim();
+#
+#     // Rule 1: must have pipeline:facilityId metadata
+#     std::string facilityId;
+#     if (!GetFacilityId(&facilityId) || facilityId.empty()) {
+#         *reason = "factory_unit must have pipeline:facilityId set";
+#         return false;
+#     }
+#
+#     // Rule 2: must have at least one TemperatureSensor child
+#     bool hasSensor = false;
+#     for (const auto& child : prim.GetChildren()) {
+#         if (child.IsA<AcmeSensors_TemperatureSensor>()) {
+#             hasSensor = true;
+#             break;
+#         }
+#     }
+#     if (!hasSensor) {
+#         *reason = "factory_unit must contain at least one TemperatureSensor";
+#         return false;
+#     }
+#
+#     return true;   // passes all rules
+# }
+#
+# In Python after the plugin is deployed:
+factory_api = FactoryUnitAPI(prim)
+is_valid, reason = factory_api.Validate()
+if not is_valid:
+    print(f"Invalid factory_unit: {reason}")
+    # "factory_unit must have pipeline:facilityId set"
+````
 
 ### Wrong Approaches
 
