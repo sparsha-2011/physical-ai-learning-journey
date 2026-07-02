@@ -146,7 +146,7 @@ Custom schemas are defined in a `schema.usda` file that describes the schema's c
         @usd/schema.usda@       # inherit from base USD schemas
     ]
 )
-
+#usdGenSchema config describing how to name the generated code it has no runtime existence
 over "GLOBAL" (
     customData = {
         string libraryName   = "acmeSensors"    # library name
@@ -182,6 +182,8 @@ STEP 1  Write schema.usda
         This is your source of truth — human-readable intent.
 
         class Xform "TemperatureSensor" (
+                ↑           ↑
+            base class   schema class (the new type you are creating)
             inherits = </Xform>
         ) {
             float sensor:temperature = 20.0
