@@ -16,7 +16,7 @@
 7. [Removing Proprietary Dependencies](#7-removing-proprietary-dependencies)
 8. [Pipeline Documentation Standards](#8-pipeline-documentation-standards)
 9. [Flattening Best Practices](#9-flattening-best-practices)
-10. [UI/UX for USD Pipelines](#10-uiux-for-usd-pipelines)
+10. [UI/UX Principles for USD Pipelines](#10-uiux-principles-for-usd-pipelines)
 11. [Build Configuration Management](#11-build-configuration-management)
 12. [Pipeline Design Principles](#12-pipeline-design-principles)
 13. [Conceptual Data Mapping Documents](#13-conceptual-data-mapping-documents)
@@ -536,19 +536,75 @@ Good USD pipeline documentation must include enough technical detail for develop
 
 ---
 
-## 10. UI/UX for USD Pipelines
+## 10. UI/UX Principles for USD Pipelines
 
-USD pipeline tools should reflect USD's modular, graph-based nature:
+USD's composition model is a graph — layers reference layers, assets reference assets, variants branch and merge. The UI for a USD pipeline tool should reflect this underlying structure, not impose a linear or modal workflow on top of it.
 
-| ✅ Good patterns                                  | ❌ Anti-patterns                                     |
-| ------------------------------------------------- | ---------------------------------------------------- |
-| Node-based visual editor with drag-and-drop       | Modal dialogs for every configuration change         |
-| Real-time feedback on execution status and errors | Linear-only pipeline flows (USD branches and merges) |
-| Context-sensitive help and tooltips for nodes     | No customisation options                             |
-| Support for branching and merging node flows      | —                                                    |
+### Core Principles
 
-> Node-based editors are specifically recommended because USD's composition model **is** a graph — layers reference layers, assets reference assets, variants branch and merge. The UI should reflect this structure.
+**1. Node-based visual editor**
 
+USD composition is a directed graph. The UI should represent it as one — nodes for layers and assets, connections for arcs (references, sublayers, payloads). A linear list or sequential step wizard misrepresents how USD actually composes.
+
+```
+shot.usda ──────────────────────────────── [Shot Node]
+               ↑             ↑                  ↑
+          [Anim Node]  [Layout Node]      [Asset Node]
+          anim.usda    layout.usda        chair_asset.usda
+
+Each arrow = a composition arc
+Each node  = a layer or asset
+```
+
+**2. Real-time feedback**
+
+USD's change notification system fires immediately on every edit. The UI should surface composition errors, validation warnings, and loading state the moment they occur — not after a modal "apply" or "submit" button is clicked.
+
+**3. Context-sensitive help and tooltips**
+
+Every node and connection should have inline documentation explaining what arc it represents, what schema type a prim uses, and what attributes are available. Schema definitions from `plugInfo.json` and `schema.usda` contain this documentation — surface it in the UI.
+
+**4. Support branching and merging**
+
+USD sublayers and references branch and merge non-linearly. A pipeline tool that forces a single linear flow misrepresents the composition model. The UI must support multiple inputs and outputs per node — just like USD composition itself.
+
+**5. No modal dialogs for configuration**
+
+USD edits are live — `attr.Set()` takes effect immediately. Configuration changes in the UI should be non-blocking. Modal dialogs that require "apply" or "OK" before changes take effect are architecturally wrong for a USD pipeline tool.
+
+**6. Scalability — lazy representation**
+
+Large scenes have thousands of prims and dozens of layers. The UI should reflect USD's payload deferred loading model — show nodes without loading their full contents until explicitly expanded, mirroring `Usd.Stage.LoadNone` + explicit `Load()`.
+
+### Wrong Patterns
+
+| Anti-pattern                                 | Why it is wrong                                                 |
+| -------------------------------------------- | --------------------------------------------------------------- |
+| Modal dialogs for every configuration change | Blocks workflow, misrepresents USD's live editing model         |
+| Linear-only pipeline flows                   | USD branches and merges — a linear flow is structurally wrong   |
+| No customisation options                     | USD pipelines are studio-specific — one size does not fit all   |
+| Flatten before editing                       | Defeats the composition benefits USD was designed to provide    |
+| No error feedback until final submission     | USD surfaces composition errors immediately — the UI should too |
+| Loading all nodes fully at startup           | Ignores USD's payload deferred loading design                   |
+
+### Why Node-Based Is the Right Mental Model
+
+```
+USD asks:   "what layers compose this prim?"
+Node UI answers visually:
+  [chair_asset.usda] ──reference──> [ChairA in shot.usda]
+                                         ↑
+                               [anim.usda override]
+
+Linear UI fails to represent:
+  - which layer is strongest
+  - where overrides come from
+  - how arcs stack and resolve
+```
+
+> **The rule:** if the underlying USD data structure is a graph, the UI must be a graph. Any tool that flattens this into a sequential list is hiding information the artist needs to understand and debug composition.
+
+````
 ---
 
 ## 11. Build Configuration Management
@@ -606,7 +662,7 @@ mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")   # ← inherits UsdGeomMesh 
 light = UsdLux.SphereLight.Define(stage, "/World/Key") # ← inherits UsdLuxLight schema
 # Schema-aware writing: correct attribute types enforced automatically
 # Wrong type → error at authoring time, not silently at render time
-```
+````
 
 **Register custom schemas before exporting**
 
