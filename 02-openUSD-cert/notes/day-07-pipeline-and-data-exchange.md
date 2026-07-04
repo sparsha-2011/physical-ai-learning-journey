@@ -604,7 +604,6 @@ Linear UI fails to represent:
 
 > **The rule:** if the underlying USD data structure is a graph, the UI must be a graph. Any tool that flattens this into a sequential list is hiding information the artist needs to understand and debug composition.
 
-````
 ---
 
 ## 11. Build Configuration Management
@@ -662,7 +661,7 @@ mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")   # ← inherits UsdGeomMesh 
 light = UsdLux.SphereLight.Define(stage, "/World/Key") # ← inherits UsdLuxLight schema
 # Schema-aware writing: correct attribute types enforced automatically
 # Wrong type → error at authoring time, not silently at render time
-````
+```
 
 **Register custom schemas before exporting**
 
