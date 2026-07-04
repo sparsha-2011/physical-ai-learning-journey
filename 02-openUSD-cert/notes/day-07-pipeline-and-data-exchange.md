@@ -562,27 +562,6 @@ USD pipeline tools should reflect USD's modular, graph-based nature:
 
 ---
 
-## 12. Pipeline Design Principles
-
-```python
-from pxr import Usd, Sdf
-
-# Stage Caching — avoid redundant recomposition
-cache = Usd.StageCache()
-with Usd.StageCacheContext(cache):
-    stage = Usd.Stage.Open("scene.usda")
-    # Second Open returns cached stage — no recomposition
-    stage2 = Usd.Stage.Open("scene.usda")
-
-# Change Notifications — SdfChangeBlock for bulk authoring
-with Sdf.ChangeBlock():
-    for i in range(10000):
-        attr.Set(value[i], time=i)
-# ONE notification sent after block — not 10,000
-```
-
----
-
 ## 13. Conceptual Data Mapping Documents
 
 A conceptual data mapping document is the **logical blueprint** that specifies how source schema attributes map to target USD schema attributes before writing any code.
