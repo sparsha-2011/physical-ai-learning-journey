@@ -15,14 +15,13 @@
 6. [Exporter Hooks — Pre/Post Export](#6-exporter-hooks--prepost-export)
 7. [Removing Proprietary Dependencies](#7-removing-proprietary-dependencies)
 8. [Pipeline Documentation Standards](#8-pipeline-documentation-standards)
-9. [Flattening Best Practices](#9-flattening-best-practices)
-10. [UI/UX Principles for USD Pipelines](#10-uiux-principles-for-usd-pipelines)
-11. [Build Configuration Management](#11-build-configuration-management)
-12. [Pipeline Design Principles](#12-pipeline-design-principles)
-13. [Conceptual Data Mapping Documents](#13-conceptual-data-mapping-documents)
-14. [Custom Importers — Intermediate Representation Pattern](#14-custom-importers--intermediate-representation-pattern)
-15. [Data Interchange Script Best Practices](#15-data-interchange-script-best-practices)
-16. [Key Takeaways](#16-key-takeaways)
+9. [UI/UX Principles for USD Pipelines](#9-uiux-principles-for-usd-pipelines)
+10. [Build Configuration Management](#10-build-configuration-management)
+11. [Pipeline Design Principles](#11-pipeline-design-principles)
+12. [Conceptual Data Mapping Documents](#12-conceptual-data-mapping-documents)
+13. [Custom Importers — Intermediate Representation Pattern](#13-custom-importers--intermediate-representation-pattern)
+14. [Data Interchange Script Best Practices](#14-data-interchange-script-best-practices)
+15. [Key Takeaways](#15-key-takeaways)
 
 ---
 
@@ -522,21 +521,7 @@ Good USD pipeline documentation must include enough technical detail for develop
 
 ---
 
-## 9. Flattening Best Practices
-
-| Action                                        | Part of flattening? | Notes                                       |
-| --------------------------------------------- | ------------------- | ------------------------------------------- |
-| Resolve references and payloads into one file | ✅ Yes              | Self-contained output                       |
-| Merge all layers into one                     | ✅ Yes              | Core purpose of flattening                  |
-| Ensure unique prim paths                      | ✅ Yes              | Namespace collisions must be resolved       |
-| Collapse variants to selected variant         | ✅ Yes              | Variant switching no longer possible        |
-| Bake time-sampled data to static values       | ❌ No               | Animation is PRESERVED — separate operation |
-| Convert geometry to single mesh type          | ❌ No               | Geometry types never change                 |
-| Preserve all variant sets intact              | ❌ No               | Variants collapse to selected               |
-
----
-
-## 10. UI/UX Principles for USD Pipelines
+## 9. UI/UX Principles for USD Pipelines
 
 USD's composition model is a graph — layers reference layers, assets reference assets, variants branch and merge. The UI for a USD pipeline tool should reflect this underlying structure, not impose a linear or modal workflow on top of it.
 
@@ -606,7 +591,7 @@ Linear UI fails to represent:
 
 ---
 
-## 11. Build Configuration Management
+## 10. Build Configuration Management
 
 USD pipelines depend on environment variables, plugin versions, and schema deployments being **identical across every environment** — artist workstations, render farms, CI/CD pipelines, and client deliveries. Build configuration management is the practice of ensuring this consistency.
 
@@ -687,7 +672,7 @@ TF_DEBUG              debug symbol flags
 
 ---
 
-## 13. Conceptual Data Mapping Documents
+## 11. Conceptual Data Mapping Documents
 
 A conceptual data mapping document is the **logical blueprint** that specifies how source schema attributes map to target USD schema attributes before writing any code.
 
@@ -717,7 +702,7 @@ The following belong in OTHER documents — not in conceptual mapping docs:
 
 ---
 
-## 13b. Custom Exporters — Schema-Compliant Writing
+## 12. Custom Exporters — Schema-Compliant Writing
 
 When building custom exporters, the goal is to leverage USD's schema system for built-in validation rather than bypassing it.
 
@@ -762,10 +747,6 @@ stage.Export("output.usdc")   # binary crate
 | Embed external asset references as raw data | References/payloads maintain modularity. Raw embedding increases file size and breaks asset workflows |
 | Ignore variant sets during export           | Variant sets represent alternative configurations — ignoring them loses data fidelity                 |
 | Skip schema validation to speed up export   | Silent corruption — schema validation catches type mismatches at authoring time                       |
-
----
-
-## 14. Custom Importers — Intermediate Representation Pattern
 
 The standard architecture for a custom USD importer decouples file format parsing from USD API authoring.
 
@@ -819,7 +800,7 @@ def import_file(filepath: str, output_usd: str):
 
 ---
 
-## 15. Data Interchange Script Best Practices
+## 13. Data Interchange Script Best Practices
 
 ### `UsdUtils.CopyLayer` — Duplicating Layers for Merging
 
@@ -858,7 +839,7 @@ success = UsdUtils.CopyLayer(source_layer, dest_layer)
 
 ---
 
-## 16. Key Takeaways
+## 14. Key Takeaways
 
 | Concept                                  | What to Remember                                                                                                                                                         |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
