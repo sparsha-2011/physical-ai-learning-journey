@@ -608,12 +608,86 @@ Linear UI fails to represent:
 
 ## 11. Build Configuration Management
 
-| ✅ Correct practices                      | ❌ Anti-patterns                                   |
-| ----------------------------------------- | -------------------------------------------------- |
-| Explicit build variants in config files   | Undocumented environment variables                 |
-| Centralised version-controlled config     | Hardcoded paths in build scripts                   |
-| Conditional logic for different platforms | Ignoring build cache (forces unnecessary rebuilds) |
-| Documented environment variables          | —                                                  |
+USD pipelines depend on environment variables, plugin versions, and schema deployments being **identical across every environment** — artist workstations, render farms, CI/CD pipelines, and client deliveries. Build configuration management is the practice of ensuring this consistency.
+
+### Why It Is Needed
+
+Without it, the same `.usda` file behaves differently on different machines:
+
+```
+Artist machine:   USD 23.08  acmeSensors.so v1.2  Python 3.10
+Render farm:      USD 22.11  acmeSensors.so v1.0  Python 3.9
+
+Same file. Different results.
+Renders differ from viewport.
+Schema attributes resolve incorrectly.
+No crash — silent wrong output.
+```
+
+USD plugin mismatches cause **silent data corruption**, not errors. A renamed attribute between plugin versions means `attr.Get()` returns `None` instead of raising an exception — the pipeline appears to work but produces wrong results.
+
+---
+
+### Core Principles
+
+**1. Explicit build variants in version-controlled config files**
+
+Every environment's exact dependency versions are declared in a config file committed to the repository — not assumed or set manually per machine:
+
+```yaml
+# build_config.yaml — committed to source control
+usd_version: "23.08"
+python_version: "3.10"
+plugins:
+  acmeSensors: "1.2.0"
+pxr_plugin_path: "/studio/plugins/23.08/v1.2/"
+```
+
+**2. Centralised config — single source of truth**
+
+One config file drives all environments. Updating a plugin version means updating one file and committing — every environment that pulls the repo gets the same versions automatically.
+
+**3. Conditional logic for different platforms**
+
+```yaml
+platforms:
+  linux: { library_ext: ".so", plugin_path: "/studio/plugins/" }
+  windows: { library_ext: ".dll", plugin_path: "C:/studio/plugins/" }
+```
+
+**4. Never ignore the build cache**
+
+Build caches (cmake, ninja) only recompile what changed. Ignoring the cache forces full rebuilds — wasteful on large USD schema libraries that can take tens of minutes to compile.
+
+```bash
+cmake --build .              # correct — uses cache
+cmake --build . --clean-first  # wrong — discards cache, full rebuild
+```
+
+**5. Document all environment variables**
+
+Every variable that affects build or runtime must be explicitly documented and set by the config system — not left to individual artists to configure manually:
+
+```
+PXR_PLUGINPATH_NAME   path to custom schema plugins
+USD_INSTALL_ROOT      path to USD installation
+PYTHONPATH            path to USD Python bindings
+TF_DEBUG              debug symbol flags
+```
+
+### Wrong Approaches
+
+| Anti-pattern                       | Why                                                                      |
+| ---------------------------------- | ------------------------------------------------------------------------ |
+| Undocumented environment variables | Artists configure manually → inconsistent environments                   |
+| Hardcoded paths in build scripts   | Breaks on different machines, operating systems, or directory structures |
+| Ignoring build cache               | Unnecessary full rebuilds — wastes time on large plugin libraries        |
+| No version pinning                 | Plugin updates silently change behaviour across environments             |
+| Manual per-machine setup           | Not reproducible — "works on my machine" is not a pipeline               |
+
+> **The core rule:** if any two machines in your pipeline have different values for `PXR_PLUGINPATH_NAME`, `USD_INSTALL_ROOT`, or plugin versions — your pipeline is not under configuration management and silent errors will occur.
+
+                                             |
 
 ---
 
