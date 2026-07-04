@@ -626,8 +626,6 @@ No crash — silent wrong output.
 
 USD plugin mismatches cause **silent data corruption**, not errors. A renamed attribute between plugin versions means `attr.Get()` returns `None` instead of raising an exception — the pipeline appears to work but produces wrong results.
 
----
-
 ### Core Principles
 
 **1. Explicit build variants in version-controlled config files**
