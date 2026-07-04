@@ -17,11 +17,10 @@
 8. [Pipeline Documentation Standards](#8-pipeline-documentation-standards)
 9. [UI/UX Principles for USD Pipelines](#9-uiux-principles-for-usd-pipelines)
 10. [Build Configuration Management](#10-build-configuration-management)
-11. [Pipeline Design Principles](#11-pipeline-design-principles)
-12. [Conceptual Data Mapping Documents](#12-conceptual-data-mapping-documents)
-13. [Custom Importers — Intermediate Representation Pattern](#13-custom-importers--intermediate-representation-pattern)
-14. [Data Interchange Script Best Practices](#14-data-interchange-script-best-practices)
-15. [Key Takeaways](#15-key-takeaways)
+11. [Conceptual Data Mapping Documents](#11-conceptual-data-mapping-documents)
+12. [Custom Exporter and Importers](#12-custom-exporters-and-importers)
+13. [Data Interchange Script Best Practices](#13-data-interchange-script-best-practices)
+14. [Key Takeaways](#14-key-takeaways)
 
 ---
 
@@ -702,101 +701,128 @@ The following belong in OTHER documents — not in conceptual mapping docs:
 
 ---
 
-## 12. Custom Exporters — Schema-Compliant Writing
+## 12. Custom Exporters and Importers
 
-When building custom exporters, the goal is to leverage USD's schema system for built-in validation rather than bypassing it.
+### What They Are
 
-### Correct Practices
+A **custom exporter** translates proprietary or DCC data INTO USD.
+A **custom importer** translates USD INTO another format.
 
-**Inherit from UsdGeom classes for schema validation**
+```
+Exporter:   Maya / Houdini / proprietary tool  →  USD stage
+Importer:   USD stage  →  game engine / renderer / legacy tool
+```
+
+They are needed because USD does not automatically understand
+proprietary formats. Every format that needs to exchange data
+with USD requires a translation layer.
+
+### Custom Exporter — Correct Practices
+
+**Inherit from UsdGeom classes for built-in schema validation**
 
 ```python
-# Inherit from UsdGeom schemas — gets built-in validation for free
-mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")   # ← inherits UsdGeomMesh schema
-light = UsdLux.SphereLight.Define(stage, "/World/Key") # ← inherits UsdLuxLight schema
-# Schema-aware writing: correct attribute types enforced automatically
-# Wrong type → error at authoring time, not silently at render time
+# Inheriting from UsdGeom gives type safety and validation for free
+mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")
+light = UsdLux.SphereLight.Define(stage, "/World/Key")
+# Wrong type for an attribute → error at authoring time not render time
 ```
 
-**Register custom schemas before exporting**
+**Use `stage.Export()` to serialise — not `stage.Save()`**
 
 ```python
-# Custom schemas must be registered with TfType BEFORE export
-# This happens automatically when the schema plugin is deployed
-# (PXR_PLUGINPATH_NAME points to the plugInfo.json)
-# Without registration: custom attributes written but not schema-validated
+# stage.Export() — writes flat resolved copy to any path
+stage.Export("output.usda")   # correct for delivery
+
+# stage.Save() — writes only to the root layer's own backing file
+# does not produce a standalone deliverable
 ```
 
-**Use `stage.Export()` to serialise the entire scene graph**
+**Extend via pre/post hooks — never override the main function**
 
 ```python
-# stage.Export() is the standard serialisation method
-# Writes all prims, attributes, relationships, and metadata
-stage.Export("output.usda")   # ASCII
-stage.Export("output.usdc")   # binary crate
-
-# stage.Save() writes only to the root layer's backing file
-# stage.Export() writes a flat resolved copy to any path
-```
-
-### Wrong Approaches
-
-| Wrong approach                              | Why it's wrong                                                                                        |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Write raw binary data directly to USD files | Bypasses USD's serialisation — corrupts the file                                                      |
-| Embed external asset references as raw data | References/payloads maintain modularity. Raw embedding increases file size and breaks asset workflows |
-| Ignore variant sets during export           | Variant sets represent alternative configurations — ignoring them loses data fidelity                 |
-| Skip schema validation to speed up export   | Silent corruption — schema validation catches type mismatches at authoring time                       |
-
-The standard architecture for a custom USD importer decouples file format parsing from USD API authoring.
-
-```
-WRONG — interleaved (hard to debug, brittle):
-  open_file()
-  create_usd_prim()     ← mixing I/O with USD authoring
-  read_next_object()
-  set_usd_attribute()   ← fragile coupling
-
-CORRECT — two-pass (clean separation):
-  PASS 1: parse_proprietary_file() → intermediate Python dict/objects
-           validates data, converts units, handles errors
-
-  PASS 2: populate_usd_stage(intermediate) → USD stage
-           uses clean validated data, no file I/O concerns
-```
-
-```python
-def import_file(filepath: str, output_usd: str):
-    # Pass 1 — parse to intermediate
-    intermediate = {
-        "meshes":     [],
-        "materials":  [],
-        "transforms": [],
+def pre_export_hook(stage):
+    # runs BEFORE core export
+    UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.y)
+    stage.GetRootLayer().customLayerData = {
+        "pipeline:version": "2.0"
     }
-    with open(filepath) as f:
-        # parse proprietary format into intermediate
-        # validate data, convert units, handle errors here
-        pass
 
-    # Pass 2 — populate USD from intermediate
-    stage = Usd.Stage.CreateNew(output_usd)
+def post_export_hook(stage):
+    # runs AFTER core export
+    for prim in stage.Traverse():
+        if prim.IsA(UsdGeom.Mesh):
+            prim.CreateAttribute(
+                "pipeline:exported",
+                Sdf.ValueTypeNames.Bool
+            ).Set(True)
+```
+
+**Register custom schemas with TfType before exporting**
+
+Custom attributes must be schema-validated before export.
+If the schema plugin is not registered, custom attributes
+are written as raw unvalidated data.
+
+### Custom Importer — The Two-Pass Pattern
+
+Decouple parsing from USD authoring. Never mix file I/O
+with USD API calls.
+
+```python
+# WRONG — interleaved parsing and USD authoring
+open_file()
+create_usd_prim()       # USD authoring mixed with I/O
+read_next_object()
+set_usd_attribute()     # fragile, hard to debug
+
+# CORRECT — two separate passes
+# Pass 1: parse to intermediate — all validation and conversion here
+intermediate = {
+    "meshes":    parse_geometry(source_file),     # convert units
+    "materials": parse_materials(source_file),    # validate types
+    "animation": parse_animation(source_file),    # handle errors
+}
+
+# Pass 2: populate USD from clean validated data
+stage = Usd.Stage.CreateNew("output.usda")
+with Sdf.ChangeBlock():                           # batch notifications
     for mesh_data in intermediate["meshes"]:
         mesh = UsdGeom.Mesh.Define(stage, mesh_data["path"])
         mesh.GetPointsAttr().Set(mesh_data["points"])
-        # ...
-
-    stage.Save()
+        mesh.GetFaceVertexCountsAttr().Set(mesh_data["face_counts"])
+stage.Save()
 ```
 
-> **Why this pattern:** (1) Parsing and USD authoring can each be tested independently. (2) Errors are caught before any USD state is created. (3) USD API calls can be batched inside `SdfChangeBlock` for performance.
+**Why two passes:**
+
+- Pass 1 catches all errors before any USD state is created
+- Pass 2 can be wrapped in `Sdf.ChangeBlock()` for performance
+- Each pass can be tested independently
+- USD API calls are never mixed with file I/O concerns
 
 ### Wrong Approaches
 
-| Wrong                                            | Why                                                                          |
-| ------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `Implementing a custom UsdSchema` for the import | Custom schemas are for extending USD data types — not required for importing |
-| Writing USD ASCII files directly                 | Bypasses USD validation and layering                                         |
-| Using only `UsdGeom` namespace                   | Animation may need `UsdSkel`, materials need `UsdShade`                      |
+| Wrong                                  | Why                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------- |
+| Write raw binary directly to USD files | Bypasses USD serialisation — corrupts the file                      |
+| Hand-write USD ASCII                   | Bypasses schema validation and type checking                        |
+| Embed external references as raw data  | Breaks modularity — use references or payloads                      |
+| Override the main export function      | Use pre/post hooks instead — override loses built-in functionality  |
+| Ignore variant sets during export      | Variant sets represent configurations — ignoring them loses data    |
+| Skip schema validation for speed       | Silent corruption — validation catches type mismatches early        |
+| Interleave parsing and USD authoring   | Hard to debug, cannot test independently, fragile                   |
+| Use absolute file paths                | Breaks on any other machine — use relative paths or asset resolvers |
+
+### Exam Pattern
+
+| Question asks                                  | Correct answer signals                                    |
+| ---------------------------------------------- | --------------------------------------------------------- |
+| How to ensure schema compliance in an exporter | Inherit from UsdGeom classes                              |
+| How to serialise the full scene                | `stage.Export(path)`                                      |
+| How to extend an exporter                      | Pre/post hooks — never override main function             |
+| How to structure an importer                   | Two-pass: intermediate representation then USD population |
+| What tool validates export output              | `usdchecker` — validates, does not auto-fix               |
 
 ---
 
