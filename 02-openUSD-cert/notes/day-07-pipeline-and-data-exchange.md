@@ -685,8 +685,6 @@ TF_DEBUG              debug symbol flags
 
 > **The core rule:** if any two machines in your pipeline have different values for `PXR_PLUGINPATH_NAME`, `USD_INSTALL_ROOT`, or plugin versions — your pipeline is not under configuration management and silent errors will occur.
 
-                                             |
-
 ---
 
 ## 13. Conceptual Data Mapping Documents
