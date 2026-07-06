@@ -128,18 +128,6 @@ Physically accurate simulation is what makes Isaac Sim valuable for robotics —
 
 ---
 
-## 💡 What I learned
-
-> Updated as I go — honest reflections on the developer experience, friction points, and what other developers coming from a software background should know before starting.
-
-| Insight | When |
-|---|---|
-| The `.usd` vs `.usda` distinction matters — schemas are defined in code, not scene files | Jun 26 |
-| Schema registration happens at startup via plugins, not at runtime via Python scripts | Jun 26 |
-| *More coming soon* | — |
-
----
-
 ## 🔗 Resources
  
 | Resource | Link |
