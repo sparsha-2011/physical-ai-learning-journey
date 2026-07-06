@@ -78,7 +78,7 @@ The cert requires a passing score of 80%. Here's the iterative journey to get th
 
 > Every failed attempt was a study session in disguise — each score gap pointed directly to the next concept to revisit. 19 points gained across 4 attempts.
 
-[📸 Test 1 →](./02-openUSD-cert/screenshots/test1.png) | [📸 Test 2 →](./02-openUSD-cert/screenshots/test2.png) | [📸 Test 3 →](./02-openUSD-cert/screenshots/test3.png) | [📸 Test 4 →](./02-openUSD-cert/screenshots/test4.png)
+[📸 Test 1 →](./02-openUSD-cert/practice-tests/exam-1.png) | [📸 Test 2 →](./02-openUSD-cert/practice-tests/exam-2.png) | [📸 Test 3 →](./02-openUSD-cert/practice-tests/exam-3.png) | [📸 Test 4 →](./02-openUSD-cert/practice-tests/exam-4.png)
 
 [📝 Cert notes →](./02-openUSD-cert/notes/) | [💡 Key concepts →](./02-openUSD-cert/notes/README.md)
 
