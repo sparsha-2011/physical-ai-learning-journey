@@ -15,7 +15,7 @@
 | Day | Date | Topics | Domains Covered |
 |:---:|---|---|---|
 | 1 | Jun 24 | USD Foundations | Stage · Layer · Prim · Properties · Paths · File Formats · Metadata · Time Samples |
-| 2 | Jun 25 | Composition Arcs Part 1 | Opinions · Value Resolution · LIVRPS · Sublayers · References · Payloads |
+| 2 | Jun 25 | Composition Arcs Part 1 | Opinions · Value Resolution · LIVERPS · Sublayers · References · Payloads |
 | 3 | Jun 26 | Composition Arcs Part 2 · Advanced Composition · Schemas and Data Modeling | Variants · Inherits · Specializes · Edit Target · Session Layer · Flatten · IsA/API schemas · usdGenSchema · TfType · Model Kinds |
 | 4 | Jun 27 | Visualization · Pipeline and Data Exchange · Content Aggregation | Mesh · Primvars · UsdLux · Exporters · Importers · Hooks · Build Config · Instancing · PointInstancer |
 | 5 | Jun 28 | Debugging and Troubleshooting · Practice Test 1 | PrimStack · PropertyStack · TfDebug · MuteLayer · Composition Errors · **Score: 58%** |
