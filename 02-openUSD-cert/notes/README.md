@@ -18,7 +18,7 @@
 | [Day 7](day-07-pipeline-and-data-exchange.md)    | Pipeline and Data Exchange    | Exporters, Importers, usdchecker, Hooks, Data Mapping, Build Config                  |
 | [Day 8](day-08-content-aggregation.md)           | Content Aggregation           | Instancing, PointInstancer, Asset Management                                         |
 | [Day 9](day-09-debugging-and-troubleshooting.md) | Debugging and Troubleshooting | PrimStack, PropertyStack, TfDebug, MuteLayer, Composition Errors                     |
-| [Day 10](day-10-custom-schemas.md)               | Custom Schemas                | IsA/API schemas, usdGenSchema, TfType, SdfFileFormat, Model Kinds, Variant Fallbacks |
+
 
 ---
 
