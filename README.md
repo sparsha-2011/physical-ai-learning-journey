@@ -124,7 +124,8 @@ Synthetic data generation (SDG) is one of the most critical use cases for Physic
 
 Physically accurate simulation is what makes Isaac Sim valuable for robotics — robots trained in simulation behave predictably in the real world because the physics match. Covers articulation, joint drives, rigid body dynamics, and sensor attachment.
 
-[📝 Notes →] | [📸 Screenshots →]
+[📝 Notes →]| [📸 Screenshots →]
+
 ---
 
 ## 🔗 Resources
