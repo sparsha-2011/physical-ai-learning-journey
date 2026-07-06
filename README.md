@@ -44,7 +44,7 @@ Isaac Sim requires an NVIDIA RTX GPU — running on Intel Iris Xe on Mac locally
 - Confirmed Isaac Sim and Kit are installed on the instance
 - Full deployment and coursework begins TBD
 
-[📝 Setup notes →](./01-brev-setup/notes.md) | [📸 Screenshots →](./01-brev-setup/screenshots/)
+[📝 Setup notes →] | [📸 Screenshots →]
 
 ---
 
@@ -96,7 +96,7 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 - How Omniverse supports OpenUSD workflows under the hood
 - The relationship: OpenUSD → Omniverse → Isaac Sim
 
-[📝 Notes →](./03-omniverse-intro-course/notes.md) | [💡 Kit file explainer →](./03-omniverse-intro-course/kit-file-explained.md) | [📸 Screenshots →](./03-omniverse-intro-course/screenshots/)
+[📝 Notes →] | [💡 Kit file explainer →] | [📸 Screenshots →]
 
 ---
 
@@ -104,7 +104,7 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 
 **Goal:** Get comfortable with Isaac Sim UI, scenes, and Python scripting basics before hands-on workflows.
 
-[📝 Notes →](./04-isaac-sim-beginner/notes.md) | [📸 Screenshots →](./04-isaac-sim-beginner/screenshots/)
+[📝 Notes →]| [📸 Screenshots →]
 
 ---
 
@@ -114,7 +114,7 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 
 Synthetic data generation (SDG) is one of the most critical use cases for Physical AI — it lets you train robot models on thousands of varied scenarios without real-world data collection. Using Omniverse Replicator to randomise lighting, object placement, and camera angles.
 
-[📝 Workflow →](./05-synthetic-data/workflow.md) | [🐍 Script →](./05-synthetic-data/replicator-script.py) | [📸 Screenshots →](./05-synthetic-data/screenshots/)
+[📝 Workflow →]| [🐍 Script →] | [📸 Screenshots →]
 
 ---
 
@@ -124,8 +124,7 @@ Synthetic data generation (SDG) is one of the most critical use cases for Physic
 
 Physically accurate simulation is what makes Isaac Sim valuable for robotics — robots trained in simulation behave predictably in the real world because the physics match. Covers articulation, joint drives, rigid body dynamics, and sensor attachment.
 
-[📝 Notes →](./06-physics-sim/notes.md) | [📸 Screenshots →](./06-physics-sim/screenshots/)
-
+[📝 Notes →] | [📸 Screenshots →]
 ---
 
 ## 🔗 Resources
