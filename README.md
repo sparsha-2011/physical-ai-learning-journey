@@ -157,17 +157,3 @@ Physically accurate simulation is what makes Isaac Sim valuable for robotics —
   <i>Updated daily · Started Jun 26, 2026</i>
 </p>
 
----
-
-## 📈 Score progression
-
-| Date | Attempt | Score | Delta | Status |
-|---|---|---|---|---|
-| Jun 28 | Practice Test 1 | 58% | — | ❌ |
-| Jun 29 | Practice Test 2 | 62% | +4% | ❌ |
-| Jul 3 | Practice Test 3 | 67% | +5% | ❌ |
-| Jul 5 | Practice Test 4 | 77% | +10% | ❌ |
-| TBD | Practice Test 5 | TBD | — | 🔄 |
-| TBD | Final cert exam | TBD | — | ⏳ |
-
-> +19 points across 4 attempts. Passing threshold: 80%.
