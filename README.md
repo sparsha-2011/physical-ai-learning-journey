@@ -152,8 +152,7 @@ Physically accurate simulation is what makes Isaac Sim valuable for robotics —
 | Omniverse DLI Courses | [learn.nvidia.com](https://learn.nvidia.com) |
 | Isaac Sim on Brev | [Brev cloud setup](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html) |
 | NVIDIA Developer Discord | [discord.gg/nvidiaomniverse](http://discord.gg/nvidiaomniverse) |
-| Complete Guide to Passing OpenUSD Cert | [Medium — @chaubenz](https://medium.com/@chaubenz/your-complete-guide-to-passing-the-nvidia-certified-professional-openusd-development-b129777b0ed6) |
- 
+
 
 ---
 
