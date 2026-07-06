@@ -12,14 +12,21 @@
 
 ## 🗺️ Timeline
 
-```
-Jun 26 ────── Jun 26-TBD ────── TBD ────── TBD ────── TBD ────── TBD
-   │               │              │          │           │          │
- Brev          OpenUSD         Omniverse   Isaac Sim  Synthetic  Physics
- Setup         Cert +          Intro       Beginner   Data Gen   Sim
- 🔄            Practice        Course      Course     ⏳         ⏳
-               Tests 🔄         ⏳          ⏳
-```
+| Day | Date | Topics | Domains Covered |
+|:---:|---|---|---|
+| 1 | Jun 24 | USD Foundations | Stage · Layer · Prim · Properties · Paths · File Formats · Metadata · Time Samples |
+| 2 | Jun 25 | Composition Arcs Part 1 | Opinions · Value Resolution · LIVRPS · Sublayers · References · Payloads |
+| 3 | Jun 26 | Composition Arcs Part 2 · Advanced Composition · Schemas and Data Modeling | Variants · Inherits · Specializes · Edit Target · Session Layer · Flatten · IsA/API schemas · usdGenSchema · TfType · Model Kinds |
+| 4 | Jun 27 | Visualization · Pipeline and Data Exchange · Content Aggregation | Mesh · Primvars · UsdLux · Exporters · Importers · Hooks · Build Config · Instancing · PointInstancer |
+| 5 | Jun 28 | Debugging and Troubleshooting · Practice Test 1 | PrimStack · PropertyStack · TfDebug · MuteLayer · Composition Errors · **Score: 58%** |
+| 6 | Jun 29 | Custom Schemas · Practice Test 2 | usdGenSchema · TfType · Variant Fallbacks · Model Kinds · **Score: 62% (+4%)** · patched schema registration gaps |
+| 7 | Jun 30 | Gap Review | Revisited TFType · visualisation exercises · patched Practice Test 2 gaps |
+| 8 | Jul 1 | Deep Dives | `stage.Flatten()` vs `UsdUtils.FlattenLayerStack()` · change notification · custom Model Kind · variant fallback sets · plugin deployment |
+| 9 | Jul 2 | Gap Review | Hooks · prepend vs append arc ordering · explicit prim path vs defaultPrim |
+| 10 | Jul 3 | Practice Test 3 | **Score: 67% (+5%)** · custom exporters · build configuration |
+| 11 | Jul 5 | Practice Test 4 | **Score: 77% (+10%)** |
+
+> ↑ +19 points across 4 practice attempts · 10 topics covered · studying daily since Jun 24 · 3 points from the 80% passing threshold
 
 ---
 
@@ -149,3 +156,18 @@ Physically accurate simulation is what makes Isaac Sim valuable for robotics —
 <p align="center">
   <i>Updated daily · Started Jun 26, 2026</i>
 </p>
+
+---
+
+## 📈 Score progression
+
+| Date | Attempt | Score | Delta | Status |
+|---|---|---|---|---|
+| Jun 28 | Practice Test 1 | 58% | — | ❌ |
+| Jun 29 | Practice Test 2 | 62% | +4% | ❌ |
+| Jul 3 | Practice Test 3 | 67% | +5% | ❌ |
+| Jul 5 | Practice Test 4 | 77% | +10% | ❌ |
+| TBD | Practice Test 5 | TBD | — | 🔄 |
+| TBD | Final cert exam | TBD | — | ⏳ |
+
+> +19 points across 4 attempts. Passing threshold: 80%.
