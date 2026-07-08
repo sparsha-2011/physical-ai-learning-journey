@@ -143,6 +143,150 @@ prim.GetAttribute("xformOp:translate").Set((5, 0, 0))
 
 ---
 
+## 4. Removing and Clearing Properties
+
+### Why This Exists
+
+Sparse overrides let you ADD or CHANGE opinions. But sometimes you need to go the other direction — **remove** an opinion entirely, or **block** a property from flowing through from a weaker layer. This is a distinct authoring operation that the exam tests specifically, and it behaves differently depending on whether you want to remove a value, remove a time sample, or block the property from appearing at all.
+
+### The Three Scenarios
+
+```
+Scenario 1 — Remove an authored value
+  A layer Set() a value on an attribute.
+  You want to undo that — go back to schema fallback.
+  Use: attr.Clear()
+
+Scenario 2 — Remove a specific time sample
+  An animated attribute has a keyframe you want to delete.
+  Use: attr.ClearAtTime(frame)
+
+Scenario 3 — Remove the property entirely from the layer
+  The property spec itself should not exist in this layer at all.
+  Use: prim.RemoveProperty("name")
+```
+
+### Scenario 1 — Clear an authored value
+
+`Clear()` removes the authored opinion from the current edit target layer. The attribute still exists — it falls back to the schema default if one exists, or becomes unauthored.
+
+```python
+from pxr import Usd, UsdGeom
+
+stage = Usd.Stage.Open("scene.usda")
+prim  = stage.GetPrimAtPath("/World/Chair")
+attr  = prim.GetAttribute("xformOp:translate")
+
+# Before clear
+attr.Get()              # (5, 0, 0) — authored value
+attr.HasAuthoredValue() # True
+
+# Clear the authored opinion from the current edit target
+attr.Clear()
+
+# After clear
+attr.Get()              # (0, 0, 0) — schema fallback, or None if no fallback
+attr.HasAuthoredValue() # False
+```
+
+> **Clear() does NOT delete the property.** It removes the authored value opinion from the current edit target layer. The property spec may still exist in weaker layers — their values will now flow through.
+
+### Scenario 2 — Clear a specific time sample
+
+When you only want to remove one keyframe from an animated attribute without touching the rest of the animation:
+
+```python
+attr = prim.GetAttribute("xformOp:translate")
+
+# Before — time samples at frames 1, 12, 24, 48
+attr.GetTimeSamples()   # [1.0, 12.0, 24.0, 48.0]
+
+# Remove only frame 12
+attr.ClearAtTime(12)
+
+# After
+attr.GetTimeSamples()   # [1.0, 24.0, 48.0] — frame 12 gone
+attr.Get(time=12)       # interpolated between 1 and 24
+```
+
+### Scenario 3 — Remove the property entirely
+
+`RemoveProperty()` deletes the property spec from the prim in the current edit target layer. Use this when the property should not exist in the layer at all — not just have no value, but not be present as a spec.
+
+```python
+# Remove a primvar that should not be on this prim
+prim.RemoveProperty("primvars:displayColor")
+
+# Remove a relationship
+prim.RemoveProperty("material:binding")
+
+# The property is gone from this layer
+# If a weaker layer has it, that opinion now flows through
+```
+
+### When is this used in production?
+
+**Removing from instanced component prims in assembly stages**
+
+The most common exam scenario. An asset is referenced into a scene, and the assembly-level layer needs to strip a property from the composed prim — for example removing a debug primvar before delivery, or removing a material binding so a shot-level binding takes over cleanly.
+
+```python
+# Asset has a default red displayColor
+# Shot layer wants to remove it so the shot material controls colour
+
+stage      = Usd.Stage.Open("shot.usda")
+shot_layer = stage.GetRootLayer()
+
+# Switch to shot layer as edit target
+stage.SetEditTarget(shot_layer)
+
+chair = stage.GetPrimAtPath("/World/Chair")
+
+# Remove the colour primvar from the shot layer's opinion
+# This blocks the asset's red from showing through
+chair.RemoveProperty("primvars:displayColor")
+```
+
+**Clearing time samples during pipeline processing**
+
+When a downstream pipeline step needs to bake or strip animation from an asset before delivery:
+
+```python
+# Remove all time samples from an attribute
+attr = prim.GetAttribute("xformOp:translate")
+attr.Clear()   # removes all time samples AND default value
+
+# Or selectively remove frames in a range
+for frame in range(1, 25):
+    attr.ClearAtTime(frame)
+```
+
+### Clear vs RemoveProperty — side by side
+
+| Operation                     | What it does                            | Property still exists?         | Weaker layer flows through? |
+| ----------------------------- | --------------------------------------- | ------------------------------ | --------------------------- |
+| `attr.Clear()`                | Removes authored value from edit target | Yes — spec remains             | Yes                         |
+| `attr.ClearAtTime(n)`         | Removes one time sample                 | Yes — spec remains             | Yes for that time           |
+| `prim.RemoveProperty("name")` | Deletes property spec from edit target  | No — spec gone from this layer | Yes                         |
+
+> **Key insight:** all three operations only affect the current edit target layer. They do not touch other layers. If a weaker layer has an opinion on that property, it will now flow through after the removal — which may or may not be what you want. Use `over` specs with `Block` to explicitly prevent weaker opinions from flowing through.
+
+### Blocking a property from weaker layers
+
+If you want to prevent a weaker layer's opinion from flowing through at all — not just remove your own opinion — use `Block()`:
+
+```python
+# Block() sets the value to the type's "blocked" sentinel
+# telling composition to stop resolving this property
+attr.Block()
+
+# After Block():
+attr.Get()              # None — blocked, not the weaker layer's value
+attr.HasAuthoredValue() # True — the block IS an authored opinion
+```
+
+---
+
 ## 4. Flattening — Baking Composition
 
 **Flattening** resolves all composition arcs and produces a single layer containing only the winning values. It is a one-way operation — the original source files are untouched but the composition structure (references, variants, sublayers) is permanently discarded in the output.
