@@ -115,6 +115,99 @@ Point instancing supports per-instance variation through the per-instance arrays
 | `protoIndices` | `int[]`     | Which prototype each instance uses (enables variety) |
 | `invisibleIds` | `int64[]`   | Instance IDs to hide                                 |
 
+### Adding New Prototypes to a PointInstancer Dynamically
+
+**What it is:** A `UsdGeomPointInstancer` can reference multiple prototype prims simultaneously. Each instance selects which prototype it uses via the `protoIndices` array. Adding a new prototype means registering a new prim with the instancer's `prototypes` relationship and updating `protoIndices` to reference it.
+
+**Why it is needed:** In production, scenes are built incrementally. A forest scene might start with one tree type and later need oak, pine, and birch variants. A crowd simulation might add a new character type mid-production. Adding prototypes dynamically — without rebuilding the entire instancer — is the correct production pattern.
+
+```
+Before adding:                    After adding Oak:
+prototypes rel:                   prototypes rel:
+[0] /Forest/Protos/Pine           [0] /Forest/Protos/Pine
+                                  [1] /Forest/Protos/Oak   ← new
+
+protoIndices = [0,0,0,0,0]        protoIndices = [0,1,0,1,0]
+(all Pine)                         (alternating Pine and Oak)
+```
+
+**What breaks if you do it wrong:** The `protoIndices` array must always be valid — every index must map to an existing prototype. If you add a prototype but forget to register it in the relationship, or set an index that is out of range, the instancer silently fails to render those instances.
+
+**Method signatures:**
+
+```python
+# UsdGeomPointInstancer.GetPrototypesRel() -> UsdRelationship
+# The relationship holding all registered prototype paths
+instancer.GetPrototypesRel()
+
+# UsdRelationship.AddTarget(path) -> bool
+# Register a new prototype path — appends to the list
+# The index of the new prototype = len(existing_targets) before adding
+instancer.GetPrototypesRel().AddTarget(Sdf.Path("/Forest/Protos/Oak"))
+
+# UsdRelationship.GetTargets() -> list[Sdf.Path]
+# Check current registered prototypes and their indices
+targets = instancer.GetPrototypesRel().GetTargets()
+# targets[0] = first prototype (index 0)
+# targets[1] = second prototype (index 1)
+
+# UsdGeomPointInstancer.GetProtoIndicesAttr() -> UsdAttribute
+# Must update after adding prototype to use the new index
+instancer.GetProtoIndicesAttr().Set(Vt.IntArray([...]))
+```
+
+**Full example:**
+
+```python
+from pxr import Usd, UsdGeom, Vt, Gf, Sdf
+
+stage     = Usd.Stage.Open("scene.usda")
+instancer = UsdGeom.PointInstancer.Get(stage, "/World/Forest")
+
+# --- Check existing prototypes and their indices ---
+targets = instancer.GetPrototypesRel().GetTargets()
+# targets = [Sdf.Path("/World/Forest/Protos/Pine")]
+# Pine is at index 0
+
+# --- Step 1: Define the new prototype prim ---
+oak_proto = UsdGeom.Mesh.Define(
+    stage, "/World/Forest/Protos/Oak"
+)
+# ... set up oak geometry ...
+
+# --- Step 2: Register with the instancer ---
+# AddTarget appends — Oak will be at index 1
+instancer.GetPrototypesRel().AddTarget(
+    Sdf.Path("/World/Forest/Protos/Oak")
+)
+
+# Verify indices
+targets = instancer.GetPrototypesRel().GetTargets()
+# targets[0] = Pine   ← index 0
+# targets[1] = Oak    ← index 1
+
+# --- Step 3: Update protoIndices to use the new prototype ---
+# Existing instances still use 0 (Pine)
+# New instances use 1 (Oak)
+current_indices = list(instancer.GetProtoIndicesAttr().Get())
+# Add 200 new Oak instances
+new_indices = current_indices + [1] * 200
+instancer.GetProtoIndicesAttr().Set(Vt.IntArray(new_indices))
+
+# --- Step 4: Add positions for the new instances ---
+current_positions = list(instancer.GetPositionsAttr().Get())
+import random
+new_positions = [
+    Gf.Vec3f(random.uniform(-100, 100), 0, random.uniform(-100, 100))
+    for _ in range(200)
+]
+instancer.GetPositionsAttr().Set(
+    Vt.Vec3fArray(current_positions + new_positions)
+)
+```
+
+> **Index order is the prototype order in the relationship.** The first target added = index 0, second = index 1, and so on. If you need to remove a prototype, all existing `protoIndices` that reference it and everything after it in the list must be updated — this is why removing prototypes is rare and adding is the standard operation.
+
 ---
 
 ## 3. Per-Instance Overrides
@@ -168,6 +261,112 @@ This is the correct pattern for per-instance customisation when the asset alread
 | Create a new prim that "inherits" from the instanced prim         | USD prims don't derive from each other in the OOP sense — use references and overrides |
 
 > **Point instancing DOES support per-instance material variations.** This is a common exam trap — the false statement is "point instancing disables per-instance material variations." It does not. Per-instance materials work via primvar-driven shader inputs.
+
+### Instance Proxy — Reading and Overriding Without Breaking Instancing
+
+**What it is:** When a prim has `instanceable = True`, USD creates a shared prototype and makes the prim an instance of it. You cannot directly author opinions on the children of an instanceable prim — doing so would break the prototype sharing because USD would need to diverge the data. An **instance proxy** is the read-only handle USD gives you to access those children for inspection. For authoring overrides, you work on the instance root itself — not the children.
+
+**Why it is needed:** Instanced assets are common in large scenes — thousands of trees, crowds, props. You often need to customise individual instances (this particular tree is dead, this character is injured) without breaking the instancing for all the others or duplicating the entire asset. Understanding the correct override pattern prevents a common production bug: writing to an instance child and silently breaking instancing.
+
+```
+Instanceable prim:
+/World/Tree_042  (instanceable = True)
+← prototype is shared with all other Tree instances
+
+What you can do:
+Read:    stage.GetPrimAtPath("/World/Tree_042/Trunk")
+→ returns instance proxy — readable, not writable
+Override: stage.OverridePrim("/World/Tree_042")
+→ override on the INSTANCE ROOT — this is valid
+→ author sparse opinions here without breaking instancing
+
+What breaks instancing:
+stage.GetPrimAtPath("/World/Tree_042").SetInstanceable(False)
+→ now this tree is NOT an instance — it gets its own copy
+→ memory efficiency lost for this prim
+```
+
+**The three patterns — read, override, and break:**
+
+```python
+from pxr import Usd, UsdGeom, UsdShade, Sdf
+
+stage = Usd.Stage.Open("scene.usda")
+
+# --- Pattern 1: READ via instance proxy (always safe) ---
+trunk_proxy = stage.GetPrimAtPath("/World/Tree_042/Trunk")
+# trunk_proxy IS an instance proxy — you can read from it
+print(trunk_proxy.IsInstanceProxy())           # True
+print(trunk_proxy.GetAttribute("radius").Get()) # reads prototype value
+
+# You CANNOT author on an instance proxy child
+# trunk_proxy.GetAttribute("radius").Set(2.0)  ← WRONG — no effect or error
+
+# --- Pattern 2: OVERRIDE on the instance root (correct) ---
+# Author a sparse override on the instance root prim
+# This is the correct way to customise one instance
+stage.SetEditTarget(stage.GetRootLayer())
+over = stage.OverridePrim("/World/Tree_042")
+
+# Override a property at the instance root level
+UsdGeom.Imageable(over).GetVisibilityAttr().Set(
+    UsdGeom.Tokens.invisible
+)
+# Only Tree_042 becomes invisible — all other trees unchanged
+# Instancing is preserved — prototype is still shared
+
+# Override material binding on the instance root
+binding = UsdShade.MaterialBindingAPI.Apply(over)
+binding.Bind(dead_tree_mat)
+# Only Tree_042 uses dead_tree_mat — prototype unchanged
+
+# --- Pattern 3: BREAK instancing (use only when necessary) ---
+# If you need to author on a specific child prim,
+# you must turn off instanceable for that prim
+tree_prim = stage.GetPrimAtPath("/World/Tree_042")
+tree_prim.SetInstanceable(False)
+# Now Tree_042 is NOT an instance — it gets its own copy of the prototype
+# You can now author on /World/Tree_042/Trunk directly
+# BUT: this tree no longer shares the prototype — memory cost increases
+trunk = stage.GetPrimAtPath("/World/Tree_042/Trunk")
+trunk.GetAttribute("radius").Set(2.0)   # now valid
+```
+
+**Method signatures:**
+
+```python
+# UsdPrim.IsInstanceProxy() -> bool
+# True if this prim is a child accessed through an instance
+prim.IsInstanceProxy()
+
+# UsdPrim.IsInstance() -> bool
+# True if this prim IS an instance (the root, not a child)
+prim.IsInstance()
+
+# UsdPrim.IsPrototype() -> bool
+# True if this prim IS the prototype (the shared template)
+prim.IsPrototype()
+
+# UsdPrim.SetInstanceable(bool) -> None
+# True = share prototype with matching instances
+# False = this prim gets its own copy — breaks sharing for this prim only
+prim.SetInstanceable(False)
+
+# Usd.Stage.OverridePrim(path) -> UsdPrim
+# Creates an over spec at path for sparse authoring
+# Safe to use on instance roots — does not break instancing
+stage.OverridePrim("/World/Tree_042")
+```
+
+**Key rules:**
+
+- Instance proxy children are **read-only** — reading is always safe, authoring is not
+- Override on the **instance root** (the instanceable prim itself) — not on its children
+- Overriding on the instance root via `stage.OverridePrim()` is safe and does not break instancing
+- `SetInstanceable(False)` breaks prototype sharing for that prim — use only when you genuinely need to diverge the geometry
+- Visibility, material binding, transform overrides on the instance root all work correctly and preserve instancing
+
+> **Exam phrasing:** "Edit properties of instanceProxy meshes without breaking instancing status" → the answer is override on the instance root using `stage.OverridePrim()`, not on the proxy child. The proxy child is read-only.
 
 ---
 

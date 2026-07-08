@@ -193,6 +193,96 @@ mesh.GetExtentAttr().Set(Vt.Vec3fArray([
 ]))
 ```
 
+### The extent Attribute — What It Is and Why You Must Update It
+
+`extent` is the axis-aligned bounding box of the mesh — a pair of Vec3f values representing the minimum and maximum corners of the box that contains all vertices.
+
+```text
+extent = [min_corner, max_corner]
+= [(x_min, y_min, z_min), (x_max, y_max, z_max)]
+
+Example: a unit cube sitting on the origin
+extent = [(-0.5, 0.0, -0.5), (0.5, 1.0, 0.5)]
+```
+
+**Why it exists:** USD renderers and viewport systems use `extent` for frustum culling — before doing any real work they check the bounding box to decide whether this prim is even visible to the camera. If the bounding box says the prim is outside the view, the renderer skips it entirely. This is a major performance optimisation for large scenes.
+
+**Why you must update it manually:** USD does NOT recompute `extent` automatically when you change `points`. It is a cached value that you are responsible for keeping in sync. If you modify the geometry and forget to update `extent`, the renderer is working from a stale bounding box.
+
+Consequence of stale extent:
+
+- Prim disappears at the wrong camera angle (renderer thinks it is outside the frustum when it is not)
+- Prim does not render at all in some renderers
+- Viewport bounding box display is wrong
+- BBoxCache queries return incorrect results
+
+This is not a cosmetic issue — it breaks rendering.
+
+**The exam rule:** Any time you modify `points`, updating `extent` is the next required step. They always go together.
+
+```python
+from pxr import Usd, UsdGeom, Vt, Gf
+
+stage = Usd.Stage.CreateInMemory()
+mesh  = UsdGeom.Mesh.Define(stage, "/World/Chair")
+
+new_points = Vt.Vec3fArray([
+    Gf.Vec3f(-1, 0, -1), Gf.Vec3f(1, 0, -1),
+    Gf.Vec3f(1,  2, -1), Gf.Vec3f(-1, 2, -1),
+    Gf.Vec3f(-1, 0,  1), Gf.Vec3f(1, 0,  1),
+    Gf.Vec3f(1,  2,  1), Gf.Vec3f(-1, 2,  1),
+])
+
+# Step 1 — set the new points
+mesh.GetPointsAttr().Set(new_points)
+
+# Step 2 — recompute and update extent
+# Method A: let USD compute it from the points array
+extent = UsdGeom.PointBased(mesh).ComputeExtent(new_points)
+# returns Vt.Vec3fArray([min_corner, max_corner])
+mesh.GetExtentAttr().Set(extent)
+
+# Method B: set manually if you know the exact bounds
+mesh.GetExtentAttr().Set(Vt.Vec3fArray([
+    Gf.Vec3f(-1, 0, -1),   # minimum corner
+    Gf.Vec3f( 1, 2,  1),   # maximum corner
+]))
+
+# Method C: use BBoxCache for the whole stage (more expensive)
+bbox_cache = UsdGeom.BBoxCache(
+    Usd.TimeCode.Default(),
+    includedPurposes=["default"]
+)
+world_bound = bbox_cache.ComputeWorldBound(mesh.GetPrim())
+bbox_range  = world_bound.GetRange()
+mesh.GetExtentAttr().Set(Vt.Vec3fArray([
+    Gf.Vec3f(bbox_range.GetMin()),
+    Gf.Vec3f(bbox_range.GetMax())
+]))
+```
+
+**Method signatures:**
+
+```python
+# UsdGeom.PointBased.ComputeExtent(points) -> Vt.Vec3fArray
+UsdGeom.PointBased(mesh).ComputeExtent(points_array)
+# points_array: Vt.Vec3fArray
+# returns:      Vt.Vec3fArray with two elements [min, max]
+
+# UsdGeomMesh.GetExtentAttr() -> UsdAttribute
+mesh.GetExtentAttr().Set(Vt.Vec3fArray([min_vec, max_vec]))
+# value type: float3[2] — exactly two Vec3f values
+
+# UsdGeom.BBoxCache(timeCode, includedPurposes)
+bbox_cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), ["default"])
+# ComputeWorldBound(prim) -> UsdGeom.BBox3d
+# .GetRange() -> Gf.Range3d
+# .GetMin()   -> Gf.Vec3d
+# .GetMax()   -> Gf.Vec3d
+```
+
+> **Do not confuse extent with normals.** Normals describe surface orientation for lighting. Extent describes the bounding box for culling. Both are additional mesh attributes but serve completely different purposes.
+
 > **UVs are NEVER auto-generated.** UV coordinates must be explicitly authored as `primvars:st`. The exam specifically tests this.
 
 ---
@@ -368,6 +458,183 @@ mat.CreateSurfaceOutput().ConnectToSource(surf_out)
 binding_api = UsdShade.MaterialBindingAPI.Apply(mesh.GetPrim())
 binding_api.Bind(mat)
 ```
+
+### UsdGeomSubset — Per-Face Material Binding
+
+**What it is:** `UsdGeomSubset` defines a named group of face indices on a mesh. It is a child prim of the mesh that holds a list of face indices and a material binding. The mesh itself remains one prim — the subsets are just views into subsets of its faces.
+
+**Why it is needed:** Direct `MaterialBindingAPI.Bind()` applies one material to the entire mesh. In production, a single mesh often has multiple material zones — a car body has painted metal, rubber tyres, glass windows, chrome trim. Without GeomSubsets you would need to split every mesh into separate prims for each material zone, which is expensive and breaks artist workflows.
+
+```text
+Without GeomSubset:
+/Car/Body     -> one material (wrong — body has paint, rubber, glass)
+OR
+/Car/Body/Paint   -> split into 4 separate prims
+/Car/Body/Rubber
+/Car/Body/Glass
+/Car/Body/Chrome  <- more complex hierarchy, harder to rig/animate
+
+With GeomSubset:
+/Car/Body           -> one mesh, full topology intact
+/Car/Body/Paint   -> subset, faces [0-120]   -> paint_mat
+/Car/Body/Rubber  -> subset, faces [121-160] -> rubber_mat
+/Car/Body/Glass   -> subset, faces [161-200] -> glass_mat
+/Car/Body/Chrome  -> subset, faces [201-240] -> chrome_mat
+```
+
+**Method signatures:**
+
+```python
+# UsdGeom.Subset.Define(stage, path) -> UsdGeom.Subset
+subset = UsdGeom.Subset.Define(stage, "/World/Mesh/ZoneName")
+
+# CreateElementTypeAttr(value) -> UsdAttribute
+# value must be UsdGeom.Tokens.face for material binding
+subset.CreateElementTypeAttr(UsdGeom.Tokens.face)
+
+# CreateIndicesAttr(value) -> UsdAttribute
+# value: Vt.IntArray of face indices from the parent mesh
+subset.CreateIndicesAttr(Vt.IntArray([0, 1, 2, 3]))
+
+# UsdShade.MaterialBindingAPI.Apply(prim) -> MaterialBindingAPI
+# Apply on the SUBSET prim, not the mesh
+binding = UsdShade.MaterialBindingAPI.Apply(subset.GetPrim())
+binding.Bind(material)
+```
+
+**Full example:**
+
+```python
+from pxr import Usd, UsdGeom, UsdShade, Vt, Gf, Sdf
+
+stage = Usd.Stage.CreateInMemory()
+
+# Define the mesh — 12 faces total
+mesh = UsdGeom.Mesh.Define(stage, "/World/Chair/Body")
+mesh.GetPointsAttr().Set(Vt.Vec3fArray([...]))
+mesh.GetFaceVertexCountsAttr().Set(Vt.IntArray([4]*12))
+mesh.GetFaceVertexIndicesAttr().Set(Vt.IntArray([...]))
+
+# Define materials
+fabric_mat = UsdShade.Material.Define(stage, "/Looks/Fabric")
+metal_mat  = UsdShade.Material.Define(stage, "/Looks/Metal")
+# ... (set up shader networks on each material)
+
+# Subset 1 — seat cushion faces
+fabric_subset = UsdGeom.Subset.Define(
+    stage, "/World/Chair/Body/FabricZone"
+)
+fabric_subset.CreateElementTypeAttr(UsdGeom.Tokens.face)
+fabric_subset.CreateIndicesAttr(Vt.IntArray([0,1,2,3,4,5,6,7]))
+UsdShade.MaterialBindingAPI.Apply(
+    fabric_subset.GetPrim()
+).Bind(fabric_mat)
+
+# Subset 2 — metal frame faces
+metal_subset = UsdGeom.Subset.Define(
+    stage, "/World/Chair/Body/MetalZone"
+)
+metal_subset.CreateElementTypeAttr(UsdGeom.Tokens.face)
+metal_subset.CreateIndicesAttr(Vt.IntArray([8,9,10,11]))
+UsdShade.MaterialBindingAPI.Apply(
+    metal_subset.GetPrim()
+).Bind(metal_mat)
+```
+
+**Key rules:**
+
+- `elementType` must be `UsdGeom.Tokens.face` — material binding only works on face subsets
+- The subset prim must be a **direct child** of the mesh prim
+- Face indices refer to the order of faces in `faceVertexCounts` — face 0 is the first entry, face 1 is the second, and so on
+- A face can only belong to one material subset — overlapping indices cause undefined behaviour
+- `MaterialBindingAPI` is applied on the **subset prim** not the mesh prim
+
+### Collection-Based Material Binding
+
+**What it is:** Collection-based binding uses `Usd.CollectionAPI` to define a named set of prims from anywhere in the scene hierarchy and then binds a material to that collection in one operation. The collection is defined on a single root prim but can include targets from any path in the stage.
+
+**Why it is needed:** Direct binding and GeomSubset binding only affect one prim at a time. In a large scene, dozens of prims may need the same material — every metal bolt, every glass panel, every rubber seal scattered across hundreds of assets. Updating them one by one is expensive and error-prone. Collection binding lets you declare the group once and bind once.
+
+```text
+Direct binding:                      Collection binding:
+/Building/Floor/Tile_001.Bind()      collection "marble_surfaces" includes:
+/Building/Floor/Tile_002.Bind()        /Building/Floor/Tile_001
+/Building/Floor/Tile_003.Bind()        /Building/Floor/Tile_002
+... 500 more calls                     /Building/Floor/Tile_003
+... 500 more entries
+root.Bind(marble_mat, "marble_surfaces")
+<- one bind call covers all 500
+```
+
+**When to use it:**
+
+- Many prims scattered across the hierarchy share one material
+- You want to manage material assignments at the scene level rather than per-asset
+- Assets are instanced — you cannot bind on each instance directly
+
+**Method signatures:**
+
+```python
+# Usd.CollectionAPI.Apply(prim, collectionName) -> CollectionAPI
+# Apply to any prim that will own the collection definition
+collection = Usd.CollectionAPI.Apply(root_prim, "collection_name")
+
+# CreateIncludesRel() -> UsdRelationship
+# Add target paths to include in the collection
+collection.CreateIncludesRel().AddTarget(Sdf.Path("/World/Chair/Legs"))
+
+# CreateExcludesRel() -> UsdRelationship
+# Optionally exclude specific paths from an include-all collection
+collection.CreateExcludesRel().AddTarget(Sdf.Path("/World/Chair/Legs/LeftFront"))
+
+# UsdShade.MaterialBindingAPI.Bind(material, strength, collectionName)
+# strength: UsdShade.Tokens.strongerThanDescendants
+#           UsdShade.Tokens.weakerThanDescendants
+binding_api.Bind(
+    material,
+    UsdShade.Tokens.strongerThanDescendants,
+    "collection_name"
+)
+```
+
+**Full example:**
+
+```python
+from pxr import Usd, UsdShade, Sdf
+
+stage = Usd.Stage.Open("building.usda")
+
+root      = stage.GetPrimAtPath("/Building")
+metal_mat = UsdShade.Material.Get(stage, "/Looks/Metal")
+
+# Define a collection called "structural_metal"
+# that includes all metal structural prims
+collection = Usd.CollectionAPI.Apply(root, "structural_metal")
+includes   = collection.CreateIncludesRel()
+includes.AddTarget(Sdf.Path("/Building/Floor_01/Beams"))
+includes.AddTarget(Sdf.Path("/Building/Floor_02/Beams"))
+includes.AddTarget(Sdf.Path("/Building/Facade/Frame"))
+includes.AddTarget(Sdf.Path("/Building/Roof/Trusses"))
+
+# Bind the material to the whole collection in one call
+binding_api = UsdShade.MaterialBindingAPI.Apply(root)
+binding_api.Bind(
+    metal_mat,
+    UsdShade.Tokens.strongerThanDescendants,
+    "structural_metal"
+)
+# All four paths now use metal_mat
+# If new paths are added to the collection later,
+# they automatically inherit the binding
+```
+
+**The three-tier binding summary:**
+
+| Tier | Mechanism | Scope | Best for |
+| --- | --- | --- | --- |
+| Direct | `MaterialBindingAPI.Bind(mat)` | One prim | Simple single-material assets |
+| GeomSubset | `MaterialBindingAPI.Bind(mat)` on subset | Face group within one mesh | Multi-material single mesh |
+| Collection | `CollectionAPI` + `Bind(mat, strength, name)` | Any set of prims across hierarchy | Large scenes, scattered prims, instanced assets |
 
 ---
 

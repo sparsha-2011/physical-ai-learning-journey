@@ -18,7 +18,9 @@
 9. [UI/UX Principles for USD Pipelines](#9-uiux-principles-for-usd-pipelines)
 10. [Build Configuration Management](#10-build-configuration-management)
 11. [Conceptual Data Mapping Documents](#11-conceptual-data-mapping-documents)
-12. [Custom Exporter and Importers](#12-custom-exporters-and-importers)
+12. [Custom Exporters and Importers](#12-custom-exporters-and-importers)
+    - [12b. Splitting Monolithic Assets for Multi-User Collaboration](#12b-splitting-monolithic-assets-for-multi-user-collaboration)
+    - [12c. Round-Trip Pipelines — Export → DCC → Import Back](#12c-round-trip-pipelines--export--dcc--import-back)
 13. [Data Interchange Script Best Practices](#13-data-interchange-script-best-practices)
 14. [Key Takeaways](#14-key-takeaways)
 
@@ -890,6 +892,225 @@ Extend via:         pre/post hooks              pre/post hooks
 | What validates export output                 | `usdchecker` — validates only, does not auto-fix           |
 | Does importing require a custom schema       | No — custom schemas extend types, not required for reading |
 | How to merge layers when importing           | `UsdUtils.CopyLayer()`                                     |
+
+---
+
+## 12b. Splitting Monolithic Assets for Multi-User Collaboration
+
+### What it is
+
+A **monolithic asset** is a single USD file that contains everything — geometry, shading, animation, and rigging all authored in one layer by one person. This works for solo work but breaks down in production where multiple departments own different parts of the same asset simultaneously.
+
+**Splitting** means decomposing that single file into multiple department-owned layers that compose back together using sublayers or references. Each department owns and edits only their layer — nobody overwrites anyone else’s work.
+
+### Why it is needed
+
+```
+Monolithic (one file, one owner at a time):
+character.usda
+/Character/Mesh          ← modeling owns this
+/Character/Rig            ← rigging owns this
+/Character/Materials      ← look dev owns this
+/Character/Anim           ← animation owns this
+
+Problem:
+Only one person can edit the file at a time
+File locking blocks other departments
+A rigging change overwrites an animation edit
+Cannot render partially complete work
+Version conflicts are constant
+```
+
+```
+Split (multiple files, one owner each):
+character_geo.usda        ← modeling owns, edits freely
+character_rig.usda        ← rigging owns, edits freely
+character_look.usda       ← look dev owns, edits freely
+character_anim.usda       ← animation owns, edits freely
+character_shot.usda       ← sublayers all four, nobody edits directly
+
+Benefits:
+Each department works in parallel with no conflicts
+Partial completion is renderable at any time
+One department’s change never touches another’s file
+LIVRPS resolves any opinion conflicts cleanly
+```
+
+### The layering strategy
+
+The shot file sublayers all department files in LIVRPS order — the strongest layer wins conflicts:
+
+```usda
+#usda 1.0
+(
+    subLayers = [
+        @./character_anim.usda@,    # strongest — animation overrides everything
+        @./character_look.usda@,    # look dev overrides geo and rig
+        @./character_rig.usda@,     # rig overrides base geo
+        @./character_geo.usda@      # weakest — base geometry
+    ]
+)
+```
+
+### Python implementation
+
+```python
+from pxr import Usd, UsdGeom, UsdShade, Sdf
+
+# --- Step 1: Create department-owned layers ---
+
+# Modeling layer — owns base geometry
+geo_stage = Usd.Stage.CreateNew("character_geo.usda")
+mesh = UsdGeom.Mesh.Define(geo_stage, "/Character/Body")
+mesh.GetPointsAttr().Set(base_points)
+mesh.GetFaceVertexCountsAttr().Set(face_counts)
+mesh.GetFaceVertexIndicesAttr().Set(face_indices)
+geo_stage.Save()
+
+# Look dev layer — owns materials only
+look_stage = Usd.Stage.CreateNew("character_look.usda")
+# over “Character” — sparse override, does not redefine geometry
+look_root = look_stage.OverridePrim("/Character")
+UsdShade.MaterialBindingAPI.Apply(
+    look_stage.OverridePrim("/Character/Body")
+).Bind(UsdShade.Material.Define(look_stage, "/Looks/Skin"))
+look_stage.Save()
+
+# Animation layer — owns transforms only
+anim_stage = Usd.Stage.CreateNew("character_anim.usda")
+anim_prim  = anim_stage.OverridePrim("/Character")
+xform      = UsdGeom.Xformable(anim_prim)
+# Author time samples on the override — geo layer untouched
+for frame, pos in animation_data.items():
+    anim_prim.GetAttribute("xformOp:translate").Set(pos, time=frame)
+anim_stage.Save()
+
+# --- Step 2: Create the shot file that composes all layers ---
+shot_stage = Usd.Stage.CreateNew("character_shot.usda")
+root_layer = shot_stage.GetRootLayer()
+
+# Add department layers as sublayers — strongest first
+root_layer.subLayerPaths = [
+    "./character_anim.usda",   # strongest
+    "./character_look.usda",
+    "./character_rig.usda",
+    "./character_geo.usda",    # weakest
+]
+shot_stage.Save()
+# character_shot.usda composes all four — full character visible
+# each department can keep editing their own file independently
+```
+
+### Key rules
+
+- Each department layer uses **`over`** (sparse override) not **`def`** — only define the prim in the geometry layer, override it in all others
+- The shot file only manages sublayer ordering — departments never edit the shot file directly
+- LIVRPS handles conflicts — animation opinions beat look dev opinions beat rig opinions beat geometry
+- Each layer is independently committable to version control — no merge conflicts between departments
+
+> **Exam connection:** “Split monolithic assets to model multiple collaborative workstreams” is listed as a tested practical skill under both Composition and Pipeline domains. The answer is always sublayers with department-owned layers and sparse overrides — not copying data between files or using variant sets for collaboration.
+
+---
+
+## 12c. Round-Trip Pipelines — Export → DCC → Import Back
+
+**What it is:** A round-trip pipeline moves data from USD into an external DCC tool (Maya, Houdini, Blender), allows an artist to work in that tool, and then brings the modified data back into USD — preserving the original structure, metadata, and custom attributes throughout.
+
+**Why it is needed:** USD is the hub but artists work in DCC tools. A character modelled in USD needs to go to Maya for rigging, come back to USD with the rig intact. A USD simulation needs to go to Houdini for effects, come back with the simulation baked in. Without a round-trip strategy, data is lost or corrupted at each crossing.
+
+**The core challenge:** DCC tools do not understand custom USD schemas, namespaced attributes, relationships, or USD metadata. A naive export strips all of this out. A naive import overwrites the original. A robust round-trip preserves what the DCC does not understand and merges only what changed.
+
+```
+Round-trip without strategy (data loss):
+USD stage              →   Export to Maya    →   Maya modifies mesh
+/Chair/Seat               .fbx or .ma            (rig is added)
+- custom:pipeline:id         ← lost               ← lost in .ma
+- material bindings          ← lost               ← gone
+- variant sets               ← lost               ← gone
+←   Import back      ←   Re-import
+overwrites original   all metadata gone
+```
+
+```
+Round-trip with strategy (data preserved):
+USD stage              →   Export to Maya    →   Maya modifies mesh
+/Chair/Seat               custom exporter         (rig is added)
+- custom:pipeline:id         ← preserved in sidecar
+- material bindings          ← preserved in sidecar
+- variant sets               ← preserved in sidecar
+←   Import back      ←   Two-pass importer
+merges Maya data      restores sidecar data
+into original         + applies Maya changes
+USD layer             on top
+```
+
+**The sidecar pattern — preserving what DCCs cannot:**
+
+```python
+from pxr import Usd, UsdUtils, UsdGeom, Sdf
+
+# --- EXPORT PHASE ---
+
+def export_to_dcc(usd_path: str, dcc_path: str, sidecar_path: str):
+    stage = Usd.Stage.Open(usd_path)
+
+    # Step 1: Save everything the DCC cannot understand into a sidecar USD file
+    sidecar = Sdf.Layer.CreateNew(sidecar_path)
+    # Copy custom metadata, variant sets, relationships
+    # into the sidecar before the DCC strips them
+    UsdUtils.CopyLayer(stage.GetRootLayer(), sidecar)
+    sidecar.Save()
+
+    # Step 2: Export only DCC-compatible data
+    # (geometry, transforms, basic materials)
+    export_geometry_to_dcc(stage, dcc_path)
+    # DCC file does not contain USD-specific data
+    # but sidecar preserves everything
+
+
+# --- IMPORT PHASE (after DCC work is done) ---
+
+def import_from_dcc(dcc_path: str, sidecar_path: str, output_usd: str):
+
+    # Pass 1 — parse DCC file into intermediate
+    dcc_data = parse_dcc_file(dcc_path)
+    # validate, convert units, extract what changed
+
+    # Pass 2 — build USD from intermediate
+    stage = Usd.Stage.CreateNew(output_usd)
+
+    # Restore preserved data from sidecar
+    stage.GetRootLayer().subLayerPaths.append(sidecar_path)
+    # sidecar is weaker — DCC changes override it
+
+    # Apply DCC changes on top as stronger layer
+    stage.SetEditTarget(stage.GetRootLayer())
+    for mesh_data in dcc_data["meshes"]:
+        mesh = UsdGeom.Mesh.Get(stage, mesh_data["path"])
+        # Apply only what the DCC changed — not a full rewrite
+        if mesh_data.get("points_changed"):
+            mesh.GetPointsAttr().Set(mesh_data["points"])
+
+    stage.Save()
+    # Result: USD file with DCC changes on top + all original metadata preserved
+```
+
+**What a round-trip must preserve:**
+
+| Data type                | DCC understands? | Round-trip strategy                               |
+| ------------------------ | ---------------- | ------------------------------------------------- |
+| Geometry (points, faces) | Yes              | Export and reimport directly                      |
+| Transforms               | Yes              | Export and reimport directly                      |
+| Basic materials          | Partially        | Export approximation, restore from sidecar        |
+| Custom schema attributes | No               | Preserve in sidecar, restore on import            |
+| Variant sets             | No               | Preserve in sidecar, restore on import            |
+| USD relationships        | No               | Preserve in sidecar, restore on import            |
+| Pipeline metadata        | No               | Preserve in sidecar, restore on import            |
+| Time samples / animation | Partially        | Export as DCC keyframes, reimport as time samples |
+
+> **Round-trip = export + sidecar + two-pass import.** The sidecar pattern is what separates a production-quality round-trip from a naive one. Without a sidecar, every DCC round-trip loses USD-specific data permanently.
+
+> **Exam connection:** “Implement round-trip pipelines between DCCs and USD” is listed as a tested practical skill under both Data Exchange and Pipeline domains. The correct answer pattern always involves preserving what the DCC cannot understand and merging on import — not overwriting the original USD file.
 
 ---
 
