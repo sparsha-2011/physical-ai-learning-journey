@@ -445,10 +445,6 @@ for prim in stage.Traverse():
 
 ## 3c. Interface Schemas — Loose Coupling for Composable Components
 
-Let me build this up from a concrete problem first.
-
----
-
 ### The Problem Without Interface Schemas
 
 You have a chair asset. The scene wants to change its colour. Without an interface, the scene needs to know the exact internal path:
@@ -473,8 +469,6 @@ Scene knows about:          Asset changes internally:
 
 Scene breaks silently - wrong path, no error until render time
 ```
-
----
 
 ### The Solution — Interface Attribute on the Root
 
@@ -519,8 +513,6 @@ shader_input.ConnectToSource(
 stage.Save()
 ```
 
----
-
 ### Now The Scene Is Completely Decoupled
 
 ```python
@@ -542,8 +534,6 @@ chair.GetAttribute("chair:color").Set(Gf.Vec3f(0.8, 0.1, 0.1))  # red chair
 
 Now the asset team can restructure the entire internal shader network - rename shaders, add layers, change the material hierarchy - and the scene still works because the interface (`chair:color` on the root) never changed.
 
----
-
 ### The Composability Benefit — Swapping Assets
 
 Because both assets implement the same interface, the scene can swap them freely:
@@ -560,8 +550,6 @@ for chair_path in ["/World/ChairA", "/World/ChairB", "/World/ChairC"]:
 ```
 
 Without the interface, the scene would need to know the internal structure of every chair model separately - each one might use a different internal shader path.
-
----
 
 ### The Full Picture
 
@@ -584,8 +572,6 @@ WITH interface:
     Any asset that exposes chair:color is a valid chair
     Can swap ChairA for ChairB - scene code unchanged
 ```
-
----
 
 ### One-Line Summary
 
