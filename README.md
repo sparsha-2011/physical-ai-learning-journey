@@ -86,7 +86,7 @@ The cert requires a passing score of 80%. Here's the iterative journey to get th
 
 ---
 
-## 🔄 Jul 7 — An Introduction to Developing With NVIDIA Omniverse
+## ✅ Jul 7 — An Introduction to Developing With NVIDIA Omniverse
 
 **Goal:** Understand how Omniverse applications are built and extended.
 

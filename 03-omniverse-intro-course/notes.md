@@ -2,7 +2,7 @@
 
 **Course:** [An Introduction to Developing with NVIDIA Omniverse](https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-OV-11+V1)  
 **Kit App Template:** [NVIDIA-Omniverse/kit-app-template](https://github.com/NVIDIA-Omniverse/kit-app-template)  
-**Completed:** Jul 8, 2026  
+**Completed:** ✅ Jul 7, 2026
 **Environment:** NVIDIA Brev cloud · Isaac Sim 6.0.0 · L40S GPU · Browser VS Code + noVNC
 
 ---
@@ -99,3 +99,31 @@ A more fully featured viewer app template. Better suited for loading and explori
 In a real Physical AI pipeline, you'd use an editor-style app to assemble robot environments and an explorer-style app to inspect and validate USD assets before simulation.
 
 Omniverse apps are just collections of extensions assembled by a `.kit` file. Understanding this makes the entire platform make sense — every capability is an extension, every app is a configuration. This is why the ecosystem is so composable and why OpenUSD sits underneath all of it as the shared data format.
+
+---
+
+## Screenshots
+
+### App launched
+
+![App launched](./screenshots/01-app-launched.png)
+
+### USD editor cube
+
+![USD editor cube](./screenshots/02-usd-editor-cube.png)
+
+### USD explorer variant section
+
+![USD explorer variant section](./screenshots/03-usd-explorer-variant-section.png)
+
+### Extensions in the developer tab
+
+![Extensions in the developer tab](./screenshots/04-extentions-in-the-developer-tab.png)
+
+### Extensions window
+
+![Extensions window](./screenshots/05-extensions-window.png)
+
+### Course completion
+
+![Course completion](./screenshots/06-course-completion.png)
