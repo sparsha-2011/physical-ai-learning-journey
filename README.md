@@ -12,19 +12,20 @@
 
 ## 🗺️ Timeline
 
-| Day | Date | Topics | Domains Covered |
-|:---:|---|---|---|
-| 1 | Jun 24 | USD Foundations | Stage · Layer · Prim · Properties · Paths · File Formats · Metadata · Time Samples |
-| 2 | Jun 25 | Composition Arcs Part 1 | Opinions · Value Resolution · LIVERPS · Sublayers · References · Payloads |
-| 3 | Jun 26 | Composition Arcs Part 2 · Advanced Composition · Schemas and Data Modeling | Variants · Inherits · Specializes · Edit Target · Session Layer · Flatten · IsA/API schemas · usdGenSchema · TfType · Model Kinds |
-| 4 | Jun 27 | Visualization · Pipeline and Data Exchange · Content Aggregation | Mesh · Primvars · UsdLux · Exporters · Importers · Hooks · Build Config · Instancing · PointInstancer |
-| 5 | Jun 28 | Debugging and Troubleshooting · Practice Test 1 | PrimStack · PropertyStack · TfDebug · MuteLayer · Composition Errors · **Score: 58%** |
-| 6 | Jun 29 | Custom Schemas · Practice Test 2 | usdGenSchema · TfType · Variant Fallbacks · Model Kinds · **Score: 62% (+4%)** · patched schema registration gaps |
-| 7 | Jun 30 | Gap Review | Revisited TFType · visualisation exercises · patched Practice Test 2 gaps |
-| 8 | Jul 1 | Deep Dives | `stage.Flatten()` vs `UsdUtils.FlattenLayerStack()` · change notification · custom Model Kind · variant fallback sets · plugin deployment |
-| 9 | Jul 2 | Gap Review | Hooks · prepend vs append arc ordering · explicit prim path vs defaultPrim |
-| 10 | Jul 3 | Practice Test 3 | **Score: 67% (+5%)** · custom exporters · build configuration |
-| 11 | Jul 5 | Practice Test 4 | **Score: 77% (+10%)** |
+| Day | Date   | Topics                                                                     | Domains Covered                                                                                                                           |
+| :-: | ------ | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+|  1  | Jun 24 | USD Foundations                                                            | Stage · Layer · Prim · Properties · Paths · File Formats · Metadata · Time Samples                                                        |
+|  2  | Jun 25 | Composition Arcs Part 1                                                    | Opinions · Value Resolution · LIVERPS · Sublayers · References · Payloads                                                                 |
+|  3  | Jun 26 | Composition Arcs Part 2 · Advanced Composition · Schemas and Data Modeling | Variants · Inherits · Specializes · Edit Target · Session Layer · Flatten · IsA/API schemas · usdGenSchema · TfType · Model Kinds         |
+|  4  | Jun 27 | Visualization · Pipeline and Data Exchange · Content Aggregation           | Mesh · Primvars · UsdLux · Exporters · Importers · Hooks · Build Config · Instancing · PointInstancer                                     |
+|  5  | Jun 28 | Debugging and Troubleshooting · Practice Test 1                            | PrimStack · PropertyStack · TfDebug · MuteLayer · Composition Errors · **Score: 58%**                                                     |
+|  6  | Jun 29 | Custom Schemas · Practice Test 2                                           | usdGenSchema · TfType · Variant Fallbacks · Model Kinds · **Score: 62% (+4%)** · patched schema registration gaps                         |
+|  7  | Jun 30 | Gap Review                                                                 | Revisited TFType · visualisation exercises · patched Practice Test 2 gaps                                                                 |
+|  8  | Jul 1  | Deep Dives                                                                 | `stage.Flatten()` vs `UsdUtils.FlattenLayerStack()` · change notification · custom Model Kind · variant fallback sets · plugin deployment |
+|  9  | Jul 2  | Gap Review                                                                 | Hooks · prepend vs append arc ordering · explicit prim path vs defaultPrim                                                                |
+| 10  | Jul 3  | Practice Test 3                                                            | **Score: 67% (+5%)** · custom exporters · build configuration                                                                             |
+| 11  | Jul 5  | Practice Test 4                                                            | **Score: 77% (+10%)**                                                                                                                     |
+| 12  | Jul 7  | An Introduction to Developing With NVIDIA Omniverse                        | Kit app template · extensions · developer workflow                                                                                        |
 
 > ↑ +19 points across 4 practice attempts · 10 topics covered · studying daily since Jun 24 · 3 points from the 80% passing threshold
 
@@ -57,6 +58,7 @@ Isaac Sim requires an NVIDIA RTX GPU — running on Intel Iris Xe on Mac locally
 OpenUSD (Universal Scene Description) is the file format and framework that underpins Omniverse, Isaac Sim, and every robot and simulation asset in the Physical AI ecosystem. Originally built by Pixar for film pipelines, adopted by NVIDIA as the foundation of Omniverse.
 
 **Key concepts:**
+
 - Stage composition and prim hierarchy
 - USD schemas and typed prims
 - Referencing, layering, and composition arcs
@@ -67,14 +69,14 @@ OpenUSD (Universal Scene Description) is the file format and framework that unde
 
 The cert requires a passing score of 80%. Here's the iterative journey to get there — each attempt identified weak areas and informed the next study session.
 
-| Attempt | Score | Status | Key takeaway |
-|---|---|---|---|
-| Practice Test 1 | 58% | ❌ | Baseline — identified gaps in schema definition and composition arcs |
-| Practice Test 2 | 62% | ❌ | +4% — improved on composition arcs, still weak on schema registration |
-| Practice Test 3 | 67% | ❌ | +5% — schema concepts improving, gaps in USD API and layering |
-| Practice Test 4 | 77% | ❌ | +10% — strong improvement, approaching passing threshold |
-| Practice Test 5 | TBD | 🔄 | Targeting 80%+ |
-| **Final Cert Exam** | **TBD** | **⏳** | |
+| Attempt             | Score   | Status | Key takeaway                                                          |
+| ------------------- | ------- | ------ | --------------------------------------------------------------------- |
+| Practice Test 1     | 58%     | ❌     | Baseline — identified gaps in schema definition and composition arcs  |
+| Practice Test 2     | 62%     | ❌     | +4% — improved on composition arcs, still weak on schema registration |
+| Practice Test 3     | 67%     | ❌     | +5% — schema concepts improving, gaps in USD API and layering         |
+| Practice Test 4     | 77%     | ❌     | +10% — strong improvement, approaching passing threshold              |
+| Practice Test 5     | TBD     | 🔄     | Targeting 80%+                                                        |
+| **Final Cert Exam** | **TBD** | **⏳** |                                                                       |
 
 > Every failed attempt was a study session in disguise — each score gap pointed directly to the next concept to revisit. 19 points gained across 4 attempts.
 
@@ -84,19 +86,20 @@ The cert requires a passing score of 80%. Here's the iterative journey to get th
 
 ---
 
-## ⏳ TBD — An Introduction to Developing With NVIDIA Omniverse
+## 🔄 Jul 7 — An Introduction to Developing With NVIDIA Omniverse
 
 **Goal:** Understand how Omniverse applications are built and extended.
 
 Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer, and app ecosystem that powers Isaac Sim and the broader Physical AI stack. This course covers building a Kit-based application from a template and customizing it via extensions.
 
 **Key concepts:**
+
 - How `.kit` files define and assemble Omniverse applications
 - Adding and configuring extensions
 - How Omniverse supports OpenUSD workflows under the hood
 - The relationship: OpenUSD → Omniverse → Isaac Sim
 
-[📝 Notes →] | [💡 Kit file explainer →] | [📸 Screenshots →]
+[📝 Notes →](./03-omniverse-intro-course/notes.md) | [📸 Screenshots →](./03-omniverse-intro-course/screenshots)
 
 ---
 
@@ -129,22 +132,20 @@ Physically accurate simulation is what makes Isaac Sim valuable for robotics —
 ---
 
 ## 🔗 Resources
- 
-| Resource | Link |
-|---|---|
-| NVIDIA OpenUSD Cert | [developer.nvidia.com/usd](https://developer.nvidia.com/usd) |
-| OpenUSD Practice Tests | [Udemy course](https://www.udemy.com/course-dashboard-redirect/?course_id=7020603) |
-| Complete Guide to Passing the NVIDIA OpenUSD Cert | [Medium — @chaubenz](https://medium.com/@chaubenz/your-complete-guide-to-passing-the-nvidia-certified-professional-openusd-development-b129777b0ed6) |
-| OpenUSD Live Session | [YouTube](https://www.youtube.com/live/85gC4Vja5Uo?si=9VvJhl4K_z_jJKyD) |
-| Isaac Sim Docs | [docs.isaacsim.omniverse.nvidia.com](https://docs.isaacsim.omniverse.nvidia.com) |
-| Omniverse DLI Courses | [learn.nvidia.com](https://learn.nvidia.com) |
-| Isaac Sim on Brev | [Brev cloud setup](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html) |
-| NVIDIA Developer Discord | [discord.gg/nvidiaomniverse](http://discord.gg/nvidiaomniverse) |
 
+| Resource                                          | Link                                                                                                                                                 |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NVIDIA OpenUSD Cert                               | [developer.nvidia.com/usd](https://developer.nvidia.com/usd)                                                                                         |
+| OpenUSD Practice Tests                            | [Udemy course](https://www.udemy.com/course-dashboard-redirect/?course_id=7020603)                                                                   |
+| Complete Guide to Passing the NVIDIA OpenUSD Cert | [Medium — @chaubenz](https://medium.com/@chaubenz/your-complete-guide-to-passing-the-nvidia-certified-professional-openusd-development-b129777b0ed6) |
+| OpenUSD Live Session                              | [YouTube](https://www.youtube.com/live/85gC4Vja5Uo?si=9VvJhl4K_z_jJKyD)                                                                              |
+| Isaac Sim Docs                                    | [docs.isaacsim.omniverse.nvidia.com](https://docs.isaacsim.omniverse.nvidia.com)                                                                     |
+| Omniverse DLI Courses                             | [learn.nvidia.com](https://learn.nvidia.com)                                                                                                         |
+| Isaac Sim on Brev                                 | [Brev cloud setup](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html)                            |
+| NVIDIA Developer Discord                          | [discord.gg/nvidiaomniverse](http://discord.gg/nvidiaomniverse)                                                                                      |
 
 ---
 
 <p align="center">
   <i>Updated daily · Started Jun 26, 2026</i>
 </p>
-
