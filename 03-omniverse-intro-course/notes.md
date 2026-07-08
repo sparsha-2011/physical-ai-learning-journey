@@ -74,6 +74,28 @@ First launch triggers shader compilation which takes 10-15 minutes. The progress
 
 ---
 
-## Key takeaway
+## Hands-on — Two apps, two use cases
+
+### My USD Editor — `my_company.my_editor.kit`
+
+A minimal custom editor built from the kit-app-template. Used for basic USD scene manipulation — creating primitives, moving objects, editing properties directly. This is the app you build and customise as a developer.
+
+- Created a cube primitive
+- Moved it around the viewport
+- Demonstrates the core USD scene editing workflow
+
+### My USD Explorer — `my_company.my_usd_explorer.kit`
+
+A more fully featured viewer app template. Better suited for loading and exploring existing USD assets — browsing the scene hierarchy, inspecting prims and properties, loading NVIDIA assets from the asset library.
+
+- Loaded a NVIDIA USD asset from the asset library
+- Explored the scene hierarchy
+- Enabled the variant section in the UI — variants allow different versions of an asset to be swapped non-destructively, a core USD composition concept seen in the cert curriculum and now observed in a live app
+- Demonstrates how Omniverse connects to NVIDIA's asset ecosystem
+
+### Key difference
+
+**Editor = you build scenes from scratch. Explorer = you load and inspect existing assets.**
+In a real Physical AI pipeline, you'd use an editor-style app to assemble robot environments and an explorer-style app to inspect and validate USD assets before simulation.
 
 Omniverse apps are just collections of extensions assembled by a `.kit` file. Understanding this makes the entire platform make sense — every capability is an extension, every app is a configuration. This is why the ecosystem is so composable and why OpenUSD sits underneath all of it as the shared data format.
