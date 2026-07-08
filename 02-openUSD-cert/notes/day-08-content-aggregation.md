@@ -368,6 +368,45 @@ stage.OverridePrim("/World/Tree_042")
 
 > **Exam phrasing:** "Edit properties of instanceProxy meshes without breaking instancing status" → the answer is override on the instance root using `stage.OverridePrim()`, not on the proxy child. The proxy child is read-only.
 
+### Decision Tree — Editing One Instance (`/World/Tree_042`)
+
+```
+I want to change something on Tree_042 only:
+    |
+    v
+Does the change target /World/Tree_042 itself?
+    |
+   YES  ->  OverridePrim("/World/Tree_042")
+       author the opinion there
+       instancing preserved
+    |
+   NO (needs a child path like /Trunk, /Leaves)
+    |
+    v
+Does the prototype expose this as an interface attribute at the root?
+    |
+   YES  ->  override the interface attribute on the root
+       instancing preserved
+    |
+   NO
+    |
+    v
+Does the prototype have a variant set for this property?
+    |
+   YES  ->  set variant selection on the root
+       instancing preserved
+    |
+   NO
+    |
+    v
+SetInstanceable(False) on Tree_042
+author on the child path directly
+instancing broken for this one tree
+(all other trees still share prototype)
+```
+
+> **One-line summary:** Instancing is only broken when you need to author an opinion at a child prim path. Anything authored on the instance root itself - visibility, transform, material binding, variant selection, custom attributes - leaves instancing intact. The prototype handles child data for all instances, while the instance root can carry per-instance overrides on top without disturbing prototype sharing.
+
 ---
 
 ## 3b. Payload Pruning — Optimising Scene Aggregation
@@ -406,34 +445,151 @@ for prim in stage.Traverse():
 
 ## 3c. Interface Schemas — Loose Coupling for Composable Components
 
-**Interface schemas** define the boundary of what a component exposes to the outside world — its public "API". They allow components to be composed dynamically without tight coupling between the consumer and the internal structure of each asset.
+Let me build this up from a concrete problem first.
+
+---
+
+### The Problem Without Interface Schemas
+
+You have a chair asset. The scene wants to change its colour. Without an interface, the scene needs to know the exact internal path:
+
+```python
+# Scene has to reach deep inside the asset to change colour
+# It must know:
+#   - the exact path to the shader: /Chair/Looks/WoodMat/PBRShader
+#   - the exact attribute name: inputs:diffuseColor
+
+shader = stage.GetPrimAtPath("/Chair/Looks/WoodMat/PBRShader")
+shader.GetAttribute("inputs:diffuseColor").Set(Gf.Vec3f(0.8, 0.2, 0.2))
+```
+
+This works until the asset team renames the shader, restructures the Looks folder, or changes the material network. Then the scene breaks - and nobody told the scene team it was changing.
 
 ```
-Without interface schemas (tight coupling):
-  Scene needs to know: "chair asset has /Chair/Seat with primvars:displayColor"
-  → If asset restructures internally, the scene breaks
+Scene knows about:          Asset changes internally:
+/Chair/Looks/WoodMat    ->  /Chair/Materials/Wood      <- renamed
+    /PBRShader            ->    /SurfaceShader            <- renamed
+        inputs:diffuseColor ->      inputs:baseColor        <- renamed
 
-With interface schemas (loose coupling):
-  Interface defines: "this asset exposes 'chair:color' as a public input"
-  → Scene only talks to the interface — internal structure can change freely
-  → Components can be swapped as long as they implement the same interface
+Scene breaks silently - wrong path, no error until render time
+```
+
+---
+
+### The Solution — Interface Attribute on the Root
+
+Instead of the scene reaching inside the asset, the asset exposes a public attribute at its root prim. This is the interface. The scene only ever talks to the root - never to internal paths.
+
+```
+/Chair                     <- ROOT - public interface lives here
+    chair:color = (0.6,0.4,0.2)   <- public attribute - the interface
+
+    /Chair/Looks             <- INTERNAL - scene never touches this
+        /Chair/Looks/WoodMat
+            /Chair/Looks/WoodMat/Shader
+                inputs:diffuseColor  <- wired internally to read from chair:color
 ```
 
 ```python
-# Asset exposes a public interface via UsdShadeInput on the root prim
+# -- ASSET SIDE (done once by the asset team) ----------------------
+
+stage = Usd.Stage.Open("chair_asset.usda")
 chair_root = stage.GetPrimAtPath("/Chair")
 
-# Interface attribute — public contract with the outside world
-color_input = chair_root.CreateAttribute(
-    "interface:color", Sdf.ValueTypeNames.Color3f
-)
-color_input.Set(Gf.Vec3f(0.6, 0.4, 0.2))
+# Step 1 - create the public interface attribute on the root
+chair_root.CreateAttribute(
+        "chair:color",
+        Sdf.ValueTypeNames.Color3f
+).Set(Gf.Vec3f(0.6, 0.4, 0.2))   # default brown
 
-# Internal shader is wired to read from interface:color
-# Consumer doesn't need to know about the internal shader network
+# Step 2 - wire the internal shader to READ from the interface
+# This happens inside the asset - the scene never sees this
+shader = stage.GetPrimAtPath("/Chair/Looks/WoodMat/Shader")
+shader_input = UsdShade.Shader(shader).CreateInput(
+        "diffuseColor", Sdf.ValueTypeNames.Color3f
+)
+# Connect shader input -> interface attribute on root
+shader_input.ConnectToSource(
+        UsdShade.ConnectionSourceInfo(
+                UsdShade.Material.Get(stage, "/Chair/Looks/WoodMat"),
+                "chair:color",
+                UsdShade.AttributeType.Input
+        )
+)
+stage.Save()
 ```
 
-> **When the exam asks about loose coupling and composability:** The correct answer involves interface schemas + USD references/payloads. Wrong answers: embedding all logic in one layer, hardcoding asset paths, duplicating data.
+---
+
+### Now The Scene Is Completely Decoupled
+
+```python
+# -- SCENE SIDE (done by the scene/shot team) ----------------------
+
+stage = Usd.Stage.Open("shot.usda")
+
+# Reference the chair - scene knows nothing about its internals
+chair = stage.OverridePrim("/World/Chair")
+# (chair_asset.usda is referenced in shot.usda)
+
+# Change the colour by talking to the PUBLIC interface only
+# The scene does not know or care about the internal shader path
+chair.GetAttribute("chair:color").Set(Gf.Vec3f(0.8, 0.1, 0.1))  # red chair
+
+# The internal shader reads from chair:color automatically
+# The scene team never needs to know about /Chair/Looks/WoodMat/Shader
+```
+
+Now the asset team can restructure the entire internal shader network - rename shaders, add layers, change the material hierarchy - and the scene still works because the interface (`chair:color` on the root) never changed.
+
+---
+
+### The Composability Benefit — Swapping Assets
+
+Because both assets implement the same interface, the scene can swap them freely:
+
+```python
+# ChairA and ChairB both expose "chair:color" on their root
+# The scene treats them identically
+
+for chair_path in ["/World/ChairA", "/World/ChairB", "/World/ChairC"]:
+        prim = stage.GetPrimAtPath(chair_path)
+        prim.GetAttribute("chair:color").Set(Gf.Vec3f(0.1, 0.1, 0.8))  # all blue
+        # Works regardless of which chair asset is referenced
+        # as long as they all implement the chair:color interface
+```
+
+Without the interface, the scene would need to know the internal structure of every chair model separately - each one might use a different internal shader path.
+
+---
+
+### The Full Picture
+
+```
+WITHOUT interface:
+    Shot team knows:   /Chair/Looks/WoodMat/Shader.inputs:diffuseColor
+    Asset team changes: internal structure
+    Result:            scene breaks - tight coupling
+
+    Shot team knows:   /TableA/Mat/Surface.inputs:baseColor
+                                         /TableB/Shading/PBR.inputs:albedo     <- different path!
+    Result:            different code for every asset - unmaintainable
+
+WITH interface:
+    Shot team knows:   chair:color on root    <- same for every chair
+                                         table:color on root    <- same for every table
+    Asset team changes: internal structure freely
+    Result:            scene never breaks - loose coupling
+
+    Any asset that exposes chair:color is a valid chair
+    Can swap ChairA for ChairB - scene code unchanged
+```
+
+---
+
+### One-Line Summary
+
+> An interface schema is a public attribute on the asset's root prim that the scene talks to instead of reaching inside the asset. The internal wiring connects that public attribute to the actual shader/rig/geometry. The scene is decoupled from internals - it only knows the contract, not the implementation. This is exactly the same principle as a public API in software engineering: change the implementation freely as long as the public interface stays the same.
 
 ---
 
