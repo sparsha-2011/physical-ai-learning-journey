@@ -599,6 +599,25 @@ binding_api.Bind(
 )
 ```
 
+```
+strongerThanDescendants - parent wins, overrides children
+
+    /World  ->  metal_mat  (stronger)
+        /Chair  ->  wood_mat
+
+    Result:  /World = metal   /Chair = metal  <- parent wins
+
+weakerThanDescendants - children win, parent is just a fallback
+
+    /World  ->  metal_mat  (weaker)
+        /Chair  ->  wood_mat
+
+    Result:  /World = metal   /Chair = wood   <- child keeps its own
+```
+
+> stronger = force this material on everything below
+> weaker = use this material only where nothing else is set
+
 **Full example:**
 
 ```python
