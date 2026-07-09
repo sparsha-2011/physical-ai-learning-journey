@@ -13,10 +13,10 @@
 4. [Creating Custom Schemas](#4-creating-custom-schemas)
 5. [The usdGenSchema Workflow](#5-the-usdgenschema-workflow)
 6. [TfType Registration](#6-tftype-registration)
-7. [Custom File Format Plugins — SdfFileFormat](#7-custom-file-format-plugins--sdffileformat)
-8. [Model Kinds — Classifying Prims by Pipeline Role](#8-model-kinds--classifying-prims-by-pipeline-role)
-9. [Custom Model Kinds — UsdModelKindRegistry](#9-custom-model-kinds--usdmodelkindregistry)
-10. [Exam Pattern Recognition — Elimination Guide](#1--exam-pattern-recognition--elimination-guide)
+7. [Custom File Format Plugins — SdfFileFormat](#7-custom-file-format-plugins-sdffileformat)
+8. [Model Kinds — Classifying Prims by Pipeline Role](#8-model-kinds-classifying-prims-by-pipeline-role)
+9. [Custom Model Kinds — UsdModelKindRegistry](#9-custom-model-kinds-usdmodelkindregistry)
+10. [Exam Pattern Recognition — Elimination Guide](#10-exam-pattern-recognition-elimination-guide)
 11. [Key Takeaways](#11-key-takeaways)
 
 ---
@@ -777,7 +777,7 @@ SdfFileFormat = defines how data is READ and WRITTEN to/from a file format
    → Stage composes normally from that point
 ```
 
-Plugin Deployment can be done using any one of the approches mention [here](#deployment-methods)
+Plugin Deployment can be done using any one of the approches mention [here](#why-these-three-methods-exist-at-all)
 
 ### ArResolver — Handling External References During File I/O
 
@@ -1114,7 +1114,7 @@ plugInfo.json
 → PXR_PLUGINPATH_NAME points to that directory
 ```
 
-Deployment can be done using any one of the approches mention [here](#deployment-methods)
+Deployment can be done using any one of the approches mention [here](#why-these-three-methods-exist-at-all)
 
 **Step 4 — Extend the `Validate()` method for domain-specific rules**
 

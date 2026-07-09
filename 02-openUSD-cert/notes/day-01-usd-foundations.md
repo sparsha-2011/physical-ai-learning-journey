@@ -7,17 +7,17 @@
 
 ## Table of Contents
 
-0. [The Three Core Libraries](#0-the-three-core-libraries)
-1. [The Stage](#1-the-stage)
-2. [Layers](#2-layers)
-3. [Prims — The Scene Graph](#3-prims--the-scene-graph)
-4. [Properties — Attributes and Relationships](#4-properties--attributes-and-relationships)
-5. [SdfPath — Addressing the Scene](#5-sdfpath--addressing-the-scene)
-6. [USD File Formats](#6-usd-file-formats)
-7. [Metadata](#7-metadata)
-8. [Time Samples and Animation](#8-time-samples-and-animation)
-9. [The Three Core Libraries — Gf, Sdf, and Usd](#9-the-three-core-libraries--gf-sdf-and-usd)
-10. [Key Takeaways](#9-key-takeaways)
+1. [The Three Core Libraries](#0-the-three-core-libraries)
+2. [The Stage](#1-the-stage)
+3. [Layers](#2-layers)
+4. [Prims — The Scene Graph](#3-prims-the-scene-graph)
+5. [Properties — Attributes and Relationships](#4-properties-attributes-and-relationships)
+6. [SdfPath — Addressing the Scene](#5-sdfpath-addressing-the-scene)
+7. [USD File Formats](#6-usd-file-formats)
+8. [Metadata](#7-metadata)
+9. [Time Samples and Animation](#8-time-samples-and-animation)
+10. [The Three Core Libraries — Gf, Sdf, and Usd](#9-the-three-core-libraries-gf-sdf-and-usd)
+11. [Key Takeaways](#10-key-takeaways)
 
 ---
 

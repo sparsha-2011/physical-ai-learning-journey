@@ -11,7 +11,7 @@
 2. [Variant Fallback Selections](#2-variant-fallback-selections)
 3. [Inherits](#3-inherits)
 4. [Specializes](#4-specializes)
-5. [Inherits vs Specializes — The Critical Distinction](#5-inherits-vs-specializes--the-critical-distinction)
+5. [Inherits vs Specializes — The Critical Distinction](#5-inherits-vs-specializes-the-critical-distinction)
 6. [Composition Arc Best Practices](#6-composition-arc-best-practices)
 7. [Key Takeaways](#7-key-takeaways)
 

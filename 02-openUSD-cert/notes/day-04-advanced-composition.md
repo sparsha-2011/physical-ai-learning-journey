@@ -10,12 +10,13 @@
 1. [Edit Target](#1-edit-target)
 2. [The Session Layer](#2-the-session-layer)
 3. [Sparse Overrides](#3-sparse-overrides)
-4. [Flattening — Baking Composition](#4-flattening--baking-composition)
-5. [Encapsulation — Asset Structure Principles](#5-encapsulation--asset-structure-principles)
-6. [Change Processing and SdfChangeBlock](#6-change-processing-and-sdfchangeblock)
-7. [Working Directly with Layers](#7-working-directly-with-layers)
-8. [Full Composition Mental Model](#7-full-composition-mental-model)
-9. [Key Takeaways](#8-key-takeaways)
+4. [Removing and Clearing Properties](#4-removing-and-clearing-properties)
+5. [Flattening — Baking Composition](#4-flattening-baking-composition)
+6. [Encapsulation — Asset Structure Principles](#5-encapsulation-asset-structure-principles)
+7. [Change Processing and SdfChangeBlock](#6-change-processing-and-sdfchangeblock)
+8. [Working Directly with Layers](#7-working-directly-with-layers)
+9. [Full Composition Mental Model](#8-full-composition-mental-model)
+10. [Key Takeaways](#9-key-takeaways)
 
 ---
 

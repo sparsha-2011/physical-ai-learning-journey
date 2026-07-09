@@ -7,12 +7,15 @@
 
 ## Table of Contents
 
-1. [Instancing — Native USD Instancing](#1-instancing--native-usd-instancing)
-2. [Point Instancing — UsdGeomPointInstancer](#2-point-instancing--usdgeompointinstancer)
+1. [Instancing — Native USD Instancing](#1-instancing-native-usd-instancing)
+2. [Point Instancing — UsdGeomPointInstancer](#2-point-instancing-usdgeompointinstancer)
 3. [Per-Instance Overrides](#3-per-instance-overrides)
-4. [Asset Versioning and Management](#4-asset-versioning-and-management)
-5. [Scenegraph Organisation Patterns](#5-scenegraph-organisation-patterns)
-6. [Key Takeaways](#6-key-takeaways)
+4. [3b. Payload Pruning — Optimising Scene Aggregation](#3b-payload-pruning-optimising-scene-aggregation)
+5. [3c. Interface Schemas — Loose Coupling for Composable Components](#3c-interface-schemas-loose-coupling-for-composable-components)
+6. [3d. Collaborative Aggregation — Composition Arcs vs File Locking](#3d-collaborative-aggregation-composition-arcs-vs-file-locking)
+7. [Asset Versioning and Management](#4-asset-versioning-and-management)
+8. [Scenegraph Organisation Patterns](#5-scenegraph-organisation-patterns)
+9. [Key Takeaways](#6-key-takeaways)
 
 ---
 

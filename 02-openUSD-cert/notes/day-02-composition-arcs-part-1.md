@@ -9,7 +9,7 @@
 
 1. [What is Composition?](#1-what-is-composition)
 2. [Opinions and Value Resolution](#2-opinions-and-value-resolution)
-3. [LIVERPS — The Strength Order](#3-liverps--the-strength-order)
+3. [LIVERPS — The Strength Order](#3-liverps-the-strength-order)
 4. [Sublayers](#4-sublayers)
 5. [References](#5-references)
 6. [Payloads](#6-payloads)

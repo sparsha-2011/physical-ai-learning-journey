@@ -7,13 +7,13 @@
 
 ## Table of Contents
 
-1. [UsdGeomImageable — Visibility and Purpose](#1-usdgeomimageable--visibility-and-purpose)
-2. [UsdGeomMesh — Polygon Geometry](#2-usdgeommesh--polygon-geometry)
-3. [Primvars — Per-Element Data](#3-primvars--per-element-data)
-4. [UsdShadeMaterial and UsdShadeShader](#4-usdshadmaterial-and-usdshadereshader)
+1. [UsdGeomImageable — Visibility and Purpose](#1-usdgeomimageable-visibility-and-purpose)
+2. [UsdGeomMesh — Polygon Geometry](#2-usdgeommesh-polygon-geometry)
+3. [Primvars — Per-Element Data](#3-primvars-per-element-data)
+4. [UsdShadeMaterial and UsdShadeShader](#usdshadematerial-and-usdshadeshader)
 5. [UsdPreviewSurface and the Texture Chain](#5-usdpreviewsurface-and-the-texture-chain)
-6. [UsdLux — Lights](#6-usdlux--lights)
-7. [UsdGeomCamera — Complete Reference](#7-usdgeomcamera--complete-reference)
+6. [UsdLux — Lights](#6-usdlux-lights)
+7. [UsdGeomCamera — Complete Reference](#7-usdgeomcamera-complete-reference)
 8. [Key Takeaways](#8-key-takeaways)
 
 ---
@@ -342,6 +342,8 @@ color.Set(Vt.Vec3fArray([Gf.Vec3f(1.0, 0.0, 0.0)]))
 
 ---
 
+<a id="usdshadematerial-and-usdshadeshader"></a>
+
 ## 4. UsdShadeMaterial and UsdShadeShader
 
 ### The Material Hierarchy
@@ -630,10 +632,10 @@ binding_api.Bind(
 
 **The three-tier binding summary:**
 
-| Tier | Mechanism | Scope | Best for |
-| --- | --- | --- | --- |
-| Direct | `MaterialBindingAPI.Bind(mat)` | One prim | Simple single-material assets |
-| GeomSubset | `MaterialBindingAPI.Bind(mat)` on subset | Face group within one mesh | Multi-material single mesh |
+| Tier       | Mechanism                                     | Scope                             | Best for                                        |
+| ---------- | --------------------------------------------- | --------------------------------- | ----------------------------------------------- |
+| Direct     | `MaterialBindingAPI.Bind(mat)`                | One prim                          | Simple single-material assets                   |
+| GeomSubset | `MaterialBindingAPI.Bind(mat)` on subset      | Face group within one mesh        | Multi-material single mesh                      |
 | Collection | `CollectionAPI` + `Bind(mat, strength, name)` | Any set of prims across hierarchy | Large scenes, scattered prims, instanced assets |
 
 ---
