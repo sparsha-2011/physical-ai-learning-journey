@@ -268,61 +268,246 @@ STEP 5  First use of the type in a running process
         Next process starts from Step 4 again.
 ```
 
-### Deployment Methods
+### Why These Three Methods Exist at All
 
-Custom schemas do not have to be deployed as a separate plugin as specified above in step 4. There are three valid deployment methods depending on your context that can be followed at Step 4.
+The core problem is: **how does a running process know about your custom schema?**
 
-**Method 1 — Separate plugin (most common in pipelines)**
+The TfType registry is built fresh every time a process starts. Something has to tell USD "this custom type exists and here is its inheritance chain." The three methods are three different answers to that question depending on who controls the environment.
 
-Compiled into a standalone `.so`/`.dll` and discovered at runtime via `PXR_PLUGINPATH_NAME`.
+### Method 1 — Separate Plugin via PXR_PLUGINPATH_NAME
 
-```bash
-# Directory structure
-/path/to/acmeSensors/
-  ├── acmeSensors.so
-  └── plugInfo.json
+**The context:** You are a studio or pipeline team. You built a custom schema. You do not own the applications your artists use - Maya, Houdini, usdview, a custom renderer. You cannot recompile any of them. You just need your schema to work everywhere.
 
-export PXR_PLUGINPATH_NAME=/path/to/acmeSensors/
+**How it works:**
+
+```
+You build:   acmeSensors.so + plugInfo.json
+             placed in /studio/plugins/acmeSensors/
+
+Every machine runs:
+  export PXR_PLUGINPATH_NAME=/studio/plugins/acmeSensors/
+
+Process starts:
+  USD scans PXR_PLUGINPATH_NAME
+  finds plugInfo.json
+  notes the library exists
+  when TemperatureSensor is first used -> loads acmeSensors.so
+  TF_REGISTRY_FUNCTION runs -> type registered
 ```
 
-- Most flexible — deploy without rebuilding the application
-- Must be set in every environment (render farm, artist machines, CI)
-- Schema loads lazily on first use
+**Why you would use this:**
 
-**Method 2 — Linked directly into the application**
+```
+You want to update the schema without touching any application
+  -> just replace acmeSensors.so on the shared drive
+  -> all processes pick it up on next launch
 
-`acmeSensors.cpp` is compiled directly into the host application at build time. No separate `.so`, no `PXR_PLUGINPATH_NAME` needed.
+You use many different applications (Maya, Houdini, usdview, custom tools)
+  -> set PXR_PLUGINPATH_NAME once per machine
+  -> works in all of them simultaneously
 
-```cmake
-# CMakeLists.txt — link schema directly into your app
-target_sources(MyApp PRIVATE acmeSensors.cpp)
-target_link_libraries(MyApp usd)
+You want department-specific schemas
+  -> /studio/plugins/vfx/   for VFX team
+  -> /studio/plugins/anim/  for animation team
+  -> PXR_PLUGINPATH_NAME points to the right one per environment
 ```
 
-- Schema is always available — baked into the executable
-- No deployment steps — ships with the application
-- Common in DCC tools (Maya plugins, Houdini HDAs)
-- Cannot be updated without rebuilding the application
+**The trade-off:**
 
-**Method 3 — Compiled into the USD build itself**
+```
+PXR_PLUGINPATH_NAME must be set correctly in EVERY environment
+  -> render farm nodes
+  -> artist workstations
+  -> CI/CD pipelines
+  -> client delivery machines
 
-Schema compiled directly into the USD libraries. Available everywhere without any deployment.
+If it is not set -> schema unknown -> IsA() returns False
+                                   -> fallbacks return None
+                                   -> silent failures
+```
 
-- Used by studios with custom USD forks
-- Schema available to all tools that use that USD build
-- Least flexible — requires rebuilding USD itself
+### Method 2 — Linked Directly into the Application
+
+**The context:** You are building an application - a Maya plugin, a Houdini HDA, a custom pipeline tool, a game engine plugin. You own the build process. The schema is not optional - it is part of the application itself. Without it the application does not make sense.
+
+**How it works:**
+
+```
+At build time:
+  acmeSensors.cpp is compiled directly into MyApp binary
+
+No .so file exists separately.
+No plugInfo.json needed for discovery.
+When MyApp process starts:
+  TF_REGISTRY_FUNCTION runs as part of application startup
+  Schema is registered before any USD stage opens
+  Always available - cannot be missing
+```
+
+**Why you would use this:**
+
+```
+Maya plugin for a game studio:
+  The plugin IS the schema - they are inseparable
+  Artists install the Maya plugin -> schema is always there
+  No environment variable needed -> no misconfiguration possible
+
+Houdini HDA for a robotics pipeline:
+  HDA includes sensor schemas
+  Artist installs HDA -> schema works
+  No separate deployment step
+
+Custom pipeline application:
+  App is written specifically for this schema
+  Ship the app -> schema ships with it
+  No external dependencies
+
+DCC tool vendors (Autodesk, SideFX):
+  They compile USD support + common schemas into their tools
+  You install Maya -> UsdGeom, UsdShade already registered
+  No PXR_PLUGINPATH_NAME needed for built-in schemas
+```
+
+**The trade-off:**
+
+```
+Cannot update the schema without rebuilding and redistributing the app
+  -> schema v1.2 requires shipping a new version of MyApp
+  -> not flexible for rapid iteration
+
+Artists must upgrade the app to get the new schema
+  -> version management becomes an application version problem
+```
+
+### Method 3 — Compiled into the USD Build Itself
+
+**The context:** You are a large studio that maintains a **custom fork of USD**. Every tool in the studio is built against your custom USD build - not Pixar's stock USD. The schema is so fundamental to your pipeline that it belongs in the USD foundation itself, not in a plugin or an application.
+
+**How it works:**
+
+```
+You fork the USD repository
+Add your schema source files to the USD build system
+Build USD itself with your schema baked in
+
+Every tool built against your USD automatically has the schema
+  -> no plugInfo.json
+  -> no PXR_PLUGINPATH_NAME
+  -> no application-level linking
+  -> schema is part of USD the way UsdGeom is part of USD
+```
+
+**Why you would use this:**
+
+```
+You have a schema so fundamental it is like a built-in schema
+  -> every single tool needs it
+  -> treating it as a plugin creates unnecessary complexity
+
+You control the entire toolchain
+  -> you build Maya's USD plugin against your USD
+  -> you build Houdini's USD plugin against your USD
+  -> you build your renderer against your USD
+  -> all of them get the schema for free
+
+Example: a large studio creates a "StudioPrim" base schema
+  -> every prim in the studio has pipeline metadata
+  -> it would be absurd to deploy this as a separate plugin
+  -> it belongs in the foundation
+
+Pixar itself uses this for internal schemas
+  -> some schemas exist in Pixar's USD build
+  -> never appear in the open-source release
+```
+
+**The trade-off:**
+
+```
+Requires maintaining a USD fork
+  -> every time Pixar releases a new USD version
+  -> you must merge your changes into the new version
+  -> expensive engineering effort
+
+Least flexible:
+  -> updating the schema = rebuilding all of USD
+  -> rebuilding USD = rebuilding every tool that links against it
+  -> cannot patch the schema in production
+
+Only viable for very stable, fundamental schemas
+  -> not for schemas that change frequently
+```
 
 ---
 
-### Comparison
+### Side by Side — When to Use Which
 
-| Method            | Deployment               | Flexibility                          | Common use case  |
-| ----------------- | ------------------------ | ------------------------------------ | ---------------- |
-| Separate plugin   | `PXR_PLUGINPATH_NAME`    | High — update without rebuild        | Studio pipelines |
-| Linked into app   | Compiled into executable | Medium — update requires app rebuild | DCC tool plugins |
-| Compiled into USD | Part of USD build        | Low — update requires USD rebuild    | Custom USD forks |
+```
+Question to ask:                         Answer -> Method
 
-> **Exam trap:** "Compiling custom schemas into a separate plugin to be loaded by USD runtime" is marked incorrect not because separate plugins are wrong — they are valid and common — but because this phrasing implies it is the **only** deployment method. The correct statement is that schemas can be deployed as a separate plugin, linked directly into the application, or compiled into the USD build. The separate plugin approach is not required.
+"Do I own the applications?"
+  No - I use third party tools           -> Method 1 (plugin)
+  Yes - I build the application          -> Method 2 (link into app)
+  Yes - I build USD itself               -> Method 3 (USD fork)
+
+"How often does the schema change?"
+  Frequently - rapid iteration           -> Method 1 (just replace .so)
+  Occasionally - tied to app releases    -> Method 2 (ship new app version)
+  Rarely - very stable foundation        -> Method 3 (USD fork)
+
+"Who controls the environment?"
+  Many machines, many teams              -> Method 1 (env var approach)
+  Application install controls it        -> Method 2 (baked in)
+  Studio owns entire toolchain           -> Method 3 (USD fork)
+
+"What is the deployment unit?"
+  A plugin file on a shared drive        -> Method 1
+  An application installer               -> Method 2
+  A full USD build                       -> Method 3
+```
+
+---
+
+### Real World Examples
+
+```
+Method 1 - most studios
+  Pipeline TD builds TemperatureSensor schema
+  Places .so on the NFS share
+  Sets PXR_PLUGINPATH_NAME in the studio environment
+  Works in Maya, Houdini, usdview, the renderer - all at once
+  Schema update = replace .so file = done
+
+Method 2 - DCC plugin developer
+  Autodesk builds Maya's USD support
+  UsdGeom, UsdShade, UsdLux compiled into the Maya USD plugin
+  You install Maya -> these schemas always available
+  No PXR_PLUGINPATH_NAME needed for them
+
+  A game studio builds a custom Unreal Engine USD importer
+  Their game-specific schemas compiled into the plugin
+  Artists install the plugin -> schemas available in Unreal
+
+Method 3 - large film studio with USD fork
+  Disney/ILM/Pixar maintain their own USD builds
+  Studio-wide metadata schemas baked into their USD
+  Every tool built against their USD automatically has it
+  Schema is as fundamental as UsdGeom itself
+```
+
+### One-Line Summary for Each
+
+```
+Method 1 - "I don't own the apps, just set an env var"
+           Most flexible, most common, works everywhere PXR_PLUGINPATH_NAME is set
+
+Method 2 - "The schema ships with my application"
+           No deployment steps, always present, update requires new app release
+
+Method 3 - "The schema is part of USD itself for us"
+           Most transparent, highest maintenance cost, only for very stable schemas
+```
+
+> **Exam trap:** "Compiling custom schemas into a separate plugin to be loaded by USD runtime" is marked incorrect not because separate plugins are wrong - they are valid and common - but because this phrasing implies it is the **only** deployment method. The correct statement is that schemas can be deployed as a separate plugin, linked directly into the application, or compiled into the USD build. The separate plugin approach is not required.
 
 ### The TfType Journey in One View
 
