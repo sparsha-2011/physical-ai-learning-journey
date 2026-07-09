@@ -175,6 +175,48 @@ def export_scene(source_data: dict, output_path: str):
 
 `usdchecker` validates a USD file or package against a defined set of rules designed to ensure the asset is **interoperable and renderable** by downstream tools.
 
+### usdchecker — When to Use It
+
+`usdchecker` validates **file correctness and schema compliance**. It answers one question:
+
+> "Is this file correctly formed?"
+
+It does NOT debug composition behaviour - a file can pass usdchecker and still have wrong composition results.
+
+### What it checks
+
+```
+Schema compliance     attributes have correct types, required attributes present
+File structure        USDA syntax valid, USDC not corrupted, asset paths resolvable
+Best practices        defaultPrim set, upAxis set, kinds correct
+```
+
+### Reach for it when
+
+```
+After exporting from a DCC          verify the export is schema-valid
+After writing a custom exporter     confirm output before publishing
+As a publish gate in CI             every asset must pass before it ships
+A renderer refuses to open a file   first diagnostic - is the file valid at all?
+```
+
+### Do NOT use it when
+
+```
+Wrong opinion winning in composition   -> GetPropertyStack()
+Reference not loading                  -> usdview composition query
+Variant not selecting correctly        -> prim.GetPrimIndex().DumpToString()
+Performance problems                   -> UsdUtils.ComputeAllDependencies
+```
+
+### Command
+
+```bash
+usdchecker asset.usda           # basic check
+usdchecker --strict asset.usda  # includes best practices
+usdchecker asset.usdz           # checks all files in a package
+```
+
 Common things `usdchecker` validates:
 
 - `defaultPrim` is set

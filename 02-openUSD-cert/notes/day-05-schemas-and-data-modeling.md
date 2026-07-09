@@ -437,8 +437,6 @@ Only viable for very stable, fundamental schemas
   -> not for schemas that change frequently
 ```
 
----
-
 ### Side by Side — When to Use Which
 
 ```
@@ -464,8 +462,6 @@ Question to ask:                         Answer -> Method
   An application installer               -> Method 2
   A full USD build                       -> Method 3
 ```
-
----
 
 ### Real World Examples
 
@@ -858,46 +854,36 @@ assembly
 
 #### assembly
 
-The top-level container that represents a complete published scene
-or set. An assembly is what gets handed off between departments or
-delivered to a client. It contains everything needed for the scene.
+```
+assembly                                    group
+----------------------------------------    ----------------------------------------
+Standalone deliverable                      Organisational container
+Has its own USD file                        No own USD file - content inline
+Gets referenced independently               Never referenced independently
+Other scenes depend on it                   Only exists inside a parent scene
+Removing it breaks other scenes             Removing it and hoisting children = same result
+
+def Xform "CityBlock" (                     def Xform "Streets" {
+    prepend references =                        def Xform "MainSt" { }
+        @./city_block.usda@                     def Xform "Alley"  { }
+) { }                                       }
+```
+
+---
+
+### The One Question
+
+> Would any other scene ever reference this prim directly?
 
 ```
-/ShotsRoot                   kind = assembly
-  /ShotsRoot/Shot_042        kind = assembly
-    /ShotsRoot/Shot_042/Set  kind = group
-```
-
-**Real example:** A complete city block handed from the environments
-department to the lighting department. The whole city block is one
-assembly — it is a self-contained deliverable.
-
-```python
-scene = stage.DefinePrim("/CityBlock", "Xform")
-Usd.ModelAPI(scene).SetKind("assembly")
+Yes -> assembly   (give it its own file, it is a deliverable)
+No  -> group      (it is just a folder, no own file needed)
 ```
 
 #### group
 
-An organisational container inside an assembly. Groups do not
-represent reusable assets — they are structural containers that
-organise components into logical units.
-
-```
-/CityBlock                   kind = assembly
-  /CityBlock/Buildings       kind = group     ← organises buildings
-  /CityBlock/Streets         kind = group     ← organises streets
-  /CityBlock/Props           kind = group     ← organises props
-```
-
-**Real example:** Inside the city block assembly, all the building
-assets are grouped under `/CityBlock/Buildings`. The group itself
-is not a reusable asset — it is just organisation.
-
-```python
-buildings = stage.DefinePrim("/CityBlock/Buildings", "Xform")
-Usd.ModelAPI(buildings).SetKind("group")
-```
+An organisational container inside an assembly. Groups are structural
+folders for readability and hierarchy, not independently published assets.
 
 #### component
 
@@ -955,19 +941,20 @@ Usd.ModelAPI(seat).SetKind("subcomponent")
 ### The Full Hierarchy in a Real Scene
 
 ```
-/Shot_042                          kind = assembly
-  /Shot_042/Environment            kind = group
-    /Shot_042/Environment/CityBlock  kind = assembly  ← nested assembly
-      /Shot_042/.../Buildings        kind = group
-        /Shot_042/.../BuildingA      kind = component
-          /Shot_042/.../BuildingA/Facade  kind = subcomponent
-  /Shot_042/Characters             kind = group
-    /Shot_042/Characters/Hero      kind = component
-      /Shot_042/.../Hero/Head      kind = subcomponent
-      /Shot_042/.../Hero/Torso     kind = subcomponent
-  /Shot_042/Props                  kind = group
-    /Shot_042/Props/Bench_001      kind = component
+/Shot_042                                   assembly  <- shots reference this
+  /Shot_042/Environment                     assembly  <- env team references this independently
+    /Shot_042/Environment/CityBlock         assembly  <- lighting references this alone
+      /Shot_042/.../Buildings               group     <- nobody references just Buildings
+        /Shot_042/.../TowerA                component <- asset team publishes this
+      /Shot_042/.../Streets                 group     <- nobody references just Streets
+        /Shot_042/.../MainSt                component <- asset team publishes this
+  /Shot_042/Characters                      group     <- nobody references just Characters
+    /Shot_042/.../Hero                      assembly  <- anim team references Hero alone
+      /Shot_042/.../Hero/Body               group     <- nobody references just Body
+        /Shot_042/.../Torso                 component <- asset team publishes this
 ```
+
+Every assembly has an `@./its_own_file.usda@` reference arc. Every group has inline children and no reference arc.
 
 ### Why Model Kinds Matter in Practice
 
