@@ -83,7 +83,7 @@ The cert requires a passing score of 80%. Here's the iterative journey to get th
 
 [📸 Test 1 →](./02-openUSD-cert/practice-tests/exam-1.png) | [📸 Test 2 →](./02-openUSD-cert/practice-tests/exam-2.png) | [📸 Test 3 →](./02-openUSD-cert/practice-tests/exam-3.png) | [📸 Test 4 →](./02-openUSD-cert/practice-tests/exam-4.png)
 
-[📝 Cert notes →](./02-openUSD-cert/notes/) | [💡 Key concepts →](./02-openUSD-cert/notes/README.md)
+[📝 Cert notes →](./02-openUSD-cert/notes/) | [💡 Key concepts →](./02-openUSD-cert/README.md)
 
 ---
 
@@ -100,7 +100,7 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 - How Omniverse supports OpenUSD workflows under the hood
 - The relationship: OpenUSD → Omniverse → Isaac Sim
 
-[📝 Notes →](./03-omniverse-intro-course/notes.md) | [📸 Screenshots →](./03-omniverse-intro-course/screenshots)
+[📝 Notes →](./03-omniverse-intro-course/README.md) | [📸 Screenshots →](./03-omniverse-intro-course/screenshots)
 
 ---
 
