@@ -7,19 +7,21 @@
 
 ## Table of Contents
 
-1. [The Three Core Libraries](#0-the-three-core-libraries)
-2. [The Stage](#1-the-stage)
-3. [Layers](#2-layers)
-4. [Prims — The Scene Graph](#3-prims-the-scene-graph)
-5. [Properties — Attributes and Relationships](#4-properties-attributes-and-relationships)
-6. [SdfPath — Addressing the Scene](#5-sdfpath-addressing-the-scene)
-7. [USD File Formats](#6-usd-file-formats)
-8. [Metadata](#7-metadata)
-9. [Time Samples and Animation](#8-time-samples-and-animation)
-10. [The Three Core Libraries — Gf, Sdf, and Usd](#9-the-three-core-libraries-gf-sdf-and-usd)
-11. [Key Takeaways](#10-key-takeaways)
+1. [The Three Core Libraries](#the-three-core-libraries)
+2. [The Stage](#the-stage)
+3. [Layers](#layers)
+4. [Prims — The Scene Graph](#prims-the-scene-graph)
+5. [Properties — Attributes and Relationships](#properties-attributes-and-relationships)
+6. [SdfPath — Addressing the Scene](#sdfpath-addressing-the-scene)
+7. [USD File Formats](#usd-file-formats)
+8. [Metadata](#metadata)
+9. [Time Samples and Animation](#time-samples-and-animation)
+10. [The Three Core Libraries — Gf, Sdf, and Usd](#the-three-core-libraries-gf-sdf-and-usd)
+11. [Key Takeaways](#key-takeaways)
 
 ---
+
+<a id="the-three-core-libraries"></a>
 
 ## 0. The Three Core Libraries
 
@@ -37,6 +39,8 @@ Every USD Python script begins with `from pxr import ...`. Understanding which l
 | `UsdUtils` | **USD Utilities**                | Helper functions — flattening, layer copying, validation                                    | Builds on top of Usd and Sdf                  |
 
 ---
+
+<a id="the-stage"></a>
 
 ## 1. The Stage
 
@@ -97,6 +101,8 @@ print(stage.ExportToString(addSourceFileComment=False))
 
 ---
 
+<a id="layers"></a>
+
 ## 2. Layers
 
 A **Layer** (`Sdf.Layer`) is a single USD file — or in-memory buffer — containing scene description. It is the physical unit of storage. Stages are assembled from layers; layers are what actually exist on disk.
@@ -147,6 +153,8 @@ root_layer.customLayerData = {
 > **The session layer** is a special in-memory layer that is always the strongest. It captures interactive edits (e.g., from usdview). It is **never saved to disk** by `stage.Save()`. Use it for temporary per-session overrides.
 
 ---
+
+<a id="prims-the-scene-graph"></a>
 
 ## 3. Prims — The Scene Graph
 
@@ -243,6 +251,8 @@ print(prim.HasAPI(UsdGeom.MotionAPI)) # True/False
 | `Shader`                                                | `UsdShade` | Individual shading node                                          |
 
 ---
+
+<a id="properties-attributes-and-relationships"></a>
 
 ## 4. Properties — Attributes and Relationships
 
@@ -414,6 +424,8 @@ primvar.Set(Vt.Vec3fArray([Gf.Vec3f(1.0, 0.0, 0.0)]))  # red
 
 ---
 
+<a id="sdfpath-addressing-the-scene"></a>
+
 ## 5. SdfPath — Addressing the Scene
 
 Every prim and property in a USD scene has a unique **path** — a string address that identifies its location in the scene graph. Paths are represented as `Sdf.Path` objects.
@@ -454,6 +466,8 @@ child = prim_path.AppendChild("Armrest")  # /World/Chair/Armrest
 ```
 
 ---
+
+<a id="usd-file-formats"></a>
 
 ## 6. USD File Formats
 
@@ -499,6 +513,8 @@ usdchecker scene.usda
 ```
 
 ---
+
+<a id="metadata"></a>
 
 ## 7. Metadata
 
@@ -563,6 +579,8 @@ version = custom.get("pipeline:schemaVersion", "unknown")
 > **`defaultPrim`** is one of the most commonly tested metadata fields. When asset A references asset B, USD needs to know which prim in B to bring in. If `defaultPrim` is not set on B, the reference fails. Always set `defaultPrim` to the root prim of every published asset.
 
 ---
+
+<a id="time-samples-and-animation"></a>
 
 ## 8. Time Samples and Animation
 
@@ -669,6 +687,8 @@ stack = attr.GetPropertyStack(Usd.TimeCode(24))
 `TimeCode.Default()` has no numeric shorthand — it must always be written in full.
 
 ---
+
+<a id="the-three-core-libraries-gf-sdf-and-usd"></a>
 
 ## 9. The Three Core Libraries — Gf, Sdf, and Usd
 
@@ -844,6 +864,8 @@ attr.Get()     # (5, 0, 0)  — anim layer won, composition applied
 ```
 
 ---
+
+<a id="key-takeaways"></a>
 
 ## 10. Key Takeaways
 
