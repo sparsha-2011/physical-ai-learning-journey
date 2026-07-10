@@ -3,6 +3,14 @@
 > **NVIDIA-Certified Professional: OpenUSD Development (NCP-OUSD)**  
 > Complete study notes aligned to the official exam domain blueprint.
 
+## Certification Status
+
+- Status: Passed
+- Certification date: Jul 9, 2026
+- Credly badge: [NVIDIA-Certified Professional: OpenUSD Development](https://www.credly.com/badges/493a815e-02bd-44e3-91da-aea56614b27d/public_url)
+- Badge image: [openusd-ncp-badge.png](assets/certification/openusd-ncp-badge.png)
+- Certificate PDF: [openusd-ncp-certificate-2026-07-09.pdf](assets/certification/openusd-ncp-certificate-2026-07-09.pdf)
+
 ---
 
 ## Study Guide

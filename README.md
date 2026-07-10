@@ -3,7 +3,7 @@
 > Full stack developer with 2 years of experience transitioning into Physical AI and robotics simulation.
 > Documenting my path from zero to NVIDIA Omniverse developer — honest notes, real friction points, and everything I build along the way.
 
-<a href="#"><img src="https://img.shields.io/badge/OpenUSD-In%20Progress-76b900?style=flat-square&logo=nvidia&logoColor=white" alt="OpenUSD In Progress"/></a>
+<a href="https://www.credly.com/badges/493a815e-02bd-44e3-91da-aea56614b27d/public_url"><img src="./02-openUSD-cert/assets/certification/openusd-ncp-badge.png" alt="NVIDIA Certified Professional: OpenUSD Development Badge" width="170"/></a>
 <a href="#"><img src="https://img.shields.io/badge/Isaac%20Sim-In%20Progress-0078D4?style=flat-square&logo=nvidia&logoColor=white" alt="Isaac Sim In Progress"/></a>
 <a href="#"><img src="https://img.shields.io/badge/Omniverse-In%20Progress-7B2FBE?style=flat-square&logo=nvidia&logoColor=white" alt="Omniverse In Progress"/></a>
 <a href="#"><img src="https://img.shields.io/badge/Physical%20AI-Learning-FF6B35?style=flat-square" alt="Physical AI Learning"/></a>
@@ -28,7 +28,7 @@
 | 12  | Jul 7  | An Introduction to Developing With NVIDIA Omniverse                                                                           | Kit app template · extensions · developer workflow                                                                                        |
 | 13  | Jul 8  | Watched Hailey Ahn talk on Content Aggregation ([YouTube Live](https://www.youtube.com/live/LFCauWTNBM4?si=xcmupaXIEMtCtvug)) | Content aggregation concepts · practical context from expert session                                                                      |
 
-> ↑ +19 points across 4 practice attempts · 10 topics covered · studying daily since Jun 24 · 3 points from the 80% passing threshold
+> ↑ +19 points across 4 practice attempts · 10 topics covered · studying daily since Jun 24 · certified on Jul 9, 2026
 
 ---
 
@@ -50,11 +50,11 @@ Isaac Sim requires an NVIDIA RTX GPU — running on Intel Iris Xe on Mac locally
 
 ---
 
-## 🔄 Jun 26 — TBD — OpenUSD Certification
+## ✅ Jul 9 — OpenUSD Certification Passed
 
 **Goal:** Understand the foundational language of the entire Physical AI stack.
 
-**Status:** In progress · Started Jun 26, 2026
+**Status:** Passed · Jul 9, 2026
 
 OpenUSD (Universal Scene Description) is the file format and framework that underpins Omniverse, Isaac Sim, and every robot and simulation asset in the Physical AI ecosystem. Originally built by Pixar for film pipelines, adopted by NVIDIA as the foundation of Omniverse.
 
@@ -70,20 +70,19 @@ OpenUSD (Universal Scene Description) is the file format and framework that unde
 
 The cert requires a passing score of 80%. Here's the iterative journey to get there — each attempt identified weak areas and informed the next study session.
 
-| Attempt             | Score   | Status | Key takeaway                                                          |
-| ------------------- | ------- | ------ | --------------------------------------------------------------------- |
-| Practice Test 1     | 58%     | ❌     | Baseline — identified gaps in schema definition and composition arcs  |
-| Practice Test 2     | 62%     | ❌     | +4% — improved on composition arcs, still weak on schema registration |
-| Practice Test 3     | 67%     | ❌     | +5% — schema concepts improving, gaps in USD API and layering         |
-| Practice Test 4     | 77%     | ❌     | +10% — strong improvement, approaching passing threshold              |
-| Practice Test 5     | TBD     | 🔄     | Targeting 80%+                                                        |
-| **Final Cert Exam** | **TBD** | **⏳** |                                                                       |
+| Attempt             | Score      | Status | Key takeaway                                                          |
+| ------------------- | ---------- | ------ | --------------------------------------------------------------------- |
+| Practice Test 1     | 58%        | ❌     | Baseline — identified gaps in schema definition and composition arcs  |
+| Practice Test 2     | 62%        | ❌     | +4% — improved on composition arcs, still weak on schema registration |
+| Practice Test 3     | 67%        | ❌     | +5% — schema concepts improving, gaps in USD API and layering         |
+| Practice Test 4     | 77%        | ❌     | +10% — strong improvement, approaching passing threshold              |
+| **Final Cert Exam** | **Passed** | **✅** | NVIDIA-Certified Professional: OpenUSD Development                    |
 
 > Every failed attempt was a study session in disguise — each score gap pointed directly to the next concept to revisit. 19 points gained across 4 attempts.
 
 [📸 Test 1 →](./02-openUSD-cert/practice-tests/exam-1.png) | [📸 Test 2 →](./02-openUSD-cert/practice-tests/exam-2.png) | [📸 Test 3 →](./02-openUSD-cert/practice-tests/exam-3.png) | [📸 Test 4 →](./02-openUSD-cert/practice-tests/exam-4.png)
 
-[📝 Cert notes →](./02-openUSD-cert/README.md) | [💡 Key concepts →](./02-openUSD-cert/notes/)
+[🏅 Credly badge →](https://www.credly.com/badges/493a815e-02bd-44e3-91da-aea56614b27d/public_url) | [📄 Certificate PDF →](./02-openUSD-cert/assets/certification/openusd-ncp-certificate-2026-07-09.pdf) | [📝 Cert notes →](./02-openUSD-cert/README.md) | [💡 Key concepts →](./02-openUSD-cert/notes/)
 
 ---
 
