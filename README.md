@@ -28,6 +28,7 @@
 | 12  | Jul 7  | An Introduction to Developing With NVIDIA Omniverse                                                                           | Kit app template · extensions · developer workflow                                                                                        |
 | 13  | Jul 8  | Watched Hailey Ahn talk on Content Aggregation ([YouTube Live](https://www.youtube.com/live/LFCauWTNBM4?si=xcmupaXIEMtCtvug)) | Content aggregation concepts · practical context from expert session                                                                      |
 | 14  | Jul 9  | OpenUSD Final Certification Exam                                                                                              | **Passed (NVIDIA-Certified Professional: OpenUSD Development)**                                                                           |
+| 15  | Jul 11 | Synthetic Data Generation Kickoff                                                                                             | Omniverse Replicator planning · custom writer scaffold · run config draft · screenshot checklist                                          |
 
 > ↑ +19 points across 4 practice attempts · 10 topics covered
 
@@ -112,13 +113,15 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 
 ---
 
-## ⏳ TBD — Synthetic Data Generation
+## 🔄 Jul 11 — Synthetic Data Generation
 
 **Goal:** Build a data pipeline that generates training data for AI models at scale.
 
+**Status:** In progress · Jul 11, 2026
+
 Synthetic data generation (SDG) is one of the most critical use cases for Physical AI — it lets you train robot models on thousands of varied scenarios without real-world data collection. Using Omniverse Replicator to randomise lighting, object placement, and camera angles.
 
-[📝 Workflow →]| [🐍 Script →] | [📸 Screenshots →]
+[📝 Workflow →](./05-synthetic-data/notes.md) | [🐍 Script →](./05-synthetic-data/MyCustomWriter.py) | [⚙️ Params →](./05-synthetic-data/my_params.json) | [📸 Screenshots →](./05-synthetic-data/screenshots)
 
 ---
 
