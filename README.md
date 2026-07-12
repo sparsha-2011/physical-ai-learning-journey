@@ -27,8 +27,9 @@
 | 11  | Jul 5  | Practice Test 4                                                                                                               | **Score: 77% (+10%)**                                                                                                                     |
 | 12  | Jul 7  | An Introduction to Developing With NVIDIA Omniverse                                                                           | Kit app template · extensions · developer workflow                                                                                        |
 | 13  | Jul 8  | Watched Hailey Ahn talk on Content Aggregation ([YouTube Live](https://www.youtube.com/live/LFCauWTNBM4?si=xcmupaXIEMtCtvug)) | Content aggregation concepts · practical context from expert session                                                                      |
+| 14  | Jul 9  | OpenUSD Final Certification Exam                                                                                              | **Passed (NVIDIA-Certified Professional: OpenUSD Development)**                                                                           |
 
-> ↑ +19 points across 4 practice attempts · 10 topics covered · studying daily since Jun 24 · certified on Jul 9, 2026
+> ↑ +19 points across 4 practice attempts · 10 topics covered
 
 ---
 
