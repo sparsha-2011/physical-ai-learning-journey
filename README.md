@@ -123,6 +123,8 @@ Synthetic data generation (SDG) is one of the most critical use cases for Physic
 
 [📝 Workflow →](./05-synthetic-data-generation/notes.md) | [📸 Screenshots →]
 
+---
+
 ## ⏳ TBD — Physics Simulation
 
 **Goal:** Load a robot with real physics, sensors, and simulate its behaviour.
