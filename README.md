@@ -121,9 +121,7 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 
 Synthetic data generation (SDG) is one of the most critical use cases for Physical AI — it lets you train robot models on thousands of varied scenarios without real-world data collection. Using Omniverse Replicator to randomise lighting, object placement, and camera angles.
 
-[📝 Workflow →](./05-synthetic-data/notes.md) | [🐍 Script →](./05-synthetic-data/MyCustomWriter.py) | [⚙️ Params →](./05-synthetic-data/my_params.json) | [📸 Screenshots →](./05-synthetic-data/screenshots)
-
----
+## [📝 Workflow →](./05-synthetic-data/notes.md) | [📸 Screenshots →]
 
 ## ⏳ TBD — Physics Simulation
 
