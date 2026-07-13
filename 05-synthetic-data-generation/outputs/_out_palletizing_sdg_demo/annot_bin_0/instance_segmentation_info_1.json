@@ -1,0 +1,130 @@
+{
+    "idToLabels": {
+        "(0, 0, 0, 0)": "BACKGROUND",
+        "(0, 0, 0, 255)": "UNLABELLED",
+        "(62, 177, 210, 255)": "/World/Ur10Table/bins/bin_0/Visuals",
+        "(195, 233, 42, 255)": "/World/Ur10Table/bins/bin_1/Visuals",
+        "(83, 54, 207, 255)": "/World/Background/SM_floor49/SM_floor02",
+        "(89, 222, 30, 255)": "/World/Background/SM_floor51/SM_floor02",
+        "(164, 222, 59, 255)": "/World/Background/SM_floor60/SM_floor02",
+        "(232, 35, 196, 255)": "/World/Background/SM_floor62/SM_floor02",
+        "(221, 13, 97, 255)": "/World/Background/SM_FuseBox_24/SM_FuseBox_01",
+        "(154, 75, 175, 255)": "/World/Background/SM_SignA_27/SM_SignA_02",
+        "(91, 205, 7, 255)": "/World/Background/SM_SignB_23/SM_SignB_11",
+        "(170, 240, 15, 255)": "/World/Background/SM_WallA_3M44/SM_WallA_6M/Section0",
+        "(20, 253, 21, 255)": "/World/Background/SM_WallWire_63/SM_WallWire_03",
+        "(237, 224, 6, 255)": "/World/Background/SM_WallWire_68/SM_WallWire_08",
+        "(53, 218, 77, 255)": "/World/Background/SM_WallWire_73/SM_WallWire_10",
+        "(31, 214, 39, 255)": "/World/Background/SM_LampCeilingA_43/SM_LampCeilingA_04/Section0",
+        "(211, 38, 86, 255)": "/World/Background/SM_LampCeilingA_43/SM_LampCeilingA_04/Section1",
+        "(35, 106, 229, 255)": "/World/Background/SM_LampCeilingA_44/SM_LampCeilingA_04/Section0",
+        "(105, 249, 0, 255)": "/World/Background/SM_LampCeilingA_44/SM_LampCeilingA_04/Section1",
+        "(243, 139, 16, 255)": "/World/Background/SM_WallA_3M13/SM_WallB_6M",
+        "(67, 7, 184, 255)": "/World/Background/SM_WallA_3M14/SM_WallB_6M",
+        "(80, 222, 21, 255)": "/World/Background/SM_WallA_3M16/SM_WallB_6M",
+        "(73, 254, 124, 255)": "/World/Background/SM_WallA_3M43/SM_WallA_6M/Section0",
+        "(225, 63, 118, 255)": "/World/Background/SM_WallA_3M43/SM_WallA_6M/Section1",
+        "(14, 121, 239, 255)": "/World/Background/SM_WallA_3M44/SM_WallA_6M/Section1",
+        "(219, 177, 51, 255)": "/World/Background/SM_WallWire_74/SM_WallWire_10",
+        "(15, 120, 209, 255)": "/World/Background/SM_WallA_3M15/SM_WallB_6M",
+        "(206, 55, 64, 255)": "/World/Background/SM_WallA_3M43_01/SM_WallA_6M/Section0",
+        "(42, 210, 143, 255)": "/World/Background/SM_WallA_3M43_01/SM_WallA_6M/Section1",
+        "(211, 99, 47, 255)": "/World/Background/SM_WallA_3M13_01/SM_WallB_6M",
+        "(157, 73, 165, 255)": "/World/Background/SM_WallA_3M14_01/SM_WallB_6M"
+    },
+    "idToSemantics": {
+        "(0, 0, 0, 0)": {
+            "class": "BACKGROUND"
+        },
+        "(0, 0, 0, 255)": {
+            "class": "UNLABELLED"
+        },
+        "(62, 177, 210, 255)": {
+            "class": "klt_bin"
+        },
+        "(195, 233, 42, 255)": {
+            "class": "klt_bin"
+        },
+        "(83, 54, 207, 255)": {
+            "class": "floor"
+        },
+        "(89, 222, 30, 255)": {
+            "class": "floor"
+        },
+        "(164, 222, 59, 255)": {
+            "class": "floor"
+        },
+        "(232, 35, 196, 255)": {
+            "class": "floor"
+        },
+        "(221, 13, 97, 255)": {
+            "class": "fuse_box"
+        },
+        "(154, 75, 175, 255)": {
+            "class": "sign"
+        },
+        "(91, 205, 7, 255)": {
+            "class": "sign"
+        },
+        "(170, 240, 15, 255)": {
+            "class": "wall"
+        },
+        "(20, 253, 21, 255)": {
+            "class": "wire"
+        },
+        "(237, 224, 6, 255)": {
+            "class": "wire"
+        },
+        "(53, 218, 77, 255)": {
+            "class": "wire"
+        },
+        "(31, 214, 39, 255)": {
+            "class": "lamp"
+        },
+        "(211, 38, 86, 255)": {
+            "class": "lamp"
+        },
+        "(35, 106, 229, 255)": {
+            "class": "lamp"
+        },
+        "(105, 249, 0, 255)": {
+            "class": "lamp"
+        },
+        "(243, 139, 16, 255)": {
+            "class": "wall"
+        },
+        "(67, 7, 184, 255)": {
+            "class": "wall"
+        },
+        "(80, 222, 21, 255)": {
+            "class": "wall"
+        },
+        "(73, 254, 124, 255)": {
+            "class": "wall"
+        },
+        "(225, 63, 118, 255)": {
+            "class": "wall"
+        },
+        "(14, 121, 239, 255)": {
+            "class": "wall"
+        },
+        "(219, 177, 51, 255)": {
+            "class": "wire"
+        },
+        "(15, 120, 209, 255)": {
+            "class": "wall"
+        },
+        "(206, 55, 64, 255)": {
+            "class": "wall"
+        },
+        "(42, 210, 143, 255)": {
+            "class": "wall"
+        },
+        "(211, 99, 47, 255)": {
+            "class": "wall"
+        },
+        "(157, 73, 165, 255)": {
+            "class": "wall"
+        }
+    }
+}
