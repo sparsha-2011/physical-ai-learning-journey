@@ -1,0 +1,1 @@
+{"(0, 0, 0, 0)": {"class": "BACKGROUND"}, "(0, 0, 0, 255)": {"class": "UNLABELLED"}, "(33, 243, 3, 255)": {"class": "floor"}, "(254, 28, 167, 255)": {"class": "pallet"}, "(143, 61, 152, 255)": {"class": "forklift"}, "(254, 39, 6, 255)": {"class": "cone,traffic_cone"}, "(49, 150, 216, 255)": {"class": "box,cardbox"}}
