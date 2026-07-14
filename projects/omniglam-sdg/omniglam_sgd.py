@@ -49,7 +49,6 @@ part_materials = {
     "Cylinder_003": {"colour": GOLD,  "metallic": 1.0, "roughness": 0.1},
     "Cylinder_002": {"colour": GOLD,  "metallic": 1.0, "roughness": 0.1},
     "Cylinder_001": {"colour": GOLD,  "metallic": 1.0, "roughness": 0.1},
-    "Cylinder":     {"colour": (0.9, 0.9, 0.9), "metallic": 0.0, "roughness": 0.5},
 }
 
 lipsticks = []
@@ -129,7 +128,7 @@ print("All 7 OmniGlam shades loaded!")
 
 # Capture loop
 async def run_pipeline():
-    num_frames = 10
+    num_frames = 500
     rng = np.random.default_rng(42)
     print(f"Starting OmniGlam SDG — generating {num_frames} frames...")
 
