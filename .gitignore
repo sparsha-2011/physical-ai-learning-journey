@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# OmniGlam — paid/licensed 3D assets
+projects/omniglam-sdg/assets/*.fbx
+projects/omniglam-sdg/assets/*.obj
+projects/omniglam-sdg/assets/*.blend
+projects/omniglam-sdg/assets/*.usd
+projects/omniglam-sdg/assets/*.usdc
+projects/omniglam-sdg/assets/*.usda
+
+# Large SDG output files
+projects/omniglam-sdg/outputs/

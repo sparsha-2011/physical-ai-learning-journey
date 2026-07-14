@@ -1,6 +1,16 @@
 # 💄 OmniGlam — Synthetic Data Generation for Retail Beauty Robotics
 
-> A synthetic data generation pipeline built with NVIDIA Isaac Sim and Omniverse Replicator, designed to train robots to identify lipstick shades by name in retail environments.
+
+
+A synthetic data generation pipeline built with NVIDIA Isaac Sim and Omniverse Replicator, designed to train robots to identify lipstick shades by name in retail environments.
+
+<div align="center">
+<img src="./assets/omniglam-vision.gif" alt="OmniGlam Demo" width="600"/>
+
+*The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible i.e. generating the training data a robot would need to get there.*
+
+</div>
+
 
 **Brand:** OmniGlam  
 **Built with:** NVIDIA Isaac Sim 5.1.0 · Omniverse Replicator · OpenUSD · Brev Cloud · L40S GPU  
