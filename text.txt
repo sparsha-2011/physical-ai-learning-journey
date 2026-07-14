@@ -1,0 +1,28 @@
+import asyncio
+import omni.replicator.core as rep
+import omni.usd
+import carb.settings
+
+async def setup_scene():
+    # New stage
+    omni.usd.get_context().new_stage()
+    rep.orchestrator.set_capture_on_play(False)
+    carb.settings.get_settings().set("rtx/post/dlss/execMode", 2)
+
+    # Vanity surface
+    surface = rep.functional.create.plane(
+        scale=(8, 8, 1),
+        position=(0, 0, 0),
+        name="VanitySurface"
+    )
+
+    # Dome light
+    rep.functional.create.dome_light(
+        intensity=1000,
+        parent="/World",
+        name="DomeLight"
+    )
+
+    print("Scene setup complete!")
+
+asyncio.ensure_future(setup_scene())
