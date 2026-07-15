@@ -2,7 +2,7 @@ import json
 import os
 from collections import Counter
 
-bbox_dir = "/root/Documents/physical-ai-learning-journey/projects/omniglam-sdg/outputs"
+bbox_dir = "/root/Documents/physical-ai-learning-journey/projects/omniglam-sdg/outputs_v2"
 shade_counts = Counter()
 total_frames = 0
 

@@ -4,8 +4,8 @@ import os
 import shutil
 
 # Paths
-OUTPUTS_DIR = "/root/Documents/physical-ai-learning-journey/projects/omniglam-sdg/outputs"
-DATASET_DIR = "/root/Documents/physical-ai-learning-journey/projects/omniglam-sdg/dataset"
+OUTPUTS_DIR = "/root/Documents/physical-ai-learning-journey/projects/omniglam-sdg/outputs_v2"
+DATASET_DIR = "/root/Documents/physical-ai-learning-journey/projects/omniglam-sdg/dataset_v2"
 
 IMAGE_WIDTH  = 1024
 IMAGE_HEIGHT = 1024
