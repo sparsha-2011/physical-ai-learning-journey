@@ -1,11 +1,5 @@
 # 💄 OmniGlam — Synthetic Data Generation for Retail Beauty Robotics
 
-
-
-A synthetic data generation pipeline built with NVIDIA Isaac Sim and Omniverse Replicator, designed to train robots to identify lipstick shades by name in retail environments.
-
-
-
 <p align="center">
   <a href="./assets/omniglam-vision.gif">
     <img
@@ -17,11 +11,9 @@ A synthetic data generation pipeline built with NVIDIA Isaac Sim and Omniverse R
   <br>
   <sub>▶ Click the preview to view the animation</sub>
 
-  *The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible i.e. generating the training data a robot would need to get there.*
-  
+  *The end goal: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible — generating the training data a robot would need to get there.*
+
 </p>
-
-
 
 **Brand:** OmniGlam  
 **Built with:** NVIDIA Isaac Sim 5.1.0 · Omniverse Replicator · OpenUSD · Brev Cloud · L40S GPU  
@@ -36,7 +28,7 @@ OmniGlam is a synthetic data generation pipeline that produces annotated trainin
 Instead of manually photographing thousands of lipstick tubes in different lighting conditions and angles, this pipeline generates them automatically inside NVIDIA Isaac Sim — producing photorealistic, perfectly labelled training data at scale.
 
 **The problem it solves:**
-Retail robots need to identify specific product SKUs — not just "lipstick" but "Neural Nude" vs "Deep Learning Red." Real-world data collection for this is slow, expensive, and hard to scale. Synthetic data generation makes it instant and infinite.
+Retail robots need to identify specific product SKUs — not just "lipstick" but "Runtime Berry" vs "Deep Learning Red." Real-world data collection for this is slow, expensive, and hard to scale. Synthetic data generation makes it instant and infinite.
 
 ---
 
@@ -58,16 +50,18 @@ Retail robots need to identify specific product SKUs — not just "lipstick" but
 
 | Step | Status | Notes |
 |---|---|---|
-| Shade names and colours defined | ✅ | 6 tech-inspired shades |
-| Lipstick asset sourced | 🔄 | FBX from Sketchfab |
-| Asset converted to USD | ⏳ | |
-| Scene built in Isaac Sim | ⏳ | Vanity surface + HDRI lighting |
-| 6 shade instances created | ⏳ | OmniPBR materials per shade |
-| Semantic labels added | ⏳ | Per shade class labels |
-| Camera + render product set up | ⏳ | Randomised position |
-| Randomisers configured | ⏳ | Lighting · positions · camera |
-| SDG pipeline running | ⏳ | BasicWriter + annotators |
-| Output reviewed + documented | ⏳ | |
+| Shade names and colours defined | ✅ | 7 tech-inspired shades |
+| Lipstick asset sourced + converted to USD | ✅ | FBX from Sketchfab → USD via Omniverse asset converter |
+| Scene built in Isaac Sim | ✅ | Vanity surface + 3-point lighting (KeyLight · FillLight · RimLight) |
+| 7 shade instances created | ✅ | OmniPBR materials per shade · gold metallic cases · caps hidden |
+| Semantic labels added | ✅ | Per shade class labels via `rep.functional.modify.semantics` |
+| Camera + render product set up | ✅ | 5 angle presets + close-up single tube · focal_length=18.0 |
+| Randomisers configured | ✅ | Lighting · positions · camera · backdrop (white 75% / black 25%) |
+| SDG pipeline — 500 frames generated | ✅ | RGB + bounding boxes + semantic segmentation · BasicWriter |
+| Dataset converted to KITTI format | ✅ | 397 train · 99 val · convert_to_kitti.py |
+| YOLOv8 model training | 🔄 | In progress — ultralytics |
+| Web app — OmniGlam shade finder | ⏳ | HTML + CSS + JS + FastAPI + model inference |
+| Deploy online | ⏳ | |
 
 ---
 
@@ -78,8 +72,11 @@ OpenUSD          ← scene description and asset format
 NVIDIA Omniverse ← platform and rendering engine
 Isaac Sim 5.1.0  ← simulation environment
 Replicator API   ← randomisation and data capture
-BasicWriter      ← annotated dataset output
+BasicWriter      ← annotated dataset output (RGB + bbox + semantic seg)
 OmniPBR          ← physically based materials per shade
+HTML · CSS · JS    ← web app frontend (shade finder store)
+FastAPI          ← inference API backend
+YOLOv8           ← object detection model training (ultralytics)
 Brev Cloud       ← L40S GPU cloud instance
 ```
 
@@ -88,20 +85,21 @@ Brev Cloud       ← L40S GPU cloud instance
 ## 🎨 Scene Design
 
 **Environment:**
-- Flat vanity surface with marble/brushed material
-- HDRI dome light randomised each frame — morning light, studio white, warm evening, cool blue
-- 6 lipstick tubes scattered on the surface with collision-checked randomisation
+- Flat display surface (30x30 plane) with glossy near-white material
+- 3-point lighting setup — KeyLight (warm), FillLight (cool), RimLight (white) + ambient distant light
+- Backdrop switches between clean white and dramatic black each frame
+
+**Two row arrangement:**
+- Back row: Deep Learning Red · Render Rose · Null Mauve · Softmax
+- Front row: Runtime Berry · Pixar Pink · CuDiva
 
 **What gets randomised every frame:**
-- Tube positions on the vanity surface
-- Camera angle and distance
-- Dome light texture (HDRI environment)
-- Light intensity and colour temperature
-
-**3 cameras:**
-- Top-down view — full vanity overview
-- Close-up view — individual shade detail
-- Angled view — natural shopping perspective
+- Tube visibility (1–7 tubes per frame · every 5th frame = single tube close-up)
+- Tube positions (slight scatter within row)
+- Tube rotation (±10° tilt)
+- Camera angle (5 presets — front angled, side left/right, close-up + random variation)
+- Lighting intensity and colour temperature (5 presets from warm golden to bright white)
+- Backdrop colour (white 75% · black 25%)
 
 ---
 
@@ -111,10 +109,16 @@ For each captured frame the pipeline generates:
 
 | File | Contents | Purpose |
 |---|---|---|
-| `rgb_*.png` | Photorealistic scene | Training image |
-| `semantic_seg_*.png` | Colour-coded shade map | Pixel-level shade identification |
-| `bounding_box_*.json` | Shade location + label | Object detection training |
-| `depth_*.png` | Distance map | 3D position of each tube |
+| `rgb_*.png` | Photorealistic scene (1024×1024) | Training image |
+| `semantic_segmentation_*.png` | Colour-coded shade map | Pixel-level shade identification |
+| `bounding_box_2d_tight_*.npy` | Bounding box coordinates | Object detection training |
+| `bounding_box_2d_tight_*.json` | Shade class labels | Annotation metadata |
+
+**Dataset statistics:**
+- Total frames: 500
+- Train: 397 frames · Val: 99 frames
+- Shade distribution: balanced (226–263 appearances per shade)
+- Average shades per frame: 1.7
 
 ---
 
@@ -126,8 +130,9 @@ A robot that can identify specific lipstick shades by name enables automated she
 **For NVIDIA:**
 Demonstrates Isaac Sim's SDG pipeline applied to retail beauty — a market segment where fine-grained product recognition (shade-level, not just category-level) is the key technical challenge.
 
-**The sim-to-real story:**
-Synthetic data trained on OmniGlam shades transfers to real-world lipstick recognition because NVIDIA's RTX renderer produces photorealistic images that close the sim-to-real gap — the same lighting physics, material reflectance, and shadow behaviour as a real camera.
+**Research backing:**
+- [Synthetica (NVIDIA, 2024)](https://arxiv.org/abs/2410.21153) — photorealistic synthetic data closes the sim-to-real gap
+- [FLORA (2025)](https://arxiv.org/abs/2508.21712) — 500 quality synthetic images can outperform 5,000 poorly generated ones
 
 ---
 
@@ -151,21 +156,38 @@ cd physical-ai-learning-journey/projects/omniglam-sdg
 ```
 
 ### Step 3 — Add the lipstick asset
-```bash
-mkdir -p ~/Documents/physical-ai-learning-journey/projects/omniglam-sdg/assets
-cp /path/to/lipstick.usd ~/Documents/physical-ai-learning-journey/projects/omniglam-sdg/assets/
+The lipstick FBX asset is not included due to licensing. Download a free lipstick model from [Sketchfab](https://sketchfab.com/search?q=lipstick&features=downloadable&price=free) (CC license) and place it in `assets/lipstick.fbx`. See `assets/README.md` for details.
+
+Convert FBX to USD in Isaac Sim Script Editor:
+```python
+import asyncio
+import omni.kit.asset_converter as converter
+
+async def convert():
+    task = converter.get_instance().create_converter_task(
+        "/path/to/assets/lipstick.fbx",
+        "/path/to/assets/lipstick.usd"
+    )
+    await task.wait_until_finished()
+
+asyncio.ensure_future(convert())
 ```
 
-### Step 4 — Run the pipeline
-Open Isaac Sim Script Editor (**Window → Script Editor**) and run the pipeline script.
-*Full script coming soon as the project progresses.*
+### Step 4 — Run the SDG pipeline
+Open Isaac Sim Script Editor (**Window → Script Editor**) and run `omniglam_sdg.py`.
 
-### Step 5 — Check output
+### Step 5 — Convert to KITTI format
 ```bash
-ls ~/Documents/physical-ai-learning-journey/projects/omniglam-sdg/outputs/
+python3 convert_to_kitti.py
 ```
 
-### Step 6 — Push to GitHub before stopping Brev
+### Step 6 — Train with YOLOv8
+```bash
+pip install ultralytics
+python3 train.py
+```
+
+### Step 7 — Push to GitHub before stopping Brev
 ```bash
 cd ~/Documents/physical-ai-learning-journey
 git add .
@@ -174,20 +196,6 @@ git push
 ```
 
 > ⚠️ Always push to GitHub before stopping your Brev instance — storage does not persist between sessions.
-
----
-
-## 📸 Screenshots
-
-*Will be added as the project progresses*
-
-| Screenshot | Description |
-|---|---|
-| Scene setup | Vanity surface with 6 OmniGlam tubes |
-| RGB output | Sample generated training image |
-| Semantic segmentation | Shade-coded output |
-| Bounding boxes | Annotated shade detection |
-| Dataset overview | Full output folder structure |
 
 ---
 
@@ -212,6 +220,9 @@ This project is part of my Physical AI learning journey. I'm a full stack develo
 | Omniverse Replicator | [docs.omniverse.nvidia.com/extensions/latest/ext_replicator](https://docs.omniverse.nvidia.com/extensions/latest/ext_replicator.html) |
 | Isaac Sim on Brev | [Brev cloud setup](https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_advanced_cloud_setup_brev.html) |
 | OpenUSD | [openusd.org](https://openusd.org) |
+| Synthetica paper | [arxiv.org/abs/2410.21153](https://arxiv.org/abs/2410.21153) |
+| FLORA paper | [arxiv.org/abs/2508.21712](https://arxiv.org/abs/2508.21712) |
+| YOLOv8 | [docs.ultralytics.com](https://docs.ultralytics.com) |
 
 ---
 
