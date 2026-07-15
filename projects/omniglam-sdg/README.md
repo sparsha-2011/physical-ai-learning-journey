@@ -11,7 +11,7 @@
   <br>
   <sub>▶ Click the preview to view the animation</sub>
 
-  *The end goal: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible — generating the training data a robot would need to get there.*
+  *The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible by generating the training data a robot would need to get there.*
 
 </p>
 
