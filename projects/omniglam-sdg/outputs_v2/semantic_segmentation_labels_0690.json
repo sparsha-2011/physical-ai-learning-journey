@@ -1,0 +1,1 @@
+{"(0, 0, 0, 0)": {"class": "BACKGROUND"}, "(0, 0, 0, 255)": {"class": "UNLABELLED"}, "(33, 243, 3, 255)": {"class": "null_mauve"}, "(240, 4, 111, 255)": {"class": "deep_learning_red"}, "(220, 179, 62, 255)": {"class": "cudiva"}, "(97, 5, 127, 255)": {"class": "softmax"}, "(224, 52, 69, 255)": {"class": "pixar_pink"}}

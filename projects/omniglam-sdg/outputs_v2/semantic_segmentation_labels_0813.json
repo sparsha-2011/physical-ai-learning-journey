@@ -1,0 +1,1 @@
+{"(0, 0, 0, 0)": {"class": "BACKGROUND"}, "(0, 0, 0, 255)": {"class": "UNLABELLED"}, "(97, 5, 127, 255)": {"class": "softmax"}, "(15, 238, 97, 255)": {"class": "runtime_berry"}}
