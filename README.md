@@ -29,16 +29,17 @@
 | 13  | Jul 8  | Watched Hailey Ahn talk on Content Aggregation ([YouTube Live](https://www.youtube.com/live/LFCauWTNBM4?si=xcmupaXIEMtCtvug)) | Content aggregation concepts · practical context from expert session                                                                      |
 | 14  | Jul 9  | OpenUSD Final Certification Exam                                                                                              | **Passed (NVIDIA-Certified Professional: OpenUSD Development)**                                                                           |
 | 15  | Jul 11 | Synthetic Data Generation Kickoff                                                                                             | Omniverse Replicator planning · custom writer scaffold · run config draft · screenshot checklist                                          |
-
-> ↑ +19 points across 4 practice attempts · 10 topics covered
+| 16  | Jul 12 | OmniGlam Project Started                                                                                                      | Project concept · brand design · shade collection · scene planning · FBX asset sourcing · USD conversion                                  |
+| 17  | Jul 13 | Isaac Sim SDG Tutorials                                                                                       | Synthetic Data Recorder · Getting Started Scripts (Ex 1–5) · SDG Workflows (1+2) · Scene Based SDG · Object Based SDG · Data Augmentation · Randomization Snippets |
+| 18  | Jul 14 | OmniGlam SDG Pipeline                                                                                               | 500 frame dataset · 7 shades · gold cases · 3-point lighting · backdrop switching · KITTI conversion · YOLOv8 training · web app (HTML) |
 
 ---
 
-## 🔄 Jun 26 — Brev cloud setup
+## ✅ Jun 26 — Brev cloud setup
 
 **Goal:** Get Isaac Sim running without a local NVIDIA GPU.
 
-**Status:** In progress · Jun 26, 2026
+**Status:** Complete · Jun 26, 2026
 
 Isaac Sim requires an NVIDIA RTX GPU — running on Intel Iris Xe on Mac locally, so set up NVIDIA Brev cloud to spin up a GPU instance on demand. This is the recommended path for developers without local RTX hardware.
 
@@ -47,8 +48,6 @@ Isaac Sim requires an NVIDIA RTX GPU — running on Intel Iris Xe on Mac locally
 - Connected to noVNC desktop successfully
 - Confirmed Isaac Sim and Kit are installed on the instance
 - Full deployment and coursework begins TBD
-
-[📝 Setup notes →] | [📸 Screenshots →]
 
 ---
 
@@ -105,33 +104,45 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 
 ---
 
-## ⏳ TBD — Isaac Sim Beginner Course
+## 🔄 Jul 13 — Isaac Sim Synthetic Data Generation Tutorials
 
-**Goal:** Get comfortable with Isaac Sim UI, scenes, and Python scripting basics before hands-on workflows.
+**Goal:** Learn the full Isaac Sim SDG pipeline before building an original project.
 
-[📝 Notes →]| [📸 Screenshots →]
+**Status:** In progress · Jul 13, 2026
+
+Completed all available Isaac Sim Replicator SDG tutorials — building up from the GUI recorder to full Python pipelines with physics, multi-camera setups, and custom randomisers.
+
+**Tutorials completed:**
+- Synthetic Data Recorder — GUI-based recording, BasicWriter, custom writer with surface normals
+- Getting Started Scripts — Examples 1–5 (BasicWriter, custom writer, randomisation, physics capture, batch performance)
+- SDG Workflows — Workflow 1 (physics-based settling) + Workflow 2 (collision-checked placement)
+- Scene Based SDG — full warehouse scene with forklift, pallet, 3 cameras, lights, material randomisation
+- Object Based SDG — object-centric SDG for recognition across environments
+- Data Augmentation — annotator and writer augmentation with Warp (GPU) and NumPy (CPU)
+- Randomization Snippets — custom spatial distribution algorithms (on sphere, in sphere, between spheres)
+
+[📝 Notes →](./05-synthetic-data-generation/notes.md)
 
 ---
 
-## 🔄 Jul 11 — Synthetic Data Generation
+## 🔄 Jul 12–14 — OmniGlam (Original Project)
 
-**Goal:** Build a data pipeline that generates training data for AI models at scale.
+**Goal:** Build an end-to-end Physical AI pipeline for retail beauty robotics.
 
-**Status:** In progress · Jul 11, 2026
+**Status:** In progress · Jul 12, 2026
 
-Synthetic data generation (SDG) is one of the most critical use cases for Physical AI — it lets you train robot models on thousands of varied scenarios without real-world data collection. Using Omniverse Replicator to randomise lighting, object placement, and camera angles.
+OmniGlam is an original synthetic data generation project — a virtual lipstick brand with 7 tech-inspired shades, built to demonstrate how Physical AI can power fine-grained product recognition in retail.
 
-[📝 Workflow →](./05-synthetic-data-generation/notes.md) | [📸 Screenshots →]
+**What's been built:**
+- 7 lipstick shades with OmniPBR materials — bullet tips coloured per shade, gold metallic cases
+- Full SDG pipeline — 500 annotated frames with lighting, camera, backdrop, and position randomisation
+- KITTI format dataset — 397 train / 99 val frames
+- YOLOv8 model training in progress
+- OmniGlam web app — shade finder store built in HTML/CSS/JS
 
----
+**The shades:** Deep Learning Red · Runtime Berry · Render Rose · Pixar Pink · Null Mauve · CuDiva · Softmax
 
-## ⏳ TBD — Physics Simulation
-
-**Goal:** Load a robot with real physics, sensors, and simulate its behaviour.
-
-Physically accurate simulation is what makes Isaac Sim valuable for robotics — robots trained in simulation behave predictably in the real world because the physics match. Covers articulation, joint drives, rigid body dynamics, and sensor attachment.
-
-[📝 Notes →]| [📸 Screenshots →]
+[📁 Project folder →](./projects/omniglam-sdg/) | [📝 Project README →](./projects/omniglam-sdg/README.md)
 
 ---
 
@@ -151,5 +162,5 @@ Physically accurate simulation is what makes Isaac Sim valuable for robotics —
 ---
 
 <p align="center">
-  <i>Updated daily · Started Jun 26, 2026</i>
+  <i>Updated daily · Started Jun 24, 2026</i>
 </p>
