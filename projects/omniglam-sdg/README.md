@@ -156,7 +156,7 @@ cd physical-ai-learning-journey/projects/omniglam-sdg
 ```
 
 ### Step 3 — Add the lipstick asset
-The lipstick FBX asset is not included due to licensing. Download a free lipstick model from [Sketchfab](https://sketchfab.com/search?q=lipstick&features=downloadable&price=free) (CC license) and place it in `assets/lipstick.fbx`. See `assets/README.md` for details.
+The lipstick FBX asset is not included due to licensing. Download a free lipstick model from [Sketchfab](https://sketchfab.com/search?q=lipstick&features=downloadable&price=free) (CC license) and place it in `assets/lipstick.fbx`.
 
 Convert FBX to USD in Isaac Sim Script Editor:
 ```python
