@@ -70,7 +70,7 @@ This clean separation of detection and classification is intentional. It reflect
 | YOLOv8 model training | ✅ | mAP50 98.3% · mAP50-95 96.4% |
 | Two-stage inference pipeline | ✅ | YOLOv8 detection + RGB colour matching for shade identification |
 | Web app — OmniGlam shade finder | ✅ | HTML + CSS + JS + FastAPI |
-| LinkedIn demo video published | ✅ | |
+| LinkedIn demo video published | ✅ |[OmniGlam LinkedIn Demo](https://www.linkedin.com/posts/sparsha-srinath_physicalai-nvidia-isaacsim-ugcPost-7483433454479626240-QmWl/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVOQsgBcMXTitzsJl-fRL6ThL8hOGwpQ_c)|
 
 ---
 
