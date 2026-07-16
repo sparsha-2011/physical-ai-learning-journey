@@ -55,15 +55,17 @@ This clean separation of detection and classification is intentional. It reflect
 | Lipstick asset sourced + converted to USD | ✅ | FBX from Sketchfab converted to USD via Omniverse asset converter |
 | Scene built in Isaac Sim | ✅ | Floor + 3 walls + 3-point lighting (KeyLight · FillLight · RimLight) |
 | 7 shade instances created | ✅ | OmniPBR materials per shade · 7 case colour variants · caps hidden |
-| Semantic labels added | ✅ | Per shade class labels via rep.functional.modify.semantics |
+| Semantic labels added | ✅ | Single class lipstick label via rep.functional.modify.semantics |
 | Camera + render product set up | ✅ | 5 angle presets + close-up single tube · focal_length=18.0 |
-| Randomisers configured | ✅ | Lighting · positions · camera · 7 backgrounds · 7 case colours |
-| SDG pipeline v1 — 500 frames generated | ✅ | RGB + bounding boxes + semantic segmentation · BasicWriter |
-| SDG pipeline v2 — 1000 frames generated | ✅ | Added case colour variants · diverse backgrounds · walls |
+| Randomisers configured | ✅ | Lighting · positions · camera · 7 backgrounds · 7 case colours · 21 bullet tip colours |
+| SDG pipeline v1 — omniglam_sdg.py | ✅ | 500 frames · 7 shade classes · gold cases · white/black backdrop · BasicWriter |
+| SDG pipeline v2 — omniglam_sdg.py (updated) | ✅ | 7 case colour variants · 7 backgrounds with walls · 6 lighting presets |
+| SDG pipeline v3 — omniglam_v3.py | ✅ | Single class lipstick · 21 randomised bullet tip colours · Isaac Lab ready |
 | Dataset converted to KITTI format | ✅ | 80/20 train/val split · convert_to_kitti.py |
 | YOLOv8 model training | ✅ | mAP50 98.3% · mAP50-95 96.4% |
 | Two-stage inference pipeline | ✅ | YOLOv8 detection + RGB colour matching for shade identification |
 | Web app — OmniGlam shade finder | ✅ | HTML + CSS + JS + FastAPI |
+| LinkedIn demo video published | ✅ | |
 
 ---
 
@@ -96,13 +98,27 @@ Brev Cloud         L40S GPU cloud instance
 - Front row: Runtime Berry · Pixar Pink · CuDiva
 
 **What gets randomised every frame:**
-- Tube visibility (1 to 7 tubes per frame, every 8th frame = single tube close-up)
+- Tube visibility (1 to 4 tubes per frame, every 8th frame = single tube close-up)
 - Tube positions (slight scatter within row) and rotation (±8° tilt)
 - Camera angle (5 presets: front angled, side left/right, close-up + random variation ±0.5)
 - Lighting intensity and colour temperature (6 presets from warm golden to dim fluorescent)
 - Background floor and wall colour (7 variants, weighted towards white)
 - Case colour (7 variants: gold, silver, black matte, rose gold, white, navy, red)
 - Base/bottom colour matched to case variant
+- Bullet tip colour (21 colours covering reds, pinks, berries, mauves, nudes, corals, blushes) — v3 only
+
+---
+
+## 📊 Pipeline Versions
+
+| Version | Script | Frames | Classes | Key additions |
+|---|---|---|---|---|
+| v1 | `omniglam_sdg.py` | 500 | 7 shade names | Baseline pipeline |
+| v2 | `omniglam_sdg.py` (updated) | 500 | 7 shade names | Case colour variants · diverse backgrounds · walls |
+| v3 | `omniglam_v3.py` | 500 | lipstick (single) | 21 bullet tip colours · Isaac Lab ready |
+
+**Why single class in v3:**
+The neural network is trained purely for detection and localisation. Shade identification is handled separately by RGB colour matching on the detected bullet tip region. This separation makes the detector more robust and prepares the pipeline for Isaac Lab manipulation training, where the robot needs to detect any lipstick tube regardless of shade.
 
 ---
 
@@ -112,16 +128,17 @@ For each captured frame the pipeline generates:
 
 | File | Contents | Purpose |
 |---|---|---|
-| `rgb_*.png` | Photorealistic scene (1024×1024) | Training image |
-| `semantic_segmentation_*.png` | Colour-coded shade map | Pixel-level shade identification |
+| `rgb_*.png` | Photorealistic scene (1024x1024) | Training image |
+| `semantic_segmentation_*.png` | Colour-coded shade map | Pixel-level identification |
 | `bounding_box_2d_tight_*.npy` | Bounding box coordinates | Object detection training |
-| `bounding_box_2d_tight_*.json` | Shade class labels | Annotation metadata |
+| `bounding_box_2d_tight_labels_*.json` | Class labels | Annotation metadata |
 
-**Dataset statistics (v2):**
-- Total frames: 1000
-- Train: 800 frames · Val: 200 frames
-- 7 shade classes: balanced distribution
-- 7 case colour variants per shade
+**Dataset statistics (v3):**
+- Total frames: 500
+- Train: 400 frames · Val: 100 frames
+- Single class: lipstick
+- 21 bullet tip colour variants
+- 7 case colour variants
 - 7 background variants
 
 ---
@@ -189,7 +206,7 @@ asyncio.ensure_future(convert())
 ```
 
 ### Step 4 — Run the SDG pipeline
-Open Isaac Sim Script Editor (Window > Script Editor) and run `omniglam_sdg.py`.
+Open Isaac Sim Script Editor (Window > Script Editor) and run `omniglam_v3.py` for the latest pipeline.
 
 ### Step 5 — Push to GitHub before stopping Brev
 ```bash
@@ -199,7 +216,7 @@ git commit -m "OmniGlam SDG output - session $(date +%Y-%m-%d)"
 git push
 ```
 
-> ⚠️ Always push to GitHub before stopping your Brev instance — storage does not persist between sessions.
+> Always push to GitHub before stopping your Brev instance — storage does not persist between sessions.
 
 ---
 
