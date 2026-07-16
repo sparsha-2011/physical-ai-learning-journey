@@ -9,7 +9,7 @@
     />
   </a>
   <br>
-  <sub>▶ Click the preview to view the animation</sub>
+
 
   *The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible, generating the training data a robot would need to get there.*
 
@@ -18,6 +18,11 @@
 **Brand:** OmniGlam  
 **Built with:** NVIDIA Isaac Sim 5.1.0 · Omniverse Replicator · OpenUSD · Brev Cloud · L40S GPU  
 **By:** Sparsha Srinath
+<p align="center">
+  <a href="https://www.linkedin.com/posts/sparsha-srinath_physicalai-nvidia-isaacsim-ugcPost-7483433454479626240-QmWl/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVOQsgBcMXTitzsJl-fRL6ThL8hOGwpQ_c">
+    <img src="https://img.shields.io/badge/Watch%20Demo-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Watch Demo"/>
+  </a>
+</p>
 
 ---
 
