@@ -3,11 +3,14 @@
 > Full stack developer with 2 years of experience transitioning into Physical AI and robotics simulation.
 > Documenting my path from zero to NVIDIA Omniverse developer — honest notes, real friction points, and everything I build along the way.
 
-<a href="https://www.credly.com/badges/493a815e-02bd-44e3-91da-aea56614b27d/public_url"><img src="./02-openUSD-cert/assets/certification/openusd-ncp-badge.png" alt="NVIDIA Certified Professional: OpenUSD Development Badge" width="170"/></a>
-<a href="#"><img src="https://img.shields.io/badge/Isaac%20Sim-In%20Progress-0078D4?style=flat-square&logo=nvidia&logoColor=white" alt="Isaac Sim In Progress"/></a>
-<a href="#"><img src="https://img.shields.io/badge/Omniverse-In%20Progress-7B2FBE?style=flat-square&logo=nvidia&logoColor=white" alt="Omniverse In Progress"/></a>
-<a href="#"><img src="https://img.shields.io/badge/Physical%20AI-Learning-FF6B35?style=flat-square" alt="Physical AI Learning"/></a>
+  
 
+<a href="https://www.credly.com/badges/493a815e-02bd-44e3-91da-aea56614b27d/public_url"><img src="./02-openUSD-cert/assets/certification/openusd-ncp-badge.png" alt="NVIDIA Certified Professional: OpenUSD Development Badge" width="170"/></a>
+
+<a href="https://www.linkedin.com/posts/sparsha-srinath_physicalai-nvidia-isaacsim-ugcPost-7483433454479626240-QmWl/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVOQsgBcMXTitzsJl-fRL6ThL8hOGwpQ_c">
+    <img src="https://img.shields.io/badge/Omniglam%20Demo-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Omniglam Demo"/>
+  </a>
+  
 ---
 
 ## 🗺️ Timeline
