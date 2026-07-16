@@ -9,9 +9,9 @@
     />
   </a>
   <br>
-  <sub>▶ Click the image to view the animation</sub>
+  <sub>▶ Click the preview to view the animation</sub>
 
-  *The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible by generating the training data a robot would need to get there.*
+  *The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible, generating the training data a robot would need to get there.*
 
 </p>
 
@@ -23,12 +23,13 @@
 
 ## 🎯 What is this project?
 
-OmniGlam is a synthetic data generation pipeline that produces annotated training images for a retail beauty robot — one that can identify specific lipstick shades by name on a shelf or vanity surface.
+OmniGlam is a synthetic data generation pipeline built in NVIDIA Isaac Sim to demonstrate how photorealistic training data can be generated automatically for retail product recognition, without collecting a single real photo.
 
-Instead of manually photographing thousands of lipstick tubes in different lighting conditions and angles, this pipeline generates them automatically inside NVIDIA Isaac Sim — producing photorealistic, perfectly labelled training data at scale.
+Using Isaac Sim's Replicator API, a single 3D scene generates hundreds of perfectly annotated training frames by randomising lighting, surfaces, object appearances, and camera angles. Every frame is labelled automatically. Zero manual photography. Zero manual annotation.
 
-**The problem it solves:**
-Retail robots need to identify specific product SKUs — not just "lipstick" but "Runtime Berry" vs "Deep Learning Red." Real-world data collection for this is slow, expensive, and hard to scale. Synthetic data generation makes it instant and infinite.
+The use case: given a photo of any lipstick, from any brand, with any casing colour, against any background, detect the tube and identify which OmniGlam shade the bullet tip most closely matches. The model is trained to detect and localise the lipstick tube. Shade identification is handled by colour extraction on the detected bullet tip region, matched to the closest OmniGlam shade by Euclidean RGB distance.
+
+This clean separation of detection and classification is intentional. It reflects how production robotics systems are actually built.
 
 ---
 
@@ -51,33 +52,34 @@ Retail robots need to identify specific product SKUs — not just "lipstick" but
 | Step | Status | Notes |
 |---|---|---|
 | Shade names and colours defined | ✅ | 7 tech-inspired shades |
-| Lipstick asset sourced + converted to USD | ✅ | FBX from Sketchfab → USD via Omniverse asset converter |
-| Scene built in Isaac Sim | ✅ | Vanity surface + 3-point lighting (KeyLight · FillLight · RimLight) |
-| 7 shade instances created | ✅ | OmniPBR materials per shade · gold metallic cases · caps hidden |
-| Semantic labels added | ✅ | Per shade class labels via `rep.functional.modify.semantics` |
+| Lipstick asset sourced + converted to USD | ✅ | FBX from Sketchfab converted to USD via Omniverse asset converter |
+| Scene built in Isaac Sim | ✅ | Floor + 3 walls + 3-point lighting (KeyLight · FillLight · RimLight) |
+| 7 shade instances created | ✅ | OmniPBR materials per shade · 7 case colour variants · caps hidden |
+| Semantic labels added | ✅ | Per shade class labels via rep.functional.modify.semantics |
 | Camera + render product set up | ✅ | 5 angle presets + close-up single tube · focal_length=18.0 |
-| Randomisers configured | ✅ | Lighting · positions · camera · backdrop (white 75% / black 25%) |
-| SDG pipeline — 500 frames generated | ✅ | RGB + bounding boxes + semantic segmentation · BasicWriter |
-| Dataset converted to KITTI format | ✅ | 397 train · 99 val · convert_to_kitti.py |
-| YOLOv8 model training | 🔄 | In progress — ultralytics |
-| Web app — OmniGlam shade finder | ⏳ | HTML + CSS + JS + FastAPI + model inference |
-| Deploy online | ⏳ | |
+| Randomisers configured | ✅ | Lighting · positions · camera · 7 backgrounds · 7 case colours |
+| SDG pipeline v1 — 500 frames generated | ✅ | RGB + bounding boxes + semantic segmentation · BasicWriter |
+| SDG pipeline v2 — 1000 frames generated | ✅ | Added case colour variants · diverse backgrounds · walls |
+| Dataset converted to KITTI format | ✅ | 80/20 train/val split · convert_to_kitti.py |
+| YOLOv8 model training | ✅ | mAP50 98.3% · mAP50-95 96.4% |
+| Two-stage inference pipeline | ✅ | YOLOv8 detection + RGB colour matching for shade identification |
+| Web app — OmniGlam shade finder | ✅ | HTML + CSS + JS + FastAPI |
 
 ---
 
 ## 🔧 Tech Stack
 
 ```
-OpenUSD          ← scene description and asset format
-NVIDIA Omniverse ← platform and rendering engine
-Isaac Sim 5.1.0  ← simulation environment
-Replicator API   ← randomisation and data capture
-BasicWriter      ← annotated dataset output (RGB + bbox + semantic seg)
-OmniPBR          ← physically based materials per shade
-HTML · CSS · JS    ← web app frontend (shade finder store)
-FastAPI          ← inference API backend
-YOLOv8           ← object detection model training (ultralytics)
-Brev Cloud       ← L40S GPU cloud instance
+OpenUSD            scene description and asset format
+NVIDIA Omniverse   platform and rendering engine
+Isaac Sim 5.1.0    simulation environment
+Replicator API     randomisation and data capture
+BasicWriter        annotated dataset output (RGB + bbox + semantic seg)
+OmniPBR            physically based materials per shade
+YOLOv8             object detection model training (ultralytics)
+FastAPI            inference API backend
+HTML · CSS · JS    web app frontend
+Brev Cloud         L40S GPU cloud instance
 ```
 
 ---
@@ -85,21 +87,22 @@ Brev Cloud       ← L40S GPU cloud instance
 ## 🎨 Scene Design
 
 **Environment:**
-- Flat display surface (30x30 plane) with glossy near-white material
-- 3-point lighting setup — KeyLight (warm), FillLight (cool), RimLight (white) + ambient distant light
-- Backdrop switches between clean white and dramatic black each frame
+- Floor and 3 walls (box geometry) with colour matched per background preset
+- 3-point lighting setup: KeyLight (warm), FillLight (cool), RimLight (white) + ambient distant light
+- 7 floor/wall background variants: white studio, black dramatic, wood, marble, warm wall, textured wall, pink
 
 **Two row arrangement:**
 - Back row: Deep Learning Red · Render Rose · Null Mauve · Softmax
 - Front row: Runtime Berry · Pixar Pink · CuDiva
 
 **What gets randomised every frame:**
-- Tube visibility (1–7 tubes per frame · every 5th frame = single tube close-up)
-- Tube positions (slight scatter within row)
-- Tube rotation (±10° tilt)
-- Camera angle (5 presets — front angled, side left/right, close-up + random variation)
-- Lighting intensity and colour temperature (5 presets from warm golden to bright white)
-- Backdrop colour (white 75% · black 25%)
+- Tube visibility (1 to 7 tubes per frame, every 8th frame = single tube close-up)
+- Tube positions (slight scatter within row) and rotation (±8° tilt)
+- Camera angle (5 presets: front angled, side left/right, close-up + random variation ±0.5)
+- Lighting intensity and colour temperature (6 presets from warm golden to dim fluorescent)
+- Background floor and wall colour (7 variants, weighted towards white)
+- Case colour (7 variants: gold, silver, black matte, rose gold, white, navy, red)
+- Base/bottom colour matched to case variant
 
 ---
 
@@ -114,21 +117,33 @@ For each captured frame the pipeline generates:
 | `bounding_box_2d_tight_*.npy` | Bounding box coordinates | Object detection training |
 | `bounding_box_2d_tight_*.json` | Shade class labels | Annotation metadata |
 
-**Dataset statistics:**
-- Total frames: 500
-- Train: 397 frames · Val: 99 frames
-- Shade distribution: balanced (226–263 appearances per shade)
-- Average shades per frame: 1.7
+**Dataset statistics (v2):**
+- Total frames: 1000
+- Train: 800 frames · Val: 200 frames
+- 7 shade classes: balanced distribution
+- 7 case colour variants per shade
+- 7 background variants
+
+---
+
+## 🔍 Inference Pipeline
+
+Detection and shade classification are intentionally separated into two stages:
+
+**Stage 1 — YOLOv8 detection (neural network)**
+Trained on synthetic data to detect and localise lipstick tubes in any image, regardless of casing colour or background. Returns a bounding box.
+
+**Stage 2 — Colour matching (RGB distance)**
+Crops the top 30% of the bounding box (the bullet tip region). Extracts the average pixel colour. Finds the closest OmniGlam shade by Euclidean distance in RGB space.
+
+This architecture is robust to real-world variation. The neural network handles the spatial detection problem. Colour mathematics handles the shade identification problem. Each stage does what it does best.
 
 ---
 
 ## 💼 Why this matters
 
-**For retail companies:**
-A robot that can identify specific lipstick shades by name enables automated shelf restocking, order fulfilment, and inventory management in beauty retail — Sephora, Ulta, MAC stores globally.
-
-**For NVIDIA:**
-Demonstrates Isaac Sim's SDG pipeline applied to retail beauty — a market segment where fine-grained product recognition (shade-level, not just category-level) is the key technical challenge.
+**For retail robotics:**
+Robots operating in retail environments need to recognise specific product variants at scale, not just product categories. Collecting real-world training data for this is slow, expensive, and hard to scale. This project demonstrates that synthetic data generation in Isaac Sim can replace that entire data collection process.
 
 **Research backing:**
 - [Synthetica (NVIDIA, 2024)](https://arxiv.org/abs/2410.21153) — photorealistic synthetic data closes the sim-to-real gap
@@ -139,7 +154,7 @@ Demonstrates Isaac Sim's SDG pipeline applied to retail beauty — a market segm
 ## 🚀 How to run
 
 ### Prerequisites
-- NVIDIA Brev account — [brev.nvidia.com](https://brev.nvidia.com)
+- NVIDIA Brev account: [brev.nvidia.com](https://brev.nvidia.com)
 - Isaac Sim 5.1.0 launchable deployed on Brev (L40S GPU)
 - noVNC + VS Code browser open
 
@@ -174,20 +189,9 @@ asyncio.ensure_future(convert())
 ```
 
 ### Step 4 — Run the SDG pipeline
-Open Isaac Sim Script Editor (**Window → Script Editor**) and run `omniglam_sdg.py`.
+Open Isaac Sim Script Editor (Window > Script Editor) and run `omniglam_sdg.py`.
 
-### Step 5 — Convert to KITTI format
-```bash
-python3 convert_to_kitti.py
-```
-
-### Step 6 — Train with YOLOv8
-```bash
-pip install ultralytics
-python3 train.py
-```
-
-### Step 7 — Push to GitHub before stopping Brev
+### Step 5 — Push to GitHub before stopping Brev
 ```bash
 cd ~/Documents/physical-ai-learning-journey
 git add .
@@ -201,9 +205,9 @@ git push
 
 ## 📖 Learning context
 
-This project is part of my Physical AI learning journey. I'm a full stack developer pivoting into Physical AI and robotics simulation.
+This project is part of my Physical AI learning journey. I am a full stack developer pivoting into Physical AI and robotics simulation.
 
-**Prerequisites I completed before building this:**
+**Prerequisites completed before building this:**
 - NVIDIA OpenUSD Certification ✅
 - Intro to NVIDIA Omniverse course ✅
 - Isaac Sim SDG tutorials (Recorder · Getting Started · Workflows · Scene Based · Object Based · Augmentation) ✅
