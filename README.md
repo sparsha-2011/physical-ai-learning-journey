@@ -128,7 +128,7 @@ Completed all available Isaac Sim Replicator SDG tutorials — building up from 
 
 ---
 
-## 🔄 Jul 12–14 — OmniGlam (Original Project)
+## 🔄 Jul 12–14 — OmniGlam 
 
 **Goal:** Build an end-to-end Physical AI pipeline for retail beauty robotics.
 
