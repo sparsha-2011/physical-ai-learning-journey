@@ -169,22 +169,39 @@ For each captured frame the pipeline generates:
 
 The v3 model was tested on 10 real lipstick photos from 5 brands never seen during training. All images were sourced from the internet — no real photos were used in training.
 
-| Image | Brand | Detected | Notes |
-|---|---|---|---|
-| mac_1.jpg | MAC | ✅ | |
-| mac_2.jpg | MAC | ✅ | |
-| charlotte_tilbury_1.jpg | Charlotte Tilbury | ✅ | |
-| charlotte_tilbury_2.jpg | Charlotte Tilbury | ⚠️ | Bounding box on horizontally placed cap — false positive |
-| nars_1.webp | NARS | ✅ | |
-| nars_2.jpg | NARS | ✅ | |
-| ysl_1.jpg | YSL | ✅ | |
-| ysl_2.jpg | YSL | ✅ | Detected closed tube not present in training — shows generalisation |
-| anastasia_beverly_hills_1.jpg | Anastasia Beverly Hills | ❌ | Diagonal tube — axis-aligned bbox could not capture it |
-| anastasia_beverly_hills_2.jpg | Anastasia Beverly Hills | ✅ | |
-
-**Result: 9/10 detected across 5 brands, 3 casing colours, never seen in training.**
+**Result: 9/10 detected across 5 brands, never seen in training.**
 
 [📁 View full inference results →](https://github.com/sparsha-2011/physical-ai-learning-journey/tree/main/projects/omniglam-sdg/inference_results)
+
+### MAC
+| mac_1.jpg | mac_2.jpg |
+|---|---|
+| <img src="./inference_results/mac_1.jpg" width="200"/> | <img src="./inference_results/mac_2.jpg" width="200"/> |
+| ✅ Detected | ⚠️ Bounding box on the left — false positive |
+
+### Charlotte Tilbury
+| charlotte_tilbury_1.jpg | charlotte_tilbury_2.jpg |
+|---|---|
+| <img src="./inference_results/charlotte_tilbury_1.jpg" width="200"/> | <img src="./inference_results/charlotte_tilbury_2.jpg" width="200"/> |
+| ✅ Detected | ⚠️ Bounding box on cap — false positive |
+
+### NARS
+| nars_1.webp | nars_2.jpg |
+|---|---|
+| <img src="./inference_results/nars_1.webp" width="200"/> | <img src="./inference_results/nars_2.jpg" width="200"/> |
+| ✅ Detected | ✅ Detected |
+
+### YSL
+| ysl_1.jpg | ysl_2.jpg |
+|---|---|
+| <img src="./inference_results/ysl_1.jpg" width="200"/> | <img src="./inference_results/ysl_2.jpg" width="200"/> |
+|  ❌ Diagonal tube — missed| ✅ Detected — closed tube, shows generalisation |
+
+### Anastasia Beverly Hills
+| anastasia_beverly_hills_1.jpg | anastasia_beverly_hills_2.jpg |
+|---|---|
+| <img src="./inference_results/anastasia_beverly_hills_1.jpg" width="200"/> | <img src="./inference_results/anastasia_beverly_hills_2.jpg" width="200"/> |
+|✅ Detected | ✅ Detected |
 
 **Notable observations:**
 
