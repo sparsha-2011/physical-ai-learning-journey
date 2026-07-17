@@ -9,7 +9,7 @@
     />
   </a>
   <br>
-
+  <sub>▶ Click the preview to view the animation</sub>
 
   *The vision: a robot arm that can scan and identify each OmniGlam lipstick shade by name. This project builds the synthetic data pipeline that makes that possible, generating the training data a robot would need to get there.*
 
@@ -18,6 +18,7 @@
 **Brand:** OmniGlam  
 **Built with:** NVIDIA Isaac Sim 5.1.0 · Omniverse Replicator · OpenUSD · Brev Cloud · L40S GPU  
 **By:** Sparsha Srinath
+
 <p align="center">
   <a href="https://www.linkedin.com/posts/sparsha-srinath_physicalai-nvidia-isaacsim-ugcPost-7483433454479626240-QmWl/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVOQsgBcMXTitzsJl-fRL6ThL8hOGwpQ_c">
     <img src="https://img.shields.io/badge/Watch%20Demo-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="Watch Demo"/>
@@ -67,10 +68,28 @@ This clean separation of detection and classification is intentional. It reflect
 | SDG pipeline v2 — omniglam_sdg.py (updated) | ✅ | 7 case colour variants · 7 backgrounds with walls · 6 lighting presets |
 | SDG pipeline v3 — omniglam_v3.py | ✅ | Single class lipstick · 21 randomised bullet tip colours · Isaac Lab ready |
 | Dataset converted to KITTI format | ✅ | 80/20 train/val split · convert_to_kitti.py |
-| YOLOv8 model training | ✅ | mAP50 98.3% · mAP50-95 96.4% |
+| YOLOv8 v3 model training | ✅ | mAP50 98.49% · mAP50-95 97.34% · Precision 100% · Recall 97.6% · [📄 metrics](https://github.com/sparsha-2011/physical-ai-learning-journey/blob/main/projects/omniglam-sdg/metrics_v3_summary.md) |
+| Real photo validation — 10 unseen images | ✅ | 9/10 detected across MAC · YSL · NARS · Charlotte Tilbury · Anastasia Beverly Hills |
 | Two-stage inference pipeline | ✅ | YOLOv8 detection + RGB colour matching for shade identification |
 | Web app — OmniGlam shade finder | ✅ | HTML + CSS + JS + FastAPI |
-| LinkedIn demo video published | ✅ |[OmniGlam LinkedIn Demo](https://www.linkedin.com/posts/sparsha-srinath_physicalai-nvidia-isaacsim-ugcPost-7483433454479626240-QmWl/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVOQsgBcMXTitzsJl-fRL6ThL8hOGwpQ_c)|
+| LinkedIn demo video published | ✅ | [▶ Watch demo](https://www.linkedin.com/posts/sparsha-srinath_physicalai-nvidia-isaacsim-ugcPost-7483433454479626240-QmWl/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADVOQsgBcMXTitzsJl-fRL6ThL8hOGwpQ_c) |
+
+---
+
+## 📈 Model Metrics — v3
+
+| Metric | Score |
+|---|---|
+| Precision | 100% |
+| Recall | 97.6% |
+| mAP50 | 98.49% |
+| mAP50-95 | 97.34% |
+| Training epochs | 50 |
+| Training time | 12.3 hours |
+| Validation images | 200 |
+| Validation instances | 467 |
+
+[📄 Full metrics report →](https://github.com/sparsha-2011/physical-ai-learning-journey/blob/main/projects/omniglam-sdg/metrics_v3_summary.md)
 
 ---
 
@@ -148,7 +167,47 @@ For each captured frame the pipeline generates:
 
 ---
 
-## 🔍 Inference Pipeline
+## 🧪 Real Photo Validation — 10 Unseen Images
+
+The v3 model was tested on 10 real lipstick photos from 5 brands never seen during training. All images were sourced from the internet — no real photos were used in training.
+
+| Image | Brand | Detected | Notes |
+|---|---|---|---|
+| mac_1.jpg | MAC | ✅ | |
+| mac_2.jpg | MAC | ✅ | |
+| charlotte_tilbury_1.jpg | Charlotte Tilbury | ✅ | |
+| charlotte_tilbury_2.jpg | Charlotte Tilbury | ⚠️ | Bounding box on horizontally placed cap — false positive |
+| nars_1.webp | NARS | ✅ | |
+| nars_2.jpg | NARS | ✅ | |
+| ysl_1.jpg | YSL | ✅ | |
+| ysl_2.jpg | YSL | ✅ | Detected closed tube not present in training — shows generalisation |
+| anastasia_beverly_hills_1.jpg | Anastasia Beverly Hills | ❌ | Diagonal tube — axis-aligned bbox could not capture it |
+| anastasia_beverly_hills_2.jpg | Anastasia Beverly Hills | ✅ | |
+
+**Result: 9/10 detected across 5 brands, 3 casing colours, never seen in training.**
+
+[📁 View full inference results →](https://github.com/sparsha-2011/physical-ai-learning-journey/tree/main/projects/omniglam-sdg/inference_results)
+
+**Notable observations:**
+
+The YSL closed lipstick detection shows the model generalised beyond its training distribution. Training data only contained open tubes but the model correctly identified a closed tube as a lipstick — demonstrating it learned the overall form factor, not just the open tube appearance.
+
+---
+
+## ⚠️ Known Limitations
+
+**Diagonal tube detection:**
+The bounding box annotator in Isaac Sim generates axis-aligned boxes. When a lipstick is significantly tilted in the real world, the axis-aligned bounding box does not align with the tube and detection may fail. The Anastasia Beverly Hills diagonal image demonstrates this. Pose-aware detection or oriented bounding boxes would fix this in a future version.
+
+**Horizontal cap false positive:**
+A lipstick cap placed horizontally on a surface has a similar form factor to a tube from certain angles. The model has not seen caps as a separate negative class so it classifies them as lipsticks. Adding cap-only images as negative examples in the training data would address this.
+
+**Bullet tip crop assumes upright tube:**
+The inference pipeline crops the top 30% of the bounding box to extract the bullet tip region for colour matching. If the tube is significantly tilted the bullet tip may not be in the top 30% of the box, reducing shade matching accuracy.
+
+---
+
+
 
 Detection and shade classification are intentionally separated into two stages:
 
