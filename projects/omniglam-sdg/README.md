@@ -176,31 +176,31 @@ The v3 model was tested on 10 real lipstick photos from 5 brands never seen duri
 ### MAC
 | mac_1.jpg | mac_2.jpg |
 |---|---|
-| <img src="./inference_results/mac_1.jpg" width="200"/> | <img src="./inference_results/mac_2.jpg" width="200"/> |
+| <img src="./inference_results/mac_1.jpg"  height="350" width="200"/> | <img src="./inference_results/mac_2.jpg" height="350" width="200"/> |
 | ✅ Detected | ⚠️ Bounding box on the left — false positive |
 
 ### Charlotte Tilbury
 | charlotte_tilbury_1.jpg | charlotte_tilbury_2.jpg |
 |---|---|
-| <img src="./inference_results/charlotte_tilbury_1.jpg" width="200"/> | <img src="./inference_results/charlotte_tilbury_2.jpg" width="200"/> |
+| <img src="./inference_results/charlotte_tilbury_1.jpg" height="350" width="200"/> | <img src="./inference_results/charlotte_tilbury_2.jpg" height="350" width="200"/> |
 | ✅ Detected | ⚠️ Bounding box on cap — false positive |
 
 ### NARS
 | nars_1.webp | nars_2.jpg |
 |---|---|
-| <img src="./inference_results/nars_1.webp" width="200"/> | <img src="./inference_results/nars_2.jpg" width="200"/> |
+| <img src="./inference_results/nars_1.webp" height="350" width="200"/> | <img src="./inference_results/nars_2.jpg" height="350" width="200"/> |
 | ✅ Detected | ✅ Detected |
 
 ### YSL
 | ysl_1.jpg | ysl_2.jpg |
 |---|---|
-| <img src="./inference_results/ysl_1.jpg" width="200"/> | <img src="./inference_results/ysl_2.jpg" width="200"/> |
+| <img src="./inference_results/ysl_1.jpg" height="350" width="200"/> | <img src="./inference_results/ysl_2.jpg" height="350" width="200"/> |
 |  ✅ Detected| ✅ Detected — closed tube, shows generalisation |
 
 ### Anastasia Beverly Hills
 | anastasia_beverly_hills_1.jpg | anastasia_beverly_hills_2.jpg |
 |---|---|
-| <img src="./inference_results/anastasia_beverly_hills_1.jpg" width="200"/> | <img src="./inference_results/anastasia_beverly_hills_2.jpg" width="200"/> |
+| <img src="./inference_results/anastasia_beverly_hills_1.jpg" height="350" width="200"/> | <img src="./inference_results/anastasia_beverly_hills_2.jpg" height="350" width="200"/> |
 |✅ Detected | ❌ Diagonal tube — missed |
 
 **Notable observations:**
