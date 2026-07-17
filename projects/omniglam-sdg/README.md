@@ -195,7 +195,7 @@ The v3 model was tested on 10 real lipstick photos from 5 brands never seen duri
 | ysl_1.jpg | ysl_2.jpg |
 |---|---|
 | <img src="./inference_results/ysl_1.jpg" height="350" width="200"/> | <img src="./inference_results/ysl_2.jpg" height="350" width="200"/> |
-|  ✅ Detected| ✅ Detected — closed tube, shows generalisation |
+|  ✅ Detected| ✅ Detected |
 
 ### Anastasia Beverly Hills
 | anastasia_beverly_hills_1.jpg | anastasia_beverly_hills_2.jpg |
