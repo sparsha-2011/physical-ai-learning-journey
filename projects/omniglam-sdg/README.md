@@ -68,7 +68,7 @@ This clean separation of detection and classification is intentional. It reflect
 | SDG pipeline v2 — omniglam_sdg.py (updated) | ✅ | 7 case colour variants · 7 backgrounds with walls · 6 lighting presets |
 | SDG pipeline v3 — omniglam_v3.py | ✅ | Single class lipstick · 21 randomised bullet tip colours · Isaac Lab ready |
 | Dataset converted to KITTI format | ✅ | 80/20 train/val split · convert_to_kitti.py |
-| YOLOv8 v3 model training | ✅ | mAP50 98.49% · mAP50-95 97.34% · Precision 100% · Recall 97.6% · [📄 metrics](https://github.com/sparsha-2011/physical-ai-learning-journey/blob/main/projects/omniglam-sdg/metrics_v3_summary.md) |
+| YOLOv8 v3 model training | ✅ | mAP50 98.49% · mAP50-95 97.34% · Precision 100% · Recall 97.6% · [📄 metrics](#model-metrics--v3) |
 | Real photo validation — 10 unseen images | ✅ | 9/10 detected across MAC · YSL · NARS · Charlotte Tilbury · Anastasia Beverly Hills |
 | Two-stage inference pipeline | ✅ | YOLOv8 detection + RGB colour matching for shade identification |
 | Web app — OmniGlam shade finder | ✅ | HTML + CSS + JS + FastAPI |
@@ -88,8 +88,6 @@ This clean separation of detection and classification is intentional. It reflect
 | Training time | 12.3 hours |
 | Validation images | 200 |
 | Validation instances | 467 |
-
-[📄 Full metrics report →](https://github.com/sparsha-2011/physical-ai-learning-journey/blob/main/projects/omniglam-sdg/metrics_v3_summary.md)
 
 ---
 
