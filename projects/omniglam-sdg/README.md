@@ -96,7 +96,7 @@ This clean separation of detection and classification is intentional. It reflect
 ```
 OpenUSD            scene description and asset format
 NVIDIA Omniverse   platform and rendering engine
-Isaac Sim 5.1.0    simulation environment
+Isaac Sim 6.0.0    simulation environment
 Replicator API     randomisation and data capture
 BasicWriter        annotated dataset output (RGB + bbox + semantic seg)
 OmniPBR            physically based materials per shade
