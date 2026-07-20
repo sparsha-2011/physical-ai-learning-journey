@@ -188,7 +188,7 @@ The v3 model was tested on 10 real lipstick photos from 5 brands never seen duri
 ### NARS
 | nars_1.webp | nars_2.jpg |
 |---|---|
-| <img src="./inference_results/nars_1.webp" height="350" width="200"/> | <img src="./inference_results/nars_2.jpg" height="350" width="200"/> |
+| <img src="./inference_results/nars_1.jpg" height="350" width="200"/> | <img src="./inference_results/nars_2.jpg" height="350" width="200"/> |
 | ✅ Detected | ✅ Detected |
 
 ### YSL
