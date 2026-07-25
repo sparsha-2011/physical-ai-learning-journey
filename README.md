@@ -109,7 +109,7 @@ Omniverse is NVIDIA's platform built on top of OpenUSD — the runtime, renderer
 
 ---
 
-## 🔄 Jul 13 — Isaac Sim Synthetic Data Generation Tutorials
+## ✅ Jul 13 — Isaac Sim Synthetic Data Generation Tutorials
 
 **Goal:** Learn the full Isaac Sim SDG pipeline before building an original project.
 
@@ -130,7 +130,7 @@ Completed all available Isaac Sim Replicator SDG tutorials — building up from 
 
 ---
 
-## 🔄 Jul 12–14 — OmniGlam 
+## ✅ Jul 12–14 — OmniGlam 
 
 **Goal:** Build an end-to-end Physical AI pipeline for retail beauty robotics.
 
