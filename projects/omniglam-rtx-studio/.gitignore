@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.venv/
+.venv-physx/
+__pycache__/
+*.pyc
+_output/
+.logs/
+*.log
+*.zip
+*.usd
+*.usda
