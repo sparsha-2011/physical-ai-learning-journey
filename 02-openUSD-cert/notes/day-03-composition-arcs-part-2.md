@@ -518,4 +518,4 @@ Specializes:  "I am a SPECIALIZATION of BasePlastic — use its values as my fal
 ---
 
 _Previous: [Day 2 — Composition Arcs Part 1](day-02-composition-arcs-part-1.md)_  
-_Next: [Day 4 — Data Modeling](day-04-data-modeling.md)_
+_Next: [Day 4 — Advanced Composition](day-04-advanced-composition.md)_
