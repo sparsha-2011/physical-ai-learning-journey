@@ -2,7 +2,7 @@
 
 
 
-## LIVERPS vs. Hierarchy — how to tell which one even applies
+
 
 Before you can use any rule below, you have to answer ONE question first: **are we talking
 about ONE prim, or TWO prims (a parent and a child)?** That single question decides which
