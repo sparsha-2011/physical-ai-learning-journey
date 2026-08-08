@@ -1,6 +1,6 @@
 # LIVERPS + Hierarchy Behavior
 
----
+
 
 ## LIVERPS vs. Hierarchy — how to tell which one even applies
 
