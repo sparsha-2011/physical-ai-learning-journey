@@ -6,7 +6,7 @@ prototype, instance, PointInstancer transform and primvar resolution order.
 
 ## Contents
 
-- [PART 1: The Two Instancing Systems, Which One and When](#part-1-the-two-instancing-systems-which-one-and-when)
+- [PART 1: Instancing, With vs Without ](#part-1-instancing-with-vs-without)
 - [PART 2: Scenegraph (Native) Instancing](#part-2-scenegraph-native-instancing)
   - [2.0 Definition](#20-definition)
   - [2.1 Key Terms and Quick Snippet](#21-key-terms-and-quick-snippet)
@@ -30,17 +30,53 @@ prototype, instance, PointInstancer transform and primvar resolution order.
 
 ---
 
-# PART 1: The Two Instancing Systems, Which One and When
+# PART 1: Instancing, With vs Without 
 
-| | Scenegraph (Native) Instancing | Point Instancing |
+## Without instancing
+
+Every box gets its own full, separate copy of the geometry.
+
+```
+/World
+  /Box_01
+    /Geometry   <- full copy #1
+  /Box_02
+    /Geometry   <- full copy #2
+```
+
+- Each box stores its own complete geometry data.
+- 2 boxes = 2 copies. 10,000 boxes = 10,000 copies.
+- More boxes = more memory, more load time.
+
+---
+
+## With instancing
+
+All boxes share ONE real copy. What you see under each box is just a window into that one copy.
+
+```
+/World
+  /Box_01 -----\
+                 \
+  /Box_02 --------->  /__Prototype_1
+                 /       /Geometry   <- the ONE real copy
+                /
+```
+
+- `Box_01/Geometry` and `Box_02/Geometry` are instance proxies (read-only windows).
+- The real data lives in one place: `/__Prototype_1`.
+- 2 boxes = 1 copy. 10,000 boxes = still 1 copy.
+- More boxes = almost no extra memory.
+
+---
+
+## The one-line summary
+
+| | Without instancing | With instancing |
 |---|---|---|
-| Mechanism | `instanceable = true` on a prim with composition arcs | A `PointInstancer` schema prim using array attributes |
-| Prototypes | Implicit. USD figures them out from composition arcs | Explicit. You manually define, relate, and index them |
-| Each copy is | A real, addressable prim, for example `/RobotArm_047` | An index into arrays. No prim, no path |
-| Best for | Moderate counts, tens to low thousands, when individual addressability matters | Massive counts, thousands to millions, simple repeated items |
-| Per copy editing | Only on the instanceable prim's own root | Only through array indexing, or full "promotion" to a real prim |
-| Mantra | Explicit instances, implicit prototypes | Explicit prototypes. You build the relationship yourself |
-| Classic example | A warehouse of 50 unique robot arms | 100,000 leaves on a tree, packing peanuts in a box |
+| Real copies of geometry | One per box | One, shared by all |
+| What's under each box | The actual data | A read-only pointer to the shared data |
+| 10,000 boxes cost | 10,000x the memory | ~1x the memory |
 
 ---
 
