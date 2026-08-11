@@ -566,11 +566,11 @@ def Xform "World"                              # ancestor above the PointInstanc
 ```
 
 Applied most local to least local:
-
 1. **Prototype**: `Peanut`'s own translate, `(0, 0, 0.1)`.
 2. **Instance**: `positions[0] = (1, 0, 0)`, `scales[0] = 2`.
 3. **PointInstancer**: its own translate, `(10, 0, 0)`.
 4. **World**: its own translate, `(100, 0, 0)`.
+
 
 Translate combines additively, most local first, assuming no rotation is involved: `(0,0,0.1) + (1,0,0) + (10,0,0) + (100,0,0) = (111, 0, 0.1)`. Scale combines multiplicatively: the Prototype and PointInstancer both leave scale unauthored, defaulting to `1`, so the only real contribution is the instance's own `2`, giving a final scale of `2`.
 
@@ -599,53 +599,54 @@ Result, most local first: `(0,0,0.1) + (1,0,0) + (10,0,0) + (100,0,0) = (111, 0,
 
 | Level | Authored value | Allowed? |
 |---|---|---|
-| Prototype (`Peanut`'s own scale) | not authored | ✓ |
-| Instance (`scales[0]`) | `2` | ✓ |
-| PointInstancer (`Scatter`'s own scale) | not authored | ✓ |
 | World | not authored | ✓ |
+| PointInstancer (`Scatter`'s own scale) | not authored | ✓ |
+| Instance (`scales[0]`) | `2` | ✓ |
+| Prototype (`Peanut`'s own scale) | not authored | ✓ |
 
 Default if nothing is authored anywhere: `1`, identity.
 
-Result: `1 x 2 x 1 x 1 = 2`. The instance's own value is the only real contribution here, since the other three default to `1` and do not change the product.
+Result: `1 x 1 x 2 x 1 = 2`. The instance's own value is the only real contribution here, since the other three default to `1` and do not change the product.
 
 #### Orientation
-
+ 
 | Level | Authored value | Allowed? |
 |---|---|---|
-| Prototype (`Peanut`'s own orient) | not authored | ✓ |
-| Instance (`orientations[0]`) | `90°` around Y | ✓ |
-| PointInstancer (`Scatter`'s own orient) | not authored | ✓ |
 | World | not authored | ✓ |
-
+| PointInstancer (`Scatter`'s own orient) | not authored | ✓ |
+| Instance (`orientations[0]`) | `90°` around Y | ✓ |
+| Prototype (`Peanut`'s own orient) | not authored | ✓ |
+ 
 Default if nothing is authored anywhere: `(1,0,0,0)`, identity, no rotation.
-
+ 
 Result: only the instance's own `90°` around Y contributes. The other three are identity and do not change the composed result. Order still matters for any level that does author a rotation, applied Prototype first, then Instance, then PointInstancer, then World, same as translate and scale.
-
+ 
 #### Primvars, for example `displayColor`
-
+ 
 | Level | Authored value | Allowed? |
 |---|---|---|
-| Prototype (`Peanut`'s own `displayColor`) | `gray` | ✓ |
-| Instance (a per-instance `primvars` array on the PointInstancer, `vertex` interpolation) | `blue` | ✓ |
-| PointInstancer (authored directly on `Scatter`, not as a per-instance array) | not authored in this example | ✓ |
 | World | not authored in this example | ✓ |
-
+| PointInstancer (authored directly on `Scatter`, not as a per-instance array) | not authored in this example | ✓ |
+| Instance (a per-instance `primvars` array on the PointInstancer, `vertex` interpolation) | `blue` | ✓ |
+| Prototype (`Peanut`'s own `displayColor`) | `gray` | ✓ |
+ 
 Default if nothing is authored anywhere: no fallback value, same as scenegraph instancing.
-
+ 
 Result: gray, not blue. This is the primvar-blocking gotcha. The Prototype's own opinion is a descendant's opinion relative to the PointInstancer's per-instance array, so it wins and shadows the array data, even though the array was clearly meant to give each instance its own color. Fix: `.Block()` the Prototype's own `displayColor` opinion, which removes the shadowing entirely and lets each instance's own array value take over.
-
+ 
 #### Visibility
-
+ 
 | Level | Authored value | Allowed? |
 |---|---|---|
-| Prototype | not authored in this example | ✓ |
-| Instance (via `invisibleIds`, listing this instance's id) | listed as invisible | ✓ |
-| PointInstancer (via `inactiveIds`, listing this instance's id) | listed as inactive | ✓ |
 | World | `visibility = "invisible"` | ✓ |
-
+| PointInstancer (via `inactiveIds`, listing this instance's id) | listed as inactive | ✓ |
+| Instance (via `invisibleIds`, listing this instance's id) | listed as invisible | ✓ |
+| Prototype | not authored in this example | ✓ |
+ 
 Default if nothing is authored anywhere: visible.
-
+ 
 Result: invisible, for two independent reasons at once. World's `"invisible"` is a poison pill affecting the whole PointInstancer and everything it scatters, exactly like ordinary hierarchy. Separately, this specific instance is also individually pruned by `inactiveIds` and individually hidden by `invisibleIds`, which operate per-instance rather than through ordinary hierarchical visibility at all.
+ 
 
 ## 3.2 Mandatory vs. Optional Properties
 
