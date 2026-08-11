@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instancing Drill</title>
+<style>
+  :root{
+    --bg:#12151A;
+    --panel:#1B2028;
+    --panel-2:#20262F;
+    --line:#2C3340;
+    --ink:#E7EAEE;
+    --ink-dim:#8C97A6;
+    --teal:#2FD9C4;
+    --teal-dim:#1B8677;
+    --coral:#F2775A;
+    --coral-dim:#A24B36;
+    --gold:#E8B14F;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, rgba(47,217,196,0.06), transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, rgba(242,119,90,0.05), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+  .wrap{width:100%;max-width:760px;}
+
+  .stack{display:flex;gap:4px;margin-bottom:22px;align-items:flex-end;height:14px;}
+  .stack .seg{flex:1;height:100%;background:var(--panel-2);border-radius:3px;transition:background .3s ease, transform .3s ease;}
+  .stack .seg.done{background:var(--teal-dim);}
+  .stack .seg.current{background:var(--teal);transform:scaleY(1.4);}
+  .stack .seg.wrong{background:var(--coral-dim);}
+  .stack .seg.answered-exam{background:var(--gold);opacity:.55;}
+
+  .meta-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-family:var(--mono);font-size:12px;color:var(--ink-dim);letter-spacing:.04em;text-transform:uppercase;}
+  .meta-row .count{color:var(--teal);}
+  .meta-row .mode-pill{font-family:var(--mono);font-size:11px;color:var(--gold);border:1px solid rgba(232,177,79,.35);background:rgba(232,177,79,.08);padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;}
+  .meta-row .meta-left{display:flex;align-items:center;gap:10px;}
+  .exit-btn{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-dim);background:transparent;border:1px solid var(--line);padding:3px 10px;border-radius:20px;cursor:pointer;transition:border-color .15s ease,color .15s ease;}
+  .exit-btn:hover{border-color:var(--coral);color:var(--coral);}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:32px 30px;box-shadow:0 20px 60px rgba(0,0,0,0.35);}
+
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);background:rgba(47,217,196,0.1);border:1px solid rgba(47,217,196,0.25);padding:3px 9px;border-radius:20px;margin-bottom:16px;}
+
+  h1{font-size:19px;line-height:1.55;font-weight:600;margin:0 0 26px 0;color:var(--ink);}
+  h1 code{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);padding:1px 6px;border-radius:5px;font-size:0.92em;color:var(--gold);}
+
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .opt{text-align:left;background:var(--panel-2);border:1px solid var(--line);color:var(--ink);padding:14px 16px;border-radius:10px;font-size:15px;font-family:var(--sans);cursor:pointer;transition:border-color .15s ease, background .15s ease, transform .1s ease;display:flex;align-items:center;gap:12px;}
+  .opt:hover:not(:disabled){border-color:var(--teal-dim);background:#232A34;}
+  .opt:active:not(:disabled){transform:scale(0.995);}
+  .opt:disabled{cursor:default;}
+  .opt .letter{font-family:var(--mono);font-size:12px;color:var(--ink-dim);border:1px solid var(--line);border-radius:6px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .opt.correct{border-color:var(--teal);background:rgba(47,217,196,0.12);}
+  .opt.correct .letter{border-color:var(--teal);color:var(--teal);}
+  .opt.incorrect{border-color:var(--coral);background:rgba(242,119,90,0.1);}
+  .opt.incorrect .letter{border-color:var(--coral);color:var(--coral);}
+  .opt.faded{opacity:0.45;}
+  .opt.selected-neutral{border-color:var(--gold);background:rgba(232,177,79,0.10);}
+  .opt.selected-neutral .letter{border-color:var(--gold);color:var(--gold);}
+
+  .explain{margin-top:20px;padding:16px 18px;border-radius:10px;background:var(--panel-2);border-left:3px solid var(--teal);font-size:14px;line-height:1.6;color:var(--ink-dim);display:none;}
+  .explain.show{display:block;}
+  .explain b{color:var(--ink);}
+  .explain.wrong-border{border-left-color:var(--coral);}
+
+  .footer-row{display:flex;justify-content:flex-end;margin-top:22px;}
+  .next-btn{font-family:var(--sans);font-weight:600;font-size:14px;background:var(--teal);color:#0A1613;border:none;padding:11px 22px;border-radius:9px;cursor:pointer;display:none;transition:transform .1s ease, background .15s ease;}
+  .next-btn:hover{background:#4CE6D2;}
+  .next-btn:active{transform:scale(0.98);}
+  .next-btn.show{display:inline-block;}
+
+  /* Mode select screen */
+  .mode-select h1{font-size:24px;margin-bottom:6px;}
+  .mode-select .sub{color:var(--ink-dim);font-size:14px;margin-bottom:28px;}
+  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .mode-card{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:22px 18px;cursor:pointer;text-align:left;transition:border-color .15s ease, transform .1s ease;}
+  .mode-card:hover{border-color:var(--teal-dim);transform:translateY(-2px);}
+  .mode-card .m-title{font-weight:700;font-size:16px;margin-bottom:8px;}
+  .mode-card.practice .m-title{color:var(--teal);}
+  .mode-card.exam .m-title{color:var(--gold);}
+  .mode-card .m-desc{color:var(--ink-dim);font-size:13px;line-height:1.55;}
+  @media (max-width:520px){.mode-grid{grid-template-columns:1fr;}}
+
+  /* Results (practice) */
+  .results h1{font-size:26px;margin-bottom:4px;}
+  .score-big{font-family:var(--mono);font-size:54px;font-weight:700;color:var(--teal);margin:6px 0 4px 0;line-height:1;}
+  .score-sub{color:var(--ink-dim);font-size:14px;margin-bottom:26px;}
+  .review{border-top:1px solid var(--line);padding-top:14px;}
+  .review-item{border-bottom:1px solid var(--line);}
+  .review-item:last-child{border-bottom:none;}
+  .review-item summary{
+    display:grid;
+    grid-template-columns:32px 1fr auto auto;
+    gap:12px;
+    align-items:center;
+    padding:12px 4px;
+    cursor:pointer;
+    list-style:none;
+    font-size:13.5px;
+  }
+  .review-item summary::-webkit-details-marker{display:none;}
+  .review-item summary .r-caret{
+    font-family:var(--mono);color:var(--ink-dim);font-size:11px;
+    transition:transform .15s ease;
+  }
+  .review-item[open] summary .r-caret{transform:rotate(90deg);}
+  .r-num{font-family:var(--mono);color:var(--ink-dim);}
+  .r-tag{color:var(--ink-dim);}
+  .r-status{font-family:var(--mono);font-size:12px;font-weight:700;white-space:nowrap;}
+  .r-status.ok{color:var(--teal);}
+  .r-status.no{color:var(--coral);}
+  .review-body{padding:2px 4px 20px 4px;}
+  .review-question{font-size:14.5px;line-height:1.6;color:var(--ink);margin-bottom:14px;}
+  .review-question code{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);padding:1px 6px;border-radius:5px;font-size:0.92em;color:var(--gold);}
+  .review-options{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+  .review-opt{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;border-radius:9px;font-size:14px;
+    background:var(--panel-2);border:1px solid var(--line);color:var(--ink-dim);
+  }
+  .review-opt .letter{
+    font-family:var(--mono);font-size:11px;color:var(--ink-dim);
+    border:1px solid var(--line);border-radius:6px;width:20px;height:20px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .review-opt .badge{
+    margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:20px;
+  }
+  .review-opt.is-correct{border-color:var(--teal);background:rgba(47,217,196,0.12);color:var(--ink);}
+  .review-opt.is-correct .letter{border-color:var(--teal);color:var(--teal);}
+  .review-opt.is-correct .badge{background:rgba(47,217,196,0.18);color:var(--teal);}
+  .review-opt.is-picked-wrong{border-color:var(--coral);background:rgba(242,119,90,0.10);color:var(--ink);}
+  .review-opt.is-picked-wrong .letter{border-color:var(--coral);color:var(--coral);}
+  .review-opt.is-picked-wrong .badge{background:rgba(242,119,90,0.18);color:var(--coral);}
+  .review-explain{
+    padding:14px 16px;border-radius:10px;background:var(--panel-2);
+    border-left:3px solid var(--teal);font-size:13.5px;line-height:1.6;color:var(--ink-dim);
+  }
+  .review-explain.wrong-border{border-left-color:var(--coral);}
+  .review-explain b{color:var(--ink);}
+  .restart-btn{margin-top:24px;width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--ink);font-family:var(--sans);font-weight:600;font-size:14px;padding:13px;border-radius:9px;cursor:pointer;}
+  .restart-btn:hover{border-color:var(--teal-dim);}
+
+  /* Exam Dashboard */
+  .dash-banner{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-radius:12px;margin-bottom:22px;}
+  .dash-banner.pass{background:rgba(47,217,196,0.12);border:1px solid rgba(47,217,196,0.4);}
+  .dash-banner.fail{background:rgba(242,119,90,0.10);border:1px solid rgba(242,119,90,0.4);}
+  .dash-banner .db-left .db-status{font-family:var(--mono);font-size:22px;font-weight:800;letter-spacing:.03em;}
+  .dash-banner.pass .db-status{color:var(--teal);}
+  .dash-banner.fail .db-status{color:var(--coral);}
+  .dash-banner .db-left .db-note{font-size:12.5px;color:var(--ink-dim);margin-top:4px;}
+  .dash-banner .db-right{text-align:right;}
+  .dash-banner .db-score{font-family:var(--mono);font-size:34px;font-weight:700;}
+  .dash-banner.pass .db-score{color:var(--teal);}
+  .dash-banner.fail .db-score{color:var(--coral);}
+  .dash-banner .db-pct{font-size:12px;color:var(--ink-dim);}
+
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:26px;}
+  .cat-card{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .cat-card .c-name{font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .cat-card .c-frac{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  .cat-bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden;}
+  .cat-bar .fill{height:100%;background:var(--teal);}
+  .cat-bar .fill.low{background:var(--coral);}
+
+  .dash-table-title{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-dim);margin:0 0 12px 0;border-top:1px solid var(--line);padding-top:20px;}
+  .filter-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  .filter-row select{
+    font-family:var(--sans);font-size:13px;color:var(--ink);
+    background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+    padding:8px 12px;cursor:pointer;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238C97A6' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;
+    padding-right:30px;
+  }
+  .filter-row select:hover{border-color:var(--teal-dim);}
+  .filter-row label{font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;display:flex;flex-direction:column;gap:5px;}
+  .no-match{color:var(--ink-dim);font-size:13.5px;padding:16px 4px;display:none;}
+
+  @media (max-width:480px){
+    .card{padding:24px 18px;}
+    h1{font-size:17px;}
+    .score-big{font-size:44px;}
+    .dash-banner{flex-direction:column;align-items:flex-start;gap:14px;}
+    .dash-banner .db-right{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div id="modeArea" class="card mode-select">
+    <span class="tag">Instancing Drill</span>
+    <h1>Choose a mode</h1>
+    <div class="sub">30 questions covering scenegraph instancing, point instancing, and LIVERPS composition.</div>
+    <div class="mode-grid">
+      <div class="mode-card practice" onclick="startQuiz('practice')">
+        <div class="m-title">Practice mode</div>
+        <div class="m-desc">See the right answer and the reasoning immediately after each question.</div>
+      </div>
+      <div class="mode-card exam" onclick="startQuiz('exam')">
+        <div class="m-title">Exam mode</div>
+        <div class="m-desc">No feedback until the end. Get a full results dashboard with your score, a pass/fail call at 85%, and every answer reviewed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="quizArea" style="display:none;">
+    <div class="meta-row">
+      <span class="meta-left" id="modePillWrap"></span>
+      <span class="count" id="counter">Q1 / 30</span>
+    </div>
+    <div class="stack" id="stack"></div>
+    <div class="card">
+      <span class="tag" id="typeTag">—</span>
+      <h1 id="qText"></h1>
+      <div class="options" id="options"></div>
+      <div class="explain" id="explain"></div>
+      <div class="footer-row">
+        <button class="next-btn" id="nextBtn">Next question →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsArea" class="card results" style="display:none;">
+    <span class="tag">Practice summary</span>
+    <h1>Session complete</h1>
+    <div class="score-big" id="scoreBig">0/30</div>
+    <div class="score-sub" id="scoreSub"></div>
+    <div class="review" id="reviewList"></div>
+    <button class="restart-btn" id="restartBtn">Choose mode again</button>
+  </div>
+
+  <div id="dashboardArea" class="card" style="display:none;">
+    <span class="tag">Exam dashboard</span>
+    <div id="dashBanner"></div>
+    <div class="cat-grid" id="catGrid"></div>
+    <p class="dash-table-title">Every answer, reviewed</p>
+    <div class="filter-row">
+      <label>Topic
+        <select id="filterTopic">
+          <option value="all">All</option>
+        </select>
+      </label>
+      <label>Result
+        <select id="filterResult">
+          <option value="both">Both</option>
+          <option value="correct">Correct</option>
+          <option value="wrong">Wrong</option>
+        </select>
+      </label>
+    </div>
+    <div class="review" id="dashReviewList"></div>
+    <p class="no-match" id="noMatch">No questions match these filters.</p>
+    <button class="restart-btn" id="restartBtnDash">Choose mode again</button>
+  </div>
+
+</div>
+
+<script>
+const PASS_THRESHOLD = 0.85;
+
+const QUESTIONS = [
+{ tag:"Scenegraph · Prototype identity", q:"<code>Box_01</code> has <code>instanceable=true</code> and <code>references=@./CubeBox.usd@</code>. <code>Box_02</code> has <code>instanceable=true</code> and the same reference, but ALSO an extra payload. Same prototype or different?", opts:["Same prototype","Different prototypes","Zero prototypes","Depends on subLayer order"], correct:1, why:"Prototype identity comes from the resulting composed content matching. Since <code>Box_02</code>'s composition genuinely differs (extra payload), they get <b>two separate prototypes</b>." },
+{ tag:"LIVERPS · Same prim", q:"A prim has a local opinion <code>mass=5</code> and a <code>references</code> arc contributing <code>mass=20</code>. What's the resolved mass?", opts:["5","20","25","12.5"], correct:0, why:"Same prim, competing arcs → LIVERPS. <b>Local always beats References.</b>" },
+{ tag:"Type B · Visibility", q:"<code>World</code> has <code>visibility=\"inherited\"</code>. <code>Box_01</code> (child) has <code>visibility=\"invisible\"</code>. Is Box_01 rendered?", opts:["Yes","No","Depends on the prototype","Depends on kind"], correct:1, why:"A child can always independently opt itself into invisible, even with a fully visible ancestor." },
+{ tag:"Point Instancer · protoIndices", q:"On a PointInstancer, <code>protoIndices=[0,1,0,1]</code> and <code>prototypes=[&lt;A&gt;,&lt;B&gt;]</code>. Which prototype does index 2 use?", opts:["A","B","Both","Neither, out of range"], correct:0, why:"<code>protoIndices[2]=0</code> maps to prototype A. Read the array position carefully, not the value at the wrong index." },
+{ tag:"Point Instancer · Addressing", q:"True or false: you can call <code>pi.GetInstance(3)</code> to get a handle to the fourth point instance.", opts:["True","False"], correct:1, why:"There is no named handle for an individual point instance. Instances are addressed only by array index or by id, never by a prim path." },
+{ tag:"LIVERPS · Same prim", q:"A prim has <code>inherits=&lt;/Class&gt;</code> where Class sets <code>color=red</code>. The prim also has a local <code>color=blue</code>. What's the resolved color?", opts:["Red","Blue","Purple, blended","Undefined"], correct:1, why:"Local always beats the composition Inherits arc, regardless of content." },
+{ tag:"Scenegraph · Instance editability", q:"For a scenegraph-instanced box, which of these is a valid edit?", opts:["over Box_01/Geometry {...}","over __Prototype_1 {...}","over Box_01 {...}","None of these"], correct:2, why:"Only the instanceable prim root itself is editable. Descendants error out; the runtime prototype name is not a stable authoring target." },
+{ tag:"Point Instancer · Defaults", q:"A PointInstancer's <code>positions</code> array has 10 entries and <code>scales</code> has 10 entries. <code>orientations</code> is not authored at all. Instance 5's rotation is:", opts:["Undefined/error","Identity, no rotation","Inherited from instance 4","Inherited from the PointInstancer's own rotation"], correct:1, why:"Unauthored <code>orientations</code> defaults to identity per instance. Instances never borrow values from neighboring instances." },
+{ tag:"Refinement · Broadcasted", q:"Which refinement technique creates the LEAST new prototypes for 50 instances all needing the same change, assuming they already share a specializes connection to a common target?", opts:["Deinstancing","Ad Hoc Arcs","Broadcasted Refinement","Variant Sets"], correct:2, why:"One edit on the shared target reaches all 50 instances, creating exactly one new prototype." },
+{ tag:"Primvars · faceVarying", q:"A cube mesh has 6 quad faces. Using faceVarying interpolation for displayColor, how many values are needed?", opts:["6","8","24","4"], correct:2, why:"6 faces × 4 corners each = 24 total corner-visits." },
+{ tag:"Broadcasted · specializes", q:"<code>_PalletBox</code> is a class prim. <code>Box_01</code> has <code>specializes=&lt;/_PalletBox&gt;</code> and a payload setting <code>rotateX=90</code>. Someone adds <code>rotateX=0</code> to <code>_PalletBox</code>. What's Box_01's final rotateX?", opts:["0","90","45","Error"], correct:1, why:"Specializes is the weakest arc and can never beat a Payload. The simulated 90 survives." },
+{ tag:"Broadcasted · inherits", q:"Same setup, but Box_01 connects via <code>inherits</code> instead of <code>specializes</code>. What's the final rotateX?", opts:["0","90","45","Error"], correct:0, why:"Inherits outranks Payload. The mandatory change (0) wins over the simulation data." },
+{ tag:"Point Instancer · Transform order", q:"A PointInstancer's own <code>xformOp:translate=(0,10,0)</code>. An instance's <code>positions[i]=(5,0,0)</code>. The prototype has no transform authored. What's the instance's world translate?", opts:["(5,0,0)","(0,10,0)","(5,10,0)","(0,0,0)"], correct:2, why:"Both levels contribute additively: (5,0,0) + (0,10,0) = (5,10,0)." },
+{ tag:"Point Instancer · Metadata vs attribute", q:"Which of these is metadata, not an ordinary attribute?", opts:["positions","invisibleIds","inactiveIds","orientations"], correct:2, why:"inactiveIds is composition metadata, so it's list-editable across layers. The other three are ordinary attributes." },
+{ tag:"Scenegraph · Deinstancing", q:"Box_01 is deinstanced (instanceable=false) in a stronger layer. Does Box_01 still benefit from CubeBox.usd being fixed later?", opts:["Yes","No, fully independent now","Only if re-instanced","Only for materials"], correct:0, why:"Deinstancing only removes prototype-sharing. The references arc to CubeBox.usd is untouched, so fixes still flow through." },
+{ tag:"Point Instancer · Scale defaults", q:"A PointInstancer scatters 3 instances, same prototype, with no scale authored anywhere at all. What's the effective scale?", opts:["0","1","Undefined, must author scale","Depends on positions"], correct:1, why:"No scale authored anywhere means identity at every level, giving an effective scale of 1." },
+{ tag:"Refinement · Least pre-planning", q:"Which technique(s) require the LEAST pre-planning on the source asset, working retroactively on any existing instanced asset?", opts:["Variant Sets","Ad Hoc Arcs Refinement","Hierarchical Refinement via primvars","Both Ad Hoc Arcs and Hierarchical Refinement"], correct:3, why:"Both Ad Hoc Arcs and Hierarchical Refinement work with zero foresight baked into the source asset. Variant Sets require a pre-existing variant set." },
+{ tag:"Scenegraph · Traversal", q:"over \"Prototypes\" with no def anywhere for that path. What happens during a default Usd.PrimRange traversal?", opts:["Errors","Skipped entirely, along with its children","Only Prototypes itself is skipped, children still visited","Treated as def automatically"], correct:1, why:"A pure over, with no def anywhere in the stack, is skipped by default traversal, and nothing beneath it gets visited either." },
+{ tag:"Refinement · Ad Hoc Arcs", q:"A studio needs to apply an identical decal to 3 out of 1000 already-instanced boxes, with NO pre-existing group connection between them. Best technique?", opts:["Broadcasted Refinement","Ad Hoc Arcs Refinement","Variant Sets","Hierarchical Refinement"], correct:1, why:"No pre-existing group means Broadcasted Refinement isn't available. Ad Hoc Arcs works retroactively with no such requirement." },
+{ tag:"Point Instancer · invisibleIds", q:"invisibleIds.timeSamples = { 1: [], 10: [5] }. You want instance 5 visible again at frame 20 too. What must you author at frame 20?", opts:["Nothing, it stays invisible forever","invisibleIds at frame 20 set to []","inactiveIds at frame 20 set to [5]",".Block() on frame 20"], correct:1, why:"Each time sample needs the complete current set restated. Frame 20 needs an explicit empty array to bring instance 5 back." },
+{ tag:"LIVERPS · Same prim", q:"A prim has a payload setting scale=3 and a specializes arc from a class setting scale=1. What's the resolved scale?", opts:["3","1","4","0.33"], correct:0, why:"Payload outranks Specializes. The payload's scale of 3 wins outright." },
+{ tag:"LIVERPS · Strength order", q:"Which of these pairs is the CORRECT LIVERPS strength order, strongest first?", opts:["Payload > References > Inherits","Local > Inherits > References > Specializes","Specializes > Payload > Local","References > Local > Inherits"], correct:1, why:"The correct relative order is Local > Inherits > VariantSets > Relocates > References > Payloads > Specializes." },
+{ tag:"Point Instancer · Rotation order", q:"A Prototype's own translate is (0,0,1). An Instance's positions[i]=(2,0,0), with a rotateY=90 in orientations[i]. Does the Prototype's translate get affected by that rotation?", opts:["No, translate and rotation are always independent","Yes, the rotation is applied before the Instance's own translate, and can change how the Prototype's earlier contribution appears","Only if the PointInstancer also has a rotation","Only in USDA, not USDC"], correct:1, why:"Rotation composition is not commutative, and it genuinely changes how earlier translate contributions combine into the final result." },
+{ tag:"Point Instancer · DeactivateId", q:"Which is true about DeactivateId(1228)?", opts:["It's a completely separate mechanism from inactiveIds","It's the Python method that authors inactiveIds metadata","It hides the instance temporarily, reversible","It only works on scenegraph instances"], correct:1, why:"DeactivateId is simply the Python API for authoring the inactiveIds metadata field. Not a separate mechanism." },
+{ tag:"Scenegraph · Material binding", q:"A material binding is authored on Box_01 (instance root) with rel material:binding=&lt;/Looks/Red&gt;. Is this allowed?", opts:["No, material binding can only be broadcasted","Yes, this is allowed since it's on the instance root","Only if Box_01 is deinstanced first","Only via specializes"], correct:1, why:"The instance root is always editable, for any attribute type, including relationships like material bindings." },
+{ tag:"Primvars · vertex on PointInstancer", q:"For vertex interpolation on a PointInstancer's primvar, what does vertex actually mean in this context?", opts:["One value per vertex of the prototype's mesh","One value per scattered instance","One value for the whole PointInstancer","One value per face"], correct:1, why:"vertex interpolation is repurposed on a PointInstancer to mean one value per scattered instance, not per mesh vertex." },
+{ tag:"Point Instancer · Primvar shadowing", q:"A prototype's own displayColor=red is authored directly on the same prim the material reads from. The PointInstancer authors a per-instance displayColor array. What color renders?", opts:["The array's per-instance colors","Red, the prototype's opinion shadows the array","A blend of both","Undefined, this is invalid"], correct:1, why:"A descendant's own authored opinion always beats an inherited one. The prototype's own red shadows the PointInstancer's array." },
+{ tag:"Point Instancer · Block fix", q:"What fixes the situation in the previous question, letting the array's colors actually show?", opts:["Re-author the array with more entries","Block() the prototype's own displayColor opinion","Switch to uniform interpolation","Add a specializes arc"], correct:1, why:"Block() erases the shadowing opinion entirely, letting the ancestor's array data finally take effect." },
+{ tag:"Scenegraph · Variant sets", q:"Two instances select the same combination of variants on an instanceable prim. Do they share a prototype?", opts:["No, variant selections always create separate prototypes per instance","Yes, one shared prototype per unique combination, regardless of instance count","Only if they're also inherits from the same class","Only in point instancing, not scenegraph instancing"], correct:1, why:"Matching combinations share one prototype. Only genuinely different combinations get separate prototypes." },
+{ tag:"LIVERPS · Same prim", q:"A prim has a local xformOp:rotateZ=30 and a variantSets selection contributing xformOp:rotateZ=60 for the currently selected variant. Same prim, same attribute. What's the resolved rotateZ?", opts:["30","60","90","45"], correct:0, why:"Local beats VariantSets. Same prim, same attribute, no summing." }
+];
+
+let mode = null;
+let current = 0;
+let score = 0;
+let answered = false;
+let selectedIdx = null;
+const userLog = [];
+
+const stackEl = document.getElementById('stack');
+const counterEl = document.getElementById('counter');
+const typeTagEl = document.getElementById('typeTag');
+const qTextEl = document.getElementById('qText');
+const optionsEl = document.getElementById('options');
+const explainEl = document.getElementById('explain');
+const nextBtn = document.getElementById('nextBtn');
+const modePillWrap = document.getElementById('modePillWrap');
+
+function startQuiz(chosenMode){
+  mode = chosenMode;
+  current = 0; score = 0; answered = false;
+  userLog.length = 0;
+  document.getElementById('modeArea').style.display = 'none';
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('dashboardArea').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  modePillWrap.innerHTML = `<span class="mode-pill">${mode} mode</span><button class="exit-btn" id="exitBtn">Exit</button>`;
+  document.getElementById('exitBtn').addEventListener('click', backToModeSelect);
+  buildStack();
+  renderQuestion();
+}
+
+function buildStack(){
+  stackEl.innerHTML = '';
+  for(let i=0;i<QUESTIONS.length;i++){
+    const seg = document.createElement('div');
+    seg.className = 'seg';
+    seg.id = 'seg'+i;
+    stackEl.appendChild(seg);
+  }
+}
+
+function refreshStack(){
+  for(let i=0;i<QUESTIONS.length;i++){
+    const seg = document.getElementById('seg'+i);
+    seg.className = 'seg';
+    if(userLog[i] !== undefined){
+      if(mode === 'practice'){
+        seg.classList.add(userLog[i].correct ? 'done' : 'wrong');
+      } else {
+        seg.classList.add('answered-exam');
+      }
+    } else if(i === current){
+      seg.classList.add('current');
+    }
+  }
+}
+
+function renderQuestion(){
+  answered = false;
+  selectedIdx = null;
+  const item = QUESTIONS[current];
+  counterEl.textContent = `Q${current+1} / ${QUESTIONS.length}`;
+  typeTagEl.textContent = item.tag;
+  qTextEl.innerHTML = item.q;
+  optionsEl.innerHTML = '';
+  explainEl.className = 'explain';
+  explainEl.innerHTML = '';
+  nextBtn.classList.remove('show');
+  refreshStack();
+
+  const letters = ['A','B','C','D'];
+  item.opts.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="letter">${letters[idx]}</span><span>${optText}</span>`;
+    btn.addEventListener('click', () => selectAnswer(idx, btn));
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(idx, btnEl){
+  if(answered) return;
+
+  if(mode === 'practice'){
+    answered = true;
+    const item = QUESTIONS[current];
+    const isCorrect = idx === item.correct;
+    const allBtns = optionsEl.querySelectorAll('.opt');
+    allBtns.forEach((b, i) => {
+      b.disabled = true;
+      if(i === item.correct){ b.classList.add('correct'); }
+      else if(i === idx && !isCorrect){ b.classList.add('incorrect'); }
+      else { b.classList.add('faded'); }
+    });
+    explainEl.classList.add('show');
+    if(!isCorrect) explainEl.classList.add('wrong-border');
+    explainEl.innerHTML = (isCorrect ? '<b>Correct.</b> ' : '<b>Not quite.</b> ') + item.why;
+
+    if(isCorrect) score++;
+    userLog[current] = { picked: item.opts[idx], correctText: item.opts[item.correct], correct: isCorrect };
+
+    nextBtn.classList.add('show');
+    nextBtn.textContent = (current === QUESTIONS.length - 1) ? 'See results →' : 'Next question →';
+    refreshStack();
+  } else {
+    selectedIdx = idx;
+    const allBtns = optionsEl.querySelectorAll('.opt');
+    allBtns.forEach((b, i) => {
+      b.classList.remove('selected-neutral', 'faded');
+      if(i === idx){ b.classList.add('selected-neutral'); }
+    });
+    nextBtn.classList.add('show');
+    nextBtn.textContent = (current === QUESTIONS.length - 1) ? 'Submit & see results →' : 'Next question →';
+  }
+}
+
+function finalizeExamAnswer(){
+  const item = QUESTIONS[current];
+  const isCorrect = selectedIdx === item.correct;
+  if(isCorrect) score++;
+  userLog[current] = {
+    picked: item.opts[selectedIdx],
+    correctText: item.opts[item.correct],
+    correct: isCorrect
+  };
+}
+
+nextBtn.addEventListener('click', () => {
+  if(mode === 'exam'){
+    if(selectedIdx === null) return;
+    finalizeExamAnswer();
+  }
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    if(mode === 'practice'){ showResults(); } else { showDashboard(); }
+  }
+});
+
+const OPT_LETTERS = ['A','B','C','D'];
+
+function buildReviewItem(item, log, i){
+  const optsHTML = item.opts.map((optText, idx) => {
+    const isCorrectOpt = idx === item.correct;
+    const isPickedWrongOpt = (optText === log.picked) && !log.correct;
+    let cls = 'review-opt';
+    let badge = '';
+    if(isCorrectOpt){ cls += ' is-correct'; badge = '<span class="badge">Correct</span>'; }
+    if(isPickedWrongOpt){ cls += ' is-picked-wrong'; badge = '<span class="badge">Your answer</span>'; }
+    return `<div class="${cls}"><span class="letter">${OPT_LETTERS[idx]}</span><span>${optText}</span>${badge}</div>`;
+  }).join('');
+
+  return `
+    <details class="review-item" data-cat="${item.tag.split(' · ')[0]}" data-status="${log.correct ? 'correct' : 'wrong'}">
+      <summary>
+        <span class="r-num">${String(i+1).padStart(2,'0')}</span>
+        <span class="r-tag">${item.tag}</span>
+        <span class="r-status ${log.correct ? 'ok' : 'no'}">${log.correct ? 'CORRECT' : 'MISSED'}</span>
+        <span class="r-caret">▶</span>
+      </summary>
+      <div class="review-body">
+        <div class="review-question">${item.q}</div>
+        <div class="review-options">${optsHTML}</div>
+        <div class="review-explain ${log.correct ? '' : 'wrong-border'}">${item.why}</div>
+      </div>
+    </details>
+  `;
+}
+
+function renderReviewList(containerId){
+  const list = document.getElementById(containerId);
+  list.innerHTML = QUESTIONS.map((item, i) => buildReviewItem(item, userLog[i], i)).join('');
+}
+
+function showResults(){
+  document.getElementById('quizArea').style.display = 'none';
+  const resultsArea = document.getElementById('resultsArea');
+  resultsArea.style.display = 'block';
+  document.getElementById('scoreBig').textContent = `${score}/${QUESTIONS.length}`;
+  const pct = Math.round((score/QUESTIONS.length)*100);
+  document.getElementById('scoreSub').textContent = `${pct}% — ${score === QUESTIONS.length ? 'flawless run.' : 'tap any question below to review it.'}`;
+  renderReviewList('reviewList');
+}
+
+function showDashboard(){
+  document.getElementById('quizArea').style.display = 'none';
+  const dash = document.getElementById('dashboardArea');
+  dash.style.display = 'block';
+
+  const pct = score / QUESTIONS.length;
+  const pctRounded = Math.round(pct*100);
+  const didPass = pct >= PASS_THRESHOLD;
+
+  const banner = document.getElementById('dashBanner');
+  banner.className = '';
+  banner.innerHTML = `
+    <div class="dash-banner ${didPass ? 'pass' : 'fail'}">
+      <div class="db-left">
+        <div class="db-status">${didPass ? 'PASS' : 'FAIL'}</div>
+        <div class="db-note">Pass threshold: ${Math.round(PASS_THRESHOLD*100)}%</div>
+      </div>
+      <div class="db-right">
+        <div class="db-score">${score}/${QUESTIONS.length}</div>
+        <div class="db-pct">${pctRounded}% correct</div>
+      </div>
+    </div>
+  `;
+
+  const catStats = {};
+  QUESTIONS.forEach((item, i) => {
+    const cat = item.tag.split(' · ')[0];
+    if(!catStats[cat]) catStats[cat] = {correct:0, total:0};
+    catStats[cat].total++;
+    if(userLog[i].correct) catStats[cat].correct++;
+  });
+
+  const catGrid = document.getElementById('catGrid');
+  catGrid.innerHTML = '';
+  Object.keys(catStats).forEach(cat => {
+    const s = catStats[cat];
+    const catPct = s.correct / s.total;
+    const div = document.createElement('div');
+    div.className = 'cat-card';
+    div.innerHTML = `
+      <div class="c-name">${cat}</div>
+      <div class="c-frac">${s.correct}/${s.total}</div>
+      <div class="cat-bar"><div class="fill ${catPct < 0.6 ? 'low' : ''}" style="width:${catPct*100}%"></div></div>
+    `;
+    catGrid.appendChild(div);
+  });
+
+  renderReviewList('dashReviewList');
+  populateTopicFilter();
+  resetFilters();
+}
+
+function populateTopicFilter(){
+  const topicSelect = document.getElementById('filterTopic');
+  const cats = [...new Set(QUESTIONS.map(q => q.tag.split(' · ')[0]))];
+  topicSelect.innerHTML = '<option value="all">All</option>' +
+    cats.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function resetFilters(){
+  document.getElementById('filterTopic').value = 'all';
+  document.getElementById('filterResult').value = 'both';
+  applyDashboardFilters();
+}
+
+function applyDashboardFilters(){
+  const topic = document.getElementById('filterTopic').value;
+  const result = document.getElementById('filterResult').value;
+  const items = document.querySelectorAll('#dashReviewList .review-item');
+  let visibleCount = 0;
+  items.forEach(el => {
+    const matchesTopic = (topic === 'all') || (el.dataset.cat === topic);
+    const matchesResult = (result === 'both') || (el.dataset.status === result);
+    const show = matchesTopic && matchesResult;
+    el.style.display = show ? '' : 'none';
+    if(show) visibleCount++;
+  });
+  document.getElementById('noMatch').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+
+document.getElementById('filterTopic').addEventListener('change', applyDashboardFilters);
+document.getElementById('filterResult').addEventListener('change', applyDashboardFilters);
+
+function backToModeSelect(){
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('dashboardArea').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('modeArea').style.display = 'block';
+  mode = null; current = 0; score = 0; answered = false;
+  userLog.length = 0;
+}
+
+document.getElementById('restartBtn').addEventListener('click', backToModeSelect);
+document.getElementById('restartBtnDash').addEventListener('click', backToModeSelect);
+</script>
+
+</body>
+</html>
