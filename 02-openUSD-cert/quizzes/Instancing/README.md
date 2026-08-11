@@ -505,15 +505,15 @@ def PointInstancer "Scatter"              # <-- THE POINTINSTANCER (the whole sc
 {
     rel prototypes = [</Scatter/Prototypes/Peanut>]
     int[] protoIndices = [0, 0, 0]
-
+ 
     point3f[] positions = [(0,0,0), (5,0,0), (10,0,0)]        # <-- INSTANCE data (per-index, no prim!)
     quath[] orientations = [(1,0,0,0), (1,0,0,0), (1,0,0,0)]  # <-- INSTANCE data
     float3[] scales = [(1,1,1), (1,1,1), (1,1,1)]             # <-- INSTANCE data
-
+ 
     double3 xformOp:translate = (100, 0, 0)   # <-- the POINTINSTANCER's OWN transform
     uniform token[] xformOpOrder = ["xformOp:translate"]
-
-    def Scope "Prototypes"                     # container — NOT one of the 3 levels itself
+ 
+    over Scope "Prototypes"                    # container — NOT one of the 3 levels itself
     {
         def "Peanut" (                          # <-- THE PROTOTYPE (shared template)
             references = @./Peanut.usd@
@@ -524,10 +524,33 @@ def PointInstancer "Scatter"              # <-- THE POINTINSTANCER (the whole sc
         }
     }
 }
-
+ 
 # NOTE: "Instance" is NOT a real prim anywhere in this file — it's just
 # whatever sits at index 0, 1, 2 across the positions/orientations/scales arrays.
 ```
+ 
+**Why `over Scope "Prototypes"` and not `def Scope "Prototypes"`**: a pure `over` (no `def` for that path anywhere) is skipped by default traversal, along with everything nested inside it.
+ 
+```python
+for prim in Usd.PrimRange(stage.GetPseudoRoot()):
+    print(prim.GetPath())
+```
+ 
+With `over Scope "Prototypes"`:
+```
+/Scatter
+```
+`Prototypes` and `Peanut` never appear — invisible to any generic tool.
+ 
+With `def Scope "Prototypes"`:
+```
+/Scatter
+/Scatter/Prototypes
+/Scatter/Prototypes/Peanut
+```
+Both show up, and a non-PointInstancer-aware tool could try to process or render `Peanut` directly.
+ 
+This is defense in depth, not a strict requirement. A tool that IS PointInstancer-aware already knows to skip anything targeted by the `prototypes` relationship, regardless of `def` or `over`. `over` protects you specifically when the consuming tool is NOT PointInstancer-aware.
 
 ## 3.1 The Three Levels
 
@@ -554,7 +577,7 @@ def Xform "World"                              # ancestor above the PointInstanc
         point3f[] positions = [(1, 0, 0)]        # instance array data
         float3[] scales = [(2, 2, 2)]
 
-        def Scope "Prototypes"
+        over Scope "Prototypes"
         {
             def "Peanut" ( references = @./Peanut.usd@ )
             {
@@ -564,6 +587,7 @@ def Xform "World"                              # ancestor above the PointInstanc
     }
 }
 ```
+`over Scope "Prototypes"` is used here for the same reason as the earlier snippet: a "pure over" is skipped by default traversal, protecting `Peanut` from generic tools that don't understand `PointInstancer`.
 
 Applied most local to least local:
 1. **Prototype**: `Peanut`'s own translate, `(0, 0, 0.1)`.
