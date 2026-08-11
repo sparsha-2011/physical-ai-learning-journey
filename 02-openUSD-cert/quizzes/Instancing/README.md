@@ -1,4 +1,4 @@
-# Instancing Cheat Sheet, Scenegraph and Point Instancing
+# Instancing: Scenegraph and Point Instancing
 
 One stop reference combining native (scenegraph) instancing and point instancing:
 when to use each, editability rules, refinement techniques, and the full
