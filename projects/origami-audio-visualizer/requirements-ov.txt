@@ -1,0 +1,5 @@
+# Versions aligned with the repository's existing NVIDIA Brev RTX Studio setup.
+# Access to these proprietary early-access wheels is required.
+ovrtx==0.4.0.346409
+ovstage==0.1.0.346039
+ovphysx==0.5.9

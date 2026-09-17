@@ -1,0 +1,1309 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World" (
+    kind = "assembly"
+)
+{
+    custom string origami:description = "Hexagonal origami tessellation seed asset"
+    custom int origami:gridWidth = 5
+    custom int origami:gridHeight = 5
+    def PhysicsScene "PhysicsScene" { vector3f physics:gravityDirection = (0, 0, -1) float physics:gravityMagnitude = 9.81 }
+    def Xform "Panels" ( prepend apiSchemas = ["PhysicsArticulationRootAPI"] )
+    {
+        def Xform "hex_0_0" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "0,0"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (0.0000, 0.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_0_1" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "0,1"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (0.8660, 1.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_0_2" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "0,2"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (1.7321, 3.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_0_3" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "0,3"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (2.5981, 4.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_0_4" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "0,4"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (3.4641, 6.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_1_0" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "1,0"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (1.7321, 0.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_1_1" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "1,1"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (2.5981, 1.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_1_2" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "1,2"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (3.4641, 3.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_1_3" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "1,3"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (4.3301, 4.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_1_4" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "1,4"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (5.1962, 6.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_2_0" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "2,0"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (3.4641, 0.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_2_1" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "2,1"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (4.3301, 1.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_2_2" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "2,2"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (5.1962, 3.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_2_3" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "2,3"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (6.0622, 4.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_2_4" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "2,4"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (6.9282, 6.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_3_0" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "3,0"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (5.1962, 0.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_3_1" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "3,1"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (6.0622, 1.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_3_2" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "3,2"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (6.9282, 3.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_3_3" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "3,3"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (7.7942, 4.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_3_4" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "3,4"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (8.6603, 6.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_4_0" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "4,0"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (6.9282, 0.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_4_1" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "4,1"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (7.7942, 1.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_4_2" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "4,2"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (8.6603, 3.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_4_3" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "4,3"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (9.5263, 4.5000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+        def Xform "hex_4_4" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            custom string origami:coord = "4,4"
+            custom bool origami:rigidPanel = 1
+        )
+        {
+            float physics:mass = 0.01
+            double3 xformOp:translate = (10.3923, 6.0000, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            def Mesh "panelMesh" { point3f[] points = [(0.8660, 0.5000, 0), (0.0000, 1.0000, 0), (-0.8660, 0.5000, 0), (-0.8660, -0.5000, 0), (-0.0000, -1.0000, 0), (0.8660, -0.5000, 0)] int[] faceVertexCounts = [6] int[] faceVertexIndices = [0, 1, 2, 3, 4, 5] uniform token subdivisionScheme = "none" }
+        }
+    }
+    def Xform "Hinges"
+    {
+        def PhysicsRevoluteJoint "hinge_0_0__1_0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_0>
+            rel physics:body1 = </World/Panels/hex_1_0>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_0"
+            custom string origami:bodyB = "/World/Panels/hex_1_0"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_0__0_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_0>
+            rel physics:body1 = </World/Panels/hex_0_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_0"
+            custom string origami:bodyB = "/World/Panels/hex_0_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_1__1_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_1>
+            rel physics:body1 = </World/Panels/hex_1_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_1"
+            custom string origami:bodyB = "/World/Panels/hex_1_1"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_1__0_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_1>
+            rel physics:body1 = </World/Panels/hex_0_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_1"
+            custom string origami:bodyB = "/World/Panels/hex_0_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_2__1_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_2>
+            rel physics:body1 = </World/Panels/hex_1_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_2"
+            custom string origami:bodyB = "/World/Panels/hex_1_2"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_2__0_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_2>
+            rel physics:body1 = </World/Panels/hex_0_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_2"
+            custom string origami:bodyB = "/World/Panels/hex_0_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_3__1_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_3>
+            rel physics:body1 = </World/Panels/hex_1_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_3"
+            custom string origami:bodyB = "/World/Panels/hex_1_3"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_3__0_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_3>
+            rel physics:body1 = </World/Panels/hex_0_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_3"
+            custom string origami:bodyB = "/World/Panels/hex_0_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_0_4__1_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_0_4>
+            rel physics:body1 = </World/Panels/hex_1_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_0_4"
+            custom string origami:bodyB = "/World/Panels/hex_1_4"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_0__2_0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_0>
+            rel physics:body1 = </World/Panels/hex_2_0>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_0"
+            custom string origami:bodyB = "/World/Panels/hex_2_0"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_0__1_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_0>
+            rel physics:body1 = </World/Panels/hex_1_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_0"
+            custom string origami:bodyB = "/World/Panels/hex_1_1"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_0__0_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_0>
+            rel physics:body1 = </World/Panels/hex_0_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_0"
+            custom string origami:bodyB = "/World/Panels/hex_0_1"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_1__2_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_1>
+            rel physics:body1 = </World/Panels/hex_2_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_1"
+            custom string origami:bodyB = "/World/Panels/hex_2_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_1__1_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_1>
+            rel physics:body1 = </World/Panels/hex_1_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_1"
+            custom string origami:bodyB = "/World/Panels/hex_1_2"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_1__0_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_1>
+            rel physics:body1 = </World/Panels/hex_0_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_1"
+            custom string origami:bodyB = "/World/Panels/hex_0_2"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_2__2_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_2>
+            rel physics:body1 = </World/Panels/hex_2_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_2"
+            custom string origami:bodyB = "/World/Panels/hex_2_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_2__1_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_2>
+            rel physics:body1 = </World/Panels/hex_1_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_2"
+            custom string origami:bodyB = "/World/Panels/hex_1_3"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_2__0_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_2>
+            rel physics:body1 = </World/Panels/hex_0_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_2"
+            custom string origami:bodyB = "/World/Panels/hex_0_3"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_3__2_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_3>
+            rel physics:body1 = </World/Panels/hex_2_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_3"
+            custom string origami:bodyB = "/World/Panels/hex_2_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_3__1_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_3>
+            rel physics:body1 = </World/Panels/hex_1_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_3"
+            custom string origami:bodyB = "/World/Panels/hex_1_4"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_3__0_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_3>
+            rel physics:body1 = </World/Panels/hex_0_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_3"
+            custom string origami:bodyB = "/World/Panels/hex_0_4"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_1_4__2_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_1_4>
+            rel physics:body1 = </World/Panels/hex_2_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_1_4"
+            custom string origami:bodyB = "/World/Panels/hex_2_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_0__3_0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_0>
+            rel physics:body1 = </World/Panels/hex_3_0>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_0"
+            custom string origami:bodyB = "/World/Panels/hex_3_0"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_0__2_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_0>
+            rel physics:body1 = </World/Panels/hex_2_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_0"
+            custom string origami:bodyB = "/World/Panels/hex_2_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_0__1_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_0>
+            rel physics:body1 = </World/Panels/hex_1_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_0"
+            custom string origami:bodyB = "/World/Panels/hex_1_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_1__3_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_1>
+            rel physics:body1 = </World/Panels/hex_3_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_1"
+            custom string origami:bodyB = "/World/Panels/hex_3_1"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_1__2_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_1>
+            rel physics:body1 = </World/Panels/hex_2_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_1"
+            custom string origami:bodyB = "/World/Panels/hex_2_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_1__1_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_1>
+            rel physics:body1 = </World/Panels/hex_1_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_1"
+            custom string origami:bodyB = "/World/Panels/hex_1_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_2__3_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_2>
+            rel physics:body1 = </World/Panels/hex_3_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_2"
+            custom string origami:bodyB = "/World/Panels/hex_3_2"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_2__2_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_2>
+            rel physics:body1 = </World/Panels/hex_2_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_2"
+            custom string origami:bodyB = "/World/Panels/hex_2_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_2__1_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_2>
+            rel physics:body1 = </World/Panels/hex_1_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_2"
+            custom string origami:bodyB = "/World/Panels/hex_1_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_3__3_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_3>
+            rel physics:body1 = </World/Panels/hex_3_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_3"
+            custom string origami:bodyB = "/World/Panels/hex_3_3"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_3__2_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_3>
+            rel physics:body1 = </World/Panels/hex_2_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_3"
+            custom string origami:bodyB = "/World/Panels/hex_2_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_3__1_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_3>
+            rel physics:body1 = </World/Panels/hex_1_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_3"
+            custom string origami:bodyB = "/World/Panels/hex_1_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_2_4__3_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_2_4>
+            rel physics:body1 = </World/Panels/hex_3_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_2_4"
+            custom string origami:bodyB = "/World/Panels/hex_3_4"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_0__4_0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_0>
+            rel physics:body1 = </World/Panels/hex_4_0>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_0"
+            custom string origami:bodyB = "/World/Panels/hex_4_0"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_0__3_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_0>
+            rel physics:body1 = </World/Panels/hex_3_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_0"
+            custom string origami:bodyB = "/World/Panels/hex_3_1"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_0__2_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_0>
+            rel physics:body1 = </World/Panels/hex_2_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_0"
+            custom string origami:bodyB = "/World/Panels/hex_2_1"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_1__4_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_1>
+            rel physics:body1 = </World/Panels/hex_4_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_1"
+            custom string origami:bodyB = "/World/Panels/hex_4_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_1__3_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_1>
+            rel physics:body1 = </World/Panels/hex_3_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_1"
+            custom string origami:bodyB = "/World/Panels/hex_3_2"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_1__2_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_1>
+            rel physics:body1 = </World/Panels/hex_2_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_1"
+            custom string origami:bodyB = "/World/Panels/hex_2_2"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_2__4_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_2>
+            rel physics:body1 = </World/Panels/hex_4_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_2"
+            custom string origami:bodyB = "/World/Panels/hex_4_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_2__3_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_2>
+            rel physics:body1 = </World/Panels/hex_3_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_2"
+            custom string origami:bodyB = "/World/Panels/hex_3_3"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_2__2_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_2>
+            rel physics:body1 = </World/Panels/hex_2_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_2"
+            custom string origami:bodyB = "/World/Panels/hex_2_3"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_3__4_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_3>
+            rel physics:body1 = </World/Panels/hex_4_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_3"
+            custom string origami:bodyB = "/World/Panels/hex_4_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_3__3_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_3>
+            rel physics:body1 = </World/Panels/hex_3_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_3"
+            custom string origami:bodyB = "/World/Panels/hex_3_4"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_3__2_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_3>
+            rel physics:body1 = </World/Panels/hex_2_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_3"
+            custom string origami:bodyB = "/World/Panels/hex_2_4"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_3_4__4_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_3_4>
+            rel physics:body1 = </World/Panels/hex_4_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_3_4"
+            custom string origami:bodyB = "/World/Panels/hex_4_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_0__4_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_0>
+            rel physics:body1 = </World/Panels/hex_4_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_0"
+            custom string origami:bodyB = "/World/Panels/hex_4_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_0__3_1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_0>
+            rel physics:body1 = </World/Panels/hex_3_1>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_0"
+            custom string origami:bodyB = "/World/Panels/hex_3_1"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_1__4_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_1>
+            rel physics:body1 = </World/Panels/hex_4_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_1"
+            custom string origami:bodyB = "/World/Panels/hex_4_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_1__3_2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_1>
+            rel physics:body1 = </World/Panels/hex_3_2>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_1"
+            custom string origami:bodyB = "/World/Panels/hex_3_2"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_2__4_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_2>
+            rel physics:body1 = </World/Panels/hex_4_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_2"
+            custom string origami:bodyB = "/World/Panels/hex_4_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_2__3_3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_2>
+            rel physics:body1 = </World/Panels/hex_3_3>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_2"
+            custom string origami:bodyB = "/World/Panels/hex_3_3"
+            custom int origami:foldSign = 1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_3__4_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_3>
+            rel physics:body1 = </World/Panels/hex_4_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_3"
+            custom string origami:bodyB = "/World/Panels/hex_4_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+        def PhysicsRevoluteJoint "hinge_4_3__3_4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            rel physics:body0 = </World/Panels/hex_4_3>
+            rel physics:body1 = </World/Panels/hex_3_4>
+            uniform token physics:axis = "Z"
+            float physics:lowerLimit = -70
+            float physics:upperLimit = 70
+            float drive:angular:physics:damping = 38
+            float drive:angular:physics:maxForce = 250
+            float drive:angular:physics:stiffness = 180
+            float drive:angular:physics:targetPosition = 0
+            custom string origami:bodyA = "/World/Panels/hex_4_3"
+            custom string origami:bodyB = "/World/Panels/hex_3_4"
+            custom int origami:foldSign = -1
+            custom string origami:jointType = "revolute"
+        }
+    }
+    def DistantLight "Key" { float intensity = 3000 float angle = 0.53 color3f color = (1, 0.82, 0.62) }
+    def DistantLight "Rim" { float intensity = 1800 float angle = 0.35 color3f color = (0.38, 0.55, 1) double3 xformOp:rotateXYZ = (25, 0, 150) uniform token[] xformOpOrder = ["xformOp:rotateXYZ"] }
+    def Camera "Camera" { float2 clippingRange = (0.1, 1000) float focalLength = 50 float horizontalAperture = 20.955 matrix4d xformOp:transform = ((1, 0, 0, 0), (0, 0.94, -0.34, 0), (0, 0.34, 0.94, 0), (0, -22, 35, 1)) uniform token[] xformOpOrder = ["xformOp:transform"] }
+}
+def "Render" { def RenderProduct "ProductShot" { rel camera = </World/Camera> rel orderedVars = [<LdrColor>] int2 resolution = (1280, 720) def RenderVar "LdrColor" { string sourceName = "LdrColor" } } }
