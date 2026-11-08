@@ -44,7 +44,9 @@ function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(send)}}
 function queueFrame(){dirty=true;settle=2;schedule()}
 controls.addEventListener('change',queueFrame);
 frame('room');
+let retryTimer, retryDelay = 1000, resumePlayback = false;
 function connect(){
+  clearTimeout(retryTimer);
   const gen=++generation;socket?.close();pending=false;setPlaying(false);
   status.hidden=false;status.textContent='Connecting to Brev…';retry.hidden=true;
   const endpoint = new URL('/cafe', location.href);
@@ -53,20 +55,30 @@ function connect(){
   socket.onmessage=async({data})=>{
     if(gen!==generation)return;
     if(typeof data==='string'){
-      duration=JSON.parse(data).duration;timeline.max=duration;status.textContent='Preparing the RTX view…';queueFrame();return;
+      duration=JSON.parse(data).duration;timeline.max=duration;status.textContent='Preparing the RTX view… On a fresh instance, the first frame can take several minutes.';queueFrame();return;
     }
     try{
       const image=await createImageBitmap(data);
       if(gen!==generation){image.close();return}
       ctx.drawImage(image,0,0,canvas.width,canvas.height);image.close();
       status.hidden=true;byId('rtx-controls').disabled=false;canvas.dataset.frames=String(Number(canvas.dataset.frames||0)+1);
+      retryDelay = 1000;
+      if (resumePlayback) {
+        resumePlayback = false;
+        setPlaying(true);
+      }
       pending=false;schedule();
     }catch{socket.close(1000,'Invalid frame')}
   };
   socket.onclose=()=>{
     if(gen!==generation)return;
+    resumePlayback ||= playing;
     pending=false;setPlaying(false);byId('rtx-controls').disabled=true;
-    status.textContent='Brev connection closed. Reconnect when the RTX service is ready.';status.hidden=false;retry.hidden=false;
+    status.textContent='Reconnecting to the live viewer…';status.hidden=false;retry.hidden=false;
+    if (!document.hidden) {
+      retryTimer = setTimeout(connect, retryDelay);
+      retryDelay = Math.min(retryDelay * 2, 15000);
+    }
   };
 }
 retry.onclick=connect;
@@ -76,8 +88,19 @@ timeline.oninput=()=>{setPlaying(false);time=Number(timeline.value);updateTime()
 byId('speed').onchange=e=>{clock();speed=Number(e.target.value);queueFrame()};
 byId('view').onchange=e=>frame(e.target.value);
 byId('full').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else byId('live-shell').requestFullscreen()};
-document.addEventListener('visibilitychange',()=>{if(document.hidden){clock();setPlaying(false)}else queueFrame()});
-window.addEventListener('pagehide',()=>{generation++;socket?.close()});
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    clearTimeout(retryTimer);
+    resumePlayback = false;
+    clock();
+    setPlaying(false);
+  } else if (socket?.readyState === WebSocket.CLOSED) {
+    connect();
+  } else {
+    queueFrame();
+  }
+});
+window.addEventListener('pagehide',()=>{clearTimeout(retryTimer);generation++;socket?.close()});
 window.addEventListener('pageshow',e=>{if(e.persisted)connect()});
 // Old film bookmarks now open the live viewer.
 if(location.hash==='#film')history.replaceState(null,'',location.pathname);
