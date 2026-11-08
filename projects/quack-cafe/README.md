@@ -6,7 +6,7 @@ Microduck built a kitchen-sized Rube Goldberg machine to drop one sugar cube int
 
 1. Open [Quack Café on NVIDIA Brev](https://brev.nvidia.com/launchable/deploy/now?launchableID=env-3LnkitsG2PiHFYuzQUKlP0T4s2Z) and sign in if prompted.
 2. On the Launchable page, choose **Deploy**. Keep the default **NVIDIA L40S** GPU and confirm. Brev starts an instance for you and loads the café automatically.
-3. When setup finishes, select **open-quack-cafe** endpoint on your deployment page. The website opens in **Explore in 3D**. On first use, the RTX renderer may take a few minutes to show the room.
+3. When setup finishes, select **open-quack-cafe** endpoint on your deployment page in the **Endpoint** section. The website opens in **Explore in 3D**. On first use, the RTX renderer may take a few minutes to show the room.
 4. Select **Play** to watch Microduck start the machine. Drag to orbit, scroll to zoom, or pause and scrub the timeline to see how one part triggers the next.
 
 When you’re finished, return to the Brev Console and **stop your instance** to end the GPU session.
