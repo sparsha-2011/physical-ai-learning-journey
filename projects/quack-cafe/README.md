@@ -29,4 +29,4 @@ Search for an object such as a muffin, then select **Find in scene** to see wher
 
 ![Café Catalogue showing the household objects used in the machine](docs/screenshots/catalogue.jpg)
 
-Created by **Sparsha Srinath**. The scene build, verified physics replay and RTX rendering ran on NVIDIA Brev using one NVIDIA L40S GPU.
+The scene build, verified physics replay and RTX rendering ran on NVIDIA Brev using one NVIDIA L40S GPU.
