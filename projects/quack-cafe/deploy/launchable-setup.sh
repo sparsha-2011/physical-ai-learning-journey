@@ -18,7 +18,7 @@ for group in video render; do
 done
 repo=/var/lib/quackcafe/source
 source_url=https://github.com/sparsha-2011/physical-ai-learning-journey.git
-revision=b9f378d9619caa08875d6b705c2536b46903610a
+revision=cf74ad3e5085a56d671dd4d27f38c8d5dd0f6ea7
 as_cafe() { sudo -H -u "$account" -- "$@"; }
 if [[ ! -d "$repo/.git" ]]; then
   as_cafe git init -q "$repo"
