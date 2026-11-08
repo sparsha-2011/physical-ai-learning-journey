@@ -1,0 +1,1006 @@
+{
+  "passed": true,
+  "checks": {
+    "ordered_ladle_to_cup": true,
+    "cube_retained": true,
+    "three_reactions": true,
+    "two_post_landing_nods": true,
+    "idle_control": true,
+    "all_boards_stable": true,
+    "scoop_strikes_middle_of_carton": true,
+    "mug_cavity_clear": true,
+    "released_before_contact": true,
+    "no_foot_strike": true,
+    "heel_lean": true,
+    "car_cord_clearance": true,
+    "ladle_rack_seated": true,
+    "support_clearance": true
+  },
+  "sequence": [
+    {
+      "pair": [
+        "Ladle",
+        "Domino00"
+      ],
+      "s": 2.0122395833333333
+    },
+    {
+      "pair": [
+        "Domino00",
+        "Domino01"
+      ],
+      "s": 2.1132812499999996
+    },
+    {
+      "pair": [
+        "Domino01",
+        "Domino02"
+      ],
+      "s": 2.267708333333333
+    },
+    {
+      "pair": [
+        "Domino02",
+        "Domino03"
+      ],
+      "s": 2.3890624999999996
+    },
+    {
+      "pair": [
+        "Domino03",
+        "Domino04"
+      ],
+      "s": 2.502083333333333
+    },
+    {
+      "pair": [
+        "Domino04",
+        "Domino05"
+      ],
+      "s": 2.591927083333333
+    },
+    {
+      "pair": [
+        "Domino05",
+        "Domino06"
+      ],
+      "s": 2.665625
+    },
+    {
+      "pair": [
+        "Domino06",
+        "Domino07"
+      ],
+      "s": 2.7765625
+    },
+    {
+      "pair": [
+        "Domino07",
+        "Domino08"
+      ],
+      "s": 2.8635416666666664
+    },
+    {
+      "pair": [
+        "Domino08",
+        "Domino09"
+      ],
+      "s": 2.9377604166666664
+    },
+    {
+      "pair": [
+        "Domino09",
+        "Domino10"
+      ],
+      "s": 3.0424479166666663
+    },
+    {
+      "pair": [
+        "Domino10",
+        "Domino11"
+      ],
+      "s": 3.131770833333333
+    },
+    {
+      "pair": [
+        "Domino11",
+        "Domino12"
+      ],
+      "s": 3.1984375
+    },
+    {
+      "pair": [
+        "Domino12",
+        "Domino13"
+      ],
+      "s": 3.27265625
+    },
+    {
+      "pair": [
+        "Domino13",
+        "Lever"
+      ],
+      "s": 3.4265624999999997
+    },
+    {
+      "pair": [
+        "Marble",
+        "Bridge"
+      ],
+      "s": 5.065885416666667
+    },
+    {
+      "pair": [
+        "Marble",
+        "BowlFeeder"
+      ],
+      "s": 5.391666666666667
+    },
+    {
+      "pair": [
+        "Marble",
+        "Pan"
+      ],
+      "s": 6.09375
+    },
+    {
+      "pair": [
+        "Cart",
+        "Flap"
+      ],
+      "s": 8.055208333333333
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SecondRun/Board1"
+      ],
+      "s": 8.451302083333333
+    },
+    {
+      "pair": [
+        "Marble2",
+        "Turnaround/Board"
+      ],
+      "s": 9.481510416666667
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board00"
+      ],
+      "s": 10.104427083333334
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board01"
+      ],
+      "s": 10.244010416666667
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board02"
+      ],
+      "s": 10.589322916666667
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board03"
+      ],
+      "s": 10.92265625
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board04"
+      ],
+      "s": 11.246354166666666
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board05"
+      ],
+      "s": 11.559635416666667
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board06"
+      ],
+      "s": 11.864583333333334
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board07"
+      ],
+      "s": 12.161197916666667
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board08"
+      ],
+      "s": 12.450260416666667
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board09"
+      ],
+      "s": 12.93125
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SugarTipper"
+      ],
+      "s": 13.20078125
+    },
+    {
+      "pair": [
+        "Sugar",
+        "CoffeeMug"
+      ],
+      "s": 13.350260416666666
+    }
+  ],
+  "received_s": 13.350260416666666,
+  "reactions": {
+    "bowl_capture": 6.09401041666626,
+    "car_handoff": 8.055468749997809,
+    "return_trip": 10.104687499995945
+  },
+  "nod_peaks_s": [
+    14.433333333333334,
+    15.183333333333334
+  ],
+  "no_pull_carton_drift_mm": 0.718511700630188,
+  "boards": [
+    {
+      "board": "/World/Bridge",
+      "board_mass_kg": 0.15518335093238642,
+      "maximum_drift_mm": 0.09511076658964157,
+      "maximum_angle_deg": 0.06945196099815895,
+      "seats": [
+        {
+          "column": 0,
+          "foundation": "/World/Set/PrepTable0",
+          "asset": "folded cloth",
+          "tins": 0,
+          "peak_base_normal_N": 2.619323129159773,
+          "screening_load_N": 3.816143129159773,
+          "assumed_steel_can_screen_N": null,
+          "peak_loaded_rim_eccentricity_ratio": 0.0,
+          "positive_load_fraction": 0.9991666666666666,
+          "passed": true
+        },
+        {
+          "column": 1,
+          "foundation": "/World/WorkBoard/Board3",
+          "asset": "folded cloth",
+          "tins": 0,
+          "peak_base_normal_N": 24.547806239689596,
+          "screening_load_N": 25.744626239689595,
+          "assumed_steel_can_screen_N": null,
+          "peak_loaded_rim_eccentricity_ratio": 0.0,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/BowlFeeder",
+      "board_mass_kg": 0.1906221521028531,
+      "maximum_drift_mm": 0.2226468175649643,
+      "maximum_angle_deg": 0.26845219083460853,
+      "seats": [
+        {
+          "column": 2,
+          "foundation": "/World/Set/FeederTable",
+          "asset": "food_canned_peach_a02",
+          "tins": 6,
+          "peak_base_normal_N": 21.294578617708204,
+          "screening_load_N": 22.491398617708203,
+          "assumed_steel_can_screen_N": 182.05538175515662,
+          "peak_loaded_rim_eccentricity_ratio": 0.9989855113945466,
+          "positive_load_fraction": 0.9997916666666666,
+          "passed": true
+        },
+        {
+          "column": 3,
+          "foundation": "/World/Pantry/Tables/Table5",
+          "asset": "food_canned_fruit_a03",
+          "tins": 4,
+          "peak_base_normal_N": 8.13766790584003,
+          "screening_load_N": 9.33448790584003,
+          "assumed_steel_can_screen_N": 129.2153674409244,
+          "peak_loaded_rim_eccentricity_ratio": 0.9089166362704297,
+          "positive_load_fraction": 0.99875,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/SecondRun/Board0",
+      "board_mass_kg": 0.7979206578509545,
+      "maximum_drift_mm": 0.008764113299548626,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 4,
+          "foundation": "/World/Pantry/Tables/Table6",
+          "asset": "food_canned_fruit_a03",
+          "tins": 2,
+          "peak_base_normal_N": 28.04062174750642,
+          "screening_load_N": 29.23744174750642,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9622637963908728,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 5,
+          "foundation": "/World/Pantry/Tables/Table6",
+          "asset": "food_canned_soup_a03",
+          "tins": 4,
+          "peak_base_normal_N": 14.207496528229921,
+          "screening_load_N": 15.404316528229922,
+          "assumed_steel_can_screen_N": 196.73331959849526,
+          "peak_loaded_rim_eccentricity_ratio": 0.9313598527384155,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/SecondRun/Board1",
+      "board_mass_kg": 0.7979206578509545,
+      "maximum_drift_mm": 0.010195182636380196,
+      "maximum_angle_deg": 0.0016597254278787506,
+      "seats": [
+        {
+          "column": 6,
+          "foundation": "/World/Pantry/Tables/Table6",
+          "asset": "food_canned_soup_a03",
+          "tins": 2,
+          "peak_base_normal_N": 10.199233180320585,
+          "screening_load_N": 11.396053180320585,
+          "assumed_steel_can_screen_N": 145.79405561653257,
+          "peak_loaded_rim_eccentricity_ratio": 0.536787586605272,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 7,
+          "foundation": "/World/Pantry/Tables/Table6",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 2,
+          "peak_base_normal_N": 21.987393152730846,
+          "screening_load_N": 23.184213152730845,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9332524089801699,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/SecondRun/Board2",
+      "board_mass_kg": 0.7979206578509531,
+      "maximum_drift_mm": 0.0019983118399977684,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 8,
+          "foundation": "/World/Set/RunTable",
+          "asset": "food_canned_beans_a01",
+          "tins": 2,
+          "peak_base_normal_N": 12.115303840064543,
+          "screening_load_N": 13.312123840064544,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.822318390408325,
+          "positive_load_fraction": 0.9997916666666666,
+          "passed": true
+        },
+        {
+          "column": 9,
+          "foundation": "/World/Set/RunTable",
+          "asset": "food_canned_peach_a02",
+          "tins": 2,
+          "peak_base_normal_N": 26.05800557574756,
+          "screening_load_N": 27.25482557574756,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9253730723424404,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/SecondRun/Board3",
+      "board_mass_kg": 0.7979206578509522,
+      "maximum_drift_mm": 0.024664297699928284,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 10,
+          "foundation": "/World/Set/RunTable",
+          "asset": "food_can_tunaFish_a01",
+          "tins": 3,
+          "peak_base_normal_N": 6.679032779219512,
+          "screening_load_N": 7.875852779219512,
+          "assumed_steel_can_screen_N": 191.7996862917385,
+          "peak_loaded_rim_eccentricity_ratio": 0.8245553639859516,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 11,
+          "foundation": "/World/Set/RunTable",
+          "asset": "food_canned_fruit_a03",
+          "tins": 1,
+          "peak_base_normal_N": 13.368570480831917,
+          "screening_load_N": 14.565390480831917,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9987103375995278,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/CartTrack0",
+      "board_mass_kg": 16.326255205357125,
+      "maximum_drift_mm": 0.038024771958589554,
+      "maximum_angle_deg": 0.008497154754348587,
+      "seats": [
+        {
+          "column": 12,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_canned_fruit_a03",
+          "tins": 3,
+          "peak_base_normal_N": 17.47280854363008,
+          "screening_load_N": 23.75120854363008,
+          "assumed_steel_can_screen_N": 113.04485339021313,
+          "peak_loaded_rim_eccentricity_ratio": 0.41553037453942937,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 13,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 2,
+          "peak_base_normal_N": 81.53720656955356,
+          "screening_load_N": 87.81560656955357,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.3178918247042286,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 14,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_canned_soup_a03",
+          "tins": 3,
+          "peak_base_normal_N": 16.37608806579141,
+          "screening_load_N": 22.654488065791412,
+          "assumed_steel_can_screen_N": 232.2340204429152,
+          "peak_loaded_rim_eccentricity_ratio": 0.979404303126324,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 15,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_canned_beans_a01",
+          "tins": 2,
+          "peak_base_normal_N": 108.53893028423731,
+          "screening_load_N": 114.81733028423731,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.5032063558126699,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/CartTrack1",
+      "board_mass_kg": 9.031299339984692,
+      "maximum_drift_mm": 0.003120575100183487,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 16,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_can_tunaFish_a01",
+          "tins": 2,
+          "peak_base_normal_N": 41.52392179581409,
+          "screening_load_N": 47.80232179581409,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.47017538202930226,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 17,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_can_tunaFish_a01",
+          "tins": 2,
+          "peak_base_normal_N": 48.719704046702056,
+          "screening_load_N": 54.99810404670205,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.26578748512566003,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 18,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_canned_peach_a02",
+          "tins": 1,
+          "peak_base_normal_N": 36.757957601579804,
+          "screening_load_N": 43.0363576015798,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.6883413363294226,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 19,
+          "foundation": "/World/Set/CartTable",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 1,
+          "peak_base_normal_N": 52.39051127180275,
+          "screening_load_N": 58.66891127180275,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.42488347109984514,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/Turnaround/Board",
+      "board_mass_kg": 6.814795553080208,
+      "maximum_drift_mm": 0.005368473008275032,
+      "maximum_angle_deg": 0.01229526065575092,
+      "seats": [
+        {
+          "column": 20,
+          "foundation": "/World/Pantry/Tables/Table4",
+          "asset": "food_canned_fruit_a03",
+          "tins": 3,
+          "peak_base_normal_N": 19.10931099917505,
+          "screening_load_N": 20.30613099917505,
+          "assumed_steel_can_screen_N": 92.91466260156476,
+          "peak_loaded_rim_eccentricity_ratio": 0.22986442069750346,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 21,
+          "foundation": "/World/Pantry/Tables/Table4",
+          "asset": "food_canned_soup_a03",
+          "tins": 3,
+          "peak_base_normal_N": 21.43718071145409,
+          "screening_load_N": 22.63400071145409,
+          "assumed_steel_can_screen_N": 94.96804299075549,
+          "peak_loaded_rim_eccentricity_ratio": 0.36603899516566923,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 22,
+          "foundation": "/World/Room/Floor",
+          "asset": "food_canned_soup_a03",
+          "tins": 3,
+          "peak_base_normal_N": 59.9330783611738,
+          "screening_load_N": 61.1298983611738,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.42134680759079884,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 23,
+          "foundation": "/World/Room/Floor",
+          "asset": "food_canned_beans_a01",
+          "tins": 5,
+          "peak_base_normal_N": 25.09316046751782,
+          "screening_load_N": 26.289980467517818,
+          "assumed_steel_can_screen_N": 191.40085651865934,
+          "peak_loaded_rim_eccentricity_ratio": 0.07309996096384014,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board00",
+      "board_mass_kg": 0.7075615856382179,
+      "maximum_drift_mm": 0.008787441067397594,
+      "maximum_angle_deg": 0.01542978974123341,
+      "seats": [
+        {
+          "column": 24,
+          "foundation": "/World/Pantry/Tables/Table0",
+          "asset": "food_canned_beans_a01",
+          "tins": 1,
+          "peak_base_normal_N": 8.264673738601667,
+          "screening_load_N": 9.461493738601668,
+          "assumed_steel_can_screen_N": 200.72795844276826,
+          "peak_loaded_rim_eccentricity_ratio": 0.22396516421630705,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 25,
+          "foundation": "/World/Room/Floor",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 4,
+          "peak_base_normal_N": 19.0259385679692,
+          "screening_load_N": 20.222758567969198,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.36259022756469406,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board01",
+      "board_mass_kg": 0.7075615856382178,
+      "maximum_drift_mm": 0.009194825775921345,
+      "maximum_angle_deg": 0.004388918741348857,
+      "seats": [
+        {
+          "column": 26,
+          "foundation": "/World/Pantry/Tables/Table0",
+          "asset": "food_can_tunaFish_a01",
+          "tins": 2,
+          "peak_base_normal_N": 13.304653807122744,
+          "screening_load_N": 14.501473807122744,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9931821632189546,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 27,
+          "foundation": "/World/Pantry/Tables/Table0",
+          "asset": "food_canned_fruit_a03",
+          "tins": 1,
+          "peak_base_normal_N": 9.046980963408851,
+          "screening_load_N": 10.243800963408852,
+          "assumed_steel_can_screen_N": 189.21223191365004,
+          "peak_loaded_rim_eccentricity_ratio": 0.45441824297474487,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board02",
+      "board_mass_kg": 0.7075615856382177,
+      "maximum_drift_mm": 0.003962364047765732,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 28,
+          "foundation": "/World/Pantry/Tables/Table1",
+          "asset": "food_canned_fruit_a03",
+          "tins": 2,
+          "peak_base_normal_N": 6.645446394886428,
+          "screening_load_N": 7.842266394886428,
+          "assumed_steel_can_screen_N": 119.21988456926341,
+          "peak_loaded_rim_eccentricity_ratio": 0.30107191915129244,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 29,
+          "foundation": "/World/Pantry/Tables/Table0",
+          "asset": "food_can_tunaFish_a01",
+          "tins": 2,
+          "peak_base_normal_N": 11.675692019284634,
+          "screening_load_N": 12.872512019284635,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.6611799872189057,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board03",
+      "board_mass_kg": 0.7075615856382179,
+      "maximum_drift_mm": 0.0012963208137080073,
+      "maximum_angle_deg": 0.0020895349082114103,
+      "seats": [
+        {
+          "column": 30,
+          "foundation": "/World/Pantry/Tables/Table1",
+          "asset": "food_canned_soup_a03",
+          "tins": 1,
+          "peak_base_normal_N": 12.326387718989524,
+          "screening_load_N": 13.523207718989525,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.6931529984380868,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 31,
+          "foundation": "/World/Pantry/Tables/Table1",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 1,
+          "peak_base_normal_N": 13.020666439884748,
+          "screening_load_N": 14.217486439884748,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.7797381799995595,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board04",
+      "board_mass_kg": 0.7075615856382177,
+      "maximum_drift_mm": 0.006713134702295065,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 32,
+          "foundation": "/World/Pantry/Tables/Table2",
+          "asset": "food_canned_beans_a01",
+          "tins": 2,
+          "peak_base_normal_N": 13.509478153136673,
+          "screening_load_N": 14.706298153136673,
+          "assumed_steel_can_screen_N": 98.72203253955796,
+          "peak_loaded_rim_eccentricity_ratio": 0.2740770684251859,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 33,
+          "foundation": "/World/Pantry/Tables/Table1",
+          "asset": "food_canned_peach_a02",
+          "tins": 1,
+          "peak_base_normal_N": 13.088623976761376,
+          "screening_load_N": 14.285443976761377,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9925845940973886,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board05",
+      "board_mass_kg": 0.7075615856382179,
+      "maximum_drift_mm": 0.0020929635502398014,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 34,
+          "foundation": "/World/Pantry/Tables/Table2",
+          "asset": "food_canned_peach_a02",
+          "tins": 1,
+          "peak_base_normal_N": 22.300702654756726,
+          "screening_load_N": 23.497522654756725,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.5051119049822199,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 35,
+          "foundation": "/World/Pantry/Tables/Table2",
+          "asset": "food_canned_fruit_a03",
+          "tins": 1,
+          "peak_base_normal_N": 10.621498730339887,
+          "screening_load_N": 11.818318730339888,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.9750426457195478,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board06",
+      "board_mass_kg": 0.7075615856382182,
+      "maximum_drift_mm": 0.003108740784227848,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 36,
+          "foundation": "/World/Pantry/Tables/Table3",
+          "asset": "food_can_tunaFish_a01",
+          "tins": 5,
+          "peak_base_normal_N": 12.363728783502188,
+          "screening_load_N": 13.560548783502188,
+          "assumed_steel_can_screen_N": 192.10081785456072,
+          "peak_loaded_rim_eccentricity_ratio": 0.5234821978439103,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 37,
+          "foundation": "/World/Pantry/Tables/Table2",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 1,
+          "peak_base_normal_N": 10.75681317904922,
+          "screening_load_N": 11.95363317904922,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.6351488798864069,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board07",
+      "board_mass_kg": 0.7075615856382184,
+      "maximum_drift_mm": 0.003476029261946678,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 38,
+          "foundation": "/World/Pantry/Tables/Table3",
+          "asset": "food_canned_soup_a03",
+          "tins": 1,
+          "peak_base_normal_N": 12.70351796827998,
+          "screening_load_N": 13.900337968279981,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.3197662830885601,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 39,
+          "foundation": "/World/Pantry/Tables/Table3",
+          "asset": "food_canned_beans_a01",
+          "tins": 1,
+          "peak_base_normal_N": 13.291762392934219,
+          "screening_load_N": 14.48858239293422,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.6129658331372404,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board08",
+      "board_mass_kg": 2.205852657209344,
+      "maximum_drift_mm": 0.0010323828319087625,
+      "maximum_angle_deg": 0.0,
+      "seats": [
+        {
+          "column": 40,
+          "foundation": "/World/Pantry/Tables/Table3",
+          "asset": "food_canned_beans_a01",
+          "tins": 1,
+          "peak_base_normal_N": 16.76171119623941,
+          "screening_load_N": 17.95853119623941,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.041303823546784406,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 41,
+          "foundation": "/World/Room/Floor",
+          "asset": "food_canned_peach_a02",
+          "tins": 3,
+          "peak_base_normal_N": 31.99185578691796,
+          "screening_load_N": 33.18867578691796,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.4433981461025976,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "board": "/World/ReturnRun/Board09",
+      "board_mass_kg": 2.44451824028769,
+      "maximum_drift_mm": 0.010921199806034565,
+      "maximum_angle_deg": 0.011961889452033567,
+      "seats": [
+        {
+          "column": 42,
+          "foundation": "/World/Room/Floor",
+          "asset": "food_canned_peach_a02",
+          "tins": 3,
+          "peak_base_normal_N": 36.85463365835595,
+          "screening_load_N": 38.05145365835595,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.5190555915509085,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        },
+        {
+          "column": 43,
+          "foundation": "/World/Room/Floor",
+          "asset": "food_can_tomatoSoup_a01",
+          "tins": 3,
+          "peak_base_normal_N": 36.56632841738851,
+          "screening_load_N": 37.763148417388514,
+          "assumed_steel_can_screen_N": 245.16625,
+          "peak_loaded_rim_eccentricity_ratio": 0.3115273801519771,
+          "positive_load_fraction": 1.0,
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "working_clearance_mm": 6.057087414202265,
+  "unexpected_pairs": [],
+  "frames": 1201,
+  "source_digest": "d58e735582f8157d177b51dfea95af410c017912e775c10b514829d21572465d",
+  "trajectory_digest": "2bf1231be735a8f6e99e65b6b80f8a5dc673ab72362878cff17fe4dc5ad4f4da",
+  "comparison_received_s": 13.5328125,
+  "simulation": "Newton-imported MuJoCo mechanism with two-way Bullet support contacts. Board reaction wrenches drive the pantry world, and its solved board poses update the mechanism collision meshes.",
+  "starter": {
+    "grip_s": 0.42,
+    "release_s": 1.62,
+    "peak_tension_N": 1.1244714289191489,
+    "peak_lean_rad": 0.3078640834840226,
+    "peak_lean_torque_Nm": 1.0424168211126235,
+    "beak_local": [
+      0.08545368808260619,
+      0.01137380135305221,
+      0.007215247716745751
+    ],
+    "tether_rest_m": 2.3196386520206222
+  },
+  "impact_fraction_of_carton_height": 0.4541445798669548,
+  "ladle_to_car_cord_mm": 601.4546688592607,
+  "rack_foot_gaps_mm": [
+    0.02408084156590995,
+    0.10027629766690138
+  ],
+  "bearing_model": "The dry contact model uses coefficient 0.55, gravity-loaded free boards, loose tins and precompressed cloth. The two solvers exchange board poses and contact forces. Bearing faces on fixed furniture are the level patches measured on source meshes. All four car-ramp seats must stay under their respective board. Cabinet and coffee-table joinery is fixed.",
+  "capacity_basis": "Screen for modeled intact, sealed steel food cans with a wall of at least 0.10 mm. The smallest measured axial collapse in Table 3 was 200 kgf. Use one eighth of this load and further reduce for diameters below 66 mm. This is a comparable-container assumption, not a package rating. No cardboard strength is credited. Cloth is represented in its already-compressed shape; crushing and cloth fiber dynamics are outside the rigid-body model.",
+  "capacity_source": "https://www2.fish-u.ac.jp/kenkyu/sangakukou/kenkyuhoukoku/44/44-3-2.pdf",
+  "timestep_comparison": {
+    "support_hz": 1280,
+    "duration_s": 20.0,
+    "reactions": {
+      "bowl_capture": 5.995833333333016,
+      "car_handoff": 7.925520833331261,
+      "return_trip": 9.97447916666273
+    },
+    "sugar_contact_s": 13.5328125,
+    "cube_retained": true,
+    "celebration_s": 13.755989583325958,
+    "passed": true
+  }
+}

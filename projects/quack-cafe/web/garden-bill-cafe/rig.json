@@ -1,0 +1,5726 @@
+{
+  "placements": [
+    {
+      "path": "/World/Room/Floor",
+      "asset": "environment_floor_a01",
+      "min": [
+        -4.500000357627869,
+        -6.300000214576699,
+        -0.1
+      ],
+      "max": [
+        4.500000357627869,
+        6.300000214576699,
+        8.18816479294937e-06
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Room/BackWall",
+      "asset": "structure_wall_straight_a01",
+      "min": [
+        -4.500003218650817,
+        5.557499853521584,
+        0.0
+      ],
+      "max": [
+        4.500003218650818,
+        5.742500146478415,
+        3.3300154101854673
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Room/LeftWall",
+      "asset": "structure_wall_straight_a01",
+      "min": [
+        -4.542500146478415,
+        -3.4500042319299653,
+        0.0
+      ],
+      "max": [
+        -4.357499853521586,
+        6.75000334978105,
+        3.3300154101854655
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Fulcrum",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.46605092787818503,
+        0.3667476550002586,
+        0.9764
+      ],
+      "max": [
+        -0.11394907212181501,
+        0.41720382499974146,
+        1.026856177962291
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Lever/Visual",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.43299999397993094,
+        0.1449757521593474,
+        1.0279
+      ],
+      "max": [
+        -0.14700000602006902,
+        0.6389757278406527,
+        1.0486974274464895
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Marble/Visual",
+      "asset": "toy_marble_a10",
+      "min": [
+        -0.2429999992251396,
+        0.3120000007748604,
+        1.0492371028035878
+      ],
+      "max": [
+        -0.20700000077486036,
+        0.34799999922513963,
+        1.085162897196412
+      ],
+      "collision": false,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/ServingTray",
+      "asset": "kitchenware_tray_a01",
+      "min": [
+        1.2251591205596923,
+        0.13634413897991177,
+        0.9538059721470133
+      ],
+      "max": [
+        1.6748408794403076,
+        0.40365586102008827,
+        1.0251667390346781
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/BreakfastCup",
+      "asset": "dishware_cup_tea_a01",
+      "min": [
+        1.4206223613768816,
+        0.2878947499394417,
+        0.9588059721470134
+      ],
+      "max": [
+        1.5393776386231184,
+        0.37210525006055833,
+        1.0606952546119945
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Croissant",
+      "asset": "food_prepared_croissant_a01",
+      "min": [
+        1.2699797452986241,
+        0.24656233444809914,
+        0.9588059721470134
+      ],
+      "max": [
+        1.410020254701376,
+        0.3134376655519009,
+        1.0020975926788314
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Spoon",
+      "asset": "kitchenware_spoon_h01",
+      "min": [
+        1.4610211257636547,
+        0.17828786332160237,
+        0.9588059721470134
+      ],
+      "max": [
+        1.5789788742363453,
+        0.20171213667839769,
+        0.967637403537731
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Bridge",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.28735722448415524,
+        0.637979203983518,
+        0.9711589983609018
+      ],
+      "max": [
+        -0.16264277551584463,
+        0.8499999960164819,
+        1.0280000016390982
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Sugar/Visual",
+      "asset": "hf_sugar_cube_001",
+      "min": [
+        -1.9107583202076548,
+        1.2880809915211657,
+        0.4267068753414565
+      ],
+      "max": [
+        -1.8853727062287031,
+        1.3134666055001174,
+        0.444706874462288
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/CoffeeMug",
+      "asset": "dishware_mug_coffee_a01",
+      "min": [
+        -2.0727423710812847,
+        1.1536059018446216,
+        0.29526977527165743
+      ],
+      "max": [
+        -1.8922913761724378,
+        1.3288392627634587,
+        0.4167114909014288
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino01/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -1.5017763914156532,
+        0.5100059412763565,
+        0.9731377431242156
+      ],
+      "max": [
+        -1.4563940225552936,
+        0.5903104640199692,
+        1.1215158632905788
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino02/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -1.4170299704786768,
+        0.5097276208571286,
+        0.9731694080552188
+      ],
+      "max": [
+        -1.371458179164267,
+        0.5903354646989015,
+        1.1215106628218563
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino03/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -1.331183270646039,
+        0.5102194086533305,
+        0.9731700005879296
+      ],
+      "max": [
+        -1.2871226509085267,
+        0.5899311765212303,
+        1.121510547126304
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino04/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -1.246147502005556,
+        0.5102265845060067,
+        0.9731698479962457
+      ],
+      "max": [
+        -1.2021325940485217,
+        0.5899090995073601,
+        1.1215102228808296
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino05/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -1.161228685151689,
+        0.5101528637593613,
+        0.9731684244391743
+      ],
+      "max": [
+        -1.1170658781417688,
+        0.5899314410502089,
+        1.1215123616936389
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino06/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -1.0769830369063034,
+        0.5099411203254278,
+        0.973168041794689
+      ],
+      "max": [
+        -1.0314332819871295,
+        0.5902519033562128,
+        1.1215125059195448
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino07/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.991467248112415,
+        0.5100696882526524,
+        0.9731422480958032
+      ],
+      "max": [
+        -0.9467493189270748,
+        0.5901253619869102,
+        1.121517795620627
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino08/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.9065914147010594,
+        0.5100619829260435,
+        0.9731759886794852
+      ],
+      "max": [
+        -0.8630814559349271,
+        0.5900782310403262,
+        1.1212957043594554
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino09/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.8212135123309147,
+        0.5101905149121646,
+        0.9731690968890387
+      ],
+      "max": [
+        -0.777095170110797,
+        0.5899389702181453,
+        1.1215109739880367
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino10/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.7362028069316034,
+        0.5102071865272246,
+        0.9731695919877734
+      ],
+      "max": [
+        -0.6921092562855597,
+        0.5899354116249361,
+        1.1215107173078804
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino11/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.6511353679466787,
+        0.5102260924767085,
+        0.9731697343541023
+      ],
+      "max": [
+        -0.6071689895820079,
+        0.5898865841437748,
+        1.121511290197289
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino12/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.566404144862191,
+        0.5100185716022715,
+        0.9731704713720324
+      ],
+      "max": [
+        -0.5220844339341958,
+        0.5898841774593133,
+        1.1215098379236226
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino13/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        -0.4811272772395832,
+        0.5101888442647574,
+        0.9731445108746575
+      ],
+      "max": [
+        -0.43719457067606643,
+        0.5899272894251233,
+        1.121522208561988
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Lever/EndStop",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.2936714266706079,
+        0.19900789430768875,
+        1.0487000000000002
+      ],
+      "max": [
+        -0.15632857332939215,
+        0.3009921056923113,
+        1.054709414099531
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/BowlFeeder",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.29178252839618096,
+        0.8699999968608436,
+        0.9633169874607467
+      ],
+      "max": [
+        -0.15821747160381905,
+        1.100757803139157,
+        0.9910000125392535
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Pan/Visual",
+      "asset": "dishware_plastic_smallPlate_a01",
+      "min": [
+        -0.2639009992112231,
+        1.0610994913986838,
+        0.84
+      ],
+      "max": [
+        0.01390099921122323,
+        1.3389005086013162,
+        0.9673440052878952
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Gate/Visual",
+      "asset": "food_box_sugar_a01",
+      "min": [
+        0.8206615686589473,
+        1.1744992119591156,
+        1.4504167953237972
+      ],
+      "max": [
+        0.9253869496882441,
+        1.2255007880408844,
+        1.6495832046762025
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/RunRail0",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        1.2477961741738541,
+        2.5472502196209583,
+        0.8141737983757484
+      ],
+      "max": [
+        1.298252344173337,
+        2.8927497803790407,
+        0.9923653320590342
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/RunRail1",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        1.3477961741738542,
+        2.5472502196209583,
+        0.8141737983757484
+      ],
+      "max": [
+        1.398252344173337,
+        2.8927497803790407,
+        0.9923653320590342
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Gate/Pin",
+      "asset": "misc_notebook_a02",
+      "min": [
+        0.7839181160288085,
+        1.1947494253698778,
+        1.220000131553881
+      ],
+      "max": [
+        0.962130402318383,
+        1.205250574630122,
+        1.459999868446119
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Marble2/Visual",
+      "asset": "toy_marble_a04",
+      "min": [
+        1.305024259948456,
+        2.3500000007748603,
+        1.0338730454150207
+      ],
+      "max": [
+        1.3410242583987353,
+        2.3859999992251395,
+        1.0697988398078448
+      ],
+      "collision": false,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/WheelLeft/Visual",
+      "asset": "engineComponent_idler_pulley_a01",
+      "min": [
+        -0.12349999490752822,
+        1.1411217151409796,
+        1.8715000050924724
+      ],
+      "max": [
+        0.03349999490752825,
+        1.2588782848590212,
+        2.028499994907529
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/WheelRight/Visual",
+      "asset": "engineComponent_idler_pulley_a01",
+      "min": [
+        0.7145242642660672,
+        1.1411217151409796,
+        1.8715000050924724
+      ],
+      "max": [
+        0.8715242540811237,
+        1.2588782848590212,
+        2.028499994907529
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Post0",
+      "asset": "tube_a02",
+      "min": [
+        -0.49434863399592677,
+        1.552627108693123,
+        0.001
+      ],
+      "max": [
+        -0.4596028476568822,
+        1.5873728913068772,
+        2.1009999842785874
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Post1",
+      "asset": "tube_a02",
+      "min": [
+        1.6456513660040735,
+        1.552627108693123,
+        0.001
+      ],
+      "max": [
+        1.680397152343118,
+        1.5873728913068772,
+        2.1009999842785874
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Top",
+      "asset": "tube_a02",
+      "min": [
+        -0.4944757516364602,
+        1.552627108693123,
+        2.101627106830478
+      ],
+      "max": [
+        1.6805242699836516,
+        1.5873728913068772,
+        2.136372893169523
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Hanger0",
+      "asset": "tube_a02",
+      "min": [
+        -0.05368644658476111,
+        1.5613135543465615,
+        1.9539999999147897
+      ],
+      "max": [
+        -0.03631355341523883,
+        1.5786864456534386,
+        2.1000000000852106
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Axle0",
+      "asset": "tube_a02",
+      "min": [
+        -0.05021186815795768,
+        1.2609999973551171,
+        1.9447881324008356
+      ],
+      "max": [
+        -0.03978813184204226,
+        1.5670000026448831,
+        1.9552118675991639
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Hanger1",
+      "asset": "tube_a02",
+      "min": [
+        0.7843378125888345,
+        1.5613135543465615,
+        1.9539999999147897
+      ],
+      "max": [
+        0.8017107057583568,
+        1.5786864456534386,
+        2.1000000000852106
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Frame/Axle1",
+      "asset": "tube_a02",
+      "min": [
+        0.7878123910156378,
+        1.2609999973551171,
+        1.9447881324008356
+      ],
+      "max": [
+        0.7982361273315532,
+        1.5670000026448831,
+        1.9552118675991639
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/LowShelf",
+      "asset": "hf_Shelf004",
+      "min": [
+        -0.9921374035280703,
+        2.7582809071566823,
+        0.0009999999999999998
+      ],
+      "max": [
+        -0.6078625964719298,
+        3.0417190928433184,
+        0.5705236914937554
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/ShelfPlant",
+      "asset": "hf_Plant002",
+      "min": [
+        -0.7655870011448861,
+        2.8439624994993213,
+        0.3761708774719775
+      ],
+      "max": [
+        -0.6544129988551141,
+        2.9560375005006794,
+        0.47481087978225356
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/ShelfBook0",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.957226186618209,
+        2.8575065802782778,
+        0.376171
+      ],
+      "max": [
+        -0.8427738133817912,
+        2.942493419721723,
+        0.38117884488394854
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ShelfBook1",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.957226186618209,
+        2.8575065802782778,
+        0.38122884999999995
+      ],
+      "max": [
+        -0.8427738133817912,
+        2.942493419721723,
+        0.3862366948839485
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ShelfBook2",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.957226186618209,
+        2.8575065802782778,
+        0.3862867
+      ],
+      "max": [
+        -0.8427738133817912,
+        2.942493419721723,
+        0.39129454488394855
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/SideTable",
+      "asset": "furniture_table_coffee_low_a01",
+      "min": [
+        2.1599999809265142,
+        -1.620000134706495,
+        0.00010000000000000005
+      ],
+      "max": [
+        3.8400000190734858,
+        -0.779999865293505,
+        0.6198275589852024
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Flowers",
+      "asset": "hf_FlowerVase001",
+      "min": [
+        3.0171505962802407,
+        -1.3634674525818107,
+        0.6208275589852024
+      ],
+      "max": [
+        3.3828494037197587,
+        -1.0365325474181888,
+        1.1429967737534215
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Seat0",
+      "asset": "hf_Stool016",
+      "min": [
+        2.74286375567317,
+        -2.3476599998772145,
+        0.0010000000000000009
+      ],
+      "max": [
+        3.25713624432683,
+        -1.8523400001227857,
+        1.0372625122070311
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Seat1",
+      "asset": "hf_Stool016",
+      "min": [
+        2.74286375567317,
+        -0.49765999987721443,
+        0.0010000000000000009
+      ],
+      "max": [
+        3.25713624432683,
+        -0.002340000122785485,
+        1.0372625122070311
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Plant0",
+      "asset": "hf_Plant008",
+      "min": [
+        -1.3490289971232414,
+        0.11990100264549253,
+        0.9529999999999998
+      ],
+      "max": [
+        -1.1509710028767586,
+        0.3200989973545074,
+        1.1379039942026137
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Plant1",
+      "asset": "hf_Plant002",
+      "min": [
+        0.5888259977102279,
+        0.15792499899864193,
+        0.9529999999999998
+      ],
+      "max": [
+        0.811174002289772,
+        0.382075001001358,
+        1.150280004620552
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/Counter",
+      "asset": "furniture_table_coffee_low_a01",
+      "min": [
+        -3.9800000143051135,
+        2.259999831914906,
+        0.00010000000000000005
+      ],
+      "max": [
+        -1.819999985694886,
+        3.3400001680850937,
+        0.7968925682996191
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/CoffeeMachine",
+      "asset": "hf_CoffeeMachine036",
+      "min": [
+        -3.059692008681775,
+        2.559839197390842,
+        0.797092568299619
+      ],
+      "max": [
+        -2.8403079913182263,
+        3.0401608026091567,
+        1.2478149945043961
+      ],
+      "collision": false,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/CounterLamp",
+      "asset": "lamp_table_bedside_a01",
+      "min": [
+        -2.2990266501903536,
+        2.7006240293383597,
+        0.797092568299619
+      ],
+      "max": [
+        -2.100973349809647,
+        2.89937597066164,
+        1.1687321800229862
+      ],
+      "collision": false,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/CounterPlant",
+      "asset": "hf_Plant008",
+      "min": [
+        -3.6990289971232415,
+        2.6999010026454924,
+        0.797092568299619
+      ],
+      "max": [
+        -3.5009710028767587,
+        2.9000989973545073,
+        0.9819965625022329
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ReadingBook0",
+      "asset": "misc_notebook_a02",
+      "min": [
+        0.27560596012508565,
+        0.14475855638800478,
+        0.953
+      ],
+      "max": [
+        0.4243940398749143,
+        0.25524144361199524,
+        0.9595101981103404
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ReadingBook1",
+      "asset": "misc_notebook_a02",
+      "min": [
+        0.27560596012508565,
+        0.14475855638800478,
+        0.9595602049999999
+      ],
+      "max": [
+        0.4243940398749143,
+        0.25524144361199524,
+        0.9660704031103404
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ReadingBook2",
+      "asset": "misc_notebook_a02",
+      "min": [
+        0.27560596012508565,
+        0.14475855638800478,
+        0.9661204099999999
+      ],
+      "max": [
+        0.4243940398749143,
+        0.25524144361199524,
+        0.9726306081103404
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ReadingBook3",
+      "asset": "misc_notebook_a02",
+      "min": [
+        0.27560596012508565,
+        0.14475855638800478,
+        0.9726806149999999
+      ],
+      "max": [
+        0.4243940398749143,
+        0.25524144361199524,
+        0.9791908131103404
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/ReadingBook4",
+      "asset": "misc_notebook_a02",
+      "min": [
+        0.27560596012508565,
+        0.14475855638800478,
+        0.97924082
+      ],
+      "max": [
+        0.4243940398749143,
+        0.25524144361199524,
+        0.9857510181103405
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/PrepTable0",
+      "asset": "fixture_cabinet_b01",
+      "min": [
+        -2.1588180452874735,
+        0.1517969040807646,
+        0.00010000000000000005
+      ],
+      "max": [
+        0.1928880347619417,
+        0.8482030959192353,
+        0.9528059357714408
+      ],
+      "collision": true,
+      "approximation": "none",
+      "assembly": "Uniformly scaled complete source cabinet modules",
+      "module_scale": 1.0261166366403238,
+      "module_count": 3
+    },
+    {
+      "path": "/World/Set/PrepTable1",
+      "asset": "fixture_cabinet_b01",
+      "min": [
+        0.19588805538699516,
+        0.1517969040807646,
+        0.00010000000000000005
+      ],
+      "max": [
+        1.7626921018782538,
+        0.8482030959192353,
+        0.9528059357714408
+      ],
+      "collision": true,
+      "approximation": "none",
+      "assembly": "Uniformly scaled complete source cabinet modules",
+      "module_scale": 1.0261166366403238,
+      "module_count": 2
+    },
+    {
+      "path": "/World/WorkBoard/Board0",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -1.969999992132187,
+        0.3960000034570694,
+        0.953
+      ],
+      "max": [
+        -1.4380000078678128,
+        0.7039999965429307,
+        0.9753972299978609
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/WorkBoard/Board1",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -1.4369999921321868,
+        0.3960000034570694,
+        0.953
+      ],
+      "max": [
+        -0.9050000078678128,
+        0.7039999965429307,
+        0.9753972299978609
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/WorkBoard/Board2",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.9039999921321868,
+        0.3960000034570694,
+        0.953
+      ],
+      "max": [
+        -0.37200000786781295,
+        0.7039999965429307,
+        0.9753972299978609
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/WorkBoard/Board3",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.3709999921321867,
+        0.3960000034570694,
+        0.953
+      ],
+      "max": [
+        0.1609999921321872,
+        0.7039999965429307,
+        0.9753972299978609
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/RobotPlatform/Item00",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -1.8945556664778616,
+        0.49414500375906273,
+        0.9755
+      ],
+      "max": [
+        -1.6094443335221384,
+        0.7058549962409372,
+        0.9879749997726021
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/RobotPlatform/Item01",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -1.8945556664778616,
+        0.49414500375906273,
+        0.988025
+      ],
+      "max": [
+        -1.6094443335221384,
+        0.7058549962409372,
+        1.000499999772602
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item00",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        0.9529
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        0.9635428571778727
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item01",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        0.9635928571428571
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        0.9742357143207299
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item02",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        0.9742857142857143
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        0.984928571463587
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item03",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        0.9849785714285715
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        0.9956214286064442
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item04",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        0.9956714285714285
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        1.0063142857493013
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item05",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        1.0063642857142858
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        1.0170071428921585
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/LeverRest/Item06",
+      "asset": "misc_notebook_a02",
+      "min": [
+        -0.41161920848707817,
+        0.10969141265791277,
+        1.0170571428571429
+      ],
+      "max": [
+        -0.1683807915129218,
+        0.29030858734208725,
+        1.0277000000350156
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Lever/Rail0",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.2939210642197157,
+        0.29796180081215723,
+        1.0490789327942311
+      ],
+      "max": [
+        -0.25607893578028423,
+        0.5620381991878427,
+        1.086921067205769
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Lever/Rail1",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.19392106421971572,
+        0.29796180081215723,
+        1.0490789327942311
+      ],
+      "max": [
+        -0.15607893578028426,
+        0.5620381991878427,
+        1.086921067205769
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/FeederTable",
+      "asset": "furniture_table_coffee_low_a01",
+      "min": [
+        -1.200000023841858,
+        0.8999998986721037,
+        0.00010000000000000005
+      ],
+      "max": [
+        2.3841858043383013e-08,
+        1.5000001013278963,
+        0.44276254967078565
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/Set/RunTable",
+      "asset": "furniture_table_coffee_low_a01",
+      "min": [
+        1.0230241578456996,
+        2.299999976158142,
+        0.00010000000000000005
+      ],
+      "max": [
+        1.6230243605014918,
+        3.500000023841858,
+        0.44276254967078565
+      ],
+      "collision": true,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/SecondRun/Board0",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        1.2153963332879396,
+        2.1941826063245036,
+        0.9467367673064127
+      ],
+      "max": [
+        1.430652185059252,
+        2.5449768041114984,
+        1.099990685669595
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/SecondRun/Board1",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        1.2153963332879396,
+        2.5391826063245038,
+        0.7929867673064125
+      ],
+      "max": [
+        1.430652185059252,
+        2.889976804111499,
+        0.9462406856695948
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/SecondRun/Board2",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        1.2153963332879396,
+        2.884182606324504,
+        0.6392367673064125
+      ],
+      "max": [
+        1.430652185059252,
+        3.234976804111499,
+        0.7924906856695949
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/SecondRun/Board3",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        1.2153963332879396,
+        3.2291826063245037,
+        0.4854867673064125
+      ],
+      "max": [
+        1.430652185059252,
+        3.579976804111499,
+        0.6387406856695947
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/BridgeGuide0",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.28187544646791196,
+        0.6506509573222338,
+        0.9826192891520998
+      ],
+      "max": [
+        -0.25412455353208807,
+        0.8456217606693337,
+        1.0528238520610071
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/BridgeGuide1",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.19587544646791194,
+        0.6506509573222338,
+        0.9826192891520998
+      ],
+      "max": [
+        -0.16812455353208805,
+        0.8456217606693337,
+        1.0528238520610071
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/BowlGuide0",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.28376755288988353,
+        0.872827544899792,
+        0.9736144537473351
+      ],
+      "max": [
+        -0.2522324471101165,
+        1.0946808043600222,
+        1.0222233057105952
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/BowlGuide1",
+      "asset": "kitchenware_rollingPin_a01",
+      "min": [
+        -0.1977675528898835,
+        0.872827544899792,
+        0.9736144537473351
+      ],
+      "max": [
+        -0.16623244711011648,
+        1.0946808043600222,
+        1.0222233057105952
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/CartTrack0",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        0.5786494824979744,
+        0.8134611021866249,
+        1.03018944927228
+      ],
+      "max": [
+        1.167399035849217,
+        1.8250000023588293,
+        1.2278182325459013
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/CartTrack1",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        0.6313733238794604,
+        1.8196322494087027,
+        0.9102674586206315
+      ],
+      "max": [
+        1.1146751944677316,
+        2.650000000591298,
+        1.072500041379369
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/CartTable",
+      "asset": "fixture_cabinet_b01",
+      "min": [
+        0.3593327940234048,
+        0.8561930586600164,
+        0.00010000000000000005
+      ],
+      "max": [
+        0.9806672059765953,
+        2.9538069413399834,
+        0.8501053407109327
+      ],
+      "collision": true,
+      "approximation": "none",
+      "assembly": "Uniformly scaled complete source cabinet modules",
+      "module_scale": 0.915502416023844,
+      "module_count": 3
+    },
+    {
+      "path": "/World/Cart/Visual",
+      "asset": "hf_BeetleBody",
+      "collision": true,
+      "approximation": "convexHull",
+      "min": [
+        0.8160151404603609,
+        0.8349041779593053,
+        1.199704510915726
+      ],
+      "max": [
+        0.9300333778868303,
+        1.1435691500013294,
+        1.3377367793628565
+      ]
+    },
+    {
+      "path": "/World/Tire1/Visual",
+      "asset": "hf_BeetleTire1",
+      "collision": true,
+      "approximation": "convexHull",
+      "min": [
+        0.9163787694655331,
+        1.0563948002993415,
+        1.1838458905055478
+      ],
+      "max": [
+        0.9311370699169094,
+        1.1130856491502215,
+        1.2405367432098227
+      ]
+    },
+    {
+      "path": "/World/Tire2/Visual",
+      "asset": "hf_BeetleTire2",
+      "collision": true,
+      "approximation": "convexHull",
+      "min": [
+        0.9163787694655331,
+        0.8799452313443894,
+        1.2111153700723243
+      ],
+      "max": [
+        0.9311981765973673,
+        0.9366360754828426,
+        1.2678062220483122
+      ]
+    },
+    {
+      "path": "/World/Tire3/Visual",
+      "asset": "hf_BeetleTire3",
+      "collision": true,
+      "approximation": "convexHull",
+      "min": [
+        0.814946672390371,
+        1.0563948097002966,
+        1.1838458888943364
+      ],
+      "max": [
+        0.8297660652170907,
+        1.113085657846789,
+        1.2405367370408287
+      ]
+    },
+    {
+      "path": "/World/Flap/Visual",
+      "asset": "hf_CabinetDoorPanel017",
+      "min": [
+        0.8159314767713662,
+        2.386615649965322,
+        1.025227906870103
+      ],
+      "max": [
+        1.3901170415758253,
+        2.413384350034678,
+        1.3887720931298972
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/FlapAxle",
+      "asset": "tube_a02",
+      "min": [
+        0.5880242754762597,
+        2.3972203374530303,
+        1.3912203371550063
+      ],
+      "max": [
+        1.5680242428709317,
+        2.4027796625469704,
+        1.396779662844993
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/FlapPost0",
+      "asset": "tube_a02",
+      "min": [
+        0.5865094242350248,
+        2.393485165759921,
+        0.8502053286552429
+      ],
+      "max": [
+        0.5995390941121665,
+        2.406514834240079,
+        1.3890000091043802
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/FlapPost1",
+      "asset": "tube_a02",
+      "min": [
+        1.556509424235025,
+        2.393485165759921,
+        0.44286254967078564
+      ],
+      "max": [
+        1.5695390941121667,
+        2.406514834240079,
+        1.388999973825269
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Set/Funnel",
+      "asset": "serviceTool_funnel_flexibleSpout_a01",
+      "min": [
+        -2.6920872166752816,
+        2.3401098996400833,
+        0.797092568299619
+      ],
+      "max": [
+        -2.5079127833247186,
+        2.6598901003599167,
+        0.9481684529994405
+      ],
+      "collision": false,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/CarStop",
+      "asset": "food_box_pudding_a01",
+      "min": [
+        0.7934662240520876,
+        2.5834089041573605,
+        0.9472169858016469
+      ],
+      "max": [
+        0.9525822942951043,
+        2.65584204277409,
+        1.079711601294904
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Tire4/Visual",
+      "asset": "hf_BeetleTire4",
+      "collision": true,
+      "approximation": "convexHull",
+      "min": [
+        0.814946672390371,
+        0.8800037879389868,
+        1.2111063195301728
+      ],
+      "max": [
+        0.8297660652170907,
+        0.9366946360854791,
+        1.267797167676665
+      ]
+    },
+    {
+      "path": "/World/Turnaround/Board",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        0.7800882663226292,
+        3.5398857712768894,
+        0.43074132136911675
+      ],
+      "max": [
+        1.5406014142554183,
+        3.9807083491060884,
+        0.48727563034478655
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/TurnRails/Exit0_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.7657565626846664,
+        3.5391946363827653,
+        0.46314763179474683
+      ],
+      "max": [
+        1.0930656530320577,
+        3.828181420356405,
+        0.5104871398745806
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L400162_R18000",
+        "length_m": 0.40016198223243055,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Exit1_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.7135431679660927,
+        3.5998061980848233,
+        0.46314763179474683
+      ],
+      "max": [
+        1.040852258313484,
+        3.888792982058463,
+        0.5104871398745806
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L400162_R18000",
+        "length_m": 0.4001619822324307,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Exit0_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.7649741084721668,
+        3.5385205968183793,
+        0.4994329378575458
+      ],
+      "max": [
+        1.0922831988195583,
+        3.8275073807920186,
+        0.5467724459373795
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L400162_R18000",
+        "length_m": 0.40016198223243044,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Exit1_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.7127607137535932,
+        3.5991321585204363,
+        0.4994329378575458
+      ],
+      "max": [
+        1.0400698041009844,
+        3.888118942494076,
+        0.5467724459373795
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L400162_R18000",
+        "length_m": 0.40016198223243066,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc00_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3392453293774498,
+        3.692632230836824,
+        0.478258384690572
+      ],
+      "max": [
+        1.376814648596814,
+        3.71851459353248,
+        0.5146747401069189
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22613_R18000",
+        "length_m": 0.022612609492111396,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc00_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3392453293774498,
+        3.692632230836824,
+        0.5145583846905721
+      ],
+      "max": [
+        1.376814648596814,
+        3.71851459353248,
+        0.550974740106919
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22613_R18000",
+        "length_m": 0.022612609492111396,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc01_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.339524374456145,
+        3.719431593909508,
+        0.4787863436430133
+      ],
+      "max": [
+        1.3768445077952576,
+        3.7448113654751074,
+        0.5151397615941873
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22611_R18000",
+        "length_m": 0.02261139949770475,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc01_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.339524374456145,
+        3.719431593909508,
+        0.5150863436430135
+      ],
+      "max": [
+        1.3768445077952576,
+        3.7448113654751074,
+        0.5514397615941874
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22611_R18000",
+        "length_m": 0.022611399497704746,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc02_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3349135278166733,
+        3.7436321086013735,
+        0.47923741965820266
+      ],
+      "max": [
+        1.3746779615715616,
+        3.7732735692982855,
+        0.5155208063333188
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22610_R18000",
+        "length_m": 0.022610276615358877,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc02_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3349135278166733,
+        3.7436321086013735,
+        0.5155374196582027
+      ],
+      "max": [
+        1.3746779615715616,
+        3.7732735692982855,
+        0.5518208063333188
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22610_R18000",
+        "length_m": 0.022610276615358877,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc03_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3271919721106036,
+        3.7674114712215814,
+        0.4796035996555891
+      ],
+      "max": [
+        1.3686569937476536,
+        3.8007820027161676,
+        0.5158110107200752
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22609_R18000",
+        "length_m": 0.022609320804382535,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc03_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3271919721106036,
+        3.767411471221581,
+        0.5159035996555892
+      ],
+      "max": [
+        1.3686569937476536,
+        3.8007820027161676,
+        0.5521110107200752
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22609_R18000",
+        "length_m": 0.022609320804382535,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc04_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3164982901016729,
+        3.7903406793831707,
+        0.4798783758271611
+      ],
+      "max": [
+        1.3588887108899914,
+        3.82684874305254,
+        0.5160051476988277
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22609_R18000",
+        "length_m": 0.02260860013626706,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc04_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3164982901016729,
+        3.7903406793831707,
+        0.5161783758271609
+      ],
+      "max": [
+        1.3588887108899914,
+        3.82684874305254,
+        0.5523051476988274
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22609_R18000",
+        "length_m": 0.02260860013626706,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc05_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3030238184608345,
+        3.8120070533732986,
+        0.4800568733432642
+      ],
+      "max": [
+        1.3455475960718342,
+        3.8510105186898693,
+        0.5160997088530549
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22608_R18000",
+        "length_m": 0.02260816594154055,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc05_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.3030238184608345,
+        3.8120070533732986,
+        0.5163568733432642
+      ],
+      "max": [
+        1.3455475960718342,
+        3.8510105186898693,
+        0.5523997088530549
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22608_R18000",
+        "length_m": 0.02260816594154055,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc06_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2869947523831677,
+        3.832004384389389,
+        0.4801236663266264
+      ],
+      "max": [
+        1.3288868641177822,
+        3.8728542211225627,
+        0.5161052383072958
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22608_R18000",
+        "length_m": 0.02260804914860045,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc06_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2869947523831677,
+        3.832004384389389,
+        0.5164236663266264
+      ],
+      "max": [
+        1.3288868641177822,
+        3.8728542211225627,
+        0.5524052383072958
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22608_R18000",
+        "length_m": 0.02260804914860045,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc07_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2686160782733442,
+        3.849914680059026,
+        0.4800161194001333
+      ],
+      "max": [
+        1.3092859580087215,
+        3.8920498072213725,
+        0.5160830784555217
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22608_R18000",
+        "length_m": 0.022608258077097723,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc07_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2686160782733442,
+        3.849914680059026,
+        0.5163161194001332
+      ],
+      "max": [
+        1.3092859580087215,
+        3.8920498072213725,
+        0.5523830784555216
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22608_R18000",
+        "length_m": 0.022608258077097723,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc08_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2482846264606307,
+        3.8655167277994695,
+        0.4798098385661876
+      ],
+      "max": [
+        1.2870270477172447,
+        3.908155109279525,
+        0.5159599421977797
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22609_R18000",
+        "length_m": 0.0226087778442706,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc08_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2482846264606307,
+        3.8655167277994695,
+        0.5161098385661876
+      ],
+      "max": [
+        1.2870270477172447,
+        3.908155109279525,
+        0.5522599421977797
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22609_R18000",
+        "length_m": 0.0226087778442706,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc09_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2263676694656371,
+        3.878533454636239,
+        0.4795084906333494
+      ],
+      "max": [
+        1.262504292749061,
+        3.9208803351308052,
+        0.5157380520561294
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22610_R18000",
+        "length_m": 0.02260957142690195,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc09_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2263676694656371,
+        3.878533454636239,
+        0.5158084906333493
+      ],
+      "max": [
+        1.262504292749061,
+        3.9208803351308052,
+        0.5520380520561293
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22610_R18000",
+        "length_m": 0.02260957142690195,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc10_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.2032605012317021,
+        3.8887325636855414,
+        0.47911743230267123
+      ],
+      "max": [
+        1.2361526500024527,
+        3.929997566102517,
+        0.5154214057986417
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22611_R18000",
+        "length_m": 0.02261058230260116,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc10_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.203260501231702,
+        3.8887325636855414,
+        0.5154174323026713
+      ],
+      "max": [
+        1.2361526500024524,
+        3.929997566102517,
+        0.5517214057986418
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22611_R18000",
+        "length_m": 0.022610582302601157,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc11_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.1793798517194571,
+        3.8959312804338477,
+        0.47864360873668066
+      ],
+      "max": [
+        1.2084396159192832,
+        3.9353442384861936,
+        0.5150157106308842
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22612_R18000",
+        "length_m": 0.022611738480841175,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc11_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.1793798517194571,
+        3.8959312804338477,
+        0.5149436087366807
+      ],
+      "max": [
+        1.2084396159192832,
+        3.9353442384861936,
+        0.5513157106308842
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22612_R18000",
+        "length_m": 0.022611738480841175,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc12_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.1551564326766564,
+        3.8999995478622593,
+        0.4780954529932381
+      ],
+      "max": [
+        1.179856872483728,
+        3.9368261223823877,
+        0.5145282575625681
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22613_R18000",
+        "length_m": 0.02261295763478278,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc12_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.1551564326766564,
+        3.8999995478622593,
+        0.5143954529932382
+      ],
+      "max": [
+        1.179856872483728,
+        3.9368261223823877,
+        0.5508282575625683
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22613_R18000",
+        "length_m": 0.022612957634782778,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc13_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.1275778894097848,
+        3.898615384613709,
+        0.47748269681388217
+      ],
+      "max": [
+        1.1543608448623277,
+        3.936665973343052,
+        0.5139678295037572
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22614_R18000",
+        "length_m": 0.02261415296669436,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc13_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.1275778894097848,
+        3.898615384613709,
+        0.5137826968138821
+      ],
+      "max": [
+        1.1543608448623277,
+        3.936665973343052,
+        0.5502678295037572
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22614_R18000",
+        "length_m": 0.02261415296669436,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc14_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.0992274944312894,
+        3.8931451396235213,
+        0.4768162497255069
+      ],
+      "max": [
+        1.1303171296308774,
+        3.9335250517035245,
+        0.5133444911575851
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22615_R18000",
+        "length_m": 0.022615239388160006,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc14_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.0992274944312894,
+        3.8931451396235213,
+        0.5131162497255068
+      ],
+      "max": [
+        1.1303171296308774,
+        3.9335250517035245,
+        0.5496444911575851
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22615_R18000",
+        "length_m": 0.022615239388160003,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc15_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.071973049799279,
+        3.884572928700648,
+        0.47610797484379475
+      ],
+      "max": [
+        1.1067946285190142,
+        3.9265731924017344,
+        0.5126694382387816
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22616_R18000",
+        "length_m": 0.022616139574860566,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc15_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.071973049799279,
+        3.884572928700648,
+        0.5124079748437946
+      ],
+      "max": [
+        1.1067946285190142,
+        3.9265731924017344,
+        0.5489694382387816
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22616_R18000",
+        "length_m": 0.022616139574860566,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc16_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.0463027125695652,
+        3.8730557410083017,
+        0.47537050659183905
+      ],
+      "max": [
+        1.0842129765341542,
+        3.915930946160583,
+        0.5119547675084507
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22617_R18000",
+        "length_m": 0.022616789465682397,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc16_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.0463027125695652,
+        3.8730557410083017,
+        0.5116705065918391
+      ],
+      "max": [
+        1.0842129765341542,
+        3.915930946160583,
+        0.5482547675084506
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22617_R18000",
+        "length_m": 0.022616789465682397,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc17_T0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.0226748874712936,
+        3.8588031787466472,
+        0.4746170072866191
+      ],
+      "max": [
+        1.0629764197466858,
+        3.901784877937173,
+        0.5112132780425925
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22617_R18000",
+        "length_m": 0.02261714281627219,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/TurnRails/Arc17_T1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        1.0226748874712936,
+        3.8588031787466472,
+        0.5109170072866192
+      ],
+      "max": [
+        1.0629764197466858,
+        3.901784877937173,
+        0.5475132780425925
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L22617_R18000",
+        "length_m": 0.02261714281627219,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board00",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        0.5500861907235678,
+        3.3895109700295483,
+        0.40870307854724724
+      ],
+      "max": [
+        0.9558529942000517,
+        3.7794669488197257,
+        0.43004668868807605
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R00_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.6524944116890528,
+        3.399389608321195,
+        0.4239578934130564
+      ],
+      "max": [
+        0.7167373934496553,
+        3.461759971219377,
+        0.4608606968757991
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L53181_R18000",
+        "length_m": 0.053180733744443064,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R00_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.5585103011956201,
+        3.5084904193849002,
+        0.4239578934130564
+      ],
+      "max": [
+        0.6227532829562227,
+        3.5708607822830825,
+        0.4608606968757991
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L53181_R18000",
+        "length_m": 0.053180733744443064,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board01",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        0.278736532444603,
+        3.155758754831495,
+        0.4023777936303318
+      ],
+      "max": [
+        0.6845033359210868,
+        3.545714733621672,
+        0.4237214037711607
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R01_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.38114475604759296,
+        3.1656373907116864,
+        0.41763261441271765
+      ],
+      "max": [
+        0.6753910446391795,
+        3.426142460531399,
+        0.459896888677413
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296203,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R01_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.2871606455541605,
+        3.2747382017753917,
+        0.41763261441271765
+      ],
+      "max": [
+        0.5814069341457471,
+        3.5352432715951037,
+        0.459896888677413
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296203,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board02",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        0.00738687416563838,
+        2.922006539633441,
+        0.3960525087134164
+      ],
+      "max": [
+        0.41315367764212224,
+        3.311962518423618,
+        0.4173961188542452
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R02_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.10979509776862845,
+        2.9318851755136333,
+        0.4113073294958022
+      ],
+      "max": [
+        0.40404138636021497,
+        3.1923902453333453,
+        0.4535716037604976
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296203,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R02_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        0.015810987275195976,
+        3.0409859865773385,
+        0.41130732949580223
+      ],
+      "max": [
+        0.3100572758667825,
+        3.3014910563970505,
+        0.4535716037604976
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.35680489162962037,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board03",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.26396278411332624,
+        2.688254324435388,
+        0.389727223796501
+      ],
+      "max": [
+        0.1418040193631576,
+        3.078210303225565,
+        0.41107083393732985
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R03_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.16155456051033634,
+        2.6981329603155797,
+        0.4049820445788868
+      ],
+      "max": [
+        0.13269172808125024,
+        2.9586380301352917,
+        0.4472463188435822
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296204,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R03_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.25553867100376876,
+        2.807233771379284,
+        0.40498204457888676
+      ],
+      "max": [
+        0.03870761758781781,
+        3.0677388411989965,
+        0.4472463188435822
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296204,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board04",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.535312442392291,
+        2.4545021092373345,
+        0.38340193887958557
+      ],
+      "max": [
+        -0.12954563891580706,
+        2.844458088027511,
+        0.4047455490204144
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R04_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.432904218789301,
+        2.4643807451175266,
+        0.3986567596619714
+      ],
+      "max": [
+        -0.13865793019771444,
+        2.724885814937238,
+        0.44092103392666676
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296204,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R04_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.5268883292827333,
+        2.5734815561812314,
+        0.3986567596619714
+      ],
+      "max": [
+        -0.23264204069114683,
+        2.8339866260009434,
+        0.44092103392666676
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296204,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board05",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -0.8066621006712555,
+        2.2207498940392805,
+        0.37707665396267015
+      ],
+      "max": [
+        -0.4008952971947717,
+        2.610705872829458,
+        0.39842026410349896
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R05_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.7042538770682656,
+        2.2306285299194726,
+        0.3923314747450559
+      ],
+      "max": [
+        -0.4100075884766791,
+        2.4911335997391846,
+        0.4345957490097513
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296203,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R05_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.7982379875616983,
+        2.3397293409831774,
+        0.3923314747450559
+      ],
+      "max": [
+        -0.5039916989701116,
+        2.6002344108028894,
+        0.4345957490097513
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296203,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board06",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -1.0780117589502203,
+        1.9869976788412267,
+        0.37075136904575473
+      ],
+      "max": [
+        -0.6722449554737364,
+        2.376953657631404,
+        0.3920949791865835
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R06_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -0.9756035353472303,
+        1.9968763147214195,
+        0.38600618982814044
+      ],
+      "max": [
+        -0.6813572467556438,
+        2.2573813845411315,
+        0.42827046409283587
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296205,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R06_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.069587645840663,
+        2.1059771257851243,
+        0.38600618982814044
+      ],
+      "max": [
+        -0.7753413572490764,
+        2.3664821956048363,
+        0.42827046409283587
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296205,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board07",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -1.349361417229185,
+        1.753245463643173,
+        0.3644260841288393
+      ],
+      "max": [
+        -0.9435946137527012,
+        2.14320144243335,
+        0.38576969426966806
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R07_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.2469531936261953,
+        1.7631240995233655,
+        0.3796809049112251
+      ],
+      "max": [
+        -0.9527069050346086,
+        2.0236291693430775,
+        0.42194517917592045
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296208,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R07_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.3409373041196277,
+        1.8722249105870705,
+        0.3796809049112251
+      ],
+      "max": [
+        -1.0466910155280413,
+        2.1327299804067827,
+        0.42194517917592045
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L356805_R18000",
+        "length_m": 0.3568048916296205,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board08",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -1.7764533043353805,
+        1.3760185856867346,
+        0.357566426379913
+      ],
+      "max": [
+        -1.184044561000963,
+        1.9453791992395844,
+        0.4268115121395951
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R08_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.6534898891071435,
+        1.4384860476801997,
+        0.3802211103667749
+      ],
+      "max": [
+        -1.22673675991275,
+        1.788698958044298,
+        0.46282875860584516
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L515804_R18000",
+        "length_m": 0.5158040562108036,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R08_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.722343452994576,
+        1.5181004507034983,
+        0.3802211103667749
+      ],
+      "max": [
+        -1.3194447599296943,
+        1.8966321901068246,
+        0.4628287586058451
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L515804_R18000",
+        "length_m": 0.5158040562108037,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRun/Board09",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "min": [
+        -2.0917115178190064,
+        1.0811984353230124,
+        0.4040774816673603
+      ],
+      "max": [
+        -1.5024075536287809,
+        1.6943709101484636,
+        0.4268115116001059
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/ReturnRails/R09_0",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.87457679086112,
+        1.2488598624069946,
+        0.4270268297721393
+      ],
+      "max": [
+        -1.6331025766812663,
+        1.4639048049843684,
+        0.4629961634953268
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L287732_R18000",
+        "length_m": 0.28773157894736834,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/ReturnRails/R09_1",
+      "asset": "pipe_plastic_gray_b06",
+      "min": [
+        -1.9424542039952657,
+        1.3276548926196705,
+        0.4270268297721393
+      ],
+      "max": [
+        -1.700979989815412,
+        1.5426998351970442,
+        0.4629961634953268
+      ],
+      "collision": true,
+      "approximation": "convexHull",
+      "stock_cut": {
+        "derived": "pipe_stock_L287732_R18000",
+        "length_m": 0.28773157894736834,
+        "outer_radius_m": 0.018,
+        "source_component": 87,
+        "adaptation": "Uniform diameter scaling, then planar length cuts of straight source PVC; annular cut end faces."
+      }
+    },
+    {
+      "path": "/World/SugarTipper/Spatula",
+      "asset": "kitchenware_spatula_b01",
+      "collision": true,
+      "min": [
+        -1.8965611656090822,
+        1.2966209741338501,
+        0.4274114959665234
+      ],
+      "max": [
+        -1.8554949286124351,
+        1.3428995049478147,
+        0.7276820757218296
+      ]
+    },
+    {
+      "path": "/World/TipperStand",
+      "asset": "hf_MugTree002",
+      "collision": true,
+      "adaptation": "One source mug peg cross-drilled for the utensil pivot.",
+      "min": [
+        -1.8387438346285725,
+        1.1183447579294123,
+        0.42701149662883553
+      ],
+      "max": [
+        -1.6203968625431302,
+        1.3366917300148546,
+        0.762769377923795
+      ]
+    },
+    {
+      "path": "/World/TipperPin",
+      "asset": "tube_a02",
+      "min": [
+        -1.8868339384505564,
+        1.1895208909576547,
+        0.7114004095816513
+      ],
+      "max": [
+        -1.7635375860505915,
+        1.3316888719155808,
+        0.7156313436858148
+      ],
+      "collision": false,
+      "approximation": "none",
+      "adaptation": "Source tube_a02 circular stock profile sized to 3 mm diameter and 184 mm length, with steel finish for the passive pivot."
+    },
+    {
+      "path": "/World/TipperFrontRest/Handle",
+      "asset": "hf_CabinetHandle002",
+      "min": [
+        -1.978104762609942,
+        1.212842062711793,
+        0.4269614966337333
+      ],
+      "max": [
+        -1.8346944432944832,
+        1.374346850761883,
+        0.4593470975338111
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/FinaleTable",
+      "asset": "furniture_table_coffee_low_a01",
+      "min": [
+        -2.5243572984822515,
+        0.8811011586478437,
+        0.00010000000000000005
+      ],
+      "max": [
+        -1.6994131816591307,
+        1.7480235599576137,
+        0.29511977527165745
+      ],
+      "collision": true,
+      "approximation": "convexHull"
+    },
+    {
+      "path": "/World/Domino00/Visual",
+      "asset": "food_processed_boxedCereal_d01",
+      "min": [
+        -1.5850298622036838,
+        0.508688629226302,
+        0.974731888782141
+      ],
+      "max": [
+        -1.5525085294898815,
+        0.5921472701730872,
+        1.1207318880713113
+      ],
+      "collision": false,
+      "approximation": "none"
+    },
+    {
+      "path": "/World/LeverStop/Visual",
+      "asset": "food_can_tunaFish_a01",
+      "collision": true
+    }
+  ],
+  "pan_mass": {
+    "path": "/World/Pan",
+    "mass": 0.9319402527509083,
+    "com": [
+      -9.849982817781413e-07,
+      -2.9756166904261985e-05,
+      0.0017324301869376922
+    ],
+    "density": 900.0,
+    "inertia": [
+      [
+        0.007374466964770418,
+        -2.4643167756233783e-07,
+        2.9123179229264607e-09
+      ],
+      [
+        -2.4643167756233783e-07,
+        0.007377829553407734,
+        -1.7682030972131122e-09
+      ],
+      [
+        2.9123179229264607e-09,
+        -1.7682030972131122e-09,
+        0.012027365401326649
+      ]
+    ]
+  },
+  "lever_mass": {
+    "mass": 2.1215105734917308,
+    "com": [
+      0.007659687850499696,
+      -0.0001560244119421692,
+      0.039519602968592304
+    ],
+    "inertia": [
+      [
+        0.03935681009587049,
+        1.9019696751095027e-05,
+        -0.00037403880845427877
+      ],
+      [
+        1.9019696751095027e-05,
+        0.01423293421863873,
+        -0.00011764703347776545
+      ],
+      [
+        -0.00037403880845427877,
+        -0.00011764703347776545,
+        0.053101068802500484
+      ]
+    ],
+    "parts": [
+      {
+        "path": "Visual",
+        "density": 650.0,
+        "method": "closed source mesh"
+      },
+      {
+        "path": "EndStop",
+        "density": 650.0,
+        "method": "convex envelope of non-watertight source mesh"
+      },
+      {
+        "path": "Rail0",
+        "density": 550.0,
+        "method": "closed source mesh"
+      },
+      {
+        "path": "Rail1",
+        "density": 550.0,
+        "method": "closed source mesh"
+      }
+    ]
+  },
+  "spoon_mass": {
+    "mass": 0.11329782724260844,
+    "com": [
+      -0.010588422421152738,
+      0.006092881044653945,
+      0.0297362936102731
+    ],
+    "inertia": [
+      [
+        0.0013331177047564895,
+        -0.0009572694882864442,
+        2.7543753981203885e-05
+      ],
+      [
+        -0.0009572694882864442,
+        0.0007835819764720987,
+        3.8276043001694725e-05
+      ],
+      [
+        2.7543753981203885e-05,
+        3.8276043001694725e-05,
+        0.0021091133308616178
+      ]
+    ],
+    "parts": [
+      {
+        "path": "Visual",
+        "density": 550.0,
+        "method": "closed source mesh"
+      },
+      {
+        "path": "Paddle",
+        "density": 650.0,
+        "method": "convex envelope of non-watertight source mesh"
+      }
+    ]
+  },
+  "gate_mass": 0.9619402527509083,
+  "pan_xy": [
+    -0.12499999999999997,
+    1.2
+  ],
+  "gate_initial": [
+    0.8730242591735957,
+    1.2,
+    1.5499999999999998
+  ],
+  "wheel_radius": 0.08,
+  "wheel_z": 1.95,
+  "wheel_xs": [
+    -0.04499999999999997,
+    0.7930242591735956
+  ],
+  "wheel_y": 1.2,
+  "marble2_initial": [
+    1.3230242591735957,
+    2.368,
+    1.0518359426114328
+  ],
+  "spoon_shift": [
+    1.6,
+    0.5,
+    0
+  ],
+  "coffee_center": [
+    -1.9636884602175078,
+    1.2574421838727896
+  ],
+  "source_scene": "adventure",
+  "starter_asset": "food_processed_boxedCereal_d01",
+  "slide_step_drop_m": 0.015,
+  "wheel_mass": {
+    "Left": {
+      "path": "/World/WheelLeft",
+      "mass": 0.40977340519726935,
+      "com": [
+        -1.4040228182545306e-09,
+        -0.032720474308425944,
+        -4.845533006721279e-07
+      ],
+      "density": 1100.0,
+      "inertia": [
+        [
+          0.0008967622335861769,
+          3.9853096891060254e-08,
+          6.4367380604603766e-12
+        ],
+        [
+          3.9853096891060254e-08,
+          0.001501211954824276,
+          8.528288221218231e-09
+        ],
+        [
+          6.4367380604603766e-12,
+          8.528288221218231e-09,
+          0.0008967639607038702
+        ]
+      ]
+    },
+    "Right": {
+      "path": "/World/WheelRight",
+      "mass": 0.4097734051972697,
+      "com": [
+        -1.4040230367146998e-09,
+        -0.03272047430842592,
+        -4.845533006689287e-07
+      ],
+      "density": 1100.0,
+      "inertia": [
+        [
+          0.0008967622335861774,
+          3.985309689130516e-08,
+          6.436738185029071e-12
+        ],
+        [
+          3.985309689130516e-08,
+          0.0015012119548242758,
+          8.528288221170071e-09
+        ],
+        [
+          6.436738185029071e-12,
+          8.528288221170071e-09,
+          0.00089676396070387
+        ]
+      ]
+    }
+  },
+  "support_connections": [
+    {
+      "board": "/World/Bridge",
+      "foundation": "/World/Set/PrepTable0",
+      "xy": [
+        -0.2249999999957955,
+        0.8052985785452178
+      ],
+      "base": 0.9528659357714406,
+      "asset": "misc_notebook_a02",
+      "scale": 1.0,
+      "count": 0,
+      "half": 0.03,
+      "pad_base": 0.9599269186089686,
+      "plane": [
+        -4.420265611870619e-08,
+        -0.22855608279882494,
+        0.9808345755047668
+      ],
+      "radius": 0.03,
+      "height": 0.0,
+      "foundation_gap_mm": 0.06,
+      "id": 0,
+      "notebook": {
+        "xy": [
+          -0.2249999999957955,
+          0.7902985785452178
+        ],
+        "scale": 0.7,
+        "yaw": 0,
+        "base": 0.9528659357714406,
+        "top": 0.9599269186089686
+      }
+    },
+    {
+      "board": "/World/Bridge",
+      "foundation": "/World/WorkBoard/Board3",
+      "xy": [
+        -0.22499999999579556,
+        0.6826716529939694
+      ],
+      "base": 0.9754572253076609,
+      "asset": "misc_notebook_a02",
+      "scale": 1.0,
+      "count": 0,
+      "half": 0.018,
+      "pad_base": 0.9754572253076609,
+      "plane": [
+        -5.070094099377699e-08,
+        -0.22857135482988022,
+        1.0088635779738275
+      ],
+      "radius": 0.018,
+      "height": 0.0,
+      "foundation_gap_mm": 0.06,
+      "id": 1
+    },
+    {
+      "board": "/World/BowlFeeder",
+      "foundation": "/World/Set/FeederTable",
+      "xy": [
+        -0.22499999999549736,
+        0.930065996000288
+      ],
+      "base": 0.44282244205470406,
+      "asset": "food_canned_peach_a02",
+      "scale": 0.8495535721317639,
+      "count": 6,
+      "half": 0.028691947862741457,
+      "pad_base": 0.9616330449346111,
+      "plane": [
+        -4.586802650996441e-08,
+        0.07826096071626376,
+        0.9678785056552133
+      ],
+      "radius": 0.02843710349598844,
+      "height": 0.08646843381331785,
+      "foundation_gap_mm": 0.06001137535543988,
+      "id": 2
+    },
+    {
+      "board": "/World/BowlFeeder",
+      "foundation": "/World/Pantry/Tables/Table5",
+      "xy": [
+        -0.23702085510680992,
+        1.018
+      ],
+      "base": 0.6775335851976834,
+      "asset": "food_canned_fruit_a03",
+      "scale": 0.7157248445950701,
+      "count": 4,
+      "half": 0.023940457564377456,
+      "pad_base": 0.9689224199153009,
+      "plane": [
+        -4.365796586761018e-08,
+        0.07826096134818394,
+        0.9747603059756516
+      ],
+      "radius": 0.02395745500702047,
+      "height": 0.07284720867940439,
+      "foundation_gap_mm": 0.06000962323460257,
+      "id": 3
+    },
+    {
+      "board": "/World/SecondRun/Board0",
+      "foundation": "/World/Pantry/Tables/Table6",
+      "xy": [
+        1.3230242591808483,
+        2.470877700447001
+      ],
+      "base": 0.6509738707876777,
+      "asset": "food_canned_fruit_a03",
+      "scale": 1.4646085833370364,
+      "count": 2,
+      "half": 0.052208571749357224,
+      "pad_base": 0.9491125980086463,
+      "plane": [
+        -4.759490798910431e-08,
+        -0.4021146930064226,
+        0.974106434294805
+      ],
+      "radius": 0.04902483755198502,
+      "height": 0.14906936361048434,
+      "foundation_gap_mm": 0.06002015700290464,
+      "id": 4
+    },
+    {
+      "board": "/World/SecondRun/Board0",
+      "foundation": "/World/Pantry/Tables/Table6",
+      "xy": [
+        1.3230242591808483,
+        2.3398721536129345
+      ],
+      "base": 0.6509738664718169,
+      "asset": "food_canned_soup_a03",
+      "scale": 0.8831367745704619,
+      "count": 4,
+      "half": 0.03052275209859492,
+      "pad_base": 1.0105201328641107,
+      "plane": [
+        -5.17604232735415e-08,
+        -0.40217390061360664,
+        1.0267955887129354
+      ],
+      "radius": 0.029561233903773798,
+      "height": 0.08988656659807345,
+      "foundation_gap_mm": 0.06001196366334227,
+      "id": 5
+    },
+    {
+      "board": "/World/SecondRun/Board1",
+      "foundation": "/World/Pantry/Tables/Table6",
+      "xy": [
+        1.3230242591808512,
+        2.815877700447008
+      ],
+      "base": 0.6509738656554547,
+      "asset": "food_canned_soup_a03",
+      "scale": 0.7602543574576883,
+      "count": 2,
+      "half": 0.026420843168838422,
+      "pad_base": 0.8057328019851834,
+      "plane": [
+        -5.027812343729152e-08,
+        -0.4021739007798718,
+        0.8203585768726788
+      ],
+      "radius": 0.02544799122208546,
+      "height": 0.07737946816486435,
+      "foundation_gap_mm": 0.06001032788360838,
+      "id": 6
+    },
+    {
+      "board": "/World/SecondRun/Board1",
+      "foundation": "/World/Pantry/Tables/Table6",
+      "xy": [
+        1.3230242591808512,
+        2.6132557880103193
+      ],
+      "base": 0.6509738683755915,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 1.1335676196435582,
+      "count": 2,
+      "half": 0.04008863202148616,
+      "pad_base": 0.8817252180429599,
+      "plane": [
+        -5.0861724648835285e-08,
+        -0.4021739013934172,
+        0.901847821623543
+      ],
+      "radius": 0.0379439046305434,
+      "height": 0.11537567483368422,
+      "foundation_gap_mm": 0.06001553741197263,
+      "id": 7
+    },
+    {
+      "board": "/World/SecondRun/Board2",
+      "foundation": "/World/Set/RunTable",
+      "xy": [
+        1.32302425918085,
+        3.1608777004470103
+      ],
+      "base": 0.4428224971402912,
+      "asset": "food_canned_beans_a01",
+      "scale": 1.0094743996191584,
+      "count": 2,
+      "half": 0.035545316485954534,
+      "pad_base": 0.648313176417124,
+      "plane": [
+        -5.241339234602698e-08,
+        -0.40217390032976724,
+        0.666608576849787
+      ],
+      "radius": 0.03379013274758909,
+      "height": 0.10274533963841641,
+      "foundation_gap_mm": 0.06001380571052373,
+      "id": 8
+    },
+    {
+      "board": "/World/SecondRun/Board2",
+      "foundation": "/World/Set/RunTable",
+      "xy": [
+        1.32302425918085,
+        2.958255788010321
+      ],
+      "base": 0.44282249986042804,
+      "asset": "food_canned_peach_a02",
+      "scale": 1.382787663277678,
+      "count": 2,
+      "half": 0.049213105338602306,
+      "pad_base": 0.7243055927746762,
+      "plane": [
+        -4.798823383830857e-08,
+        -0.40217390061445696,
+        0.748097821671702
+      ],
+      "radius": 0.046286046205341026,
+      "height": 0.14074154645712408,
+      "foundation_gap_mm": 0.06001901523877695,
+      "id": 9
+    },
+    {
+      "board": "/World/SecondRun/Board3",
+      "foundation": "/World/Set/RunTable",
+      "xy": [
+        1.3230242591808514,
+        3.467449406709029
+      ],
+      "base": 0.44282249642134247,
+      "asset": "food_can_tunaFish_a01",
+      "scale": 0.6822944570709231,
+      "count": 3,
+      "half": 0.0319328617264657,
+      "pad_base": 0.5114708684596244,
+      "plane": [
+        -5.122826749712868e-08,
+        -0.4021739006136088,
+        0.5283134336537774
+      ],
+      "radius": 0.029188215497630513,
+      "height": 0.022882790679427317,
+      "foundation_gap_mm": 0.06001216998879899,
+      "id": 10
+    },
+    {
+      "board": "/World/SecondRun/Board3",
+      "foundation": "/World/Set/RunTable",
+      "xy": [
+        1.3230242591808514,
+        3.303255788010332
+      ],
+      "base": 0.44282249939027124,
+      "asset": "food_canned_fruit_a03",
+      "scale": 1.2643139425447634,
+      "count": 1,
+      "half": 0.04685075351616638,
+      "pad_base": 0.5715056690529738,
+      "plane": [
+        -4.853189440464236e-08,
+        -0.40217390135530884,
+        0.5943478216497623
+      ],
+      "radius": 0.042320375800845106,
+      "height": 0.1286831696627026,
+      "foundation_gap_mm": 0.06001775506075946,
+      "id": 11
+    },
+    {
+      "board": "/World/CartTrack0",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.7258368708556331,
+        1.6119052946105636
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_canned_fruit_a03",
+      "scale": 0.6694442365600122,
+      "count": 3,
+      "half": 0.022364060544794537,
+      "pad_base": 1.054575503505417,
+      "plane": [
+        -2.7904049936816748e-08,
+        -0.15454545424028632,
+        1.0620317680250173
+      ],
+      "radius": 0.02240830438989365,
+      "height": 0.06813672093149478,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 12
+    },
+    {
+      "board": "/World/CartTrack0",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.8730242591934436,
+        1.6119052946105636
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 0.9956768597054936,
+      "count": 2,
+      "half": 0.03354608972588045,
+      "pad_base": 1.0528473644633878,
+      "plane": [
+        -4.032570028126675e-08,
+        -0.1545454564608667,
+        1.0620317615653208
+      ],
+      "radius": 0.03332828774641938,
+      "height": 0.10134101187622757,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 13
+    },
+    {
+      "board": "/World/CartTrack0",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.7258368708556329,
+        1.0265267910609217
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_canned_soup_a03",
+      "scale": 0.9595153566992671,
+      "count": 3,
+      "half": 0.03247984849850425,
+      "pad_base": 1.1431467117576941,
+      "plane": [
+        -0.00596571896024522,
+        -0.154545455940334,
+        1.1523600904007818
+      ],
+      "radius": 0.032117853893521564,
+      "height": 0.09766045701558716,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 14
+    },
+    {
+      "board": "/World/CartTrack0",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.8730242591934434,
+        1.0265267910609217
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_canned_beans_a01",
+      "scale": 1.4285795709658742,
+      "count": 2,
+      "half": 0.04871977171313916,
+      "pad_base": 1.1409699282760402,
+      "plane": [
+        -4.032570389128758e-08,
+        -0.15454545646088413,
+        1.1524993495987763
+      ],
+      "radius": 0.04781883855761192,
+      "height": 0.14540229378255376,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 15
+    },
+    {
+      "board": "/World/CartTrack1",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.7521987915428207,
+        2.4750715097228615
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_can_tunaFish_a01",
+      "scale": 1.1144133148798834,
+      "count": 2,
+      "half": 0.048378124933699446,
+      "pad_base": 0.9249157255352148,
+      "plane": [
+        -4.183838857944768e-08,
+        -0.15454545384560026,
+        0.9363923468333554
+      ],
+      "radius": 0.047674044030467065,
+      "height": 0.0373751924121411,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 16
+    },
+    {
+      "board": "/World/CartTrack1",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.9237709556016568,
+        2.4750715097228615
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_can_tunaFish_a01",
+      "scale": 1.1144133148798834,
+      "count": 2,
+      "half": 0.048378124933699446,
+      "pad_base": 0.9249157255352148,
+      "plane": [
+        -4.183838857944768e-08,
+        -0.15454545384560026,
+        0.9363923468333554
+      ],
+      "radius": 0.047674044030467065,
+      "height": 0.0373751924121411,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 17
+    },
+    {
+      "board": "/World/CartTrack1",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.7521987915428204,
+        1.994536918813506
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_canned_peach_a02",
+      "scale": 1.4618249873093716,
+      "count": 1,
+      "half": 0.049858436833054104,
+      "pad_base": 0.9989513870630631,
+      "plane": [
+        -4.075849586610571e-08,
+        -0.1545454554368276,
+        1.0106567839229506
+      ],
+      "radius": 0.04893166225271449,
+      "height": 0.14878604635213044,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 18
+    },
+    {
+      "board": "/World/CartTrack1",
+      "foundation": "/World/Set/CartTable",
+      "xy": [
+        0.9237709556016566,
+        1.994536918813506
+      ],
+      "base": 0.8501653407109326,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 1.4618249873093716,
+      "count": 1,
+      "half": 0.049858436833054104,
+      "pad_base": 0.9989513870630631,
+      "plane": [
+        -4.075849586610571e-08,
+        -0.1545454554368276,
+        1.0106567839229506
+      ],
+      "radius": 0.04893166225271449,
+      "height": 0.14878604635213044,
+      "foundation_gap_mm": 0.05999999999994898,
+      "id": 19
+    },
+    {
+      "board": "/World/Turnaround/Board",
+      "foundation": "/World/Pantry/Tables/Table4",
+      "xy": [
+        0.9398360531709791,
+        3.760386706525799
+      ],
+      "base": 0.24805184149138448,
+      "asset": "food_canned_fruit_a03",
+      "scale": 0.6069195631735442,
+      "count": 3,
+      "half": 0.019932309945428047,
+      "pad_base": 0.43337052815146465,
+      "plane": [
+        0.021563991008882823,
+        0.018576144861200683,
+        0.43817061378087874
+      ],
+      "radius": 0.02031541623490382,
+      "height": 0.06177289555336006,
+      "foundation_gap_mm": 0.06000963026039918,
+      "id": 20
+    },
+    {
+      "board": "/World/Turnaround/Board",
+      "foundation": "/World/Pantry/Tables/Table4",
+      "xy": [
+        0.9398801447858208,
+        3.8704613363059246
+      ],
+      "base": 0.24805182495799616,
+      "asset": "food_canned_soup_a03",
+      "scale": 0.6135892662968211,
+      "count": 3,
+      "half": 0.02016105672286099,
+      "pad_base": 0.4354070592896578,
+      "plane": [
+        0.021563991012161537,
+        0.018576153050829103,
+        0.44021632701097557
+      ],
+      "radius": 0.020538671182238354,
+      "height": 0.06245174477722054,
+      "foundation_gap_mm": 0.060009738814537084,
+      "id": 21
+    },
+    {
+      "board": "/World/Turnaround/Board",
+      "foundation": "/World/Room/Floor",
+      "xy": [
+        1.3808125998256138,
+        3.650135421033466
+      ],
+      "base": 6.083254641242148e-05,
+      "asset": "food_canned_soup_a03",
+      "scale": 1.43977166491293,
+      "count": 3,
+      "half": 0.048496131805270966,
+      "pad_base": 0.43968514229331535,
+      "plane": [
+        0.021563993568701458,
+        0.01857614399027685,
+        0.4456317836950573
+      ],
+      "radius": 0.04819347147582874,
+      "height": 0.14654143658230098,
+      "foundation_gap_mm": 0.060008134972584455,
+      "id": 22
+    },
+    {
+      "board": "/World/Turnaround/Board",
+      "foundation": "/World/Room/Floor",
+      "xy": [
+        1.380875209918689,
+        3.806441395321244
+      ],
+      "base": 6.084407576661505e-05,
+      "asset": "food_canned_beans_a01",
+      "scale": 0.8710858276431023,
+      "count": 5,
+      "half": 0.029292568888589318,
+      "pad_base": 0.44336088838182836,
+      "plane": [
+        0.02156399224836724,
+        0.018576165796510842,
+        0.4485366967265568
+      ],
+      "radius": 0.02915785260300653,
+      "height": 0.08866000886121235,
+      "foundation_gap_mm": 0.060004917723894775,
+      "id": 23
+    },
+    {
+      "board": "/World/ReturnRun/Board00",
+      "foundation": "/World/Pantry/Tables/Table0",
+      "xy": [
+        0.6744615533919165,
+        3.5168587887677574
+      ],
+      "base": 0.3144511790916328,
+      "asset": "food_canned_beans_a01",
+      "scale": 0.8920576937297907,
+      "count": 1,
+      "half": 0.02805481074695605,
+      "pad_base": 0.4052457259904032,
+      "plane": [
+        0.013380753791478345,
+        0.011526689422436676,
+        0.40994449959596013
+      ],
+      "radius": 0.029859843796939938,
+      "height": 0.09079454689877042,
+      "foundation_gap_mm": 0.060013806099545874,
+      "id": 24
+    },
+    {
+      "board": "/World/ReturnRun/Board00",
+      "foundation": "/World/Room/Floor",
+      "xy": [
+        0.8314785234769226,
+        3.6521198984595595
+      ],
+      "base": 6.083146788298905e-05,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 1.003882468132533,
+      "count": 4,
+      "half": 0.033686219615354555,
+      "pad_base": 0.4087655799359641,
+      "plane": [
+        0.013380751954860427,
+        0.011526688286632003,
+        0.4136046174379953
+      ],
+      "radius": 0.03360295404615814,
+      "height": 0.10217618711702028,
+      "foundation_gap_mm": 0.06000566137497993,
+      "id": 25
+    },
+    {
+      "board": "/World/ReturnRun/Board01",
+      "foundation": "/World/Pantry/Tables/Table0",
+      "xy": [
+        0.4031118951129516,
+        3.283106573569703
+      ],
+      "base": 0.3144511853613796,
+      "asset": "food_can_tunaFish_a01",
+      "scale": 1.2511955213339838,
+      "count": 2,
+      "half": 0.05029136403249949,
+      "pad_base": 0.3983763731362713,
+      "plane": [
+        0.013063544279314077,
+        0.011209484240698718,
+        0.4035970968497425
+      ],
+      "radius": 0.05352551838563491,
+      "height": 0.041962593887445825,
+      "foundation_gap_mm": 0.06002474738564523,
+      "id": 26
+    },
+    {
+      "board": "/World/ReturnRun/Board01",
+      "foundation": "/World/Pantry/Tables/Table0",
+      "xy": [
+        0.5601288651979579,
+        3.418367683261505
+      ],
+      "base": 0.3144511788527797,
+      "asset": "food_canned_fruit_a03",
+      "scale": 0.8660911757538775,
+      "count": 1,
+      "half": 0.027160780200668276,
+      "pad_base": 0.40260282692254684,
+      "plane": [
+        0.013380752250103847,
+        0.011526689877880969,
+        0.4072793324835459
+      ],
+      "radius": 0.028990666639272758,
+      "height": 0.08815164806976716,
+      "foundation_gap_mm": 0.06001338250133381,
+      "id": 27
+    },
+    {
+      "board": "/World/ReturnRun/Board02",
+      "foundation": "/World/Pantry/Tables/Table1",
+      "xy": [
+        0.1182262911370038,
+        3.0376939178809717
+      ],
+      "base": 0.25247838625418534,
+      "asset": "food_canned_fruit_a03",
+      "scale": 0.6874852075176573,
+      "count": 2,
+      "half": 0.022247056249525818,
+      "pad_base": 0.3924242851683876,
+      "plane": [
+        0.013380749575813465,
+        0.011526691248894994,
+        0.39697840240544663
+      ],
+      "radius": 0.023012189742295068,
+      "height": 0.06997294945710114,
+      "foundation_gap_mm": 0.060010815681466045,
+      "id": 28
+    },
+    {
+      "board": "/World/ReturnRun/Board02",
+      "foundation": "/World/Pantry/Tables/Table0",
+      "xy": [
+        0.2887792069189934,
+        3.184615468063446
+      ],
+      "base": 0.31445118488683615,
+      "asset": "food_can_tunaFish_a01",
+      "scale": 1.2115120940261246,
+      "count": 2,
+      "half": 0.048557587469155644,
+      "pad_base": 0.3957145671872225,
+      "plane": [
+        0.013563404683741525,
+        0.011709343510182213,
+        0.40094175086823486
+      ],
+      "radius": 0.05182788122041615,
+      "height": 0.04063169115019316,
+      "foundation_gap_mm": 0.06002392355453079,
+      "id": 29
+    },
+    {
+      "board": "/World/ReturnRun/Board03",
+      "foundation": "/World/Pantry/Tables/Table1",
+      "xy": [
+        -0.1395874214449777,
+        2.815602143173592
+      ],
+      "base": 0.25247839195963084,
+      "asset": "food_canned_soup_a03",
+      "scale": 1.3109822616779565,
+      "count": 1,
+      "half": 0.04247813857051437,
+      "pad_base": 0.3859115110034202,
+      "plane": [
+        0.013346684527837863,
+        0.011492622983429235,
+        0.3909666385498794
+      ],
+      "radius": 0.04388250427008848,
+      "height": 0.13343311904378935,
+      "foundation_gap_mm": 0.06002064003463037,
+      "id": 30
+    },
+    {
+      "board": "/World/ReturnRun/Board03",
+      "foundation": "/World/Pantry/Tables/Table1",
+      "xy": [
+        0.017429548640028644,
+        2.950863252865394
+      ],
+      "base": 0.25247839228766306,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 1.3465583169329185,
+      "count": 1,
+      "half": 0.04370592566807043,
+      "pad_base": 0.3895324787195755,
+      "plane": [
+        0.013432651111193267,
+        0.011578589967522479,
+        0.39462561816302805
+      ],
+      "radius": 0.04507334143262995,
+      "height": 0.13705408643191247,
+      "foundation_gap_mm": 0.060021221209238806,
+      "id": 31
+    },
+    {
+      "board": "/World/ReturnRun/Board04",
+      "foundation": "/World/Pantry/Tables/Table2",
+      "xy": [
+        -0.4244730254209256,
+        2.570189487484867
+      ],
+      "base": 0.2524783463448055,
+      "asset": "food_canned_beans_a01",
+      "scale": 0.6255990111725247,
+      "count": 2,
+      "half": 0.020125245209208803,
+      "pad_base": 0.3798265641988259,
+      "plane": [
+        0.013380750488519838,
+        0.01152669151297575,
+        0.3843278325766401
+      ],
+      "radius": 0.0209406733268869,
+      "height": 0.0636741089270102,
+      "foundation_gap_mm": 0.06000980862563843,
+      "id": 32
+    },
+    {
+      "board": "/World/ReturnRun/Board04",
+      "foundation": "/World/Pantry/Tables/Table1",
+      "xy": [
+        -0.25392010963893613,
+        2.7171110376673417
+      ],
+      "base": 0.25247839172077774,
+      "asset": "food_canned_peach_a02",
+      "scale": 1.284975524846074,
+      "count": 1,
+      "half": 0.0415841080242266,
+      "pad_base": 0.38326451841915765,
+      "plane": [
+        0.013403518284147318,
+        0.011549456492182893,
+        0.38830216561778236
+      ],
+      "radius": 0.04301198086680806,
+      "height": 0.1307861266983799,
+      "foundation_gap_mm": 0.06002021616902109,
+      "id": 33
+    },
+    {
+      "board": "/World/ReturnRun/Board05",
+      "foundation": "/World/Pantry/Tables/Table2",
+      "xy": [
+        -0.6822867380029067,
+        2.348097712777481
+      ],
+      "base": 0.2524783514547251,
+      "asset": "food_canned_peach_a02",
+      "scale": 1.1877218012808706,
+      "count": 1,
+      "half": 0.0382345164898803,
+      "pad_base": 0.3733658944321337,
+      "plane": [
+        0.013374642894850883,
+        0.011520579973534123,
+        0.3783177512414142
+      ],
+      "radius": 0.039756607346978994,
+      "height": 0.12088754297740861,
+      "foundation_gap_mm": 0.06001862932714097,
+      "id": 34
+    },
+    {
+      "board": "/World/ReturnRun/Board05",
+      "foundation": "/World/Pantry/Tables/Table2",
+      "xy": [
+        -0.5252697679179006,
+        2.4833588224692833
+      ],
+      "base": 0.2524783517827573,
+      "asset": "food_canned_fruit_a03",
+      "scale": 1.2233650656179829,
+      "count": 1,
+      "half": 0.039462303587436354,
+      "pad_base": 0.37699370275759514,
+      "plane": [
+        0.013392616510381922,
+        0.01153855392181563,
+        0.38197754417398067
+      ],
+      "radius": 0.040949694198872226,
+      "height": 0.12451535097483785,
+      "foundation_gap_mm": 0.06001921094861418,
+      "id": 35
+    },
+    {
+      "board": "/World/ReturnRun/Board06",
+      "foundation": "/World/Pantry/Tables/Table3",
+      "xy": [
+        -0.9671723419788546,
+        2.1026850570887547
+      ],
+      "base": 0.2524783092217758,
+      "asset": "food_can_tunaFish_a01",
+      "scale": 0.6828298589231152,
+      "count": 5,
+      "half": 0.027930976051174485,
+      "pad_base": 0.366982044152282,
+      "plane": [
+        0.013353300067266274,
+        0.011499235761945115,
+        0.37167619973533866
+      ],
+      "radius": 0.029211119720986955,
+      "height": 0.02290074698610125,
+      "foundation_gap_mm": 0.060013641773826176,
+      "id": 36
+    },
+    {
+      "board": "/World/ReturnRun/Board06",
+      "foundation": "/World/Pantry/Tables/Table2",
+      "xy": [
+        -0.7966194261968651,
+        2.2496066072712293
+      ],
+      "base": 0.25247835121587203,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 1.1617538747086051,
+      "count": 1,
+      "half": 0.03734048594359253,
+      "pad_base": 0.3707228519958961,
+      "plane": [
+        0.01338075074759033,
+        0.01152668848677102,
+        0.37565290788051764
+      ],
+      "radius": 0.038887383039371455,
+      "height": 0.11824450078002406,
+      "foundation_gap_mm": 0.060018205719658546,
+      "id": 37
+    },
+    {
+      "board": "/World/ReturnRun/Board07",
+      "foundation": "/World/Pantry/Tables/Table3",
+      "xy": [
+        -1.2249860545608355,
+        1.8805932823813716
+      ],
+      "base": 0.25247831094981926,
+      "asset": "food_canned_soup_a03",
+      "scale": 1.0644672470866465,
+      "count": 1,
+      "half": 0.033990894409246235,
+      "pad_base": 0.3608208790002314,
+      "plane": [
+        0.013380751739673262,
+        0.01152668829364662,
+        0.3656675051644086
+      ],
+      "radius": 0.03563090812217549,
+      "height": 0.10834256805041215,
+      "foundation_gap_mm": 0.06001661865889796,
+      "id": 38
+    },
+    {
+      "board": "/World/ReturnRun/Board07",
+      "foundation": "/World/Pantry/Tables/Table3",
+      "xy": [
+        -1.0679690844758294,
+        2.015854392073174
+      ],
+      "base": 0.2524783112778515,
+      "asset": "food_canned_beans_a01",
+      "scale": 1.1001274935157463,
+      "count": 1,
+      "half": 0.03521868150680231,
+      "pad_base": 0.36445041578043097,
+      "plane": [
+        0.013380751367092738,
+        0.011526688430195109,
+        0.3693276229698015
+      ],
+      "radius": 0.036824563415569375,
+      "height": 0.11197210450257951,
+      "foundation_gap_mm": 0.060017200393336356,
+      "id": 39
+    },
+    {
+      "board": "/World/ReturnRun/Board08",
+      "foundation": "/World/Pantry/Tables/Table3",
+      "xy": [
+        -1.3657966908498893,
+        1.7592929577896528
+      ],
+      "base": 0.2524783111193105,
+      "asset": "food_canned_beans_a01",
+      "scale": 1.045295245946124,
+      "count": 1,
+      "half": 0.0345418141018516,
+      "pad_base": 0.3588695332321989,
+      "plane": [
+        -0.06905853644304975,
+        -0.059490038998680994,
+        0.367309834228165
+      ],
+      "radius": 0.03498916380075477,
+      "height": 0.10639122211288837,
+      "foundation_gap_mm": 0.06001664579513566,
+      "id": 40
+    },
+    {
+      "board": "/World/ReturnRun/Board08",
+      "foundation": "/World/Room/Floor",
+      "xy": [
+        -1.5947078819158924,
+        1.5620990490964104
+      ],
+      "base": 6.0656500428020125e-05,
+      "asset": "food_canned_peach_a02",
+      "scale": 1.2618080606312352,
+      "count": 3,
+      "half": 0.0428178078172993,
+      "pad_base": 0.3853450117954961,
+      "plane": [
+        -0.06905853384985526,
+        -0.05949004178492562,
+        0.3948491800022137
+      ],
+      "radius": 0.04223649642506317,
+      "height": 0.12842811843168936,
+      "foundation_gap_mm": 0.060007136430113524,
+      "id": 41
+    },
+    {
+      "board": "/World/ReturnRun/Board09",
+      "foundation": "/World/Room/Floor",
+      "xy": [
+        -1.8992672359886904,
+        1.5064318097385152
+      ],
+      "base": 6.0652074447604624e-05,
+      "asset": "food_canned_peach_a02",
+      "scale": 1.3097950015983253,
+      "count": 3,
+      "half": 0.04384074233446363,
+      "pad_base": 0.39999748756039244,
+      "plane": [
+        6.225972558569643e-08,
+        -7.734576312756758e-10,
+        0.403997490323814
+      ],
+      "radius": 0.043842763117948526,
+      "height": 0.13331227849531493,
+      "foundation_gap_mm": 0.0600073569153547,
+      "id": 42
+    },
+    {
+      "board": "/World/ReturnRun/Board09",
+      "foundation": "/World/Room/Floor",
+      "xy": [
+        -1.694851834128019,
+        1.2691375341554958
+      ],
+      "base": 6.0632134315503576e-05,
+      "asset": "food_can_tomatoSoup_a01",
+      "scale": 1.3097951112145105,
+      "count": 3,
+      "half": 0.043840746020929335,
+      "pad_base": 0.39999750109080356,
+      "plane": [
+        6.220635652165121e-08,
+        -8.268274953593391e-10,
+        0.4039975038542254
+      ],
+      "radius": 0.04384276678713068,
+      "height": 0.13331228965216269,
+      "foundation_gap_mm": 0.06000735691596532,
+      "id": 43
+    }
+  ],
+  "uniform_asset_adaptations": [
+    {
+      "path": "/World/BridgeGuide0",
+      "asset": "kitchenware_rollingPin_a01",
+      "uniform_scale": 0.44
+    },
+    {
+      "path": "/World/BridgeGuide1",
+      "asset": "kitchenware_rollingPin_a01",
+      "uniform_scale": 0.44
+    },
+    {
+      "path": "/World/BowlGuide0",
+      "asset": "kitchenware_rollingPin_a01",
+      "uniform_scale": 0.5
+    },
+    {
+      "path": "/World/BowlGuide1",
+      "asset": "kitchenware_rollingPin_a01",
+      "uniform_scale": 0.5
+    },
+    {
+      "path": "/World/CartTrack0",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 2.6761343125390122
+    },
+    {
+      "path": "/World/CartTrack1",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 2.196826674472324
+    },
+    {
+      "path": "/World/Set/CartTable",
+      "asset": "table_metal_stainless_a03",
+      "uniform_scale": 1.0
+    },
+    {
+      "path": "/World/CartSupport0/Item00",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.597878628318235
+    },
+    {
+      "path": "/World/CartSupport0/Item01",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.597878628318235
+    },
+    {
+      "path": "/World/CartSupport1/Item00",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item01",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item02",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item03",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item04",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item05",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item06",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item07",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item08",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item09",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item10",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/CartSupport1/Item11",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.9223472735334448
+    },
+    {
+      "path": "/World/Flap/Visual",
+      "asset": "hf_CabinetDoorPanel017",
+      "uniform_scale": 0.9
+    },
+    {
+      "path": "/World/BridgeSupport/Item00",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.5653012997589993
+    },
+    {
+      "path": "/World/BridgeSupport/Item01",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.5653012997589993
+    },
+    {
+      "path": "/World/BridgeSupport/Item02",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.5653012997589993
+    },
+    {
+      "path": "/World/BridgeSupport/Item03",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 0.5653012997589993
+    },
+    {
+      "path": "/World/FeederSupport/Item00",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 1.2382551277190068
+    },
+    {
+      "path": "/World/FeederSupport/Item01",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 1.2382551277190068
+    },
+    {
+      "path": "/World/RunSupport0/Item00",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.922561957788114
+    },
+    {
+      "path": "/World/RunSupport0/Item01",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.922561957788114
+    },
+    {
+      "path": "/World/RunSupport0/Item02",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.922561957788114
+    },
+    {
+      "path": "/World/RunSupport1/Item00",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.9585026916279239
+    },
+    {
+      "path": "/World/RunSupport1/Item01",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.9585026916279239
+    },
+    {
+      "path": "/World/RunSupport2/Item00",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 0.9605201775929388
+    },
+    {
+      "path": "/World/RunSupport2/Item01",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 0.9605201775929388
+    },
+    {
+      "path": "/World/RunSupport2/Item02",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 0.9605201775929388
+    },
+    {
+      "path": "/World/RunSupport3/Item00",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item01",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item02",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item03",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item04",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item05",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item06",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item07",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item08",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/RunSupport3/Item09",
+      "asset": "misc_notebook_a01",
+      "uniform_scale": 0.8229282422953775
+    },
+    {
+      "path": "/World/Set/Funnel",
+      "asset": "serviceTool_funnel_flexibleSpout_a01",
+      "uniform_scale": 1.0
+    },
+    {
+      "path": "/World/CarStop",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.4
+    },
+    {
+      "path": "/World/Gate/Pin",
+      "asset": "misc_notebook_a02",
+      "uniform_scale": 1.0484698892553679
+    },
+    {
+      "path": "/World/Cart/Visual",
+      "asset": "hf_BeetleBody",
+      "uniform_scale": 0.08
+    },
+    {
+      "path": "/World/Tire1/Visual",
+      "asset": "hf_BeetleTire1",
+      "uniform_scale": 0.08
+    },
+    {
+      "path": "/World/Tire2/Visual",
+      "asset": "hf_BeetleTire2",
+      "uniform_scale": 0.08
+    },
+    {
+      "path": "/World/Tire3/Visual",
+      "asset": "hf_BeetleTire3",
+      "uniform_scale": 0.08
+    },
+    {
+      "path": "/World/Tire4/Visual",
+      "asset": "hf_BeetleTire4",
+      "uniform_scale": 0.08
+    },
+    {
+      "path": "/World/Turnaround/Board",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 2.0
+    },
+    {
+      "path": "/World/ReturnRun/Board00",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.9400128727095276
+    },
+    {
+      "path": "/World/ReturnSupport00/Item00",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.963010794288947
+    },
+    {
+      "path": "/World/ReturnSupport00/Item01",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.963010794288947
+    },
+    {
+      "path": "/World/ReturnRun/Board01",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.9400128727095273
+    },
+    {
+      "path": "/World/ReturnSupport01/Item00",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.127708013086552
+    },
+    {
+      "path": "/World/ReturnSupport01/Item01",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.127708013086552
+    },
+    {
+      "path": "/World/ReturnSupport01/Item02",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.127708013086552
+    },
+    {
+      "path": "/World/ReturnSupport01/Item03",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.127708013086552
+    },
+    {
+      "path": "/World/ReturnRun/Board02",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.9400128727095272
+    },
+    {
+      "path": "/World/ReturnSupport02/Item00",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.995983795997869
+    },
+    {
+      "path": "/World/ReturnSupport02/Item01",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.995983795997869
+    },
+    {
+      "path": "/World/ReturnRun/Board03",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.9400128727095275
+    },
+    {
+      "path": "/World/ReturnSupport03/Item00",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0720144016960402
+    },
+    {
+      "path": "/World/ReturnSupport03/Item01",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0720144016960402
+    },
+    {
+      "path": "/World/ReturnSupport03/Item02",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0720144016960402
+    },
+    {
+      "path": "/World/ReturnSupport03/Item03",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0720144016960402
+    },
+    {
+      "path": "/World/ReturnSupport03/Item04",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0720144016960402
+    },
+    {
+      "path": "/World/ReturnRun/Board04",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.9400128727095275
+    },
+    {
+      "path": "/World/ReturnSupport04/Item00",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.9038074152206456
+    },
+    {
+      "path": "/World/ReturnSupport04/Item01",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.9038074152206456
+    },
+    {
+      "path": "/World/ReturnRun/Board05",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.940012872709527
+    },
+    {
+      "path": "/World/ReturnSupport05/Item00",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.0572799728695
+    },
+    {
+      "path": "/World/ReturnSupport05/Item01",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.0572799728695
+    },
+    {
+      "path": "/World/ReturnSupport05/Item02",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.0572799728695
+    },
+    {
+      "path": "/World/ReturnSupport05/Item03",
+      "asset": "food_box_pudding_a01",
+      "uniform_scale": 1.0572799728695
+    },
+    {
+      "path": "/World/ReturnRun/Board06",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.9400128727095276
+    },
+    {
+      "path": "/World/ReturnSupport06/Item00",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.9328114707072721
+    },
+    {
+      "path": "/World/ReturnSupport06/Item01",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 0.9328114707072721
+    },
+    {
+      "path": "/World/ReturnRun/Board07",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 0.940012872709528
+    },
+    {
+      "path": "/World/ReturnSupport07/Item00",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0028977446273242
+    },
+    {
+      "path": "/World/ReturnSupport07/Item01",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0028977446273242
+    },
+    {
+      "path": "/World/ReturnSupport07/Item02",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0028977446273242
+    },
+    {
+      "path": "/World/ReturnSupport07/Item03",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0028977446273242
+    },
+    {
+      "path": "/World/ReturnSupport07/Item04",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 1.0028977446273242
+    },
+    {
+      "path": "/World/TurnSupport/Item00",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 1.1038220932261906
+    },
+    {
+      "path": "/World/TurnSupport/Item01",
+      "asset": "container_can_tin_open_a01",
+      "uniform_scale": 1.1038220932261906
+    },
+    {
+      "path": "/World/ReturnRun/Board08",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 1.373212956883103
+    },
+    {
+      "path": "/World/ReturnSupport08/Item00",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.8797158568258235
+    },
+    {
+      "path": "/World/ReturnSupport08/Item01",
+      "asset": "food_box_cracker_a01",
+      "uniform_scale": 0.8797158568258235
+    },
+    {
+      "path": "/World/ReturnRun/Board09",
+      "asset": "kitchenware_cuttingBoard_b01",
+      "uniform_scale": 1.4210526315789473
+    },
+    {
+      "path": "/World/ReturnSupport09/Item00",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 0.9199578921660965
+    },
+    {
+      "path": "/World/ReturnSupport09/Item01",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 0.9199578921660965
+    },
+    {
+      "path": "/World/ReturnSupport09/Item02",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 0.9199578921660965
+    },
+    {
+      "path": "/World/ReturnSupport09/Item03",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 0.9199578921660965
+    },
+    {
+      "path": "/World/ReturnSupport09/Item04",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 0.9199578921660965
+    },
+    {
+      "path": "/World/ReturnSupport09/Item05",
+      "asset": "food_box_gelatin_a01",
+      "uniform_scale": 0.9199578921660965
+    },
+    {
+      "path": "/World/SugarTipper/Spatula",
+      "asset": "kitchenware_spatula_b01",
+      "uniform_scale": 1.0
+    },
+    {
+      "path": "/World/TipperStand",
+      "asset": "hf_MugTree002",
+      "uniform_scale": 1.129953856434355
+    },
+    {
+      "path": "/World/TipperFrontRest/Handle",
+      "asset": "hf_CabinetHandle002",
+      "uniform_scale": 1.2
+    },
+    {
+      "path": "/World/FinaleTable",
+      "asset": "furniture_table_coffee_low_a01",
+      "uniform_scale": 0.666466545686197
+    },
+    {
+      "path": "/World/CoffeeMug",
+      "asset": "dishware_mug_coffee_a01",
+      "uniform_scale": 1.25
+    }
+  ],
+  "downstream_shift": [
+    0.0,
+    1.2,
+    0.0
+  ],
+  "sling_angles": [
+    -0.17453292519943295,
+    1.5707963267948966,
+    3.3161255787892263
+  ],
+  "wheel_stage": {
+    "cart_origin": [
+      0.8730242591735957,
+      0.99,
+      1.2016954545454546
+    ],
+    "scale": 0.08,
+    "tires": [
+      {
+        "body": "/World/Tire1",
+        "radius": 0.024842607732307443,
+        "mass": 0.005,
+        "source_center": [
+          0.6341707901151481,
+          1.1503204826266293,
+          0.31053262356033695
+        ],
+        "source_radial_axis_ratio": 0.99999991965258
+      },
+      {
+        "body": "/World/Tire2",
+        "radius": 0.024842607732307443,
+        "mass": 0.005,
+        "source_center": [
+          0.6345526990253334,
+          -1.081483605526113,
+          0.3105326235603375
+        ],
+        "source_radial_axis_ratio": 0.99999991965258
+      },
+      {
+        "body": "/World/Tire3",
+        "radius": 0.024842607979554527,
+        "mass": 0.005,
+        "source_center": [
+          -0.6333486401809147,
+          1.1503206260579009,
+          0.31053261015182804
+        ],
+        "source_radial_axis_ratio": 0.9999999664853348
+      },
+      {
+        "body": "/World/Tire4",
+        "radius": 0.024842607979554523,
+        "mass": 0.005,
+        "source_center": [
+          -0.6333486401809147,
+          -1.080742923086309,
+          0.31053261015182854
+        ],
+        "source_radial_axis_ratio": 0.9999999664853348
+      }
+    ],
+    "hinge": [
+      1.1030242591735957,
+      2.4,
+      1.389
+    ],
+    "funnel_role": "Counter prop only: bent narrow spout is unsuitable for the 36 mm payload.",
+    "vehicle": "red_beetle",
+    "body_mass_kg": 0.3,
+    "body_com": [
+      -3.205866297198054e-06,
+      -0.007626810977838643,
+      0.056048307234412086
+    ],
+    "body_inertia": [
+      [
+        0.0016928573756789533,
+        1.1216388543025776e-07,
+        -1.3819722776976675e-08
+      ],
+      [
+        1.1216388543025776e-07,
+        0.0004226207894522176,
+        3.995805205856629e-05
+      ],
+      [
+        -1.3819722776976675e-08,
+        3.995805205856629e-05,
+        0.0017976825873006273
+      ]
+    ],
+    "parking_stop": {
+      "path": "/World/CarStop",
+      "source": "food_box_pudding_a01",
+      "foundation": "/World/CartTrack1",
+      "scope": "Whole source carton, uniformly scaled 1.4 and fixed to the ramp as a physical end stop."
+    },
+    "source_uid": "0bf5a09fd6124ec4beb39830839b2c63",
+    "scope": "Original HF Objaverse Beetle, uniformly 0.08 scale; declared 300 g body and four 5 g wheels. Free chassis, four unpowered X-axis revolute wheel joints, source-mesh hull contacts (512-vertex tire hull budget). Chassis inertia from its convex envelope; wheels use solid-cylinder inertia. No motor or prescribed vehicle trajectory."
+  },
+  "celebration": {
+    "body": "/World/DuckHead",
+    "joint": "/World/HeadPitch",
+    "mass_kg": 0.09,
+    "torque_limit_Nm": 0.15,
+    "trigger": "Sugar inside mug and in contact with its interior for 0.12 s",
+    "scope": "Three finite-torque head reactions follow the marble, Beetle and return contacts. Two nods follow sustained sugar contact inside the mug. A separate ankle hinge drives the opening lean."
+  },
+  "finale": {
+    "type": "hinged_spatula",
+    "trigger_body": "SugarTipper",
+    "sugar_support": "ReturnRun/Board09",
+    "cup_bottom": 0.29883814635300965,
+    "cup_rim": 0.42027986260300965,
+    "cup_radius": 0.050625,
+    "sugar_initial": [
+      -1.898065513218179,
+      1.3007737985106416,
+      0.4357068749018723
+    ],
+    "tipper_mass": {
+      "path": "/World/SugarTipper",
+      "mass": 0.026985133258710055,
+      "com": [
+        -8.876140072369351e-05,
+        -1.6567603447771192e-06,
+        -0.15986754411721854
+      ],
+      "density": 650.0,
+      "inertia": [
+        [
+          0.00019219034348877528,
+          -6.801791929315691e-12,
+          1.5681033711415147e-09
+        ],
+        [
+          -6.801791929315691e-12,
+          0.0001891280849810997,
+          2.6712079463144966e-10
+        ],
+        [
+          1.5681033711415147e-09,
+          2.6712079463144966e-10,
+          3.2012645806501677e-06
+        ]
+      ]
+    }
+  },
+  "marble_return": {
+    "route": [
+      {
+        "path": "/World/ReturnRun/Board00",
+        "start": [
+          0.8881650617456536,
+          3.700952125917184,
+          0.43004668751550845
+        ],
+        "end": [
+          0.6175729298562489,
+          3.4678524763893943,
+          0.4237390608859719
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board01",
+        "start": [
+          0.6168154034666888,
+          3.4671999107191303,
+          0.42372140259859303
+        ],
+        "end": [
+          0.34622327157728433,
+          3.2341002611913408,
+          0.4174137759690565
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board02",
+        "start": [
+          0.34546574518772416,
+          3.2334476955210767,
+          0.4173961176816776
+        ],
+        "end": [
+          0.0748736132983197,
+          3.000348045993287,
+          0.41108849105214107
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board03",
+        "start": [
+          0.07411608690875955,
+          2.999695480323023,
+          0.4110708327647622
+        ],
+        "end": [
+          -0.19647604498064505,
+          2.7665958307952336,
+          0.40476320613522565
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board04",
+        "start": [
+          -0.19723357137020517,
+          2.7659432651249696,
+          0.4047455478478468
+        ],
+        "end": [
+          -0.46782570325960976,
+          2.53284361559718,
+          0.3984379212183102
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board05",
+        "start": [
+          -0.46858322964916993,
+          2.532191049926916,
+          0.3984202629309313
+        ],
+        "end": [
+          -0.7391753615385743,
+          2.2990914003991265,
+          0.39211263630139476
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board06",
+        "start": [
+          -0.7399328879281344,
+          2.2984388347288625,
+          0.3920949780140159
+        ],
+        "end": [
+          -1.010525019817539,
+          2.065339185201073,
+          0.38578735138447934
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board07",
+        "start": [
+          -1.0112825462070991,
+          2.064686619530809,
+          0.38576969309710046
+        ],
+        "end": [
+          -1.2818746780965038,
+          1.8315869700030192,
+          0.3794620664675639
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board08",
+        "start": [
+          -1.2826322044860639,
+          1.8309344043327556,
+          0.37944440818018504
+        ],
+        "end": [
+          -1.6763548006764393,
+          1.4917649002443714,
+          0.4268114966337331
+        ]
+      },
+      {
+        "path": "/World/ReturnRun/Board09",
+        "start": [
+          -1.6786277342402665,
+          1.4898068979424248,
+          0.4268114966337331
+        ],
+        "end": [
+          -1.9154913372075208,
+          1.2857624475290517,
+          0.4268114966337331
+        ]
+      }
+    ],
+    "turn_center": [
+      1.16,
+      3.72
+    ],
+    "turn_radius": 0.163,
+    "pivot": [
+      -1.876093822101183,
+      1.3197011540961245,
+      0.7135158766337331
+    ],
+    "initial_rotation": [
+      0.0,
+      0.0,
+      0.9374552046033265,
+      -0.34810593123664973
+    ],
+    "axis": [
+      0.65266743398217,
+      -0.7576445212757298,
+      0.0
+    ],
+    "connections": [
+      [
+        "/World/FinaleTable",
+        "/World/Room/Floor"
+      ],
+      [
+        "/World/CoffeeMug",
+        "/World/FinaleTable"
+      ],
+      [
+        "/World/TipperStand",
+        "/World/ReturnRun/Board09"
+      ],
+      [
+        "/World/TipperPin",
+        "/World/TipperStand"
+      ],
+      [
+        "/World/TipperPin",
+        "/World/SugarTipper/Spatula"
+      ],
+      [
+        "/World/TipperFrontRest",
+        "/World/ReturnRun/Board09"
+      ]
+    ],
+    "scope": "A passive hanging wooden spatula nudges sugar from a fixed ledge. A drilled source mug-tree peg supports the axle. An uphill board slows the marble; a complete source cabinet handle stops the blade while the smaller sugar cube passes underneath into a mug on a low caf\u00e9 table, with its rim slightly below the ledge. Fixed mount and handle feet; separate rails have no overlap exemption; no motor or scripted release in the finale.",
+    "pipe_fit": {
+      "rail_setback_m": 0.0245,
+      "overlap_exemptions": false,
+      "stop_asset": "hf_CabinetHandle002",
+      "stop_scale": 1.2,
+      "joint_type": "Complete source cabinet handle, with integral rounded grip and feet. Separate guard rails end behind it."
+    },
+    "spatula": {
+      "yaw": [
+        [
+          -0.7576445212757298,
+          0.65266743398217,
+          0.0
+        ],
+        [
+          -0.65266743398217,
+          -0.7576445212757298,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "deck_end": [
+        -1.9154913372075208,
+        1.2857624475290517,
+        0.4268114966337331
+      ],
+      "stop": [
+        -1.9063996029522121,
+        1.2935944567368378,
+        0.4548114966337331
+      ],
+      "stop_degrees": 8.0,
+      "damping": 0.002,
+      "source": "kitchenware_spatula_b01"
+    }
+  },
+  "carton_initialization": {
+    "source_trajectory": "renders/garden/accept11-no-kick/trajectory.npz",
+    "source_sha256": "282c2aad5c51d7885270b5af08cf591387656710b1a37172b8be0cf7a8e7413b",
+    "settling_sample_s": 5.0,
+    "poses": {
+      "/World/Domino00": [
+        -1.5642461776733398,
+        0.5500355958938599,
+        1.0473395586013794,
+        0.011638105846941471,
+        0.023646917194128036,
+        0.015266824513673782,
+        0.9995360374450684
+      ],
+      "/World/Domino01": [
+        -1.4790852069854736,
+        0.5501582026481628,
+        1.0473268032073975,
+        0.011821229010820389,
+        0.023601869121193886,
+        0.00962537620216608,
+        0.9996051788330078
+      ],
+      "/World/Domino02": [
+        -1.3942440748214722,
+        0.5500315427780151,
+        1.0473400354385376,
+        0.012087618000805378,
+        0.023286305367946625,
+        -0.011397863738238811,
+        0.9995907545089722
+      ],
+      "/World/Domino03": [
+        -1.3091529607772827,
+        0.5500752925872803,
+        1.0473402738571167,
+        0.011841077357530594,
+        0.02340722642838955,
+        -0.0009558099554851651,
+        0.9996554255485535
+      ],
+      "/World/Domino04": [
+        -1.2241400480270386,
+        0.5500678420066833,
+        1.0473400354385376,
+        0.011829894967377186,
+        0.023415368050336838,
+        -0.0006319135427474976,
+        0.9996556043624878
+      ],
+      "/World/Domino05": [
+        -1.1391472816467285,
+        0.5500421524047852,
+        1.0473403930664062,
+        0.011879390105605125,
+        0.02340342104434967,
+        -0.0016504684463143349,
+        0.9996541738510132
+      ],
+      "/World/Domino06": [
+        -1.0542081594467163,
+        0.5500965118408203,
+        1.0473402738571167,
+        0.011585078202188015,
+        0.023563291877508163,
+        0.010783731937408447,
+        0.9995970726013184
+      ],
+      "/World/Domino07": [
+        -0.9691082835197449,
+        0.5500975251197815,
+        1.0473300218582153,
+        0.01190454326570034,
+        0.023547310382127762,
+        0.005431635770946741,
+        0.9996370673179626
+      ],
+      "/World/Domino08": [
+        -0.8848364353179932,
+        0.5500701069831848,
+        1.0472358465194702,
+        0.01193802896887064,
+        0.019710378721356392,
+        -0.00442551402375102,
+        0.9997246861457825
+      ],
+      "/World/Domino09": [
+        -0.7991543412208557,
+        0.550064742565155,
+        1.0473400354385376,
+        0.011858581565320492,
+        0.023404357954859734,
+        -0.0013486631214618683,
+        0.9996548295021057
+      ],
+      "/World/Domino10": [
+        -0.7141560316085815,
+        0.5500712990760803,
+        1.0473401546478271,
+        0.011843705549836159,
+        0.023420948535203934,
+        -0.0011520024854689837,
+        0.9996548891067505
+      ],
+      "/World/Domino11": [
+        -0.6291521787643433,
+        0.5500563383102417,
+        1.0473405122756958,
+        0.011838161386549473,
+        0.023402733728289604,
+        -0.0003313026390969753,
+        0.9996559619903564
+      ],
+      "/World/Domino12": [
+        -0.5442442893981934,
+        0.5499513745307922,
+        1.0473401546478271,
+        0.011875898577272892,
+        0.023382756859064102,
+        -0.002744171069934964,
+        0.9996522665023804
+      ],
+      "/World/Domino13": [
+        -0.4591609239578247,
+        0.5500580668449402,
+        1.0473333597183228,
+        0.012041228823363781,
+        0.023496059700846672,
+        7.780708983773366e-05,
+        0.9996514320373535
+      ]
+    },
+    "contact_dimension": 6,
+    "sliding_friction": 0.55,
+    "torsional_friction_m": 0.005,
+    "rolling_friction_m": 0.0001,
+    "scope": "Initial carton poses sampled from a gravity-settled, no-kick run; initialized at rest, then remain unconstrained dynamic rigid bodies. Six-dimensional contact enables the model\u2019s existing torsional and rolling friction coefficients. No locks, kinematic releases or motion edits."
+  },
+  "inventor": {
+    "starter": "Beak pull and release, passive hanging ladle",
+    "hip_target_rad": 0
+  },
+  "cereal_mass_kg": 0.08702824735940386,
+  "lever_tin": {
+    "asset": "food_can_tunaFish_a01",
+    "mass_kg": 0.36031470753709893,
+    "height_m": 0.0415881539590843,
+    "diameter_m": 0.10609580071872317,
+    "base_z": 0.9753972225256218,
+    "scale": 1.2400308740142498,
+    "contact_angle_deg": 2.8315174039947064
+  },
+  "ladle": {
+    "beak": [
+      -2.1211978561157876,
+      1.5433737302298098,
+      0.625672132935366
+    ],
+    "pivot": [
+      -1.629,
+      0.5502,
+      1.754
+    ],
+    "guide": [
+      -2.006,
+      0.5502,
+      1.776
+    ],
+    "tether_local": [
+      -1.328300837316242e-06,
+      -0.01976438940731323,
+      -0.4338959206979621
+    ],
+    "swing_yaw_deg": 0,
+    "carton_positions": [
+      [
+        -1.5687691958467824,
+        0.5504179496996946
+      ],
+      [
+        -1.4790404388844607,
+        0.5505633038941313
+      ],
+      [
+        -1.394366088312575,
+        0.5504479128830811
+      ],
+      [
+        -1.3093949992392586,
+        0.5505494639005761
+      ],
+      [
+        -1.224374930034736,
+        0.550540738280255
+      ],
+      [
+        -1.1394058758024306,
+        0.5505162025941448
+      ],
+      [
+        -1.0541414386909063,
+        0.5504929038846832
+      ],
+      [
+        -0.9691643195461249,
+        0.5505388419505025
+      ],
+      [
+        -0.8851513277535632,
+        0.5505143580806724
+      ],
+      [
+        -0.7994054256192418,
+        0.5505404485767216
+      ],
+      [
+        -0.7144021352815113,
+        0.5505462526226401
+      ],
+      [
+        -0.6293807383076511,
+        0.5505280058744074
+      ],
+      [
+        -0.5445302282394449,
+        0.5504132852133568
+      ],
+      [
+        -0.471379371057869,
+        0.5735275682733815
+      ]
+    ],
+    "duck_feet": [
+      -2.22,
+      1.532,
+      0.2912
+    ],
+    "duck_translation": [
+      -0.5700000000000003,
+      0.917,
+      -0.7102032021448744
+    ],
+    "tray_bed": 0.2986383710813522,
+    "route": [
+      [
+        -1.89,
+        1.581,
+        0.735
+      ],
+      [
+        -2.006,
+        0.5502,
+        1.776
+      ]
+    ]
+  },
+  "serving_duck": {
+    "gaze": "source yaw swivel and pitch servo",
+    "grip_free_end_m": [
+      0.0,
+      0.0,
+      0.11558000000000002
+    ]
+  }
+}

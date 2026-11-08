@@ -1,0 +1,65 @@
+{
+  "run": "ready-fine",
+  "support_hz": 1920,
+  "gate": {
+    "car_mass_kg": 0.32,
+    "gate_mass_kg": 0.9619402527509083,
+    "empty_pan_kg": 0.9319402527509083,
+    "payload_kg": 0.061,
+    "static_downhill_pull_N": 0.4794557518513857,
+    "steady_side_load_N": 0.3326888887935763,
+    "baseline_startup_peak_N": 281.5406688139818,
+    "parked_startup_peak_N": 44.9741593869775,
+    "largest_release_contact_N": 143.78598347638138,
+    "release_peak_time_s": 6.72265625,
+    "native_gate_friction_N": 0.06,
+    "gravity_surplus_before_drag_N": 0.30411000000000027,
+    "lower_stop_peak_N": 735.9921583243403,
+    "lower_stop_net_impulse_Ns": [
+      0.04477929730807871,
+      0.4316757388160503,
+      -0.10228290579314109
+    ],
+    "car_speed_before_stopping_mps": 1.0798780918121338,
+    "translational_energy_before_stop_J": 0.18658187090813044,
+    "contact_face": [
+      "/World/Gate/Pin/Geometry/noteBook_01_obj_00/noteBook_01_mesh_00_3120"
+    ]
+  },
+  "bend": {
+    "native": {
+      "minimum_surface_gap_mm": -0.5956068113222613,
+      "rail": "/World/TurnRails/Breakfast/Mouth00_0",
+      "time_s": 9.20234375
+    },
+    "display": {
+      "minimum_surface_gap_mm": -0.3041031180091268,
+      "rail": "/World/TurnRails/Arc08_T0",
+      "time_s": 9.416718749999696
+    },
+    "native_hz": 3840,
+    "display_sample_hz": 1920,
+    "sampled_arc_degrees": [
+      2.0,
+      128.74301818094403
+    ],
+    "center_min_clear_of_inner_centerline_mm": 18.12930486521365,
+    "center_min_clear_of_outer_centerline_mm": 33.812005491905964,
+    "native_max_contact_depth_mm": 0.4791853236044523,
+    "reaches_return": true,
+    "passed": true
+  },
+  "finale": {
+    "sugar_contact_s": 13.350260416666666,
+    "cube_retained": true,
+    "celebration_s": 13.78932291665926,
+    "camera": [
+      -1.57,
+      1.73,
+      0.755
+    ],
+    "look_at_cube_error_deg": 5.090961878113502,
+    "hold_max_error_deg": 2.1428165257099985,
+    "hold_duration_s": 1.15
+  }
+}

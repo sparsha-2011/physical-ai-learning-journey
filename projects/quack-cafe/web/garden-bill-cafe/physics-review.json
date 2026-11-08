@@ -1,0 +1,4494 @@
+{
+  "main": {
+    "run": "ready-fine",
+    "support_hz": 1920,
+    "gate": {
+      "car_mass_kg": 0.32,
+      "gate_mass_kg": 0.9619402527509083,
+      "empty_pan_kg": 0.9319402527509083,
+      "payload_kg": 0.061,
+      "static_downhill_pull_N": 0.4794557518513857,
+      "steady_side_load_N": 0.3326888887935763,
+      "baseline_startup_peak_N": 281.5406688139818,
+      "parked_startup_peak_N": 44.9741593869775,
+      "largest_release_contact_N": 143.78598347638138,
+      "release_peak_time_s": 6.72265625,
+      "native_gate_friction_N": 0.06,
+      "gravity_surplus_before_drag_N": 0.30411000000000027,
+      "lower_stop_peak_N": 735.9921583243403,
+      "lower_stop_net_impulse_Ns": [
+        0.04477929730807871,
+        0.4316757388160503,
+        -0.10228290579314109
+      ],
+      "car_speed_before_stopping_mps": 1.0798780918121338,
+      "translational_energy_before_stop_J": 0.18658187090813044,
+      "contact_face": [
+        "/World/Gate/Pin/Geometry/noteBook_01_obj_00/noteBook_01_mesh_00_3120"
+      ]
+    },
+    "bend": {
+      "native": {
+        "minimum_surface_gap_mm": -0.5956068113222613,
+        "rail": "/World/TurnRails/Breakfast/Mouth00_0",
+        "time_s": 9.20234375
+      },
+      "display": {
+        "minimum_surface_gap_mm": -0.3041031180091268,
+        "rail": "/World/TurnRails/Arc08_T0",
+        "time_s": 9.416718749999696
+      },
+      "native_hz": 3840,
+      "display_sample_hz": 1920,
+      "sampled_arc_degrees": [
+        2.0,
+        128.74301818094403
+      ],
+      "center_min_clear_of_inner_centerline_mm": 18.12930486521365,
+      "center_min_clear_of_outer_centerline_mm": 33.812005491905964,
+      "native_max_contact_depth_mm": 0.4791853236044523,
+      "reaches_return": true,
+      "passed": true
+    },
+    "finale": {
+      "sugar_contact_s": 13.350260416666666,
+      "cube_retained": true,
+      "celebration_s": 13.78932291665926,
+      "camera": [
+        -1.57,
+        1.73,
+        0.755
+      ],
+      "look_at_cube_error_deg": 5.090961878113502,
+      "hold_max_error_deg": 2.1428165257099985,
+      "hold_duration_s": 1.15
+    }
+  },
+  "comparison": {
+    "run": "ready-mid",
+    "support_hz": 1280,
+    "gate": {
+      "car_mass_kg": 0.32,
+      "gate_mass_kg": 0.9619402527509083,
+      "empty_pan_kg": 0.9319402527509083,
+      "payload_kg": 0.061,
+      "static_downhill_pull_N": 0.4794557518513857,
+      "steady_side_load_N": 0.3970475050124787,
+      "baseline_startup_peak_N": 281.5406688139818,
+      "parked_startup_peak_N": 16.92328852153521,
+      "largest_release_contact_N": 206.35577726684275,
+      "release_peak_time_s": 6.509635416666667,
+      "native_gate_friction_N": 0.06,
+      "gravity_surplus_before_drag_N": 0.30411000000000027,
+      "lower_stop_peak_N": 730.8976495803018,
+      "lower_stop_net_impulse_Ns": [
+        -0.057506803802271196,
+        0.44378647461693516,
+        -0.09861479809484096
+      ],
+      "car_speed_before_stopping_mps": 1.075995922088623,
+      "translational_energy_before_stop_J": 0.1852427558962154,
+      "contact_face": [
+        "/World/Gate/Pin/Geometry/noteBook_01_obj_00/noteBook_01_mesh_00_3120"
+      ]
+    },
+    "bend": {
+      "native": {
+        "minimum_surface_gap_mm": -0.26557952648256433,
+        "rail": "/World/TurnRails/Breakfast/Inner01_0",
+        "time_s": 8.978125
+      },
+      "display": {
+        "minimum_surface_gap_mm": -0.02443606205446841,
+        "rail": "/World/TurnRails/Arc13_T0",
+        "time_s": 9.333385416666216
+      },
+      "native_hz": 3840,
+      "display_sample_hz": 1920,
+      "sampled_arc_degrees": [
+        2.0,
+        128.74301818094403
+      ],
+      "center_min_clear_of_inner_centerline_mm": 24.519474165963963,
+      "center_min_clear_of_outer_centerline_mm": 36.07546494905339,
+      "native_max_contact_depth_mm": 0.24758954211702086,
+      "reaches_return": true,
+      "passed": true
+    },
+    "finale": {
+      "sugar_contact_s": 13.5328125,
+      "cube_retained": true,
+      "celebration_s": 13.755989583325958,
+      "camera": [
+        -1.57,
+        1.73,
+        0.755
+      ],
+      "look_at_cube_error_deg": 4.568911193570153,
+      "hold_max_error_deg": 2.1428165257099985,
+      "hold_duration_s": 1.15
+    }
+  },
+  "braking": {
+    "run": "ready-fine",
+    "window_s": [
+      7.85,
+      9.7
+    ],
+    "control": {
+      "ramp_max_drift_mm": 0.4151272488146619,
+      "ramp_max_tilt_deg": 0.02422198578359501,
+      "peak_base_reactions_N": [
+        24.639895706233382,
+        91.273187581247,
+        254.33417234537725,
+        242.63701357567757
+      ],
+      "positive_base_fraction": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "with_bumper_load": {
+      "ramp_max_drift_mm": 0.4151272488146619,
+      "ramp_max_tilt_deg": 0.02422198578359501,
+      "peak_base_reactions_N": [
+        41.761954310834504,
+        91.273187581247,
+        254.33417234537725,
+        242.63701357567757
+      ],
+      "positive_base_fraction": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "scope": "Separate structural replay of the stopping impulse at the bumper, with the recorded wheel loads. Rigid fixture force peaks are solver-dependent. Fastener strength and failure were not tested."
+  },
+  "boards": {
+    "passed": true,
+    "checks": {
+      "ordered_ladle_to_cup": true,
+      "cube_retained": true,
+      "three_reactions": true,
+      "two_post_landing_nods": true,
+      "idle_control": true,
+      "all_boards_stable": true,
+      "scoop_strikes_middle_of_carton": true,
+      "mug_cavity_clear": true,
+      "released_before_contact": true,
+      "no_foot_strike": true,
+      "heel_lean": true,
+      "car_cord_clearance": true,
+      "ladle_rack_seated": true,
+      "support_clearance": true
+    },
+    "sequence": [
+      {
+        "pair": [
+          "Ladle",
+          "Domino00"
+        ],
+        "s": 2.0122395833333333
+      },
+      {
+        "pair": [
+          "Domino00",
+          "Domino01"
+        ],
+        "s": 2.1132812499999996
+      },
+      {
+        "pair": [
+          "Domino01",
+          "Domino02"
+        ],
+        "s": 2.267708333333333
+      },
+      {
+        "pair": [
+          "Domino02",
+          "Domino03"
+        ],
+        "s": 2.3890624999999996
+      },
+      {
+        "pair": [
+          "Domino03",
+          "Domino04"
+        ],
+        "s": 2.502083333333333
+      },
+      {
+        "pair": [
+          "Domino04",
+          "Domino05"
+        ],
+        "s": 2.591927083333333
+      },
+      {
+        "pair": [
+          "Domino05",
+          "Domino06"
+        ],
+        "s": 2.665625
+      },
+      {
+        "pair": [
+          "Domino06",
+          "Domino07"
+        ],
+        "s": 2.7765625
+      },
+      {
+        "pair": [
+          "Domino07",
+          "Domino08"
+        ],
+        "s": 2.8635416666666664
+      },
+      {
+        "pair": [
+          "Domino08",
+          "Domino09"
+        ],
+        "s": 2.9377604166666664
+      },
+      {
+        "pair": [
+          "Domino09",
+          "Domino10"
+        ],
+        "s": 3.0424479166666663
+      },
+      {
+        "pair": [
+          "Domino10",
+          "Domino11"
+        ],
+        "s": 3.131770833333333
+      },
+      {
+        "pair": [
+          "Domino11",
+          "Domino12"
+        ],
+        "s": 3.1984375
+      },
+      {
+        "pair": [
+          "Domino12",
+          "Domino13"
+        ],
+        "s": 3.27265625
+      },
+      {
+        "pair": [
+          "Domino13",
+          "Lever"
+        ],
+        "s": 3.4265624999999997
+      },
+      {
+        "pair": [
+          "Marble",
+          "Bridge"
+        ],
+        "s": 5.065885416666667
+      },
+      {
+        "pair": [
+          "Marble",
+          "BowlFeeder"
+        ],
+        "s": 5.391666666666667
+      },
+      {
+        "pair": [
+          "Marble",
+          "Pan"
+        ],
+        "s": 6.09375
+      },
+      {
+        "pair": [
+          "Cart",
+          "Flap"
+        ],
+        "s": 8.055208333333333
+      },
+      {
+        "pair": [
+          "Marble2",
+          "SecondRun/Board1"
+        ],
+        "s": 8.451302083333333
+      },
+      {
+        "pair": [
+          "Marble2",
+          "Turnaround/Board"
+        ],
+        "s": 9.481510416666667
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board00"
+        ],
+        "s": 10.104427083333334
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board01"
+        ],
+        "s": 10.244010416666667
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board02"
+        ],
+        "s": 10.589322916666667
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board03"
+        ],
+        "s": 10.92265625
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board04"
+        ],
+        "s": 11.246354166666666
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board05"
+        ],
+        "s": 11.559635416666667
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board06"
+        ],
+        "s": 11.864583333333334
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board07"
+        ],
+        "s": 12.161197916666667
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board08"
+        ],
+        "s": 12.450260416666667
+      },
+      {
+        "pair": [
+          "Marble2",
+          "ReturnRun/Board09"
+        ],
+        "s": 12.93125
+      },
+      {
+        "pair": [
+          "Marble2",
+          "SugarTipper"
+        ],
+        "s": 13.20078125
+      },
+      {
+        "pair": [
+          "Sugar",
+          "CoffeeMug"
+        ],
+        "s": 13.350260416666666
+      }
+    ],
+    "received_s": 13.350260416666666,
+    "reactions": {
+      "bowl_capture": 6.09401041666626,
+      "car_handoff": 8.055468749997809,
+      "return_trip": 10.104687499995945
+    },
+    "nod_peaks_s": [
+      14.433333333333334,
+      15.183333333333334
+    ],
+    "no_pull_carton_drift_mm": 0.718511700630188,
+    "boards": [
+      {
+        "board": "/World/Bridge",
+        "board_mass_kg": 0.15518335093238642,
+        "maximum_drift_mm": 0.09511076658964157,
+        "maximum_angle_deg": 0.06945196099815895,
+        "seats": [
+          {
+            "column": 0,
+            "foundation": "/World/Set/PrepTable0",
+            "asset": "folded cloth",
+            "tins": 0,
+            "peak_base_normal_N": 2.619323129159773,
+            "screening_load_N": 3.816143129159773,
+            "assumed_steel_can_screen_N": null,
+            "peak_loaded_rim_eccentricity_ratio": 0.0,
+            "positive_load_fraction": 0.9991666666666666,
+            "passed": true
+          },
+          {
+            "column": 1,
+            "foundation": "/World/WorkBoard/Board3",
+            "asset": "folded cloth",
+            "tins": 0,
+            "peak_base_normal_N": 24.547806239689596,
+            "screening_load_N": 25.744626239689595,
+            "assumed_steel_can_screen_N": null,
+            "peak_loaded_rim_eccentricity_ratio": 0.0,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/BowlFeeder",
+        "board_mass_kg": 0.1906221521028531,
+        "maximum_drift_mm": 0.2226468175649643,
+        "maximum_angle_deg": 0.26845219083460853,
+        "seats": [
+          {
+            "column": 2,
+            "foundation": "/World/Set/FeederTable",
+            "asset": "food_canned_peach_a02",
+            "tins": 6,
+            "peak_base_normal_N": 21.294578617708204,
+            "screening_load_N": 22.491398617708203,
+            "assumed_steel_can_screen_N": 182.05538175515662,
+            "peak_loaded_rim_eccentricity_ratio": 0.9989855113945466,
+            "positive_load_fraction": 0.9997916666666666,
+            "passed": true
+          },
+          {
+            "column": 3,
+            "foundation": "/World/Pantry/Tables/Table5",
+            "asset": "food_canned_fruit_a03",
+            "tins": 4,
+            "peak_base_normal_N": 8.13766790584003,
+            "screening_load_N": 9.33448790584003,
+            "assumed_steel_can_screen_N": 129.2153674409244,
+            "peak_loaded_rim_eccentricity_ratio": 0.9089166362704297,
+            "positive_load_fraction": 0.99875,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/SecondRun/Board0",
+        "board_mass_kg": 0.7979206578509545,
+        "maximum_drift_mm": 0.008764113299548626,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 4,
+            "foundation": "/World/Pantry/Tables/Table6",
+            "asset": "food_canned_fruit_a03",
+            "tins": 2,
+            "peak_base_normal_N": 28.04062174750642,
+            "screening_load_N": 29.23744174750642,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9622637963908728,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 5,
+            "foundation": "/World/Pantry/Tables/Table6",
+            "asset": "food_canned_soup_a03",
+            "tins": 4,
+            "peak_base_normal_N": 14.207496528229921,
+            "screening_load_N": 15.404316528229922,
+            "assumed_steel_can_screen_N": 196.73331959849526,
+            "peak_loaded_rim_eccentricity_ratio": 0.9313598527384155,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/SecondRun/Board1",
+        "board_mass_kg": 0.7979206578509545,
+        "maximum_drift_mm": 0.010195182636380196,
+        "maximum_angle_deg": 0.0016597254278787506,
+        "seats": [
+          {
+            "column": 6,
+            "foundation": "/World/Pantry/Tables/Table6",
+            "asset": "food_canned_soup_a03",
+            "tins": 2,
+            "peak_base_normal_N": 10.199233180320585,
+            "screening_load_N": 11.396053180320585,
+            "assumed_steel_can_screen_N": 145.79405561653257,
+            "peak_loaded_rim_eccentricity_ratio": 0.536787586605272,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 7,
+            "foundation": "/World/Pantry/Tables/Table6",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 2,
+            "peak_base_normal_N": 21.987393152730846,
+            "screening_load_N": 23.184213152730845,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9332524089801699,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/SecondRun/Board2",
+        "board_mass_kg": 0.7979206578509531,
+        "maximum_drift_mm": 0.0019983118399977684,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 8,
+            "foundation": "/World/Set/RunTable",
+            "asset": "food_canned_beans_a01",
+            "tins": 2,
+            "peak_base_normal_N": 12.115303840064543,
+            "screening_load_N": 13.312123840064544,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.822318390408325,
+            "positive_load_fraction": 0.9997916666666666,
+            "passed": true
+          },
+          {
+            "column": 9,
+            "foundation": "/World/Set/RunTable",
+            "asset": "food_canned_peach_a02",
+            "tins": 2,
+            "peak_base_normal_N": 26.05800557574756,
+            "screening_load_N": 27.25482557574756,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9253730723424404,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/SecondRun/Board3",
+        "board_mass_kg": 0.7979206578509522,
+        "maximum_drift_mm": 0.024664297699928284,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 10,
+            "foundation": "/World/Set/RunTable",
+            "asset": "food_can_tunaFish_a01",
+            "tins": 3,
+            "peak_base_normal_N": 6.679032779219512,
+            "screening_load_N": 7.875852779219512,
+            "assumed_steel_can_screen_N": 191.7996862917385,
+            "peak_loaded_rim_eccentricity_ratio": 0.8245553639859516,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 11,
+            "foundation": "/World/Set/RunTable",
+            "asset": "food_canned_fruit_a03",
+            "tins": 1,
+            "peak_base_normal_N": 13.368570480831917,
+            "screening_load_N": 14.565390480831917,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9987103375995278,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/CartTrack0",
+        "board_mass_kg": 16.326255205357125,
+        "maximum_drift_mm": 0.038024771958589554,
+        "maximum_angle_deg": 0.008497154754348587,
+        "seats": [
+          {
+            "column": 12,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_canned_fruit_a03",
+            "tins": 3,
+            "peak_base_normal_N": 17.47280854363008,
+            "screening_load_N": 23.75120854363008,
+            "assumed_steel_can_screen_N": 113.04485339021313,
+            "peak_loaded_rim_eccentricity_ratio": 0.41553037453942937,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 13,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 2,
+            "peak_base_normal_N": 81.53720656955356,
+            "screening_load_N": 87.81560656955357,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.3178918247042286,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 14,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_canned_soup_a03",
+            "tins": 3,
+            "peak_base_normal_N": 16.37608806579141,
+            "screening_load_N": 22.654488065791412,
+            "assumed_steel_can_screen_N": 232.2340204429152,
+            "peak_loaded_rim_eccentricity_ratio": 0.979404303126324,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 15,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_canned_beans_a01",
+            "tins": 2,
+            "peak_base_normal_N": 108.53893028423731,
+            "screening_load_N": 114.81733028423731,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.5032063558126699,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/CartTrack1",
+        "board_mass_kg": 9.031299339984692,
+        "maximum_drift_mm": 0.003120575100183487,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 16,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_can_tunaFish_a01",
+            "tins": 2,
+            "peak_base_normal_N": 41.52392179581409,
+            "screening_load_N": 47.80232179581409,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.47017538202930226,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 17,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_can_tunaFish_a01",
+            "tins": 2,
+            "peak_base_normal_N": 48.719704046702056,
+            "screening_load_N": 54.99810404670205,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.26578748512566003,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 18,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_canned_peach_a02",
+            "tins": 1,
+            "peak_base_normal_N": 36.757957601579804,
+            "screening_load_N": 43.0363576015798,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.6883413363294226,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 19,
+            "foundation": "/World/Set/CartTable",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 1,
+            "peak_base_normal_N": 52.39051127180275,
+            "screening_load_N": 58.66891127180275,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.42488347109984514,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/Turnaround/Board",
+        "board_mass_kg": 6.814795553080208,
+        "maximum_drift_mm": 0.005368473008275032,
+        "maximum_angle_deg": 0.01229526065575092,
+        "seats": [
+          {
+            "column": 20,
+            "foundation": "/World/Pantry/Tables/Table4",
+            "asset": "food_canned_fruit_a03",
+            "tins": 3,
+            "peak_base_normal_N": 19.10931099917505,
+            "screening_load_N": 20.30613099917505,
+            "assumed_steel_can_screen_N": 92.91466260156476,
+            "peak_loaded_rim_eccentricity_ratio": 0.22986442069750346,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 21,
+            "foundation": "/World/Pantry/Tables/Table4",
+            "asset": "food_canned_soup_a03",
+            "tins": 3,
+            "peak_base_normal_N": 21.43718071145409,
+            "screening_load_N": 22.63400071145409,
+            "assumed_steel_can_screen_N": 94.96804299075549,
+            "peak_loaded_rim_eccentricity_ratio": 0.36603899516566923,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 22,
+            "foundation": "/World/Room/Floor",
+            "asset": "food_canned_soup_a03",
+            "tins": 3,
+            "peak_base_normal_N": 59.9330783611738,
+            "screening_load_N": 61.1298983611738,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.42134680759079884,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 23,
+            "foundation": "/World/Room/Floor",
+            "asset": "food_canned_beans_a01",
+            "tins": 5,
+            "peak_base_normal_N": 25.09316046751782,
+            "screening_load_N": 26.289980467517818,
+            "assumed_steel_can_screen_N": 191.40085651865934,
+            "peak_loaded_rim_eccentricity_ratio": 0.07309996096384014,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board00",
+        "board_mass_kg": 0.7075615856382179,
+        "maximum_drift_mm": 0.008787441067397594,
+        "maximum_angle_deg": 0.01542978974123341,
+        "seats": [
+          {
+            "column": 24,
+            "foundation": "/World/Pantry/Tables/Table0",
+            "asset": "food_canned_beans_a01",
+            "tins": 1,
+            "peak_base_normal_N": 8.264673738601667,
+            "screening_load_N": 9.461493738601668,
+            "assumed_steel_can_screen_N": 200.72795844276826,
+            "peak_loaded_rim_eccentricity_ratio": 0.22396516421630705,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 25,
+            "foundation": "/World/Room/Floor",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 4,
+            "peak_base_normal_N": 19.0259385679692,
+            "screening_load_N": 20.222758567969198,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.36259022756469406,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board01",
+        "board_mass_kg": 0.7075615856382178,
+        "maximum_drift_mm": 0.009194825775921345,
+        "maximum_angle_deg": 0.004388918741348857,
+        "seats": [
+          {
+            "column": 26,
+            "foundation": "/World/Pantry/Tables/Table0",
+            "asset": "food_can_tunaFish_a01",
+            "tins": 2,
+            "peak_base_normal_N": 13.304653807122744,
+            "screening_load_N": 14.501473807122744,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9931821632189546,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 27,
+            "foundation": "/World/Pantry/Tables/Table0",
+            "asset": "food_canned_fruit_a03",
+            "tins": 1,
+            "peak_base_normal_N": 9.046980963408851,
+            "screening_load_N": 10.243800963408852,
+            "assumed_steel_can_screen_N": 189.21223191365004,
+            "peak_loaded_rim_eccentricity_ratio": 0.45441824297474487,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board02",
+        "board_mass_kg": 0.7075615856382177,
+        "maximum_drift_mm": 0.003962364047765732,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 28,
+            "foundation": "/World/Pantry/Tables/Table1",
+            "asset": "food_canned_fruit_a03",
+            "tins": 2,
+            "peak_base_normal_N": 6.645446394886428,
+            "screening_load_N": 7.842266394886428,
+            "assumed_steel_can_screen_N": 119.21988456926341,
+            "peak_loaded_rim_eccentricity_ratio": 0.30107191915129244,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 29,
+            "foundation": "/World/Pantry/Tables/Table0",
+            "asset": "food_can_tunaFish_a01",
+            "tins": 2,
+            "peak_base_normal_N": 11.675692019284634,
+            "screening_load_N": 12.872512019284635,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.6611799872189057,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board03",
+        "board_mass_kg": 0.7075615856382179,
+        "maximum_drift_mm": 0.0012963208137080073,
+        "maximum_angle_deg": 0.0020895349082114103,
+        "seats": [
+          {
+            "column": 30,
+            "foundation": "/World/Pantry/Tables/Table1",
+            "asset": "food_canned_soup_a03",
+            "tins": 1,
+            "peak_base_normal_N": 12.326387718989524,
+            "screening_load_N": 13.523207718989525,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.6931529984380868,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 31,
+            "foundation": "/World/Pantry/Tables/Table1",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 1,
+            "peak_base_normal_N": 13.020666439884748,
+            "screening_load_N": 14.217486439884748,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.7797381799995595,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board04",
+        "board_mass_kg": 0.7075615856382177,
+        "maximum_drift_mm": 0.006713134702295065,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 32,
+            "foundation": "/World/Pantry/Tables/Table2",
+            "asset": "food_canned_beans_a01",
+            "tins": 2,
+            "peak_base_normal_N": 13.509478153136673,
+            "screening_load_N": 14.706298153136673,
+            "assumed_steel_can_screen_N": 98.72203253955796,
+            "peak_loaded_rim_eccentricity_ratio": 0.2740770684251859,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 33,
+            "foundation": "/World/Pantry/Tables/Table1",
+            "asset": "food_canned_peach_a02",
+            "tins": 1,
+            "peak_base_normal_N": 13.088623976761376,
+            "screening_load_N": 14.285443976761377,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9925845940973886,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board05",
+        "board_mass_kg": 0.7075615856382179,
+        "maximum_drift_mm": 0.0020929635502398014,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 34,
+            "foundation": "/World/Pantry/Tables/Table2",
+            "asset": "food_canned_peach_a02",
+            "tins": 1,
+            "peak_base_normal_N": 22.300702654756726,
+            "screening_load_N": 23.497522654756725,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.5051119049822199,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 35,
+            "foundation": "/World/Pantry/Tables/Table2",
+            "asset": "food_canned_fruit_a03",
+            "tins": 1,
+            "peak_base_normal_N": 10.621498730339887,
+            "screening_load_N": 11.818318730339888,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.9750426457195478,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board06",
+        "board_mass_kg": 0.7075615856382182,
+        "maximum_drift_mm": 0.003108740784227848,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 36,
+            "foundation": "/World/Pantry/Tables/Table3",
+            "asset": "food_can_tunaFish_a01",
+            "tins": 5,
+            "peak_base_normal_N": 12.363728783502188,
+            "screening_load_N": 13.560548783502188,
+            "assumed_steel_can_screen_N": 192.10081785456072,
+            "peak_loaded_rim_eccentricity_ratio": 0.5234821978439103,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 37,
+            "foundation": "/World/Pantry/Tables/Table2",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 1,
+            "peak_base_normal_N": 10.75681317904922,
+            "screening_load_N": 11.95363317904922,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.6351488798864069,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board07",
+        "board_mass_kg": 0.7075615856382184,
+        "maximum_drift_mm": 0.003476029261946678,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 38,
+            "foundation": "/World/Pantry/Tables/Table3",
+            "asset": "food_canned_soup_a03",
+            "tins": 1,
+            "peak_base_normal_N": 12.70351796827998,
+            "screening_load_N": 13.900337968279981,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.3197662830885601,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 39,
+            "foundation": "/World/Pantry/Tables/Table3",
+            "asset": "food_canned_beans_a01",
+            "tins": 1,
+            "peak_base_normal_N": 13.291762392934219,
+            "screening_load_N": 14.48858239293422,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.6129658331372404,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board08",
+        "board_mass_kg": 2.205852657209344,
+        "maximum_drift_mm": 0.0010323828319087625,
+        "maximum_angle_deg": 0.0,
+        "seats": [
+          {
+            "column": 40,
+            "foundation": "/World/Pantry/Tables/Table3",
+            "asset": "food_canned_beans_a01",
+            "tins": 1,
+            "peak_base_normal_N": 16.76171119623941,
+            "screening_load_N": 17.95853119623941,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.041303823546784406,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 41,
+            "foundation": "/World/Room/Floor",
+            "asset": "food_canned_peach_a02",
+            "tins": 3,
+            "peak_base_normal_N": 31.99185578691796,
+            "screening_load_N": 33.18867578691796,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.4433981461025976,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "board": "/World/ReturnRun/Board09",
+        "board_mass_kg": 2.44451824028769,
+        "maximum_drift_mm": 0.010921199806034565,
+        "maximum_angle_deg": 0.011961889452033567,
+        "seats": [
+          {
+            "column": 42,
+            "foundation": "/World/Room/Floor",
+            "asset": "food_canned_peach_a02",
+            "tins": 3,
+            "peak_base_normal_N": 36.85463365835595,
+            "screening_load_N": 38.05145365835595,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.5190555915509085,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          },
+          {
+            "column": 43,
+            "foundation": "/World/Room/Floor",
+            "asset": "food_can_tomatoSoup_a01",
+            "tins": 3,
+            "peak_base_normal_N": 36.56632841738851,
+            "screening_load_N": 37.763148417388514,
+            "assumed_steel_can_screen_N": 245.16625,
+            "peak_loaded_rim_eccentricity_ratio": 0.3115273801519771,
+            "positive_load_fraction": 1.0,
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "working_clearance_mm": 6.057087414202265,
+    "unexpected_pairs": [],
+    "frames": 1201,
+    "source_digest": "d58e735582f8157d177b51dfea95af410c017912e775c10b514829d21572465d",
+    "trajectory_digest": "2bf1231be735a8f6e99e65b6b80f8a5dc673ab72362878cff17fe4dc5ad4f4da",
+    "comparison_received_s": 13.5328125,
+    "simulation": "Newton-imported MuJoCo mechanism with two-way Bullet support contacts. Board reaction wrenches drive the pantry world, and its solved board poses update the mechanism collision meshes.",
+    "starter": {
+      "grip_s": 0.42,
+      "release_s": 1.62,
+      "peak_tension_N": 1.1244714289191489,
+      "peak_lean_rad": 0.3078640834840226,
+      "peak_lean_torque_Nm": 1.0424168211126235,
+      "beak_local": [
+        0.08545368808260619,
+        0.01137380135305221,
+        0.007215247716745751
+      ],
+      "tether_rest_m": 2.3196386520206222
+    },
+    "impact_fraction_of_carton_height": 0.4541445798669548,
+    "ladle_to_car_cord_mm": 601.4546688592607,
+    "rack_foot_gaps_mm": [
+      0.02408084156590995,
+      0.10027629766690138
+    ],
+    "bearing_model": "The dry contact model uses coefficient 0.55, gravity-loaded free boards, loose tins and precompressed cloth. The two solvers exchange board poses and contact forces. Bearing faces on fixed furniture are the level patches measured on source meshes. All four car-ramp seats must stay under their respective board. Cabinet and coffee-table joinery is fixed.",
+    "capacity_basis": "Screen for modeled intact, sealed steel food cans with a wall of at least 0.10 mm. The smallest measured axial collapse in Table 3 was 200 kgf. Use one eighth of this load and further reduce for diameters below 66 mm. This is a comparable-container assumption, not a package rating. No cardboard strength is credited. Cloth is represented in its already-compressed shape; crushing and cloth fiber dynamics are outside the rigid-body model.",
+    "capacity_source": "https://www2.fish-u.ac.jp/kenkyu/sangakukou/kenkyuhoukoku/44/44-3-2.pdf",
+    "timestep_comparison": {
+      "support_hz": 1280,
+      "duration_s": 20.0,
+      "reactions": {
+        "bowl_capture": 5.995833333333016,
+        "car_handoff": 7.925520833331261,
+        "return_trip": 9.97447916666273
+      },
+      "sugar_contact_s": 13.5328125,
+      "cube_retained": true,
+      "celebration_s": 13.755989583325958,
+      "passed": true
+    }
+  },
+  "cord": {
+    "frames": 1201,
+    "sample_hz": 120,
+    "cord_radius_mm": 1.9,
+    "minimum_gap_mm": 0.723975782300086,
+    "unintended_contacts": {},
+    "static_mesh_count": 27,
+    "moving_paths": [
+      "/World/Microduck",
+      "/World/KickLeg",
+      "/World/Sugar",
+      "/World/Marble2",
+      "/World/DuckHead",
+      "/World/ReturnRun/Board08",
+      "/World/ReturnRun/Board09",
+      "/World/SugarTipper",
+      "/World/Pantry/Column42/FoldedCloth",
+      "/World/Pantry/Column43/FoldedCloth",
+      "/World/Domino00"
+    ],
+    "scope": "Finite cotton cord radius versus visible scene meshes in its swept bounds. Includes head and ladle outside the 13 mm beak grip and 14 mm attachment. Intentional eyelet contacts excluded. Light running cord transmits tension until release. Gravity and a length constraint govern the free end; fiber bending and eye friction are idealized."
+  },
+  "twine": {
+    "frames": 1201,
+    "unintended_contacts": [],
+    "nearest_moving_clearance_mm": 7.992312404624207,
+    "source_bowl_fit": {
+      "BasketLeg0": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 0.11632563490550606
+      },
+      "BasketLeg1": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 0.1146289452270484
+      },
+      "BasketLeg2": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 0.12618810117585966
+      },
+      "BottomGather": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 3.1169677588866804
+      },
+      "KeeperBand": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 0.04761540701427589
+      },
+      "BridleEye": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 176.9822858599462
+      },
+      "NeckWhipping": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 182.29646245913563
+      },
+      "PulleyTieAndTail": {
+        "intersects": false,
+        "deepest_mm": 0.0,
+        "distance_mm": 199.14095423947546
+      }
+    },
+    "legs": 3,
+    "guide_endpoint_pan_local_m": [
+      0,
+      0,
+      0.24
+    ],
+    "scope": "The visible basket, keeper band and tied eye follow the solved guided pan. The pulley tendon supplies the resultant force at the eye. Fiber strain, knot friction and tightening are idealized."
+  },
+  "solids": {
+    "groups": 485,
+    "frames": 1201,
+    "samples": 2401,
+    "static_mesh_intersection_pairs": [
+      {
+        "parts": [
+          "/World/FinaleTable",
+          "/World/LadleRack/Screw1_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "table guide fastener"
+      },
+      {
+        "parts": [
+          "/World/FinaleTable",
+          "/World/LadleRack/Screw1_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "table guide fastener"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Arm",
+          "/World/GateBracket/LeftBack"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "gate guide secured to arm"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Arm",
+          "/World/GateBracket/RightBack"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "gate guide secured to arm"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Arm",
+          "/World/GateBracket/Upright"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "fixed upper arm"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/LeftBack",
+          "/World/GateBracket/LeftEdge"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "gate slide joinery"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/LeftEdge",
+          "/World/GateBracket/LeftLip"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "gate slide joinery"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/RightBack",
+          "/World/GateBracket/RightEdge"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "gate slide joinery"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/RightEdge",
+          "/World/GateBracket/RightLip"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "gate slide joinery"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw0",
+          "/World/GateBracket/Sole"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "counter-mounted foot and fasteners"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw0",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "fastener into fixed countertop"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw1",
+          "/World/GateBracket/Sole"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "counter-mounted foot and fasteners"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw1",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "fastener into fixed countertop"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw2",
+          "/World/GateBracket/Sole"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "counter-mounted foot and fasteners"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw2",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "fastener into fixed countertop"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw3",
+          "/World/GateBracket/Sole"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "counter-mounted foot and fasteners"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Screw3",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "fastener into fixed countertop"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Sole",
+          "/World/GateBracket/Upright"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "counter-mounted foot and fasteners"
+      },
+      {
+        "parts": [
+          "/World/GateBracket/Sole",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "base on fixed countertop"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Beam0",
+          "/World/LadleRack/Tie2_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Beam0",
+          "/World/LadleRack/Tie2_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Beam0",
+          "/World/LadleRack/Upright1"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Beam0",
+          "/World/LadleRack/UtensilHook0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Fairlead0",
+          "/World/LadleRack/GuideTie0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Fairlead0",
+          "/World/LadleRack/GuideTie2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Fairlead0",
+          "/World/LadleRack/ServingGuideArm"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Fairlead2",
+          "/World/LadleRack/Lashing1"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Fairlead2",
+          "/World/LadleRack/Tie2_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Fairlead2",
+          "/World/LadleRack/Tie2_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Foot0",
+          "/World/LadleRack/Screw0_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Foot0",
+          "/World/LadleRack/Screw0_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Foot0",
+          "/World/LadleRack/Upright0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Foot1",
+          "/World/LadleRack/Screw1_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Foot1",
+          "/World/LadleRack/Screw1_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/GuidePost1",
+          "/World/LadleRack/ServingGuideArm"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/GuideTie0",
+          "/World/LadleRack/GuideTie2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/GuideTie0",
+          "/World/LadleRack/ServingGuideArm"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/GuideTie2",
+          "/World/LadleRack/ServingGuideArm"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Lashing0",
+          "/World/LadleRack/UtensilHook0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Lashing0",
+          "/World/LadleRack/UtensilHook1"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Lashing1",
+          "/World/LadleRack/Tie2_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Screw0_0",
+          "/World/Set/PrepTable0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack base fastener"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Screw0_2",
+          "/World/Set/PrepTable0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack base fastener"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/Tie2_0",
+          "/World/LadleRack/Tie2_2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/LadleRack/UtensilHook0",
+          "/World/LadleRack/UtensilHook1"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "rack joinery, guides and fasteners"
+      },
+      {
+        "parts": [
+          "/World/Room/BackWall",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "wall and floor joint"
+      },
+      {
+        "parts": [
+          "/World/Room/BackWall",
+          "/World/Room/LeftWall"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "wall and floor joint"
+      },
+      {
+        "parts": [
+          "/World/Room/Floor",
+          "/World/Room/LeftWall"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "wall and floor joint"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc0",
+          "/World/RopeDraw/Arc1"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc0",
+          "/World/RopeDraw/Left"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc1",
+          "/World/RopeDraw/Arc2"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc10",
+          "/World/RopeDraw/Arc11"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc10",
+          "/World/RopeDraw/Arc9"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc11",
+          "/World/RopeDraw/Arc12"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc12",
+          "/World/RopeDraw/Arc13"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc13",
+          "/World/RopeDraw/Arc14"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc14",
+          "/World/RopeDraw/Arc15"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc15",
+          "/World/RopeDraw/Arc16"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc16",
+          "/World/RopeDraw/Arc17"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc17",
+          "/World/RopeDraw/Arc18"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc18",
+          "/World/RopeDraw/Arc19"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc19",
+          "/World/RopeDraw/Arc20"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc2",
+          "/World/RopeDraw/Arc3"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc20",
+          "/World/RopeDraw/Arc21"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc21",
+          "/World/RopeDraw/Arc22"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc22",
+          "/World/RopeDraw/Arc23"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc23",
+          "/World/RopeDraw/Arc24"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc24",
+          "/World/RopeDraw/Arc25"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc25",
+          "/World/RopeDraw/Arc26"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc26",
+          "/World/RopeDraw/Arc27"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc27",
+          "/World/RopeDraw/Arc28"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc28",
+          "/World/RopeDraw/Arc29"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc29",
+          "/World/RopeDraw/Arc30"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc3",
+          "/World/RopeDraw/Arc4"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc30",
+          "/World/RopeDraw/Arc31"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc31",
+          "/World/RopeDraw/Arc32"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc32",
+          "/World/RopeDraw/Arc33"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc33",
+          "/World/RopeDraw/Arc34"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc34",
+          "/World/RopeDraw/Right"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc4",
+          "/World/RopeDraw/Arc5"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc5",
+          "/World/RopeDraw/Arc6"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc6",
+          "/World/RopeDraw/Arc7"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc7",
+          "/World/RopeDraw/Arc8"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/RopeDraw/Arc8",
+          "/World/RopeDraw/Arc9"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "adjacent cord segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Arc00_T0",
+          "/World/TurnRails/Breakfast/Mouth01_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner00_0",
+          "/World/TurnRails/Breakfast/Inner01_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner01_0",
+          "/World/TurnRails/Breakfast/Inner02_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner02_0",
+          "/World/TurnRails/Breakfast/Inner03_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner03_0",
+          "/World/TurnRails/Breakfast/Inner04_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner04_0",
+          "/World/TurnRails/Breakfast/Inner05_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner05_0",
+          "/World/TurnRails/Breakfast/Inner06_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner06_0",
+          "/World/TurnRails/Breakfast/Inner07_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner07_0",
+          "/World/TurnRails/Breakfast/Inner08_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner08_0",
+          "/World/TurnRails/Breakfast/Inner09_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner09_0",
+          "/World/TurnRails/Breakfast/Inner10_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner10_0",
+          "/World/TurnRails/Breakfast/Inner11_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner11_0",
+          "/World/TurnRails/Breakfast/Inner12_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner12_0",
+          "/World/TurnRails/Breakfast/Inner13_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner13_0",
+          "/World/TurnRails/Breakfast/Inner14_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner14_0",
+          "/World/TurnRails/Breakfast/Inner15_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner15_0",
+          "/World/TurnRails/Breakfast/Inner16_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Inner16_0",
+          "/World/TurnRails/Exit0_T0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      },
+      {
+        "parts": [
+          "/World/TurnRails/Breakfast/Mouth00_0",
+          "/World/TurnRails/Breakfast/Mouth01_0"
+        ],
+        "first_s": 0.0,
+        "last_s": 0.0,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "joined track guide segments"
+      }
+    ],
+    "moving_mesh_contact_pairs": [
+      {
+        "parts": [
+          "/World/BowlFeeder",
+          "/World/BowlGuide0"
+        ],
+        "first_s": 5.4,
+        "last_s": 5.4,
+        "samples": 1,
+        "native_contact": false,
+        "interpretation": "feeder board with its own mounted marble guide"
+      },
+      {
+        "parts": [
+          "/World/BowlFeeder",
+          "/World/Marble"
+        ],
+        "first_s": 5.408333333333333,
+        "last_s": 5.983333333333333,
+        "samples": 13,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/BowlFeeder",
+          "/World/Pantry/Column03/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 601,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Bridge",
+          "/World/BridgeGuide0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "mounted lateral guide on bridge"
+      },
+      {
+        "parts": [
+          "/World/Bridge",
+          "/World/BridgeGuide1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "mounted lateral guide on bridge"
+      },
+      {
+        "parts": [
+          "/World/Bridge",
+          "/World/Marble"
+        ],
+        "first_s": 5.066666666666666,
+        "last_s": 5.375,
+        "samples": 38,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/BridgeGuide0",
+          "/World/Marble"
+        ],
+        "first_s": 5.125,
+        "last_s": 5.133333333333334,
+        "samples": 2,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CarStop",
+          "/World/Cart"
+        ],
+        "first_s": 8.208333333333334,
+        "last_s": 8.391666666666667,
+        "samples": 23,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CarStop",
+          "/World/CartTrack1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "timber stop bedded and fastened to the lower ramp"
+      },
+      {
+        "parts": [
+          "/World/Cart",
+          "/World/Gate"
+        ],
+        "first_s": 0.06666666666666667,
+        "last_s": 6.333333333333333,
+        "samples": 728,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Cart",
+          "/World/Tire2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "wheel attachment"
+      },
+      {
+        "parts": [
+          "/World/Cart",
+          "/World/Tire4"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "wheel attachment"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Pantry/Column12/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Pantry/Column13/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Pantry/Column14/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Pantry/Column15/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Tire1"
+        ],
+        "first_s": 0.0,
+        "last_s": 7.641666666666667,
+        "samples": 862,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Tire2"
+        ],
+        "first_s": 0.0,
+        "last_s": 7.783333333333333,
+        "samples": 564,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Tire3"
+        ],
+        "first_s": 0.0,
+        "last_s": 7.641666666666667,
+        "samples": 865,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack0",
+          "/World/Tire4"
+        ],
+        "first_s": 0.0,
+        "last_s": 7.783333333333333,
+        "samples": 881,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Pantry/Column16/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Pantry/Column17/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Pantry/Column18/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Pantry/Column19/FoldedCloth"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Tire1"
+        ],
+        "first_s": 7.65,
+        "last_s": 20.0,
+        "samples": 1422,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Tire2"
+        ],
+        "first_s": 7.791666666666667,
+        "last_s": 20.0,
+        "samples": 1440,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Tire3"
+        ],
+        "first_s": 7.65,
+        "last_s": 20.0,
+        "samples": 1414,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CartTrack1",
+          "/World/Tire4"
+        ],
+        "first_s": 7.791666666666667,
+        "last_s": 20.0,
+        "samples": 1419,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CoffeeMug",
+          "/World/Sugar"
+        ],
+        "first_s": 13.35,
+        "last_s": 13.525,
+        "samples": 4,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/CoffeeSurface",
+          "/World/Sugar"
+        ],
+        "first_s": 13.325,
+        "last_s": 13.341666666666667,
+        "samples": 3,
+        "native_contact": false,
+        "interpretation": "cube entering coffee"
+      },
+      {
+        "parts": [
+          "/World/Domino00",
+          "/World/Domino01"
+        ],
+        "first_s": 2.6,
+        "last_s": 20.0,
+        "samples": 2018,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino00",
+          "/World/Ladle"
+        ],
+        "first_s": 2.1333333333333333,
+        "last_s": 2.2,
+        "samples": 9,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino00",
+          "/World/WorkBoard/Board0"
+        ],
+        "first_s": 0.016666666666666666,
+        "last_s": 20.0,
+        "samples": 2395,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino01",
+          "/World/Domino02"
+        ],
+        "first_s": 2.4833333333333334,
+        "last_s": 20.0,
+        "samples": 384,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino01",
+          "/World/WorkBoard/Board0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino02",
+          "/World/Domino03"
+        ],
+        "first_s": 2.4,
+        "last_s": 20.0,
+        "samples": 2113,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino02",
+          "/World/WorkBoard/Board1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino03",
+          "/World/Domino04"
+        ],
+        "first_s": 2.8833333333333333,
+        "last_s": 20.0,
+        "samples": 2035,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino03",
+          "/World/WorkBoard/Board1"
+        ],
+        "first_s": 0.016666666666666666,
+        "last_s": 20.0,
+        "samples": 2399,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino04",
+          "/World/Domino05"
+        ],
+        "first_s": 2.816666666666667,
+        "last_s": 2.95,
+        "samples": 17,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino04",
+          "/World/WorkBoard/Board1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino05",
+          "/World/Domino06"
+        ],
+        "first_s": 2.6666666666666665,
+        "last_s": 20.0,
+        "samples": 2072,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino05",
+          "/World/WorkBoard/Board1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino06",
+          "/World/Domino07"
+        ],
+        "first_s": 2.783333333333333,
+        "last_s": 20.0,
+        "samples": 2021,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino06",
+          "/World/WorkBoard/Board1"
+        ],
+        "first_s": 0.016666666666666666,
+        "last_s": 20.0,
+        "samples": 2380,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino07",
+          "/World/Domino08"
+        ],
+        "first_s": 3.0833333333333335,
+        "last_s": 17.466666666666665,
+        "samples": 416,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino07",
+          "/World/WorkBoard/Board1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino08",
+          "/World/Domino09"
+        ],
+        "first_s": 2.966666666666667,
+        "last_s": 20.0,
+        "samples": 2043,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino08",
+          "/World/WorkBoard/Board2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino09",
+          "/World/Domino10"
+        ],
+        "first_s": 3.05,
+        "last_s": 20.0,
+        "samples": 1859,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino09",
+          "/World/WorkBoard/Board2"
+        ],
+        "first_s": 0.016666666666666666,
+        "last_s": 20.0,
+        "samples": 2399,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino10",
+          "/World/Domino11"
+        ],
+        "first_s": 3.3833333333333333,
+        "last_s": 7.316666666666666,
+        "samples": 472,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino10",
+          "/World/WorkBoard/Board2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino11",
+          "/World/Domino12"
+        ],
+        "first_s": 3.2,
+        "last_s": 20.0,
+        "samples": 2013,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino11",
+          "/World/WorkBoard/Board2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino12",
+          "/World/Domino13"
+        ],
+        "first_s": 3.283333333333333,
+        "last_s": 20.0,
+        "samples": 1963,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino12",
+          "/World/WorkBoard/Board2"
+        ],
+        "first_s": 0.016666666666666666,
+        "last_s": 20.0,
+        "samples": 2375,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino13",
+          "/World/Lever"
+        ],
+        "first_s": 3.433333333333333,
+        "last_s": 20.0,
+        "samples": 1987,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Domino13",
+          "/World/WorkBoard/Board2"
+        ],
+        "first_s": 0.016666666666666666,
+        "last_s": 20.0,
+        "samples": 2390,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/DuckFace",
+          "/World/DuckHead"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "source neck swivel"
+      },
+      {
+        "parts": [
+          "/World/DuckHead",
+          "/World/Microduck"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "source neck pitch"
+      },
+      {
+        "parts": [
+          "/World/FinaleTable",
+          "/World/KickLeg"
+        ],
+        "first_s": 0.10833333333333334,
+        "last_s": 20.0,
+        "samples": 1057,
+        "native_contact": true,
+        "interpretation": "sole on tabletop"
+      },
+      {
+        "parts": [
+          "/World/FinaleTable",
+          "/World/Microduck"
+        ],
+        "first_s": 0.1,
+        "last_s": 20.0,
+        "samples": 1061,
+        "native_contact": false,
+        "interpretation": "anchored soles on tabletop"
+      },
+      {
+        "parts": [
+          "/World/Gate",
+          "/World/RopeDraw/Right"
+        ],
+        "first_s": 6.116666666666666,
+        "last_s": 20.0,
+        "samples": 1667,
+        "native_contact": false,
+        "interpretation": "attached gate line"
+      },
+      {
+        "parts": [
+          "/World/KickLeg",
+          "/World/Microduck"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "hip joint"
+      },
+      {
+        "parts": [
+          "/World/Ladle",
+          "/World/LadleRack/Lashing0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "suspension eye"
+      },
+      {
+        "parts": [
+          "/World/Ladle",
+          "/World/LadleRack/UtensilHook1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 2401,
+        "native_contact": false,
+        "interpretation": "utensil hook"
+      },
+      {
+        "parts": [
+          "/World/Lever",
+          "/World/LeverRest"
+        ],
+        "first_s": 0.0,
+        "last_s": 3.4166666666666665,
+        "samples": 411,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Lever",
+          "/World/Marble"
+        ],
+        "first_s": 0.0,
+        "last_s": 5.041666666666667,
+        "samples": 503,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble",
+          "/World/Pan"
+        ],
+        "first_s": 14.883333333333333,
+        "last_s": 14.908333333333333,
+        "samples": 2,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board00"
+        ],
+        "first_s": 10.216666666666667,
+        "last_s": 10.233333333333333,
+        "samples": 2,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board01"
+        ],
+        "first_s": 10.25,
+        "last_s": 10.583333333333334,
+        "samples": 4,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board02"
+        ],
+        "first_s": 10.591666666666667,
+        "last_s": 10.916666666666666,
+        "samples": 5,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board03"
+        ],
+        "first_s": 10.925,
+        "last_s": 11.241666666666667,
+        "samples": 4,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board04"
+        ],
+        "first_s": 11.25,
+        "last_s": 19.475,
+        "samples": 9,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board05"
+        ],
+        "first_s": 11.558333333333334,
+        "last_s": 19.191666666666666,
+        "samples": 12,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board06"
+        ],
+        "first_s": 11.866666666666667,
+        "last_s": 18.5,
+        "samples": 8,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board07"
+        ],
+        "first_s": 12.166666666666666,
+        "last_s": 17.916666666666668,
+        "samples": 8,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board08"
+        ],
+        "first_s": 12.45,
+        "last_s": 17.416666666666668,
+        "samples": 29,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/ReturnRun/Board09"
+        ],
+        "first_s": 12.966666666666667,
+        "last_s": 16.225,
+        "samples": 26,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/RunRail0"
+        ],
+        "first_s": 8.55,
+        "last_s": 8.55,
+        "samples": 1,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/RunRail1"
+        ],
+        "first_s": 8.483333333333333,
+        "last_s": 8.483333333333333,
+        "samples": 1,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/SecondRun/Board0"
+        ],
+        "first_s": 8.375,
+        "last_s": 8.4,
+        "samples": 3,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/SecondRun/Board1"
+        ],
+        "first_s": 8.783333333333333,
+        "last_s": 8.783333333333333,
+        "samples": 1,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/SecondRun/Board2"
+        ],
+        "first_s": 9.008333333333333,
+        "last_s": 9.016666666666667,
+        "samples": 2,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/SecondRun/Board3"
+        ],
+        "first_s": 9.191666666666666,
+        "last_s": 9.191666666666666,
+        "samples": 1,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/TurnRails/Arc08_T0"
+        ],
+        "first_s": 9.416666666666666,
+        "last_s": 9.433333333333334,
+        "samples": 3,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/TurnRails/Arc16_T0"
+        ],
+        "first_s": 9.6,
+        "last_s": 9.6,
+        "samples": 1,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Marble2",
+          "/World/Turnaround/Board"
+        ],
+        "first_s": 9.941666666666666,
+        "last_s": 10.025,
+        "samples": 9,
+        "native_contact": true,
+        "interpretation": "resolved rigid-body contact"
+      },
+      {
+        "parts": [
+          "/World/Pan",
+          "/World/RopeDraw/Left"
+        ],
+        "first_s": 0.0,
+        "last_s": 6.275,
+        "samples": 754,
+        "native_contact": false,
+        "interpretation": "attached bowl line"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column02/Item00",
+          "/World/Pantry/Column02/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column02/Item00",
+          "/World/Set/FeederTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column02/Item01",
+          "/World/Pantry/Column02/Item02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column02/Item02",
+          "/World/Pantry/Column02/Item03"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column02/Item03",
+          "/World/Pantry/Column02/Item04"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column02/Item04",
+          "/World/Pantry/Column02/Item05"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column03/FoldedCloth",
+          "/World/Pantry/Column03/Item03"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column03/Item00",
+          "/World/Pantry/Column03/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column03/Item00",
+          "/World/Pantry/Tables/Table5"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column03/Item01",
+          "/World/Pantry/Column03/Item02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column03/Item02",
+          "/World/Pantry/Column03/Item03"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column04/FoldedCloth",
+          "/World/SecondRun/Board0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column04/Item00",
+          "/World/Pantry/Column04/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column04/Item00",
+          "/World/Pantry/Tables/Table6"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column05/Item00",
+          "/World/Pantry/Tables/Table6"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column06/FoldedCloth",
+          "/World/SecondRun/Board1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column06/Item00",
+          "/World/Pantry/Tables/Table6"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column07/FoldedCloth",
+          "/World/SecondRun/Board1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column07/Item00",
+          "/World/Pantry/Tables/Table6"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column08/FoldedCloth",
+          "/World/SecondRun/Board2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column08/Item00",
+          "/World/Set/RunTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column09/FoldedCloth",
+          "/World/SecondRun/Board2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column09/Item00",
+          "/World/Pantry/Column09/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column09/Item00",
+          "/World/Set/RunTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column10/FoldedCloth",
+          "/World/SecondRun/Board3"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column10/Item00",
+          "/World/Set/RunTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column11/FoldedCloth",
+          "/World/SecondRun/Board3"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column11/Item00",
+          "/World/Set/RunTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column12/Item00",
+          "/World/Pantry/Column12/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column12/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column12/Item01",
+          "/World/Pantry/Column12/Item02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column13/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column14/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column15/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column16/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column18/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column19/Item00",
+          "/World/Set/CartTable"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column20/FoldedCloth",
+          "/World/Turnaround/Board"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column20/Item00",
+          "/World/Pantry/Column20/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column20/Item00",
+          "/World/Pantry/Tables/Table4"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column20/Item01",
+          "/World/Pantry/Column20/Item02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column21/FoldedCloth",
+          "/World/Turnaround/Board"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column21/Item00",
+          "/World/Pantry/Tables/Table4"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column22/FoldedCloth",
+          "/World/Turnaround/Board"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column22/Item00",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column23/FoldedCloth",
+          "/World/Turnaround/Board"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column23/Item00",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column24/FoldedCloth",
+          "/World/ReturnRun/Board00"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column24/Item00",
+          "/World/Pantry/Tables/Table0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column25/Item00",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column26/Item00",
+          "/World/Pantry/Tables/Table0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column27/FoldedCloth",
+          "/World/ReturnRun/Board01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column27/Item00",
+          "/World/Pantry/Tables/Table0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column28/FoldedCloth",
+          "/World/ReturnRun/Board02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column28/Item00",
+          "/World/Pantry/Column28/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column28/Item00",
+          "/World/Pantry/Tables/Table1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column29/Item00",
+          "/World/Pantry/Tables/Table0"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column30/FoldedCloth",
+          "/World/ReturnRun/Board03"
+        ],
+        "first_s": 11.0,
+        "last_s": 11.233333333333333,
+        "samples": 8,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column30/Item00",
+          "/World/Pantry/Tables/Table1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column31/Item00",
+          "/World/Pantry/Tables/Table1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column32/FoldedCloth",
+          "/World/ReturnRun/Board04"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column32/Item00",
+          "/World/Pantry/Tables/Table2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column33/FoldedCloth",
+          "/World/ReturnRun/Board04"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column33/Item00",
+          "/World/Pantry/Tables/Table1"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column34/FoldedCloth",
+          "/World/ReturnRun/Board05"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column34/Item00",
+          "/World/Pantry/Tables/Table2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column35/FoldedCloth",
+          "/World/ReturnRun/Board05"
+        ],
+        "first_s": 11.566666666666666,
+        "last_s": 19.166666666666668,
+        "samples": 24,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column35/Item00",
+          "/World/Pantry/Tables/Table2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column36/FoldedCloth",
+          "/World/ReturnRun/Board06"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column36/Item00",
+          "/World/Pantry/Tables/Table3"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column37/FoldedCloth",
+          "/World/ReturnRun/Board06"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column37/Item00",
+          "/World/Pantry/Tables/Table2"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column38/FoldedCloth",
+          "/World/ReturnRun/Board07"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column38/Item00",
+          "/World/Pantry/Tables/Table3"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column39/FoldedCloth",
+          "/World/ReturnRun/Board07"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 601,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column39/Item00",
+          "/World/Pantry/Tables/Table3"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column40/FoldedCloth",
+          "/World/ReturnRun/Board08"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column40/Item00",
+          "/World/Pantry/Tables/Table3"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column41/FoldedCloth",
+          "/World/ReturnRun/Board08"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column41/Item00",
+          "/World/Pantry/Column41/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column41/Item00",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column41/Item01",
+          "/World/Pantry/Column41/Item02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column42/FoldedCloth",
+          "/World/ReturnRun/Board09"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column42/Item00",
+          "/World/Pantry/Column42/Item01"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column42/Item00",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column42/Item01",
+          "/World/Pantry/Column42/Item02"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column43/FoldedCloth",
+          "/World/ReturnRun/Board09"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      },
+      {
+        "parts": [
+          "/World/Pantry/Column43/Item00",
+          "/World/Room/Floor"
+        ],
+        "first_s": 0.0,
+        "last_s": 20.0,
+        "samples": 602,
+        "native_contact": false,
+        "interpretation": "load-bearing seat"
+      }
+    ],
+    "native_penetration_mm": [
+      {
+        "parts": [
+          "CartTrack0",
+          "Tire1"
+        ],
+        "depth": 0.595
+      },
+      {
+        "parts": [
+          "Marble2",
+          "TurnRails"
+        ],
+        "depth": 0.479
+      },
+      {
+        "parts": [
+          "Cart",
+          "Flap"
+        ],
+        "depth": 0.4
+      },
+      {
+        "parts": [
+          "Sugar",
+          "SugarTipper"
+        ],
+        "depth": 0.363
+      },
+      {
+        "parts": [
+          "CoffeeMug",
+          "Sugar"
+        ],
+        "depth": 0.313
+      },
+      {
+        "parts": [
+          "Marble2",
+          "ReturnRun/Board00"
+        ],
+        "depth": 0.273
+      },
+      {
+        "parts": [
+          "Domino07",
+          "Domino08"
+        ],
+        "depth": 0.271
+      },
+      {
+        "parts": [
+          "Domino06",
+          "Domino07"
+        ],
+        "depth": 0.261
+      },
+      {
+        "parts": [
+          "Domino09",
+          "Domino10"
+        ],
+        "depth": 0.26
+      },
+      {
+        "parts": [
+          "CartTrack0",
+          "Tire2"
+        ],
+        "depth": 0.256
+      },
+      {
+        "parts": [
+          "Domino04",
+          "Domino05"
+        ],
+        "depth": 0.254
+      },
+      {
+        "parts": [
+          "CarStop",
+          "Cart"
+        ],
+        "depth": 0.238
+      }
+    ],
+    "scope": "Triangle mesh overlaps are candidates including support contact, articulated joints, fitted kitchen hardware and authored furniture joinery. Dynamic mechanism meshes tested every half replay frame. Additional moving support meshes were checked at 30 Hz, alongside 960 Hz structural contacts and recorded loads. A finite sampling interval cannot establish a continuous nonintersection guarantee.",
+    "contact_classes": {
+      "table guide fastener": 2,
+      "gate guide secured to arm": 2,
+      "fixed upper arm": 1,
+      "gate slide joinery": 4,
+      "counter-mounted foot and fasteners": 5,
+      "fastener into fixed countertop": 4,
+      "base on fixed countertop": 1,
+      "rack joinery, guides and fasteners": 24,
+      "rack base fastener": 2,
+      "wall and floor joint": 3,
+      "adjacent cord segments": 36,
+      "joined track guide segments": 19,
+      "feeder board with its own mounted marble guide": 1,
+      "resolved rigid-body contact": 65,
+      "load-bearing seat": 97,
+      "mounted lateral guide on bridge": 2,
+      "timber stop bedded and fastened to the lower ramp": 1,
+      "wheel attachment": 2,
+      "cube entering coffee": 1,
+      "source neck swivel": 1,
+      "source neck pitch": 1,
+      "sole on tabletop": 1,
+      "anchored soles on tabletop": 1,
+      "attached gate line": 1,
+      "hip joint": 1,
+      "suspension eye": 1,
+      "utensil hook": 1,
+      "attached bowl line": 1
+    },
+    "unclassified_pairs": [],
+    "checked_run": "ready-fine",
+    "source_scope": "Contact at the duck soles, fitted supports, bearings, physical impacts, liquid entry and bolted joints is intentional. Face and rack eyelets are also checked using the separate finite-radius cord audit."
+  },
+  "duck": {
+    "gaze_begins_s": 12.2802083333273,
+    "cup_contact_s": 13.350260416666666,
+    "celebration_s": 13.78932291665926,
+    "source_lens_forward": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "gaze_error_at_landing_deg": 4.882320988068101,
+    "mean_gaze_error_during_drop_deg": 4.036241406093632,
+    "body_celebration_swing_deg": 10.330273477806363,
+    "body_bobs": 2,
+    "grip_closes_s": 0.42,
+    "release_s": 1.62,
+    "peak_pull_N": 1.1244714289191489,
+    "draw_mm": 116.18927040167752,
+    "note": "Gaze is measured from the sourced lens mesh to the moving sugar. The jaw is animated on its source hinge. Ankle, pitch and yaw servos are torque limited.",
+    "passed": true
+  }
+}

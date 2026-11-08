@@ -1,0 +1,770 @@
+{
+  "case": "normal",
+  "marble_rest_run": "banked-idle",
+  "duration": 20.0,
+  "physics_hz": 3840,
+  "support_hz": 1920,
+  "scene_sha256": "d58e735582f8157d177b51dfea95af410c017912e775c10b514829d21572465d",
+  "source_scene_sha256": "95fa1cc178d1640fe855965b063b4adbd27db00ff9647cb1f8cd6da5e8023557",
+  "native_model_sha256": "a54bb7cb9acbd1b4c738e0aac3111133b0337ff36227eb5863d2c40f96add52d",
+  "starter": {
+    "grip_s": 0.42,
+    "release_s": 1.62,
+    "peak_tension_N": 1.1244714289191489,
+    "peak_lean_rad": 0.3078640834840226,
+    "peak_lean_torque_Nm": 1.0424168211126235,
+    "beak_local": [
+      0.08545368808260619,
+      0.01137380135305221,
+      0.007215247716745751
+    ],
+    "tether_rest_m": 2.3196386520206222
+  },
+  "motor_torque_max_Nm": 0.06287421646640524,
+  "celebration": {
+    "trigger_s": 13.78932291665926,
+    "contact_dwell_s": 0.12,
+    "peak_torque_Nm": 0.1308746527720677,
+    "motor_work_J": 0.004612790576107357,
+    "scope": "Three finite-torque head reactions follow the marble, Beetle and return contacts. Two nods follow sustained sugar contact inside the mug. A separate ankle hinge drives the opening lean.",
+    "reactions": {
+      "bowl_capture": 6.09401041666626,
+      "car_handoff": 8.055468749997809,
+      "return_trip": 10.104687499995945
+    },
+    "prestart_look": true,
+    "look_to_cup_s": 12.2802083333273,
+    "face_yaw_peak_torque_Nm": 0.15,
+    "audience_camera": [
+      -1.57,
+      1.73,
+      0.755
+    ],
+    "audience_turn_trigger_s": 13.78932291665926
+  },
+  "contacts": [
+    {
+      "pair": [
+        "LeverStop",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -1.3105987536160537e-05
+    },
+    {
+      "pair": [
+        "Domino01",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -7.55157007196795e-06
+    },
+    {
+      "pair": [
+        "Domino02",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.952559800613099e-05
+    },
+    {
+      "pair": [
+        "Domino04",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.1325044721918704e-05
+    },
+    {
+      "pair": [
+        "Domino05",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -3.5765370104886856e-05
+    },
+    {
+      "pair": [
+        "Domino07",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.929520884090177e-05
+    },
+    {
+      "pair": [
+        "Domino08",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -3.198661686348771e-05
+    },
+    {
+      "pair": [
+        "Domino10",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.116486389934278e-05
+    },
+    {
+      "pair": [
+        "Domino11",
+        "WorkBoard"
+      ],
+      "first_s": 0.0,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.600739723826024e-05
+    },
+    {
+      "pair": [
+        "Lever",
+        "LeverRest"
+      ],
+      "first_s": 0.0,
+      "last_s": 3.4268229166666666,
+      "min_distance_m": -1.371091692816011e-10
+    },
+    {
+      "pair": [
+        "CartTrack0",
+        "Tire1"
+      ],
+      "first_s": 0.0,
+      "last_s": 7.6359375,
+      "min_distance_m": -0.0005954246573143055
+    },
+    {
+      "pair": [
+        "CartTrack0",
+        "Tire2"
+      ],
+      "first_s": 0.0,
+      "last_s": 7.7796875000000005,
+      "min_distance_m": -0.0002561779106197482
+    },
+    {
+      "pair": [
+        "CartTrack0",
+        "Tire3"
+      ],
+      "first_s": 0.0,
+      "last_s": 7.63359375,
+      "min_distance_m": -0.0002364252728773055
+    },
+    {
+      "pair": [
+        "CartTrack0",
+        "Tire4"
+      ],
+      "first_s": 0.0,
+      "last_s": 7.776822916666667,
+      "min_distance_m": -6.119152549712019e-05
+    },
+    {
+      "pair": [
+        "Lever",
+        "Marble"
+      ],
+      "first_s": 0.0,
+      "last_s": 5.025520833333333,
+      "min_distance_m": -6.011414952766803e-06
+    },
+    {
+      "pair": [
+        "Cart",
+        "Gate"
+      ],
+      "first_s": 0.0018229166666666667,
+      "last_s": 6.780729166666667,
+      "min_distance_m": -1.8075990835897788e-05
+    },
+    {
+      "pair": [
+        "Domino03",
+        "WorkBoard"
+      ],
+      "first_s": 0.00390625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.4475915156342616e-05
+    },
+    {
+      "pair": [
+        "Domino06",
+        "WorkBoard"
+      ],
+      "first_s": 0.00390625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -3.078399873136513e-05
+    },
+    {
+      "pair": [
+        "Domino09",
+        "WorkBoard"
+      ],
+      "first_s": 0.00390625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -1.6135292931378607e-05
+    },
+    {
+      "pair": [
+        "Domino12",
+        "WorkBoard"
+      ],
+      "first_s": 0.00390625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -1.500630880081616e-05
+    },
+    {
+      "pair": [
+        "Domino13",
+        "WorkBoard"
+      ],
+      "first_s": 0.00390625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -1.5056391226409028e-05
+    },
+    {
+      "pair": [
+        "Domino00",
+        "WorkBoard"
+      ],
+      "first_s": 0.004166666666666667,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -1.8823548577086144e-05
+    },
+    {
+      "pair": [
+        "ReturnRun/Board09",
+        "Sugar"
+      ],
+      "first_s": 0.005208333333333333,
+      "last_s": 13.2421875,
+      "min_distance_m": -1.6091147795689318e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SecondRun/Board0"
+      ],
+      "first_s": 0.005208333333333333,
+      "last_s": 8.397135416666666,
+      "min_distance_m": -1.4874196070695928e-05
+    },
+    {
+      "pair": [
+        "Flap",
+        "Marble2"
+      ],
+      "first_s": 0.06640625,
+      "last_s": 8.055208333333333,
+      "min_distance_m": -2.708277777244486e-05
+    },
+    {
+      "pair": [
+        "FinaleTable",
+        "KickLeg"
+      ],
+      "first_s": 0.10208333333333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -2.585157208861375e-05
+    },
+    {
+      "pair": [
+        "Domino00",
+        "Ladle"
+      ],
+      "first_s": 2.0122395833333333,
+      "last_s": 2.155989583333333,
+      "min_distance_m": -0.00022102165437359403,
+      "point_m": [
+        -1.5852752438379294,
+        0.5550175126221399,
+        1.0417823383356168
+      ]
+    },
+    {
+      "pair": [
+        "Domino00",
+        "Domino01"
+      ],
+      "first_s": 2.1132812499999996,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00017346945021492872
+    },
+    {
+      "pair": [
+        "Domino01",
+        "Domino02"
+      ],
+      "first_s": 2.267708333333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00012468550242042872
+    },
+    {
+      "pair": [
+        "Domino02",
+        "Domino03"
+      ],
+      "first_s": 2.3890624999999996,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.0001515895970037145
+    },
+    {
+      "pair": [
+        "Domino03",
+        "Domino04"
+      ],
+      "first_s": 2.502083333333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.0001219024868598252
+    },
+    {
+      "pair": [
+        "Domino04",
+        "Domino05"
+      ],
+      "first_s": 2.591927083333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00025438677332659205
+    },
+    {
+      "pair": [
+        "Domino05",
+        "Domino06"
+      ],
+      "first_s": 2.665625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.0001958837307159479
+    },
+    {
+      "pair": [
+        "Domino06",
+        "Domino07"
+      ],
+      "first_s": 2.7765625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00026119092348588017
+    },
+    {
+      "pair": [
+        "Domino07",
+        "Domino08"
+      ],
+      "first_s": 2.8635416666666664,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.0002709056571768892
+    },
+    {
+      "pair": [
+        "Domino08",
+        "Domino09"
+      ],
+      "first_s": 2.9377604166666664,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00014178539978466765
+    },
+    {
+      "pair": [
+        "Domino09",
+        "Domino10"
+      ],
+      "first_s": 3.0424479166666663,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00026020370298977406
+    },
+    {
+      "pair": [
+        "Domino10",
+        "Domino11"
+      ],
+      "first_s": 3.131770833333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00016710130171479623
+    },
+    {
+      "pair": [
+        "Domino11",
+        "Domino12"
+      ],
+      "first_s": 3.1984375,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00023440228743228257
+    },
+    {
+      "pair": [
+        "Domino12",
+        "Domino13"
+      ],
+      "first_s": 3.27265625,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00020212495307186327
+    },
+    {
+      "pair": [
+        "Domino13",
+        "Lever"
+      ],
+      "first_s": 3.4265624999999997,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -5.56501010808092e-05
+    },
+    {
+      "pair": [
+        "Lever",
+        "LeverStop"
+      ],
+      "first_s": 3.705989583333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -1.4128627090034364e-05
+    },
+    {
+      "pair": [
+        "Bridge",
+        "Marble"
+      ],
+      "first_s": 5.065885416666667,
+      "last_s": 5.367447916666666,
+      "min_distance_m": -5.530912650010891e-05
+    },
+    {
+      "pair": [
+        "BridgeGuide0",
+        "Marble"
+      ],
+      "first_s": 5.066927083333334,
+      "last_s": 5.119791666666667,
+      "min_distance_m": -5.136437035725e-05
+    },
+    {
+      "pair": [
+        "BridgeGuide1",
+        "Marble"
+      ],
+      "first_s": 5.302083333333334,
+      "last_s": 5.302083333333334,
+      "min_distance_m": -5.721079481470215e-06
+    },
+    {
+      "pair": [
+        "BowlFeeder",
+        "Marble"
+      ],
+      "first_s": 5.391666666666667,
+      "last_s": 5.9546875,
+      "min_distance_m": -0.00010981720313321328
+    },
+    {
+      "pair": [
+        "BowlGuide1",
+        "Marble"
+      ],
+      "first_s": 5.4281250000000005,
+      "last_s": 5.429427083333334,
+      "min_distance_m": -5.656847039809884e-05
+    },
+    {
+      "pair": [
+        "BowlGuide0",
+        "Marble"
+      ],
+      "first_s": 5.575260416666667,
+      "last_s": 5.57578125,
+      "min_distance_m": -2.3896032760272606e-05
+    },
+    {
+      "pair": [
+        "Marble",
+        "Pan"
+      ],
+      "first_s": 6.09375,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00023661621399355404
+    },
+    {
+      "pair": [
+        "CartTrack1",
+        "Tire1"
+      ],
+      "first_s": 7.646614583333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -4.523714865724697e-05
+    },
+    {
+      "pair": [
+        "CartTrack1",
+        "Tire3"
+      ],
+      "first_s": 7.648958333333334,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -4.212994798206739e-05
+    },
+    {
+      "pair": [
+        "CartTrack1",
+        "Tire4"
+      ],
+      "first_s": 7.791666666666667,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -6.403484097232707e-05
+    },
+    {
+      "pair": [
+        "CartTrack1",
+        "Tire2"
+      ],
+      "first_s": 7.791927083333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -5.4300410065389676e-05
+    },
+    {
+      "pair": [
+        "Cart",
+        "Flap"
+      ],
+      "first_s": 8.055208333333333,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00039951410506965557
+    },
+    {
+      "pair": [
+        "CarStop",
+        "Cart"
+      ],
+      "first_s": 8.20078125,
+      "last_s": 8.389322916666666,
+      "min_distance_m": -0.00023780330524652229
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SecondRun/Board1"
+      ],
+      "first_s": 8.451302083333333,
+      "last_s": 8.782291666666667,
+      "min_distance_m": -0.00017672221502569238
+    },
+    {
+      "pair": [
+        "Marble2",
+        "RunRail1"
+      ],
+      "first_s": 8.4765625,
+      "last_s": 8.47734375,
+      "min_distance_m": -8.006511039899619e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "RunRail0"
+      ],
+      "first_s": 8.548697916666667,
+      "last_s": 8.54921875,
+      "min_distance_m": -5.140437310912141e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SecondRun/Board2"
+      ],
+      "first_s": 8.8359375,
+      "last_s": 9.016145833333333,
+      "min_distance_m": -0.00018998749411835644
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SecondRun/Board3"
+      ],
+      "first_s": 9.06875,
+      "last_s": 9.191666666666666,
+      "min_distance_m": -0.00011148730152362243
+    },
+    {
+      "pair": [
+        "Marble2",
+        "TurnRails"
+      ],
+      "first_s": 9.201822916666666,
+      "last_s": 9.70859375,
+      "min_distance_m": -0.0004791853236044523
+    },
+    {
+      "pair": [
+        "Marble2",
+        "Turnaround/Board"
+      ],
+      "first_s": 9.481510416666667,
+      "last_s": 10.02265625,
+      "min_distance_m": -7.241485327278904e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board00"
+      ],
+      "first_s": 10.104427083333334,
+      "last_s": 10.2359375,
+      "min_distance_m": -0.00027345257116801955
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board01"
+      ],
+      "first_s": 10.244010416666667,
+      "last_s": 10.581510416666667,
+      "min_distance_m": -4.3577939398305177e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board02"
+      ],
+      "first_s": 10.589322916666667,
+      "last_s": 10.915625,
+      "min_distance_m": -4.118072666309605e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board03"
+      ],
+      "first_s": 10.92265625,
+      "last_s": 11.2390625,
+      "min_distance_m": -3.574265240405272e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board04"
+      ],
+      "first_s": 11.246354166666666,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -6.073072163549631e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board05"
+      ],
+      "first_s": 11.559635416666667,
+      "last_s": 19.190104166666668,
+      "min_distance_m": -4.8188238683657264e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board06"
+      ],
+      "first_s": 11.864583333333334,
+      "last_s": 18.496354166666666,
+      "min_distance_m": -6.275562734213772e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board07"
+      ],
+      "first_s": 12.161197916666667,
+      "last_s": 17.922916666666666,
+      "min_distance_m": -8.910743406294677e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board08"
+      ],
+      "first_s": 12.450260416666667,
+      "last_s": 17.426041666666666,
+      "min_distance_m": -8.926207291649543e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRun/Board09"
+      ],
+      "first_s": 12.93125,
+      "last_s": 16.246614583333333,
+      "min_distance_m": -6.474269939965235e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "SugarTipper"
+      ],
+      "first_s": 13.20078125,
+      "last_s": 13.490104166666667,
+      "min_distance_m": -0.00020573341224620553
+    },
+    {
+      "pair": [
+        "Sugar",
+        "SugarTipper"
+      ],
+      "first_s": 13.218229166666667,
+      "last_s": 13.22265625,
+      "min_distance_m": -0.00036335208983874484
+    },
+    {
+      "pair": [
+        "SugarTipper",
+        "TipperFrontRest"
+      ],
+      "first_s": 13.234114583333334,
+      "last_s": 13.24375,
+      "min_distance_m": -0.00020985305230366086
+    },
+    {
+      "pair": [
+        "Sugar",
+        "TipperFrontRest"
+      ],
+      "first_s": 13.2375,
+      "last_s": 13.2375,
+      "min_distance_m": -3.078952732337294e-05
+    },
+    {
+      "pair": [
+        "Marble2",
+        "ReturnRails"
+      ],
+      "first_s": 13.263802083333333,
+      "last_s": 19.302083333333332,
+      "min_distance_m": -7.610361799701912e-05
+    },
+    {
+      "pair": [
+        "CoffeeMug",
+        "Sugar"
+      ],
+      "first_s": 13.350260416666666,
+      "last_s": 19.999739583333334,
+      "min_distance_m": -0.00031291512267034305
+    }
+  ],
+  "solver": "Newton-imported MuJoCo mechanism with two-way Bullet support contacts. Board reaction wrenches drive the pantry world, and its solved board poses update the mechanism collision meshes.",
+  "events": {
+    "grip": 0.42,
+    "release": 1.62,
+    "first_domino": 2.0122395833333333,
+    "seesaw_contact": 3.4265624999999997,
+    "bowl_contact": 6.09375,
+    "pulley_motion": 6.133333333333333,
+    "gate_release": 6.5,
+    "cart_contact": 8.055208333333333,
+    "hinge_release": 8.055208333333333,
+    "return_start": 10.104427083333334,
+    "launcher_contact": 13.20078125,
+    "sugar_received": 13.350260416666666,
+    "celebration": 13.78932291665926
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "ready-fine": {
+    "impact": 3.4265624999999997,
+    "preimpact_max_mm": 0.0,
+    "preimpact_xy_mm": 0.0,
+    "centimetre_after_s": 0.3567708333333335,
+    "bowl": 6.09375,
+    "sugar": 13.350260416666666,
+    "celebration": 13.78932291665926
+  },
+  "ready-mid": {
+    "impact": 3.4393229166666663,
+    "preimpact_max_mm": 0.0,
+    "preimpact_xy_mm": 0.0,
+    "centimetre_after_s": 0.3606770833333335,
+    "bowl": 5.995572916666667,
+    "sugar": 13.5328125,
+    "celebration": 13.755989583325958
+  },
+  "ready-idle": {
+    "impact": null,
+    "preimpact_max_mm": 0.0,
+    "preimpact_xy_mm": 0.0,
+    "centimetre_after_s": null,
+    "bowl": null,
+    "sugar": null,
+    "celebration": null
+  },
+  "ready-normal": {
+    "impact": 3.4338541666666664,
+    "preimpact_max_mm": 0.0,
+    "preimpact_xy_mm": 0.0,
+    "centimetre_after_s": 0.41614583333333366,
+    "bowl": null,
+    "sugar": null,
+    "celebration": null
+  },
+  "banked-normal": {
+    "impact": 3.432552083333333,
+    "preimpact_max_mm": 37.03052520751953,
+    "preimpact_xy_mm": 37.02602005004883,
+    "centimetre_after_s": 0.6174479166666669,
+    "bowl": 6.304947916666666,
+    "sugar": 13.408333333333333,
+    "celebration": 13.977343749992423
+  }
+}

@@ -1,0 +1,1475 @@
+{
+  "release": "quack-cafe-assets-v1",
+  "base_url": "https://github.com/sparsha-2011/physical-ai-learning-journey/releases/download/quack-cafe-assets-v1",
+  "assets": [
+    {
+      "file": "scene.bin.gz",
+      "sha256": "f9affbc7e5c82bdccaa4f1e37feb9a44cd12311165c6a1ce7c084b051598fc48",
+      "bytes": 106145382,
+      "members": {
+        "web/garden-bill-cafe/scene.bin": {
+          "sha256": "d3b3e53c7df21fd8aea44d1262b7c5b683509b4dffc3984644d56db5fb4d978b",
+          "bytes": 363891048
+        }
+      }
+    },
+    {
+      "file": "motion.json.gz",
+      "sha256": "dbfbbb5a16f6030a5233cf18627639354e2350d4e48be1fe6ddd8483fa5c131b",
+      "bytes": 1453838,
+      "members": {
+        "web/garden-bill-cafe/motion.json": {
+          "sha256": "c18a22996304ce63376053ba1081983aad380a2657e1a55b7580e398dc58b6a7",
+          "bytes": 14654563
+        }
+      }
+    },
+    {
+      "file": "thread.bin.gz",
+      "sha256": "990512aff26bbc19874db5d55716a1841320266eee44a5945dc4ef0b9f670526",
+      "bytes": 7159994,
+      "members": {
+        "web/garden-bill-cafe/thread.bin": {
+          "sha256": "0d92e8ae981d629814f794a89702e1cdedb95e8dc1518b656e947c326943b41a",
+          "bytes": 9656040
+        }
+      }
+    },
+    {
+      "file": "cafe-images.tar.gz",
+      "sha256": "e64716c3064bd220eea35229d273ad1893d8b70493b3e3dc792b06450ece7422",
+      "bytes": 28611515,
+      "members": {
+        "web/garden-bill-cafe/textures/t0.jpg": {
+          "sha256": "9f47648493ceecf13484c750452903f1799b81f1544f1808b32141f00dae650d",
+          "bytes": 159690
+        },
+        "web/garden-bill-cafe/textures/t1.jpg": {
+          "sha256": "810df1bc066536e9f7962c17da9b90c7bbd6c07e3a7710e39f4b6beb711d6a84",
+          "bytes": 25091
+        },
+        "web/garden-bill-cafe/textures/t10.jpg": {
+          "sha256": "57758e5f34d90ddbe824d685d15d1e669f5f52e69c72499bc248614f2a24436b",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t100.jpg": {
+          "sha256": "7f4adb825b2bfa6d112ab176302bdaff653d3ac89811d814cc6cc210cde2e4c0",
+          "bytes": 17183
+        },
+        "web/garden-bill-cafe/textures/t101.jpg": {
+          "sha256": "eb016ceb05a764fb1e176cb74f20a9cb1bb90cfb6a959e729e62ce8037c9f124",
+          "bytes": 322511
+        },
+        "web/garden-bill-cafe/textures/t102.jpg": {
+          "sha256": "e59263605751d22e021854fa46f74121a144fa34cf019f7acf760729c7a1cc12",
+          "bytes": 320609
+        },
+        "web/garden-bill-cafe/textures/t103.jpg": {
+          "sha256": "fce9c4dec8c307f8365efa2d0019d0a5c52dbb68c513f9dac265f63d8bf20b95",
+          "bytes": 662830
+        },
+        "web/garden-bill-cafe/textures/t104.jpg": {
+          "sha256": "192bd9f8966acb9e07eb86c0d9bbfc0162f084f267be7e7100986492a3ff44f1",
+          "bytes": 256159
+        },
+        "web/garden-bill-cafe/textures/t105.jpg": {
+          "sha256": "a93a235b211846b8a07b8a32c59de00d7f3b5b363439a6704a8990473ae5c2ff",
+          "bytes": 182829
+        },
+        "web/garden-bill-cafe/textures/t106.jpg": {
+          "sha256": "f6edaf0486bd8cdf4ef27148c9c44a811bfe94946540ed533f5c5145e925d0f0",
+          "bytes": 56027
+        },
+        "web/garden-bill-cafe/textures/t107.jpg": {
+          "sha256": "740f91022c78778425297a8917fe1c30951e6763001f6e095e92e135d7d818fd",
+          "bytes": 268644
+        },
+        "web/garden-bill-cafe/textures/t108.jpg": {
+          "sha256": "a93a235b211846b8a07b8a32c59de00d7f3b5b363439a6704a8990473ae5c2ff",
+          "bytes": 182829
+        },
+        "web/garden-bill-cafe/textures/t109.jpg": {
+          "sha256": "f6edaf0486bd8cdf4ef27148c9c44a811bfe94946540ed533f5c5145e925d0f0",
+          "bytes": 56027
+        },
+        "web/garden-bill-cafe/textures/t11.jpg": {
+          "sha256": "509bae93f70cfc62dc47aab75d5ca354a06ba6d223d8999b1214af297a817624",
+          "bytes": 17030
+        },
+        "web/garden-bill-cafe/textures/t110.jpg": {
+          "sha256": "1664e5b922a3ff2ede1e12525c1e185e494a955dcaea62bec58e7fc825c2deff",
+          "bytes": 214954
+        },
+        "web/garden-bill-cafe/textures/t111.jpg": {
+          "sha256": "9b6d585df644e05bc228bede90dd60ba77179f2a92a76f1cb8aa3c2fae947837",
+          "bytes": 175170
+        },
+        "web/garden-bill-cafe/textures/t112.jpg": {
+          "sha256": "7e27b7069bc2829ce4874230175674fdbca262e88a3c62351bd54ac10a070d76",
+          "bytes": 49189
+        },
+        "web/garden-bill-cafe/textures/t113.jpg": {
+          "sha256": "90a45fcae634017b5a85ccc39cebe520b66afaaf5f0d8dc7e5c95e5417912f9c",
+          "bytes": 243670
+        },
+        "web/garden-bill-cafe/textures/t114.jpg": {
+          "sha256": "2c95856db569d37811530af408cfd870605f1dcfa8a3858927f884f40db1c9c8",
+          "bytes": 161169
+        },
+        "web/garden-bill-cafe/textures/t115.jpg": {
+          "sha256": "e4c62400d060890b2ce08fc4eb9c5da62eb0273b8375e75d4877c8d780fd2316",
+          "bytes": 56783
+        },
+        "web/garden-bill-cafe/textures/t116.jpg": {
+          "sha256": "2894485961c16f785f5723085d991af8495c91ae42c2cffd73b30c2391133c7f",
+          "bytes": 209668
+        },
+        "web/garden-bill-cafe/textures/t117.jpg": {
+          "sha256": "4747aa4cd1e2e4692c7e44ebe28e5ddf8a7f6938ea362fd1d941bc0e3c3a69db",
+          "bytes": 159618
+        },
+        "web/garden-bill-cafe/textures/t118.jpg": {
+          "sha256": "1183f7f7ee330784a32094d5daebcbdc76bf80623173f407ebf69d5c602e82c7",
+          "bytes": 83360
+        },
+        "web/garden-bill-cafe/textures/t119.jpg": {
+          "sha256": "1f531ba8a9410ff3135b599770886fbeca347f635bc9d542f35f7103bc742813",
+          "bytes": 38639
+        },
+        "web/garden-bill-cafe/textures/t12.jpg": {
+          "sha256": "b52c4ab8ece5acd6a0920b97dcd1ba3778db66b08574e7cd560dc50231ff31dd",
+          "bytes": 61117
+        },
+        "web/garden-bill-cafe/textures/t120.jpg": {
+          "sha256": "27875d30dd199cfa9694ab781b98461840f05b215361d2b10be7963adc068bf1",
+          "bytes": 37542
+        },
+        "web/garden-bill-cafe/textures/t121.jpg": {
+          "sha256": "397c0c48681e2b15344f3bed677d7ac9718241e4fcc02dc035d8e045e5ea2103",
+          "bytes": 8637
+        },
+        "web/garden-bill-cafe/textures/t122.jpg": {
+          "sha256": "6d1e11787415f5aec254cd53336065c0e0ee5682268e9286f66fd9be9a53b4f4",
+          "bytes": 194544
+        },
+        "web/garden-bill-cafe/textures/t123.jpg": {
+          "sha256": "bd351d86ffa494e1295105bc399e6f86daabadb9391b9f12abeb1a7ddf79069c",
+          "bytes": 220087
+        },
+        "web/garden-bill-cafe/textures/t124.jpg": {
+          "sha256": "bd351d86ffa494e1295105bc399e6f86daabadb9391b9f12abeb1a7ddf79069c",
+          "bytes": 220087
+        },
+        "web/garden-bill-cafe/textures/t125.jpg": {
+          "sha256": "bd351d86ffa494e1295105bc399e6f86daabadb9391b9f12abeb1a7ddf79069c",
+          "bytes": 220087
+        },
+        "web/garden-bill-cafe/textures/t126.jpg": {
+          "sha256": "bd351d86ffa494e1295105bc399e6f86daabadb9391b9f12abeb1a7ddf79069c",
+          "bytes": 220087
+        },
+        "web/garden-bill-cafe/textures/t127.jpg": {
+          "sha256": "bd351d86ffa494e1295105bc399e6f86daabadb9391b9f12abeb1a7ddf79069c",
+          "bytes": 220087
+        },
+        "web/garden-bill-cafe/textures/t128.jpg": {
+          "sha256": "0dc11ac3391975c2269cf5c53ead5c9ddadb5c8fc0f4e85fe18c51be1d295f65",
+          "bytes": 258834
+        },
+        "web/garden-bill-cafe/textures/t129.jpg": {
+          "sha256": "d54decde526919b1f16e062ea08e8ad3f04e46d18f8e85c4d1625fc2373ef513",
+          "bytes": 106487
+        },
+        "web/garden-bill-cafe/textures/t13.jpg": {
+          "sha256": "7e403c080699ff0ed0177f8d9a86a11972f13ee634ba79e6b9fbb9063ab62e12",
+          "bytes": 134742
+        },
+        "web/garden-bill-cafe/textures/t130.jpg": {
+          "sha256": "7bd2cd3a8889ea27f00568b693e72b66987c968ca6b85e1a0ad7dfd80d0f3495",
+          "bytes": 17093
+        },
+        "web/garden-bill-cafe/textures/t131.jpg": {
+          "sha256": "ef437da2ad9a206ec3b658472ccae108cbb41fb40266a352ffe6afc85a465c17",
+          "bytes": 220780
+        },
+        "web/garden-bill-cafe/textures/t132.jpg": {
+          "sha256": "309e52acb759e63a731b9f1febae1cae0559d434adfca240cdf76b34793db67c",
+          "bytes": 95925
+        },
+        "web/garden-bill-cafe/textures/t133.jpg": {
+          "sha256": "ca5c0526999cd0e21f120674163606b7fc583f5d1672a8c83b43e9c367ab30f8",
+          "bytes": 17019
+        },
+        "web/garden-bill-cafe/textures/t134.jpg": {
+          "sha256": "d5d03681fc7a1b1ce3e5e8f05245f7c830b9a1e3c41dc971f60d7af464efb7d0",
+          "bytes": 231996
+        },
+        "web/garden-bill-cafe/textures/t135.jpg": {
+          "sha256": "bc1e28a1d5a2c313c918db65bdd74bb0b7bb318641f601307ed856316594d8af",
+          "bytes": 264917
+        },
+        "web/garden-bill-cafe/textures/t136.jpg": {
+          "sha256": "efe5e2e97067c4ac69f7e326feaa61a35b986bcffe400dd0a1c500ccf3ab3db5",
+          "bytes": 238345
+        },
+        "web/garden-bill-cafe/textures/t137.jpg": {
+          "sha256": "a0795496428e984fac73ff94b6d76129fe73c7534945d219a1c0fc999e49156b",
+          "bytes": 98193
+        },
+        "web/garden-bill-cafe/textures/t138.jpg": {
+          "sha256": "5fc4a15a386bb0ad8f9aa2e1f60c94fdbcce175c83a48683a7b21e9c088a9de0",
+          "bytes": 55157
+        },
+        "web/garden-bill-cafe/textures/t139.jpg": {
+          "sha256": "63f63f820e2fd6582dae35369cd49b105f1e65d625a09ec7e069e69ea76f170a",
+          "bytes": 18381
+        },
+        "web/garden-bill-cafe/textures/t14.jpg": {
+          "sha256": "42e113caa707fb2c59e8ae6b4a927796577806acd421920e6de9d46c1fe6253c",
+          "bytes": 43834
+        },
+        "web/garden-bill-cafe/textures/t140.jpg": {
+          "sha256": "a161ebbc6e471ed12762f35cf0c3a6555fbae6f3dcaabe0806149a1d0f35e1f3",
+          "bytes": 92642
+        },
+        "web/garden-bill-cafe/textures/t141.jpg": {
+          "sha256": "e26b8af19f58f5ddfae7982127eaf629e8cde974882737e1b2762ae1a47919aa",
+          "bytes": 89363
+        },
+        "web/garden-bill-cafe/textures/t142.jpg": {
+          "sha256": "b5e6279bd58004d3013d1e78ade0cb991fe16663352d1c355d73f65207310c06",
+          "bytes": 17163
+        },
+        "web/garden-bill-cafe/textures/t143.jpg": {
+          "sha256": "62e7bae2ceb0a95eedb4309e4ad296e96bf30855efa47238e2e4134bdc1adf95",
+          "bytes": 17017
+        },
+        "web/garden-bill-cafe/textures/t144.jpg": {
+          "sha256": "386ada54bb2e6077345e96a22639a23e755e4c1722032a2ae3da503f0ee642b8",
+          "bytes": 136491
+        },
+        "web/garden-bill-cafe/textures/t145.jpg": {
+          "sha256": "f79457cef8d58ea3164ed7c9d967c1cac369c0280d0985275b35861cadd71df1",
+          "bytes": 210829
+        },
+        "web/garden-bill-cafe/textures/t146.jpg": {
+          "sha256": "c279a485414b4d6cb8723d7ea0f98300881af31ec38afcc5d20ff05c67f87d4b",
+          "bytes": 165121
+        },
+        "web/garden-bill-cafe/textures/t147.jpg": {
+          "sha256": "b41a12b38c83215eb3f8b2a6511fa21be9b0980dc7d467bc47fd814dd832bb25",
+          "bytes": 339954
+        },
+        "web/garden-bill-cafe/textures/t148.jpg": {
+          "sha256": "bf35963bfe97d3d57b65b9f1b70e052dfdd2a1574b938f738ecf6908c6cd556e",
+          "bytes": 333603
+        },
+        "web/garden-bill-cafe/textures/t149.jpg": {
+          "sha256": "c97848c5c7607c9c14572cc51378f9c031bcec0655f87e9a95226544f9952e89",
+          "bytes": 252961
+        },
+        "web/garden-bill-cafe/textures/t15.jpg": {
+          "sha256": "e293c9c7a5fefc133f97f714c9ec5e55f734d7f747322895b2667815de84ceaf",
+          "bytes": 92717
+        },
+        "web/garden-bill-cafe/textures/t150.jpg": {
+          "sha256": "834239290babaee9b414b8b8f51e8d3fac15954bf029062e603a50e4a097b961",
+          "bytes": 48148
+        },
+        "web/garden-bill-cafe/textures/t151.jpg": {
+          "sha256": "a81e7ad12cd5b71bebc35da8c6631405e46646029a777dd5137f3985a1461c06",
+          "bytes": 104517
+        },
+        "web/garden-bill-cafe/textures/t152.jpg": {
+          "sha256": "2fc3ef650e0acd37a0c8c4d9d377c5dbfe9d2c0f3656edeae9cc6cef717d50e5",
+          "bytes": 73472
+        },
+        "web/garden-bill-cafe/textures/t153.jpg": {
+          "sha256": "a4b8c1bb1d34909decf3797cad828cc1e7ca8e5ab7685ba74b859eae9f2bbc0e",
+          "bytes": 79853
+        },
+        "web/garden-bill-cafe/textures/t154.jpg": {
+          "sha256": "68031b6bd7983581f758b9a4dcc077f608fcb8bf9686f31e6556a98839a1b9cb",
+          "bytes": 17742
+        },
+        "web/garden-bill-cafe/textures/t155.jpg": {
+          "sha256": "536ab40ab6eeeb1bf8dc0912221b26390c1648eb471a6c73464c3d5c595473d3",
+          "bytes": 33205
+        },
+        "web/garden-bill-cafe/textures/t156.jpg": {
+          "sha256": "a4b8c1bb1d34909decf3797cad828cc1e7ca8e5ab7685ba74b859eae9f2bbc0e",
+          "bytes": 79853
+        },
+        "web/garden-bill-cafe/textures/t157.jpg": {
+          "sha256": "68031b6bd7983581f758b9a4dcc077f608fcb8bf9686f31e6556a98839a1b9cb",
+          "bytes": 17742
+        },
+        "web/garden-bill-cafe/textures/t158.jpg": {
+          "sha256": "7eea2d125cababf8cae84c6abe6b26ff44cbcc6cc02a92475d56c6ab239baf84",
+          "bytes": 44612
+        },
+        "web/garden-bill-cafe/textures/t159.jpg": {
+          "sha256": "19f6589e34d5881fe83f924c538dbf5d4c891194515753097bb1ddb56e17d7dc",
+          "bytes": 157768
+        },
+        "web/garden-bill-cafe/textures/t16.jpg": {
+          "sha256": "b617639e43e6b6a26837d3b272dbd13793752716ca648754e1f5e98f7c7c735e",
+          "bytes": 17030
+        },
+        "web/garden-bill-cafe/textures/t160.jpg": {
+          "sha256": "515632cef8bf40c68a78f96b7efb0d14d0b2b118965b2f4764638eb35c0a2647",
+          "bytes": 19903
+        },
+        "web/garden-bill-cafe/textures/t161.jpg": {
+          "sha256": "a161ebbc6e471ed12762f35cf0c3a6555fbae6f3dcaabe0806149a1d0f35e1f3",
+          "bytes": 92642
+        },
+        "web/garden-bill-cafe/textures/t162.jpg": {
+          "sha256": "e26b8af19f58f5ddfae7982127eaf629e8cde974882737e1b2762ae1a47919aa",
+          "bytes": 89363
+        },
+        "web/garden-bill-cafe/textures/t163.jpg": {
+          "sha256": "b5e6279bd58004d3013d1e78ade0cb991fe16663352d1c355d73f65207310c06",
+          "bytes": 17163
+        },
+        "web/garden-bill-cafe/textures/t164.jpg": {
+          "sha256": "e9d34f580e0b00dd8eb6fe4e566c6834a739067b41a031bdaf28c7e51352ef10",
+          "bytes": 81690
+        },
+        "web/garden-bill-cafe/textures/t165.jpg": {
+          "sha256": "a1ed538f4fda35e318f08c8c398ff787b3bf852dee91308c77362d702e5e7943",
+          "bytes": 21575
+        },
+        "web/garden-bill-cafe/textures/t166.jpg": {
+          "sha256": "542aa811b122f343bf3905884a48105416d5293794ec5b0afa9577759ed149cf",
+          "bytes": 40080
+        },
+        "web/garden-bill-cafe/textures/t167.jpg": {
+          "sha256": "6fd0e4ef8949b4109e3c731427f21f04cb449b533ac40395e1806f3ff694429a",
+          "bytes": 205260
+        },
+        "web/garden-bill-cafe/textures/t168.jpg": {
+          "sha256": "7708508da6dc301254d1d13d9d3b8c33e687e490883073b2df0db02d0315e8f2",
+          "bytes": 232458
+        },
+        "web/garden-bill-cafe/textures/t169.jpg": {
+          "sha256": "da8c4f15d00ee20ab81c81afacbb285860635a5e7270b8236b21f8b7b90a84a7",
+          "bytes": 17011
+        },
+        "web/garden-bill-cafe/textures/t17.jpg": {
+          "sha256": "ad95993beb09f8512f972b41e58751010b375ce18ecaef2d95d676419bc66df7",
+          "bytes": 46281
+        },
+        "web/garden-bill-cafe/textures/t170.jpg": {
+          "sha256": "c5dfb031edc19a97a5661ea2eb5805257ff663ad1f1924a561da910db9de7e74",
+          "bytes": 100734
+        },
+        "web/garden-bill-cafe/textures/t171.jpg": {
+          "sha256": "401aeac9fa6817a802dcc53ff5c18f64c82670320a3e43f5af4730c9b9f67188",
+          "bytes": 18878
+        },
+        "web/garden-bill-cafe/textures/t172.jpg": {
+          "sha256": "a0795496428e984fac73ff94b6d76129fe73c7534945d219a1c0fc999e49156b",
+          "bytes": 98193
+        },
+        "web/garden-bill-cafe/textures/t173.jpg": {
+          "sha256": "5fc4a15a386bb0ad8f9aa2e1f60c94fdbcce175c83a48683a7b21e9c088a9de0",
+          "bytes": 55157
+        },
+        "web/garden-bill-cafe/textures/t174.jpg": {
+          "sha256": "63f63f820e2fd6582dae35369cd49b105f1e65d625a09ec7e069e69ea76f170a",
+          "bytes": 18381
+        },
+        "web/garden-bill-cafe/textures/t175.jpg": {
+          "sha256": "7eea2d125cababf8cae84c6abe6b26ff44cbcc6cc02a92475d56c6ab239baf84",
+          "bytes": 44612
+        },
+        "web/garden-bill-cafe/textures/t176.jpg": {
+          "sha256": "19f6589e34d5881fe83f924c538dbf5d4c891194515753097bb1ddb56e17d7dc",
+          "bytes": 157768
+        },
+        "web/garden-bill-cafe/textures/t177.jpg": {
+          "sha256": "515632cef8bf40c68a78f96b7efb0d14d0b2b118965b2f4764638eb35c0a2647",
+          "bytes": 19903
+        },
+        "web/garden-bill-cafe/textures/t178.jpg": {
+          "sha256": "67902add7263441dd40c83b57a43f87c5475a12b252ee434d6d854a65d971c04",
+          "bytes": 88019
+        },
+        "web/garden-bill-cafe/textures/t179.jpg": {
+          "sha256": "04ae6eb9c74c265b5302fa230313fab6aaa363f5b3ea73c5b05cb1c8bb2f97e8",
+          "bytes": 97093
+        },
+        "web/garden-bill-cafe/textures/t18.jpg": {
+          "sha256": "696e1950e3294b8fffe46307d9d84003b0d6e0b6b012ac864fbc56936f0fdfff",
+          "bytes": 137669
+        },
+        "web/garden-bill-cafe/textures/t180.jpg": {
+          "sha256": "89994b3a674ac438146a70dbb635f88f0bc3376778dc9c6dd84199f807c022fe",
+          "bytes": 95964
+        },
+        "web/garden-bill-cafe/textures/t181.jpg": {
+          "sha256": "770f5f16779052d382e05dc2a780f19436db589119af99cf76b39ad0b63f5cfb",
+          "bytes": 46385
+        },
+        "web/garden-bill-cafe/textures/t182.jpg": {
+          "sha256": "f7b11fcee3f9d40a72bdefe20ef74dd9b9418d269db179cfb978a18df330c95f",
+          "bytes": 184813
+        },
+        "web/garden-bill-cafe/textures/t183.jpg": {
+          "sha256": "0d941570ebdb01c58743ca209db16ecba63feb785f1fdf4c1186bbeabc90ede9",
+          "bytes": 27100
+        },
+        "web/garden-bill-cafe/textures/t184.jpg": {
+          "sha256": "807c15ed03443b5d566533268e52ff05f8c2476bedb3f6b250b352f7a3186f8f",
+          "bytes": 137177
+        },
+        "web/garden-bill-cafe/textures/t185.jpg": {
+          "sha256": "67081512f50b5d549428b765f64c036b105bd1e7cce1b9398aba0c94483b875c",
+          "bytes": 32928
+        },
+        "web/garden-bill-cafe/textures/t186.jpg": {
+          "sha256": "2fc3ef650e0acd37a0c8c4d9d377c5dbfe9d2c0f3656edeae9cc6cef717d50e5",
+          "bytes": 73472
+        },
+        "web/garden-bill-cafe/textures/t187.jpg": {
+          "sha256": "a4b8c1bb1d34909decf3797cad828cc1e7ca8e5ab7685ba74b859eae9f2bbc0e",
+          "bytes": 79853
+        },
+        "web/garden-bill-cafe/textures/t188.jpg": {
+          "sha256": "68031b6bd7983581f758b9a4dcc077f608fcb8bf9686f31e6556a98839a1b9cb",
+          "bytes": 17742
+        },
+        "web/garden-bill-cafe/textures/t189.jpg": {
+          "sha256": "111d167f00c4defec2b6b59414c4722648da6126253197d6ef6bc93d64462c4b",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t19.jpg": {
+          "sha256": "b99d7ee0cfc3544f9b34b3ba4f230600665e100fa3261d53c8ef08d922cfa680",
+          "bytes": 18581
+        },
+        "web/garden-bill-cafe/textures/t190.jpg": {
+          "sha256": "386ada54bb2e6077345e96a22639a23e755e4c1722032a2ae3da503f0ee642b8",
+          "bytes": 136491
+        },
+        "web/garden-bill-cafe/textures/t191.jpg": {
+          "sha256": "f79457cef8d58ea3164ed7c9d967c1cac369c0280d0985275b35861cadd71df1",
+          "bytes": 210829
+        },
+        "web/garden-bill-cafe/textures/t192.jpg": {
+          "sha256": "65e3c9e9961004e7e7eceb9b4d89aa178541308801a1f137ee05fdb00c6e2e10",
+          "bytes": 18677
+        },
+        "web/garden-bill-cafe/textures/t193.jpg": {
+          "sha256": "a0795496428e984fac73ff94b6d76129fe73c7534945d219a1c0fc999e49156b",
+          "bytes": 98193
+        },
+        "web/garden-bill-cafe/textures/t194.jpg": {
+          "sha256": "5fc4a15a386bb0ad8f9aa2e1f60c94fdbcce175c83a48683a7b21e9c088a9de0",
+          "bytes": 55157
+        },
+        "web/garden-bill-cafe/textures/t195.jpg": {
+          "sha256": "63f63f820e2fd6582dae35369cd49b105f1e65d625a09ec7e069e69ea76f170a",
+          "bytes": 18381
+        },
+        "web/garden-bill-cafe/textures/t196.jpg": {
+          "sha256": "a161ebbc6e471ed12762f35cf0c3a6555fbae6f3dcaabe0806149a1d0f35e1f3",
+          "bytes": 92642
+        },
+        "web/garden-bill-cafe/textures/t197.jpg": {
+          "sha256": "e26b8af19f58f5ddfae7982127eaf629e8cde974882737e1b2762ae1a47919aa",
+          "bytes": 89363
+        },
+        "web/garden-bill-cafe/textures/t198.jpg": {
+          "sha256": "b5e6279bd58004d3013d1e78ade0cb991fe16663352d1c355d73f65207310c06",
+          "bytes": 17163
+        },
+        "web/garden-bill-cafe/textures/t199.jpg": {
+          "sha256": "60c66e1db188afb7aed1060506d8fbcf2ffb39468272c60aa1073d6757c0d81e",
+          "bytes": 48592
+        },
+        "web/garden-bill-cafe/textures/t2.jpg": {
+          "sha256": "622976bc0d20fe4c46978ea3ddf74cb37db2b85717d110ac92a32ba0a441aaf5",
+          "bytes": 253790
+        },
+        "web/garden-bill-cafe/textures/t20.jpg": {
+          "sha256": "5688d2ce25c78f13aebce74c99f0383a0cd0f25e77d489f198420c3f07a4c52a",
+          "bytes": 283566
+        },
+        "web/garden-bill-cafe/textures/t200.jpg": {
+          "sha256": "c0317b9975f263b9d4bffd0990daee6abc2a22a1f08c31b57435880ebc5f8240",
+          "bytes": 139796
+        },
+        "web/garden-bill-cafe/textures/t201.jpg": {
+          "sha256": "be1b91a387c7ebcd05daf6847f8f536efead2d016353f1b14ce07e912a2eff6b",
+          "bytes": 66796
+        },
+        "web/garden-bill-cafe/textures/t202.jpg": {
+          "sha256": "b474a248605d726ff9c9e747dec2fd58bd70e00fde805ae313e5c429210f3192",
+          "bytes": 17014
+        },
+        "web/garden-bill-cafe/textures/t203.jpg": {
+          "sha256": "2fc3ef650e0acd37a0c8c4d9d377c5dbfe9d2c0f3656edeae9cc6cef717d50e5",
+          "bytes": 73472
+        },
+        "web/garden-bill-cafe/textures/t204.jpg": {
+          "sha256": "4a067ecd7ec37ebcb3aa88f4a7a680a3776c8840ed59dd28da75017fc1b45f87",
+          "bytes": 132111
+        },
+        "web/garden-bill-cafe/textures/t205.jpg": {
+          "sha256": "b52c4ab8ece5acd6a0920b97dcd1ba3778db66b08574e7cd560dc50231ff31dd",
+          "bytes": 61117
+        },
+        "web/garden-bill-cafe/textures/t206.jpg": {
+          "sha256": "7eea2d125cababf8cae84c6abe6b26ff44cbcc6cc02a92475d56c6ab239baf84",
+          "bytes": 44612
+        },
+        "web/garden-bill-cafe/textures/t207.jpg": {
+          "sha256": "19f6589e34d5881fe83f924c538dbf5d4c891194515753097bb1ddb56e17d7dc",
+          "bytes": 157768
+        },
+        "web/garden-bill-cafe/textures/t208.jpg": {
+          "sha256": "515632cef8bf40c68a78f96b7efb0d14d0b2b118965b2f4764638eb35c0a2647",
+          "bytes": 19903
+        },
+        "web/garden-bill-cafe/textures/t209.jpg": {
+          "sha256": "a0795496428e984fac73ff94b6d76129fe73c7534945d219a1c0fc999e49156b",
+          "bytes": 98193
+        },
+        "web/garden-bill-cafe/textures/t21.jpg": {
+          "sha256": "5cd1fa67deb83625a3c3229c84f554e913b812905347282b91137cd16f1c9d0f",
+          "bytes": 173397
+        },
+        "web/garden-bill-cafe/textures/t210.jpg": {
+          "sha256": "5fc4a15a386bb0ad8f9aa2e1f60c94fdbcce175c83a48683a7b21e9c088a9de0",
+          "bytes": 55157
+        },
+        "web/garden-bill-cafe/textures/t211.jpg": {
+          "sha256": "63f63f820e2fd6582dae35369cd49b105f1e65d625a09ec7e069e69ea76f170a",
+          "bytes": 18381
+        },
+        "web/garden-bill-cafe/textures/t212.jpg": {
+          "sha256": "a4b8c1bb1d34909decf3797cad828cc1e7ca8e5ab7685ba74b859eae9f2bbc0e",
+          "bytes": 79853
+        },
+        "web/garden-bill-cafe/textures/t213.jpg": {
+          "sha256": "68031b6bd7983581f758b9a4dcc077f608fcb8bf9686f31e6556a98839a1b9cb",
+          "bytes": 17742
+        },
+        "web/garden-bill-cafe/textures/t214.jpg": {
+          "sha256": "fbe6ef53a014edcb7c6c3b682ead02f001ca047079972e0b6086649f7de3eec7",
+          "bytes": 17011
+        },
+        "web/garden-bill-cafe/textures/t215.jpg": {
+          "sha256": "8058e0b483a9b6ecf086c6245ef5f5157f373d19a556f41fc37bb235505f4c46",
+          "bytes": 85735
+        },
+        "web/garden-bill-cafe/textures/t216.jpg": {
+          "sha256": "6db2f3ffb57921bb4431d410bb3316d5ac9668540081d999b7d51c4394185876",
+          "bytes": 17020
+        },
+        "web/garden-bill-cafe/textures/t217.jpg": {
+          "sha256": "93ecd8cc24e1d804c2bf44980a936a59c25751634d3c4767d04e871f41f00ae4",
+          "bytes": 103333
+        },
+        "web/garden-bill-cafe/textures/t218.jpg": {
+          "sha256": "84a2557ab9698247bb5a2ff2b4c56bc4a18322e8be3c78a3f5d4d9a2b4d03fd9",
+          "bytes": 166713
+        },
+        "web/garden-bill-cafe/textures/t219.jpg": {
+          "sha256": "509bae93f70cfc62dc47aab75d5ca354a06ba6d223d8999b1214af297a817624",
+          "bytes": 17030
+        },
+        "web/garden-bill-cafe/textures/t22.jpg": {
+          "sha256": "1de2e5d9870e00d56ec2cf6cf055d609d586746cd864ec13c13f830ae5981888",
+          "bytes": 303810
+        },
+        "web/garden-bill-cafe/textures/t220.jpg": {
+          "sha256": "3c2a0b5e299f87cdd12bf094e84f2bf8009389b5af8031fcce407b72bcb6f809",
+          "bytes": 60776
+        },
+        "web/garden-bill-cafe/textures/t221.jpg": {
+          "sha256": "e9d34f580e0b00dd8eb6fe4e566c6834a739067b41a031bdaf28c7e51352ef10",
+          "bytes": 81690
+        },
+        "web/garden-bill-cafe/textures/t222.jpg": {
+          "sha256": "a1ed538f4fda35e318f08c8c398ff787b3bf852dee91308c77362d702e5e7943",
+          "bytes": 21575
+        },
+        "web/garden-bill-cafe/textures/t223.jpg": {
+          "sha256": "ca4cba6374c620642d938f24b7ce1ba47bfa10c05c76689e90a09b157363f534",
+          "bytes": 53487
+        },
+        "web/garden-bill-cafe/textures/t224.jpg": {
+          "sha256": "ace530b84896cd0ef5a2961a1b887648ed2a7a9880d3731f0d6f802564ba3d25",
+          "bytes": 29772
+        },
+        "web/garden-bill-cafe/textures/t225.jpg": {
+          "sha256": "1a5d729fe53b3f1a6ac6383c902e74248801eeb0b03f679172dc645d97ebf7eb",
+          "bytes": 28220
+        },
+        "web/garden-bill-cafe/textures/t226.jpg": {
+          "sha256": "4428a5421fffea9f4bd8d37d71c43c20398e237fd414e8d12fabfc54b7817086",
+          "bytes": 56169
+        },
+        "web/garden-bill-cafe/textures/t227.jpg": {
+          "sha256": "a86254c79e9ae6be582fa51c7bbe115946da0dc6a39ec68dc997f77cf68a490b",
+          "bytes": 220324
+        },
+        "web/garden-bill-cafe/textures/t228.jpg": {
+          "sha256": "a27306c121ac6b11496a544b5c747dd3bed253f00033c951c3425422d1f96c22",
+          "bytes": 165485
+        },
+        "web/garden-bill-cafe/textures/t229.jpg": {
+          "sha256": "917c167bc111d66df90bde17037769e6b7f24a32747f81c31d83a762e843fff6",
+          "bytes": 19772
+        },
+        "web/garden-bill-cafe/textures/t23.jpg": {
+          "sha256": "06a67b3cf31d9d07e558d9de582ed8be940de555f1c3d5c58ff1563f28c9b724",
+          "bytes": 12245
+        },
+        "web/garden-bill-cafe/textures/t230.jpg": {
+          "sha256": "a08dba2f54851bc3bec24bd11e169c5d058d36978842c33882d06aa27afbc5db",
+          "bytes": 91755
+        },
+        "web/garden-bill-cafe/textures/t231.jpg": {
+          "sha256": "942c27ed298ced0034c106262b40754f4cb58373353e3c73471bbd5d980312c8",
+          "bytes": 275319
+        },
+        "web/garden-bill-cafe/textures/t232.jpg": {
+          "sha256": "4c8bef89a8593ad6a6a88294641d10e351ee5a4ea0535031b0388651bbf26da3",
+          "bytes": 363571
+        },
+        "web/garden-bill-cafe/textures/t233.jpg": {
+          "sha256": "27039efa5dd4b687c47499a15d095cfbbd80341acf291f905a85d3a7d8ca8342",
+          "bytes": 17011
+        },
+        "web/garden-bill-cafe/textures/t234.jpg": {
+          "sha256": "522ce1de021918b901f17d4e188dc5e022179b8d74cb23ad92f49f0d0faa7357",
+          "bytes": 20369
+        },
+        "web/garden-bill-cafe/textures/t235.jpg": {
+          "sha256": "57758e5f34d90ddbe824d685d15d1e669f5f52e69c72499bc248614f2a24436b",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t236.jpg": {
+          "sha256": "9debf38121c2e4b87c379e7467e99d2f0d35d0468c9037eb939d98023548a837",
+          "bytes": 171650
+        },
+        "web/garden-bill-cafe/textures/t237.jpg": {
+          "sha256": "91b9407bc87c2c1b6ae6e17c2a8ee9303bab82c77aefbda1c78e88ea2883feaf",
+          "bytes": 129761
+        },
+        "web/garden-bill-cafe/textures/t238.jpg": {
+          "sha256": "df91764a629912a5d544ec796b969754826d3fcd36eef887f4f3749a8d52e6c3",
+          "bytes": 162748
+        },
+        "web/garden-bill-cafe/textures/t239.jpg": {
+          "sha256": "ae2b5a79f15e07f87d60bcbc771e036b0d0d3e5bb22e09e5e4f09945dadb924f",
+          "bytes": 37094
+        },
+        "web/garden-bill-cafe/textures/t24.jpg": {
+          "sha256": "46273ee4076d5acbb2b7b5ac968ed9e37836e38f4d04f61484b8018163d57e4c",
+          "bytes": 21047
+        },
+        "web/garden-bill-cafe/textures/t240.jpg": {
+          "sha256": "7c0670ae8d4d949239b02b1db461e9cc9675ace14bdc3070dd090cdbd9951317",
+          "bytes": 157779
+        },
+        "web/garden-bill-cafe/textures/t241.jpg": {
+          "sha256": "4446cee01b507057551d902b99bf8b48fb1d36a1609483df28c5b4157bfa9119",
+          "bytes": 24857
+        },
+        "web/garden-bill-cafe/textures/t242.jpg": {
+          "sha256": "a0795496428e984fac73ff94b6d76129fe73c7534945d219a1c0fc999e49156b",
+          "bytes": 98193
+        },
+        "web/garden-bill-cafe/textures/t243.jpg": {
+          "sha256": "5fc4a15a386bb0ad8f9aa2e1f60c94fdbcce175c83a48683a7b21e9c088a9de0",
+          "bytes": 55157
+        },
+        "web/garden-bill-cafe/textures/t244.jpg": {
+          "sha256": "63f63f820e2fd6582dae35369cd49b105f1e65d625a09ec7e069e69ea76f170a",
+          "bytes": 18381
+        },
+        "web/garden-bill-cafe/textures/t245.jpg": {
+          "sha256": "a4875c19021c3744b4da662c396706b1704b13886faa333ba3c19ec26d71d2cf",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t246.jpg": {
+          "sha256": "c3f68be3e8dc09cf15a26979cf18bba4b285832d50f6d17bc36863ec1cd7b6f4",
+          "bytes": 89459
+        },
+        "web/garden-bill-cafe/textures/t247.jpg": {
+          "sha256": "33bdd7959389c031d6bdf482a18acaa64cb5742f7a9e1e55a3f373599993678d",
+          "bytes": 18732
+        },
+        "web/garden-bill-cafe/textures/t248.jpg": {
+          "sha256": "1ae0d2b29b0c16b8d5a0ccbfc12dc99d910b16477e56a62702cfa4f7453de777",
+          "bytes": 80477
+        },
+        "web/garden-bill-cafe/textures/t249.jpg": {
+          "sha256": "34f0e1c3630fc1464f06498f0b8544a193a20a93a0c32c2735ea7f2f73a8782d",
+          "bytes": 17242
+        },
+        "web/garden-bill-cafe/textures/t25.jpg": {
+          "sha256": "2d2de840dca4e505d97ffbbeb353801046481d3c60b1a7813fb0aa3be0616965",
+          "bytes": 8504
+        },
+        "web/garden-bill-cafe/textures/t250.jpg": {
+          "sha256": "05fa70e982754e2250126e42be2d1b193adeb5b5935618d38e56d8395906ca2e",
+          "bytes": 193045
+        },
+        "web/garden-bill-cafe/textures/t251.jpg": {
+          "sha256": "624f8e64c5625efa715fc1e7fcced1844829fe865fca43cd6da150ed52645369",
+          "bytes": 434810
+        },
+        "web/garden-bill-cafe/textures/t252.jpg": {
+          "sha256": "9ab7c3bd17489be10af80d231bcb47d796c81a31634ed3453d52f26c1b6cefe0",
+          "bytes": 516181
+        },
+        "web/garden-bill-cafe/textures/t253.jpg": {
+          "sha256": "26f9b49be768b3b8f30b165d351d1d313642525b5dc97b5997d86c42f4517173",
+          "bytes": 809499
+        },
+        "web/garden-bill-cafe/textures/t254.jpg": {
+          "sha256": "50beecde1c15f3ff24599e9b7df929d036e9eb390a34a09d9a001617a6f738e0",
+          "bytes": 159385
+        },
+        "web/garden-bill-cafe/textures/t255.jpg": {
+          "sha256": "54e8861b0ee4a40e57f5bffb749737a3dfab68150cb027aaaac97f4576057f8f",
+          "bytes": 19191
+        },
+        "web/garden-bill-cafe/textures/t256.jpg": {
+          "sha256": "2fdb884ffc2d65cfda4259ecadbcdfdd18d5ffc34c7b1e813f65307021e9dcc1",
+          "bytes": 140554
+        },
+        "web/garden-bill-cafe/textures/t257.jpg": {
+          "sha256": "0b5387414a138af3e2bac216215dab58e8a85cef8f443cda849b21b8e03243ce",
+          "bytes": 170326
+        },
+        "web/garden-bill-cafe/textures/t258.jpg": {
+          "sha256": "e76b6eeb4777cb1a1d00e2ff12d2e8dd262b2d67ce91ae0f9d3ea61f7c3a6f05",
+          "bytes": 27199
+        },
+        "web/garden-bill-cafe/textures/t259.jpg": {
+          "sha256": "ecb7fb0ee67de9c5d8fdaf5298a9b590f548b71d35361dd1650ad1d15027670b",
+          "bytes": 51034
+        },
+        "web/garden-bill-cafe/textures/t26.jpg": {
+          "sha256": "221059eabd21f7be8cf59c80d24152d0564c12e1658ffc737cfaf14f7952591b",
+          "bytes": 38039
+        },
+        "web/garden-bill-cafe/textures/t260.jpg": {
+          "sha256": "2cd1b852fbebf10881d85065e9d46b489494552cf3786163c55351075c8f535a",
+          "bytes": 63119
+        },
+        "web/garden-bill-cafe/textures/t261.jpg": {
+          "sha256": "56794d1131d92916af72a204b84898287aafc27e8609fe9ea0f6a5d44faaef38",
+          "bytes": 65024
+        },
+        "web/garden-bill-cafe/textures/t262.jpg": {
+          "sha256": "2f53709e5a015fba4913808941209d9237450e21f7e0f662407df13adebf7076",
+          "bytes": 236024
+        },
+        "web/garden-bill-cafe/textures/t263.jpg": {
+          "sha256": "3e97d1c82e826456b3995f2f2e0f2a980fe29d6c47fd491d6a041d947718e93b",
+          "bytes": 19889
+        },
+        "web/garden-bill-cafe/textures/t264.jpg": {
+          "sha256": "4fe4f195361e36e0655ed80996550c3dab69fa8a23791911862bec81b906af8e",
+          "bytes": 129730
+        },
+        "web/garden-bill-cafe/textures/t265.jpg": {
+          "sha256": "56e5b2dbf917671745818d1edf438e7d9e3018f41d082f290bdbb92603a66b98",
+          "bytes": 197235
+        },
+        "web/garden-bill-cafe/textures/t266.jpg": {
+          "sha256": "459e17cf136863c93ffea240af8b181d649dc4a64c6d9271013e24fddbfd7c5d",
+          "bytes": 67835
+        },
+        "web/garden-bill-cafe/textures/t267.jpg": {
+          "sha256": "2f53709e5a015fba4913808941209d9237450e21f7e0f662407df13adebf7076",
+          "bytes": 236024
+        },
+        "web/garden-bill-cafe/textures/t268.jpg": {
+          "sha256": "3e97d1c82e826456b3995f2f2e0f2a980fe29d6c47fd491d6a041d947718e93b",
+          "bytes": 19889
+        },
+        "web/garden-bill-cafe/textures/t269.jpg": {
+          "sha256": "4fe4f195361e36e0655ed80996550c3dab69fa8a23791911862bec81b906af8e",
+          "bytes": 129730
+        },
+        "web/garden-bill-cafe/textures/t27.jpg": {
+          "sha256": "06216bad628941565f82a43e74046e13266ed4b3a903dfe58c1f095d56f64fd8",
+          "bytes": 63475
+        },
+        "web/garden-bill-cafe/textures/t270.jpg": {
+          "sha256": "56e5b2dbf917671745818d1edf438e7d9e3018f41d082f290bdbb92603a66b98",
+          "bytes": 197235
+        },
+        "web/garden-bill-cafe/textures/t271.jpg": {
+          "sha256": "459e17cf136863c93ffea240af8b181d649dc4a64c6d9271013e24fddbfd7c5d",
+          "bytes": 67835
+        },
+        "web/garden-bill-cafe/textures/t272.jpg": {
+          "sha256": "2f53709e5a015fba4913808941209d9237450e21f7e0f662407df13adebf7076",
+          "bytes": 236024
+        },
+        "web/garden-bill-cafe/textures/t273.jpg": {
+          "sha256": "3e97d1c82e826456b3995f2f2e0f2a980fe29d6c47fd491d6a041d947718e93b",
+          "bytes": 19889
+        },
+        "web/garden-bill-cafe/textures/t274.jpg": {
+          "sha256": "4fe4f195361e36e0655ed80996550c3dab69fa8a23791911862bec81b906af8e",
+          "bytes": 129730
+        },
+        "web/garden-bill-cafe/textures/t275.jpg": {
+          "sha256": "56e5b2dbf917671745818d1edf438e7d9e3018f41d082f290bdbb92603a66b98",
+          "bytes": 197235
+        },
+        "web/garden-bill-cafe/textures/t276.jpg": {
+          "sha256": "459e17cf136863c93ffea240af8b181d649dc4a64c6d9271013e24fddbfd7c5d",
+          "bytes": 67835
+        },
+        "web/garden-bill-cafe/textures/t28.jpg": {
+          "sha256": "909bf0756fa1752014c945795d5d118f109860281d0edc549ba9e405967387c7",
+          "bytes": 17011
+        },
+        "web/garden-bill-cafe/textures/t29.jpg": {
+          "sha256": "38152e88d62a812a6c315d75404a2bbc5aaeb9534c71bebe0dc1b27de070145e",
+          "bytes": 86224
+        },
+        "web/garden-bill-cafe/textures/t3.jpg": {
+          "sha256": "03d427c6131e0f8537fab1b90f64936f36605565bf2ceed807355c25ba2b267b",
+          "bytes": 69655
+        },
+        "web/garden-bill-cafe/textures/t30.jpg": {
+          "sha256": "3aaa5c39cce0e58789f4cd252ab31555d4e9c3b409f92e0426c777d2a4dd7a37",
+          "bytes": 20820
+        },
+        "web/garden-bill-cafe/textures/t31.jpg": {
+          "sha256": "dd3b7a591e9518d672e56c930aae36a65bcb9af544a1aeff366c2f6786c5cf68",
+          "bytes": 59743
+        },
+        "web/garden-bill-cafe/textures/t32.jpg": {
+          "sha256": "a19d639d19202cfa7c851222da287ef0b39117f0d37aae2bab0929df2ac5176e",
+          "bytes": 79261
+        },
+        "web/garden-bill-cafe/textures/t33.jpg": {
+          "sha256": "e072a50d697aa0df626cae1fe8e5f4e23693023904dc197ec107686beca69c96",
+          "bytes": 57735
+        },
+        "web/garden-bill-cafe/textures/t34.jpg": {
+          "sha256": "d3300372baa9db17c18ef3ca4d224226cb09ec4bde4ea533408e33ff34ff75ad",
+          "bytes": 168437
+        },
+        "web/garden-bill-cafe/textures/t35.jpg": {
+          "sha256": "38045fae8fb35dfa34314adca9f34afe0600a829454b644f797abce5417e58f3",
+          "bytes": 142844
+        },
+        "web/garden-bill-cafe/textures/t36.jpg": {
+          "sha256": "1512434170d9b9d9797fb7a3bd8d337bcfc5a040012346f5a80314255713ac6c",
+          "bytes": 52885
+        },
+        "web/garden-bill-cafe/textures/t37.jpg": {
+          "sha256": "2f53709e5a015fba4913808941209d9237450e21f7e0f662407df13adebf7076",
+          "bytes": 236024
+        },
+        "web/garden-bill-cafe/textures/t38.jpg": {
+          "sha256": "3e97d1c82e826456b3995f2f2e0f2a980fe29d6c47fd491d6a041d947718e93b",
+          "bytes": 19889
+        },
+        "web/garden-bill-cafe/textures/t39.jpg": {
+          "sha256": "4fe4f195361e36e0655ed80996550c3dab69fa8a23791911862bec81b906af8e",
+          "bytes": 129730
+        },
+        "web/garden-bill-cafe/textures/t4.jpg": {
+          "sha256": "28436efbc7601f9b1b4d1217a9a2cb37021cada87b179cd3fbf3c13c1a4111f3",
+          "bytes": 42511
+        },
+        "web/garden-bill-cafe/textures/t40.jpg": {
+          "sha256": "56e5b2dbf917671745818d1edf438e7d9e3018f41d082f290bdbb92603a66b98",
+          "bytes": 197235
+        },
+        "web/garden-bill-cafe/textures/t41.jpg": {
+          "sha256": "459e17cf136863c93ffea240af8b181d649dc4a64c6d9271013e24fddbfd7c5d",
+          "bytes": 67835
+        },
+        "web/garden-bill-cafe/textures/t42.jpg": {
+          "sha256": "c70c54852c143d3abe10fe27f61b22a2a30d787db7b377485c53b6b052a488af",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t43.jpg": {
+          "sha256": "386ada54bb2e6077345e96a22639a23e755e4c1722032a2ae3da503f0ee642b8",
+          "bytes": 136491
+        },
+        "web/garden-bill-cafe/textures/t44.jpg": {
+          "sha256": "f79457cef8d58ea3164ed7c9d967c1cac369c0280d0985275b35861cadd71df1",
+          "bytes": 210829
+        },
+        "web/garden-bill-cafe/textures/t45.jpg": {
+          "sha256": "1175164c979bfdc9058fbf516799874b83f975318d2265485e51e8c24e8c7fb5",
+          "bytes": 193334
+        },
+        "web/garden-bill-cafe/textures/t46.jpg": {
+          "sha256": "8a231f4e47d37fc686e1368f6c703abbb1221ef58abaa460bfe63b09e0f4ce0a",
+          "bytes": 170174
+        },
+        "web/garden-bill-cafe/textures/t47.jpg": {
+          "sha256": "db5da004a15a60c9604863a2a788f9cbc77669dda95842bf555ced5913bcd319",
+          "bytes": 18753
+        },
+        "web/garden-bill-cafe/textures/t48.jpg": {
+          "sha256": "a0795496428e984fac73ff94b6d76129fe73c7534945d219a1c0fc999e49156b",
+          "bytes": 98193
+        },
+        "web/garden-bill-cafe/textures/t49.jpg": {
+          "sha256": "5fc4a15a386bb0ad8f9aa2e1f60c94fdbcce175c83a48683a7b21e9c088a9de0",
+          "bytes": 55157
+        },
+        "web/garden-bill-cafe/textures/t5.jpg": {
+          "sha256": "b3e0135e550b74248c5acb795b565d4487d0b6284c215145453310290069a425",
+          "bytes": 41631
+        },
+        "web/garden-bill-cafe/textures/t50.jpg": {
+          "sha256": "63f63f820e2fd6582dae35369cd49b105f1e65d625a09ec7e069e69ea76f170a",
+          "bytes": 18381
+        },
+        "web/garden-bill-cafe/textures/t51.jpg": {
+          "sha256": "62e7bae2ceb0a95eedb4309e4ad296e96bf30855efa47238e2e4134bdc1adf95",
+          "bytes": 17017
+        },
+        "web/garden-bill-cafe/textures/t52.jpg": {
+          "sha256": "a161ebbc6e471ed12762f35cf0c3a6555fbae6f3dcaabe0806149a1d0f35e1f3",
+          "bytes": 92642
+        },
+        "web/garden-bill-cafe/textures/t53.jpg": {
+          "sha256": "e26b8af19f58f5ddfae7982127eaf629e8cde974882737e1b2762ae1a47919aa",
+          "bytes": 89363
+        },
+        "web/garden-bill-cafe/textures/t54.jpg": {
+          "sha256": "b5e6279bd58004d3013d1e78ade0cb991fe16663352d1c355d73f65207310c06",
+          "bytes": 17163
+        },
+        "web/garden-bill-cafe/textures/t55.jpg": {
+          "sha256": "cc70de6ad43e799728f27dac70a42642c16e072659312e01f3c048168fcf9197",
+          "bytes": 214065
+        },
+        "web/garden-bill-cafe/textures/t56.jpg": {
+          "sha256": "ab28d670bf4cba06bbfb4f3ae55e02790320d59751cbf149cc89bc313b35d286",
+          "bytes": 42533
+        },
+        "web/garden-bill-cafe/textures/t57.jpg": {
+          "sha256": "12f7f815965d9139354a3b232b945db53154401a613d4184f74fa51b43dc4499",
+          "bytes": 162043
+        },
+        "web/garden-bill-cafe/textures/t58.jpg": {
+          "sha256": "0ecd2b191e5f98371aea3dfeadcdc414c865d081ebcbd5177cd5cc2f86304a63",
+          "bytes": 100981
+        },
+        "web/garden-bill-cafe/textures/t59.jpg": {
+          "sha256": "f26800201feeb96a975ca8c1e9d78fbf595bf442401984348f9f20250dcd13ea",
+          "bytes": 72553
+        },
+        "web/garden-bill-cafe/textures/t6.jpg": {
+          "sha256": "79a6abdc23e35f69f41c731aaf1f8ead94b275269971fd0ef9838ce69dd555dd",
+          "bytes": 27035
+        },
+        "web/garden-bill-cafe/textures/t60.jpg": {
+          "sha256": "9e0062207d275f7bcf1150192496d102c6e6d9ae164372fd550a76090c26351b",
+          "bytes": 46799
+        },
+        "web/garden-bill-cafe/textures/t61.jpg": {
+          "sha256": "3d5736672e400193da07b439b00268eaea47be142c3ea2354e09b6be5c59c60e",
+          "bytes": 156502
+        },
+        "web/garden-bill-cafe/textures/t62.jpg": {
+          "sha256": "1c22cb6b26eb277464ebbefe61ad7e8d37492bdead0784c09b84fe292462d624",
+          "bytes": 68141
+        },
+        "web/garden-bill-cafe/textures/t63.jpg": {
+          "sha256": "c3f68be3e8dc09cf15a26979cf18bba4b285832d50f6d17bc36863ec1cd7b6f4",
+          "bytes": 89459
+        },
+        "web/garden-bill-cafe/textures/t64.jpg": {
+          "sha256": "33bdd7959389c031d6bdf482a18acaa64cb5742f7a9e1e55a3f373599993678d",
+          "bytes": 18732
+        },
+        "web/garden-bill-cafe/textures/t65.jpg": {
+          "sha256": "71f6606610daf7dcbf430717c83a5061ef236f0e3cec2560c2fcb6a8612ca364",
+          "bytes": 244933
+        },
+        "web/garden-bill-cafe/textures/t66.jpg": {
+          "sha256": "a24bfa47248f6f11daa96ff238f4ac865625e8c22cd05f5b15181b4deb1f4c6a",
+          "bytes": 51271
+        },
+        "web/garden-bill-cafe/textures/t67.jpg": {
+          "sha256": "dfdd1cebf47028d67278f88a1c7af499224d255b458b29a45bdf4ef2c8db2fbc",
+          "bytes": 72472
+        },
+        "web/garden-bill-cafe/textures/t68.jpg": {
+          "sha256": "5cbc9de38d8596857224b9eb3afea9051a64c5ab2a8d056d89d6fdd530e2ab01",
+          "bytes": 75421
+        },
+        "web/garden-bill-cafe/textures/t69.jpg": {
+          "sha256": "93ecd8cc24e1d804c2bf44980a936a59c25751634d3c4767d04e871f41f00ae4",
+          "bytes": 103333
+        },
+        "web/garden-bill-cafe/textures/t7.jpg": {
+          "sha256": "6a80ce5f20ccfd2cc2f1f5c2ca911cb1e9f70ddc9a42dfa40371f7d068e96916",
+          "bytes": 68391
+        },
+        "web/garden-bill-cafe/textures/t70.jpg": {
+          "sha256": "84a2557ab9698247bb5a2ff2b4c56bc4a18322e8be3c78a3f5d4d9a2b4d03fd9",
+          "bytes": 166713
+        },
+        "web/garden-bill-cafe/textures/t71.jpg": {
+          "sha256": "509bae93f70cfc62dc47aab75d5ca354a06ba6d223d8999b1214af297a817624",
+          "bytes": 17030
+        },
+        "web/garden-bill-cafe/textures/t72.jpg": {
+          "sha256": "7eea2d125cababf8cae84c6abe6b26ff44cbcc6cc02a92475d56c6ab239baf84",
+          "bytes": 44612
+        },
+        "web/garden-bill-cafe/textures/t73.jpg": {
+          "sha256": "19f6589e34d5881fe83f924c538dbf5d4c891194515753097bb1ddb56e17d7dc",
+          "bytes": 157768
+        },
+        "web/garden-bill-cafe/textures/t74.jpg": {
+          "sha256": "515632cef8bf40c68a78f96b7efb0d14d0b2b118965b2f4764638eb35c0a2647",
+          "bytes": 19903
+        },
+        "web/garden-bill-cafe/textures/t75.jpg": {
+          "sha256": "56e5b2dbf917671745818d1edf438e7d9e3018f41d082f290bdbb92603a66b98",
+          "bytes": 197235
+        },
+        "web/garden-bill-cafe/textures/t76.jpg": {
+          "sha256": "459e17cf136863c93ffea240af8b181d649dc4a64c6d9271013e24fddbfd7c5d",
+          "bytes": 67835
+        },
+        "web/garden-bill-cafe/textures/t77.jpg": {
+          "sha256": "c3f68be3e8dc09cf15a26979cf18bba4b285832d50f6d17bc36863ec1cd7b6f4",
+          "bytes": 89459
+        },
+        "web/garden-bill-cafe/textures/t78.jpg": {
+          "sha256": "33bdd7959389c031d6bdf482a18acaa64cb5742f7a9e1e55a3f373599993678d",
+          "bytes": 18732
+        },
+        "web/garden-bill-cafe/textures/t79.jpg": {
+          "sha256": "40c482d6f79a12b285cb98c973d9044aa635824ef62453074430350b8eb39a38",
+          "bytes": 161186
+        },
+        "web/garden-bill-cafe/textures/t8.jpg": {
+          "sha256": "c7d02c9bf274d23b6704e409dfd6de18bbaac47ee853c4cc7f98e7dc96b67794",
+          "bytes": 158797
+        },
+        "web/garden-bill-cafe/textures/t80.jpg": {
+          "sha256": "dfeda17b946ced93deab7bf7315f3f888634cfe7fbf48656406ffd8eb234c897",
+          "bytes": 59073
+        },
+        "web/garden-bill-cafe/textures/t81.jpg": {
+          "sha256": "77aa44d1248ae3b98855ea07b5d5436c9712a8d3363acc6ab07340585a448b70",
+          "bytes": 130066
+        },
+        "web/garden-bill-cafe/textures/t82.jpg": {
+          "sha256": "e1b2a3be86d0602743b6f2d5bf81ed2720d164fc43495ab1fa8913ecb8a7b709",
+          "bytes": 21528
+        },
+        "web/garden-bill-cafe/textures/t83.jpg": {
+          "sha256": "512f436198603541fab73a2b5123acdac5e8462ce91dc3001c326dc738dfc767",
+          "bytes": 17120
+        },
+        "web/garden-bill-cafe/textures/t84.jpg": {
+          "sha256": "f8bbf9e8947ed31130f36015b6a9a68c0bb482abf3b0b40489cad34bff28058e",
+          "bytes": 45863
+        },
+        "web/garden-bill-cafe/textures/t85.jpg": {
+          "sha256": "9e929d3dca190abc891930627b95f9bdf5c134320871956d8b626e9513a77002",
+          "bytes": 137582
+        },
+        "web/garden-bill-cafe/textures/t86.jpg": {
+          "sha256": "8755bba5740de73db34d2a0735a8e527e2f97365fe174ca90b921b4655d2ad69",
+          "bytes": 19959
+        },
+        "web/garden-bill-cafe/textures/t87.jpg": {
+          "sha256": "83f39e96ef3cb396012fe0b962c37e1d7ee44cf253f567020dcf483cfe07d356",
+          "bytes": 35291
+        },
+        "web/garden-bill-cafe/textures/t88.jpg": {
+          "sha256": "1ea81d30c49d7cb8c3c1d612f5ada0a1471a95a89cc7b8ec28af52989598af90",
+          "bytes": 35998
+        },
+        "web/garden-bill-cafe/textures/t89.jpg": {
+          "sha256": "b072924dadb078e76ddb827b0da5c8d19ecfde8f77fbf161ea749e40514828f6",
+          "bytes": 20555
+        },
+        "web/garden-bill-cafe/textures/t9.jpg": {
+          "sha256": "806491a0c881c37586bf57c168e1e7ceecc73aa939e5508a30f201f737f8d4ec",
+          "bytes": 343135
+        },
+        "web/garden-bill-cafe/textures/t90.jpg": {
+          "sha256": "b8a08551f6ce2c6c81ba72a4793edb784964f617308d9046b05815f27bd3c97e",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t91.jpg": {
+          "sha256": "ddfd7d285e99b6891c5a0d8a2fb735749272a489603ff90000a20c6a220ff7d0",
+          "bytes": 17013
+        },
+        "web/garden-bill-cafe/textures/t92.jpg": {
+          "sha256": "efe7d54b65b4c58f6302d18f51eda75efa078c097d6d42068e6ae3848f3fec12",
+          "bytes": 67755
+        },
+        "web/garden-bill-cafe/textures/t93.jpg": {
+          "sha256": "540e22a4481631b989227a58628a46e00be350356b83656cf95ab193b01f4d9c",
+          "bytes": 141588
+        },
+        "web/garden-bill-cafe/textures/t94.jpg": {
+          "sha256": "f4721a2dabc00e8c9836405a77340407a8a5f01ff97057ad34f7a6317692ee02",
+          "bytes": 37141
+        },
+        "web/garden-bill-cafe/textures/t95.jpg": {
+          "sha256": "6e34ee4bb634ddf9bca0b6951345ca19bbe82a75295817a66dbeee2e7d550823",
+          "bytes": 149088
+        },
+        "web/garden-bill-cafe/textures/t96.jpg": {
+          "sha256": "17af5eaf96f20bd2cce9f085bd34732dc53cc7c5bacb7e633d37554583d4ad54",
+          "bytes": 68893
+        },
+        "web/garden-bill-cafe/textures/t97.jpg": {
+          "sha256": "aff9d95a1d51e015eb256c17f852c82c5d67fbef2ac6b3d29a47982dbf1e735a",
+          "bytes": 76533
+        },
+        "web/garden-bill-cafe/textures/t98.jpg": {
+          "sha256": "9f1f10c5a12716687026f0ad355a3ca05bbb6104d9ee44d339654b3b69a23cd1",
+          "bytes": 249504
+        },
+        "web/garden-bill-cafe/textures/t99.jpg": {
+          "sha256": "69a8b21a894a8864c665af90dbe9e1066a36c17a8ceb7f9efcdc07912c6c38a2",
+          "bytes": 48281
+        },
+        "web/garden-bill-cafe/thumbs/asset-1.webp": {
+          "sha256": "16037ad327b2f87b34190c1f22d01a18d442dbf896cb2af7e412c90802cf52ab",
+          "bytes": 12554
+        },
+        "web/garden-bill-cafe/thumbs/asset-10.webp": {
+          "sha256": "52fd02acc83be96f0ea0c1ea0b5aa097ff090bbf1e0445f818e1200ad021db02",
+          "bytes": 4840
+        },
+        "web/garden-bill-cafe/thumbs/asset-11.webp": {
+          "sha256": "58b927c2129127bfb708ebbdc83026790943719b26df84ec478c8af1ccafaafd",
+          "bytes": 12922
+        },
+        "web/garden-bill-cafe/thumbs/asset-12.webp": {
+          "sha256": "a706387e5e8e98a347ad400afd05893081888a588772ce7b1f56e0384c6a7e94",
+          "bytes": 6988
+        },
+        "web/garden-bill-cafe/thumbs/asset-13.webp": {
+          "sha256": "c9dd5154857785d0be621f529af4c2f6a366e08913ffe3d8dd654a576af88e82",
+          "bytes": 11586
+        },
+        "web/garden-bill-cafe/thumbs/asset-14.webp": {
+          "sha256": "d320b8c7b4f11b52a9d87bdb680b0d39ca03b04980194c906f3916823c9d081a",
+          "bytes": 3780
+        },
+        "web/garden-bill-cafe/thumbs/asset-15.webp": {
+          "sha256": "585022393564f23dfd0726b805563273fa1129f2a08990a333f7d93c19716973",
+          "bytes": 2854
+        },
+        "web/garden-bill-cafe/thumbs/asset-16.webp": {
+          "sha256": "e0fdd50c69c3d60804201b8b7e6a201cd889cb248269be7614044ca4006cda9d",
+          "bytes": 4714
+        },
+        "web/garden-bill-cafe/thumbs/asset-17.webp": {
+          "sha256": "b42ac76471425faed3561ad0571f551b47e5e20f2e50c40179e36f58844c1d15",
+          "bytes": 6516
+        },
+        "web/garden-bill-cafe/thumbs/asset-18.webp": {
+          "sha256": "81173d8c215a95e490ec2b874bc2d5ed59c7b9969cdaa68d796ec961354f01ed",
+          "bytes": 6502
+        },
+        "web/garden-bill-cafe/thumbs/asset-19.webp": {
+          "sha256": "c25acfa213fb6f92537ca9fd6e6a3da13e0a079d09982f6123626ea299e22a31",
+          "bytes": 2796
+        },
+        "web/garden-bill-cafe/thumbs/asset-2.webp": {
+          "sha256": "c4b843a9a0c37d1bbadc4aef00193b271840cb43dd2da52ee0c3f14d89561542",
+          "bytes": 10594
+        },
+        "web/garden-bill-cafe/thumbs/asset-20.webp": {
+          "sha256": "7fd4ae55b5b602388fbd5f906ffebaef873ee4898f32699c0c4f18b96ce5d483",
+          "bytes": 15726
+        },
+        "web/garden-bill-cafe/thumbs/asset-21.webp": {
+          "sha256": "6e370fefd8c18a9aef8097dddeaf4bcb49ff23d40858a28353b96b485c882164",
+          "bytes": 11984
+        },
+        "web/garden-bill-cafe/thumbs/asset-22.webp": {
+          "sha256": "1b6ed8cc61cf6e3bb07d2fa71ae625df6dfb13adc1e175baae9db18ea9ac1e30",
+          "bytes": 12256
+        },
+        "web/garden-bill-cafe/thumbs/asset-23.webp": {
+          "sha256": "03adca7fecbe16f41b65193abfd6d0dbba118c7eca79f09fc1bce9bd0c764775",
+          "bytes": 5716
+        },
+        "web/garden-bill-cafe/thumbs/asset-24.webp": {
+          "sha256": "0e6fb024be75ddd935d4127d27af6527bde9b63d1aefce6b5e7b961b6db6c5cb",
+          "bytes": 11084
+        },
+        "web/garden-bill-cafe/thumbs/asset-25.webp": {
+          "sha256": "d1e16bc93b07e02188e465f3dda889fcf22ac6f2a883a0ee23249226d4c91b6e",
+          "bytes": 6204
+        },
+        "web/garden-bill-cafe/thumbs/asset-26.webp": {
+          "sha256": "4dcfbb59d4b1adee592f0780e5a7ccd37f8925427b8d1b2d289f4bd1203230d6",
+          "bytes": 5508
+        },
+        "web/garden-bill-cafe/thumbs/asset-27.webp": {
+          "sha256": "6ec6566db6ebe8fdbe40cc56c03c4485e53348e441ee3028188d1bcf1e9acfe9",
+          "bytes": 3246
+        },
+        "web/garden-bill-cafe/thumbs/asset-28.webp": {
+          "sha256": "26ea1f173067a994238e62c343b8a3ae48a0116c33885a1f2a98a4224bf03fbd",
+          "bytes": 5506
+        },
+        "web/garden-bill-cafe/thumbs/asset-29.webp": {
+          "sha256": "be80d9b8f73fd80ffa1fdd516644123dae077a80643dbd3474ef60bf93c74bae",
+          "bytes": 5292
+        },
+        "web/garden-bill-cafe/thumbs/asset-3.webp": {
+          "sha256": "529d1c4f1a8bf53f61e59b0dca2669a13a9b9d07630bdb49827291ea8029e1c4",
+          "bytes": 3214
+        },
+        "web/garden-bill-cafe/thumbs/asset-30.webp": {
+          "sha256": "46d17da5c7db8df28af26211cc63e2ce3b099f1562be0e400ce21dfc069a3b48",
+          "bytes": 5892
+        },
+        "web/garden-bill-cafe/thumbs/asset-31.webp": {
+          "sha256": "7af2144bbd15f41a0e2f385cbd265eb4bd7c141eb95f65301898203521ba8868",
+          "bytes": 2794
+        },
+        "web/garden-bill-cafe/thumbs/asset-32.webp": {
+          "sha256": "87760e267066f67865fa8466c43ae5e3c67046a1f2fa3b060f4348c590f8fb5c",
+          "bytes": 3500
+        },
+        "web/garden-bill-cafe/thumbs/asset-33.webp": {
+          "sha256": "5e198ddc4c5b60a3d8c4fab775d07bc9180055110903efd29553b67ed1037f86",
+          "bytes": 4730
+        },
+        "web/garden-bill-cafe/thumbs/asset-34.webp": {
+          "sha256": "cfa1c6417ea478cc3277e7a7f737ef78ba555561458dc74a8128bf6d3de70bec",
+          "bytes": 14756
+        },
+        "web/garden-bill-cafe/thumbs/asset-35.webp": {
+          "sha256": "6287769a30ea314ef8cee8df219139853cbff1e76d0393b94351dbeccdad1114",
+          "bytes": 16468
+        },
+        "web/garden-bill-cafe/thumbs/asset-36.webp": {
+          "sha256": "868a1b9ef1a2860a2c386e046592036833c2479b26175b694d8afe5d0996d036",
+          "bytes": 2694
+        },
+        "web/garden-bill-cafe/thumbs/asset-37.webp": {
+          "sha256": "34b08221885af20a0cccea4113bc4127530e66fb8c6d7a37812e2791897e3325",
+          "bytes": 2368
+        },
+        "web/garden-bill-cafe/thumbs/asset-38.webp": {
+          "sha256": "1fb3c59e2b0499afa38002c8b3168051808857364d1f28d10d86a1ed0d06abc2",
+          "bytes": 6110
+        },
+        "web/garden-bill-cafe/thumbs/asset-39.webp": {
+          "sha256": "fb19bd8561790ed7e6ded8eb2678701bd8b994603b8cd90a68df496f1e9d8db0",
+          "bytes": 5520
+        },
+        "web/garden-bill-cafe/thumbs/asset-4.webp": {
+          "sha256": "16d0c4b2f0af43a20b18c6479f56ffc35b1a534e4f81f5f58e7aec0cc48f1cab",
+          "bytes": 4736
+        },
+        "web/garden-bill-cafe/thumbs/asset-40.webp": {
+          "sha256": "376ee3ef487d72908182fe4bb89f387f37db850c75b6ccf9bff43b10fbb772a5",
+          "bytes": 20572
+        },
+        "web/garden-bill-cafe/thumbs/asset-41.webp": {
+          "sha256": "ff91fe35bd0ea7643d745032ee9f749f466326f38b3f81d2a09090941c48c1bd",
+          "bytes": 20900
+        },
+        "web/garden-bill-cafe/thumbs/asset-42.webp": {
+          "sha256": "396203c5ebda21971fc070a02b8783334ff90f00f49ca2cad2eefabb82668ef3",
+          "bytes": 3172
+        },
+        "web/garden-bill-cafe/thumbs/asset-43.webp": {
+          "sha256": "09cf6f1299ad0768a8c28c62c8665ca12ba6bc81b9f8acc53a0c50ab4288faa3",
+          "bytes": 1916
+        },
+        "web/garden-bill-cafe/thumbs/asset-44.webp": {
+          "sha256": "8ff934d563c06e4c93b2f76c2cf876cb4ff915c1798ef4b8bf74d7376d09e555",
+          "bytes": 7706
+        },
+        "web/garden-bill-cafe/thumbs/asset-45.webp": {
+          "sha256": "1a597e6258cd969bd10a35f2a7193619eee65ad2413c8d7b4c874c1333c5c4b6",
+          "bytes": 6734
+        },
+        "web/garden-bill-cafe/thumbs/asset-46.webp": {
+          "sha256": "08aeb2f364a88a02853163b50f1d90c98448853448e84e71051a1c818e769f8c",
+          "bytes": 9502
+        },
+        "web/garden-bill-cafe/thumbs/asset-47.webp": {
+          "sha256": "57f74241a1689fd5c942751d69b88a61f1426e5efb4524860cca489bd381bea8",
+          "bytes": 5922
+        },
+        "web/garden-bill-cafe/thumbs/asset-48.webp": {
+          "sha256": "382bd7f7d53bb58e70a5fd9faaa8eddfc8de254ab939b61708e3316c35a7acf8",
+          "bytes": 2566
+        },
+        "web/garden-bill-cafe/thumbs/asset-49.webp": {
+          "sha256": "0fbc349422aceeaffed5e9fffee515f1a2da83bfd28b9ae53d288a5e533bb932",
+          "bytes": 1488
+        },
+        "web/garden-bill-cafe/thumbs/asset-5.webp": {
+          "sha256": "658c9c9e3344a0b34ee7a7d11bd45993b98534862588fdc9ddd9544b01f62561",
+          "bytes": 7498
+        },
+        "web/garden-bill-cafe/thumbs/asset-50.webp": {
+          "sha256": "405ad5b5793613659c0fd53fc3764c0084db04b28221a4890a79185d0bd976b2",
+          "bytes": 1958
+        },
+        "web/garden-bill-cafe/thumbs/asset-51.webp": {
+          "sha256": "405ad5b5793613659c0fd53fc3764c0084db04b28221a4890a79185d0bd976b2",
+          "bytes": 1958
+        },
+        "web/garden-bill-cafe/thumbs/asset-52.webp": {
+          "sha256": "fe4327dc03fd2556a4a190ab6be0d88c94b528dea03d89f05ef303971a81b200",
+          "bytes": 6016
+        },
+        "web/garden-bill-cafe/thumbs/asset-53.webp": {
+          "sha256": "71b7469458b4f273055286cde96ef136930bd216226fd52a0dfbe81da68d73f2",
+          "bytes": 9048
+        },
+        "web/garden-bill-cafe/thumbs/asset-54.webp": {
+          "sha256": "681c61eaa339edc94f713124a1851e1d3bdad45d333f797a9ba894479975c367",
+          "bytes": 8692
+        },
+        "web/garden-bill-cafe/thumbs/asset-55.webp": {
+          "sha256": "b5128443c248cf2115fe88c8dd022403b3ae0e19601cb993d88d5cfeabdeabd4",
+          "bytes": 1496
+        },
+        "web/garden-bill-cafe/thumbs/asset-56.webp": {
+          "sha256": "032aa546846c3fa2354fc39f30b68e876e09e23da274bb9be7f52217b84205b8",
+          "bytes": 7980
+        },
+        "web/garden-bill-cafe/thumbs/asset-57.webp": {
+          "sha256": "b4c99b8299f1b1b9ebc8f65bcd5f5abaf3201c3832524fb382d060f511125467",
+          "bytes": 6538
+        },
+        "web/garden-bill-cafe/thumbs/asset-58.webp": {
+          "sha256": "0ac4fadc0eae05156aba2a4df007c90c61333c6788cd05cbf907b1e0fc024136",
+          "bytes": 9778
+        },
+        "web/garden-bill-cafe/thumbs/asset-59.webp": {
+          "sha256": "c7d7df5841b5493b9de709687702cb3f414de012d5b21128cc07f2a7e860d610",
+          "bytes": 6310
+        },
+        "web/garden-bill-cafe/thumbs/asset-6.webp": {
+          "sha256": "26b74e2722cb524d54be1ba549ab8b88c88063476dc856dba236ca50d4439a64",
+          "bytes": 6176
+        },
+        "web/garden-bill-cafe/thumbs/asset-60.webp": {
+          "sha256": "9eab833617644082f7238ab4fe394f8ceea90f5097b9a1ea1611d2a6b0b63c15",
+          "bytes": 9524
+        },
+        "web/garden-bill-cafe/thumbs/asset-61.webp": {
+          "sha256": "651f990bef88ec9a4768307557e2aadba0d6ed2e66d043deca91c7ee16ee205f",
+          "bytes": 4252
+        },
+        "web/garden-bill-cafe/thumbs/asset-62.webp": {
+          "sha256": "63d9ff56457287769a20de845a4d499a36eea8abcc8a2528cf8853c727574399",
+          "bytes": 7690
+        },
+        "web/garden-bill-cafe/thumbs/asset-63.webp": {
+          "sha256": "9f72d58e59c3986390e111aea360863f198bddf1330b34029acb6011dc80245f",
+          "bytes": 2508
+        },
+        "web/garden-bill-cafe/thumbs/asset-64.webp": {
+          "sha256": "cde16c2f2c6ca026a67612e7310be7fa04b0c1483d79daf793f4d7e6ea1fda00",
+          "bytes": 6254
+        },
+        "web/garden-bill-cafe/thumbs/asset-65.webp": {
+          "sha256": "51e5751d44b78413c8f803e99a8b70ddb4478d5e273ac4ecfb64fd571afdcf9a",
+          "bytes": 14890
+        },
+        "web/garden-bill-cafe/thumbs/asset-66.webp": {
+          "sha256": "9229d6310d10b7760f9f7f5fc5b8851a0c1f717908b35be131dd7db67f5a6fcd",
+          "bytes": 5732
+        },
+        "web/garden-bill-cafe/thumbs/asset-67.webp": {
+          "sha256": "7f16758a37a3438f3a2bb5474df1d19bb62e8648b140f32882c72094f6b61645",
+          "bytes": 11348
+        },
+        "web/garden-bill-cafe/thumbs/asset-68.webp": {
+          "sha256": "9e5f8efd9b9f4397ba88f392136e9abf8a0f8a6a65c5c5599395608c697cb3d9",
+          "bytes": 10004
+        },
+        "web/garden-bill-cafe/thumbs/asset-69.webp": {
+          "sha256": "d7f14920aa154466c761ba7ed608bbfc3da098b35e013309f061d7d9c8960cae",
+          "bytes": 7312
+        },
+        "web/garden-bill-cafe/thumbs/asset-7.webp": {
+          "sha256": "057dac2cc65c1948ed6c6fe252bf14a4edd7558a6b4f03dd6988eb8c87858c7a",
+          "bytes": 15222
+        },
+        "web/garden-bill-cafe/thumbs/asset-70.webp": {
+          "sha256": "7065b23e0111a7ef2d2ac73df6b16c777db935c2f41f536c652448f1e123eceb",
+          "bytes": 9674
+        },
+        "web/garden-bill-cafe/thumbs/asset-71.webp": {
+          "sha256": "36245ad8285f779561d8e06abf003cdbb3a01b4903d786b29e7eb28f0f71be45",
+          "bytes": 4830
+        },
+        "web/garden-bill-cafe/thumbs/asset-72.webp": {
+          "sha256": "7ad4f9ac08023967cb50c35fb12ea535fafde16f030500ab92dbd53a96abe074",
+          "bytes": 7572
+        },
+        "web/garden-bill-cafe/thumbs/asset-73.webp": {
+          "sha256": "4e0ac778f57a2a577c8e9e6ada4970a682ea5720bb67d0d35f9ce9e6233c9c9d",
+          "bytes": 11040
+        },
+        "web/garden-bill-cafe/thumbs/asset-74.webp": {
+          "sha256": "e1bd277d4af154d79773ff7af86324d774c0e0625608772bf8eb341066ae4c58",
+          "bytes": 6142
+        },
+        "web/garden-bill-cafe/thumbs/asset-75.webp": {
+          "sha256": "ef55b62364c73e31d9b141d72498a0e5c769f2ca3107883d9c281712d7afb498",
+          "bytes": 4094
+        },
+        "web/garden-bill-cafe/thumbs/asset-76.webp": {
+          "sha256": "56131a49f2430dd18ec603e69b29c21f391131847651443596120b2bac126a0d",
+          "bytes": 1496
+        },
+        "web/garden-bill-cafe/thumbs/asset-77.webp": {
+          "sha256": "4f2bddc985daf5510ef02e7a0679cd45944559e3d00846ca54e34b08c552d25c",
+          "bytes": 22574
+        },
+        "web/garden-bill-cafe/thumbs/asset-78.webp": {
+          "sha256": "509edb8194b59d3212b29b99cb2561ea0b3f67695fe5e896b97bcd90cbf15baa",
+          "bytes": 9080
+        },
+        "web/garden-bill-cafe/thumbs/asset-79.webp": {
+          "sha256": "34909b47baf97477c2024e80079b095ff4e3506d8bb0732b045223c8703fa565",
+          "bytes": 1504
+        },
+        "web/garden-bill-cafe/thumbs/asset-8.webp": {
+          "sha256": "b06b92b26d3d76cf7f36cfcca595b23c208000576f8113d3d092c315c8319c48",
+          "bytes": 23094
+        },
+        "web/garden-bill-cafe/thumbs/asset-9.webp": {
+          "sha256": "155be32ad0039f8e58f9bbca7e330205a5c8cecbd8fe331350a03e27ddd2560c",
+          "bytes": 3310
+        },
+        "web/garden-bill-cafe/thumbs/pull-pearl.webp": {
+          "sha256": "409078148bd4aa8c96fc761c68d16fb5812ee5e9a9c09206f2dd0a2a884dc331",
+          "bytes": 4660
+        }
+      }
+    }
+  ],
+  "replay_seconds": 20.0
+}

@@ -1,0 +1,12 @@
+.venv/
+.bootstrap/
+.cache/
+__pycache__/
+*.pyc
+.DS_Store
+renders/
+web/garden-bill-cafe/scene.bin
+web/garden-bill-cafe/thread.bin
+web/garden-bill-cafe/motion.json
+web/garden-bill-cafe/textures/
+web/garden-bill-cafe/thumbs/

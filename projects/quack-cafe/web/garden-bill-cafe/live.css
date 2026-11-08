@@ -1,0 +1,28 @@
+.live-screen{position:relative;background:#382a25}
+#screen{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+#screen:active{cursor:grabbing}
+.connection{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:.5rem}
+#status{background:var(--paper);padding:7px 11px;border-radius:5px;font-size:13px}
+#rtx-controls{border:0;margin:0;min-width:0;justify-content:flex-start}
+#time{font-variant-numeric:tabular-nums}
+#live-shell:fullscreen{display:flex;flex-direction:column;justify-content:center;background:var(--paper)}
+#live-shell:fullscreen #screen{height:calc(100svh - 82px);object-fit:contain}
+
+#rtx-controls { flex-wrap:wrap; }
+#rtx-controls select {
+  appearance:none;
+  color:var(--ink);
+  font:inherit;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:7px 32px 7px 12px;
+  background-color:var(--white);
+  background-image:linear-gradient(45deg,transparent 50%,var(--rose) 50%),linear-gradient(135deg,var(--rose) 50%,transparent 50%);
+  background-size:5px 5px;
+  background-position:right 15px center,right 10px center;
+  background-repeat:no-repeat;
+  cursor:pointer;
+}
+#rtx-controls select:hover {border-color:var(--rose)}
+#rtx-controls :focus-visible {outline:2px solid var(--rose);outline-offset:2px}
+@media(max-width:600px){#rtx-controls{gap:7px;padding:9px}#rtx-controls #seek{min-width:70px}#rtx-controls select{max-width:55vw}}
